@@ -40,22 +40,22 @@ class FavoritesStore extends ChangeNotifier {
     return _favorites.length < 2;
   }
 
-  Future<void> toggle(GeneratorType t, {required bool isPro}) async {
+  Future<bool> toggle(GeneratorType t, {required int maxFavorites}) async {
     if (_favorites.contains(t)) {
       _favorites.remove(t);
       await _persist();
       notifyListeners();
-      return;
+      return true;
     }
 
-    if (!canAddMore(isPro: isPro)) {
-      // Hard block for MVP. Later show dialog.
-      return;
+    if (_favorites.length >= maxFavorites) {
+      return false; // blocked
     }
 
     _favorites.insert(0, t);
     await _persist();
     notifyListeners();
+    return true;
   }
 
   Future<void> _persist() async {

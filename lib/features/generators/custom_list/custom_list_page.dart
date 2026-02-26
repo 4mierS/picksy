@@ -5,6 +5,7 @@ import '../../../storage/custom_lists_store.dart';
 import '../../../models/generator_type.dart';
 import '../../../storage/history_store.dart';
 import '../../../storage/premium_store.dart';
+import '../../../core/gating/feature_gate.dart';
 
 class CustomListPage extends StatefulWidget {
   const CustomListPage({super.key});
@@ -134,24 +135,23 @@ class _CustomListPageState extends State<CustomListPage> {
                     onPressed: selected == null
                         ? null
                         : () async {
+                            final history = context.read<HistoryStore>();
+                            final gate = context.gateRead;
+
                             final picked = await store.drawFromSelected(
                               withReplacement: _withReplacement,
                             );
                             if (!mounted) return;
 
                             final value = picked ?? '(no items)';
-                            final isPro = context.read<PremiumStore>().isPro;
-                            final max = context.gateRead.historyMax;
 
-                            await context.read<HistoryStore>().add(
+                            await history.add(
                               type: GeneratorType.customList,
                               value: value,
-                              maxEntries: max,
+                              maxEntries: gate.historyMax,
                             );
 
-                            setState(
-                              () => _lastPicked = picked ?? '(no items)',
-                            );
+                            setState(() => _lastPicked = value);
                           },
                     child: const Text('Pick Random'),
                   ),

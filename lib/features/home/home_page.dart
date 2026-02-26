@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../core/gating/feature_gate.dart';
 import '../../models/generator_type.dart';
 import '../../storage/favorites_store.dart';
 
@@ -23,18 +25,29 @@ class HomePage extends StatelessWidget {
     final favStore = context.watch<FavoritesStore>();
     final favorites = favStore.favorites;
 
-    // MVP: we treat everyone as non-pro for now.
-    const isPro = false;
-
     return SafeArea(
       child: CustomScrollView(
         slivers: [
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Text(
-                'Random Builder',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              child: Row(
+                children: [
+                  const Text(
+                    'Random Builder',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    tooltip: 'History',
+                    icon: const Icon(Icons.history),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const HistoryPage()),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ),
@@ -49,7 +62,7 @@ class HomePage extends StatelessWidget {
                 ),
               ),
             ),
-            _GeneratorGrid(items: favorites, isPro: isPro),
+            _GeneratorGrid(items: favorites),
           ],
 
           const SliverToBoxAdapter(
@@ -62,7 +75,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-          _GeneratorGrid(items: _all, isPro: isPro),
+          _GeneratorGrid(items: _all),
 
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
@@ -73,9 +86,8 @@ class HomePage extends StatelessWidget {
 
 class _GeneratorGrid extends StatelessWidget {
   final List<GeneratorType> items;
-  final bool isPro;
 
-  const _GeneratorGrid({required this.items, required this.isPro});
+  const _GeneratorGrid({required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +112,22 @@ class _GeneratorGrid extends StatelessWidget {
               return _GeneratorTile(
                 type: t,
                 isFavorite: isFav,
-                onFavoriteToggle: () => favStore.toggle(t, isPro: isPro),
+                onFavoriteToggle: () async {
+                  final gate = context.gateRead;
+                  final ok = await favStore.toggle(
+                    t,
+                    maxFavorites: gate.favoritesMax,
+                  );
+
+                  if (!ok && context.mounted) {
+                    await showProDialog(
+                      context,
+                      title: 'Favorites limit reached',
+                      message:
+                          'Free users can pin up to 2 generators. Go Pro for unlimited favorites.',
+                    );
+                  }
+                },
                 onOpen: () {
                   if (t == GeneratorType.customList) {
                     Navigator.of(context).push(
@@ -131,7 +158,7 @@ class _GeneratorGrid extends StatelessWidget {
 class _GeneratorTile extends StatelessWidget {
   final GeneratorType type;
   final bool isFavorite;
-  final VoidCallback onFavoriteToggle;
+  final Future<void> Function() onFavoriteToggle;
   final VoidCallback onOpen;
 
   const _GeneratorTile({
@@ -183,31 +210,8 @@ class _GeneratorTile extends StatelessWidget {
                     const Spacer(),
                     IconButton(
                       tooltip: isFavorite ? 'Unfavorite' : 'Favorite',
-                      onPressed: onFavoriteToggle,
+                      onPressed: () => onFavoriteToggle(),
                       icon: Icon(isFavorite ? Icons.star : Icons.star_border),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text(
-                      'Random Builder',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      tooltip: 'History',
-                      icon: const Icon(Icons.history),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const HistoryPage(),
-                          ),
-                        );
-                      },
                     ),
                   ],
                 ),
