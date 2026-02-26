@@ -7,6 +7,9 @@ import '../../storage/favorites_store.dart';
 
 import '../history/history_page.dart';
 import '../generators/custom_list/custom_list_page.dart';
+import '../generators/number/number_page.dart';
+import '../generators/color/color_page.dart';
+import '../generators/letter/letter_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -132,6 +135,24 @@ class _GeneratorGrid extends StatelessWidget {
                   if (t == GeneratorType.customList) {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => const CustomListPage()),
+                    );
+                    return;
+                  }
+                  if (t == GeneratorType.number) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const NumberPage()),
+                    );
+                    return;
+                  }
+                  if (t == GeneratorType.color) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const ColorPage()),
+                    );
+                    return;
+                  }
+                  if (t == GeneratorType.letter) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const LetterPage()),
                     );
                     return;
                   }
