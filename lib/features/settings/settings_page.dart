@@ -56,11 +56,13 @@ class SettingsPage extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.bug_report_rounded),
             title: const Text('Report Bug'),
+            subtitle: const Text('Requires a GitHub account'),
             onTap: openBugReport,
           ),
           ListTile(
             leading: const Icon(Icons.lightbulb_rounded),
             title: const Text('Suggest Feature'),
+            subtitle: const Text('Requires a GitHub account'),
             onTap: openFeatureRequest,
           ),
           ListTile(
@@ -71,19 +73,19 @@ class SettingsPage extends StatelessWidget {
 
           const Divider(height: 32),
 
-          ListTile(
-            leading: const Icon(Icons.star_rate_rounded),
-            title: const Text('Rate App'),
-            onTap: () {
-              // Später: Play Store Link rein
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.star_rate_rounded),
+          //   title: const Text('Rate App'),
+          //   onTap: () {
+          //     openRateApp();
+          //   },
+          // ),
 
           ListTile(
             leading: const Icon(Icons.privacy_tip_rounded),
             title: const Text('Privacy Policy'),
             onTap: () {
-              // Später: deine URL rein
+              openPrivacyPolicy();
             },
           ),
 

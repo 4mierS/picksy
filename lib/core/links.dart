@@ -20,3 +20,9 @@ Future<void> openFeatureRequest() => openExternalUrl(
 
 Future<void> openGithubIssues() =>
     openExternalUrl('https://github.com/4mierS/picksy/issues');
+
+Future<void> openPrivacyPolicy() =>
+    openExternalUrl('https://4miers.github.io/picksy/privacy');
+
+Future<void> openRateApp() =>
+    openExternalUrl('https://github.com/4mierS/picksy');
