@@ -36,7 +36,25 @@ class ProPage extends StatelessWidget {
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
               const Spacer(),
-              Chip(label: Text(premium.isPro ? 'PRO ACTIVE' : 'FREE')),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(999),
+                  gradient: LinearGradient(
+                    colors: [Colors.amber, Colors.orange],
+                  ),
+                ),
+                child: const Text(
+                  "PRO",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
 
@@ -155,11 +173,14 @@ class _FeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(context).dividerColor.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).colorScheme.primary.withOpacity(0.12),
+            Theme.of(context).colorScheme.primary.withOpacity(0.04),
+          ],
         ),
       ),
       child: Column(
@@ -285,6 +306,12 @@ class _PlanTile extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             FilledButton(
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+              ),
               onPressed: enabled ? onPressed : null,
               child: Text(enabled ? 'Unlock' : 'Active'),
             ),

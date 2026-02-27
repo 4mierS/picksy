@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/ui/app_styles.dart';
 
 import '../../../storage/custom_lists_store.dart';
 import '../../../models/generator_type.dart';
@@ -109,19 +110,11 @@ class _CustomListPageState extends State<CustomListPage> {
             if (_lastPicked != null)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(
-                    color: Theme.of(context).dividerColor.withOpacity(0.5),
-                  ),
-                ),
+                padding: const EdgeInsets.all(22),
+                decoration: AppStyles.glassCard(context),
                 child: Text(
                   'Picked: $_lastPicked',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: AppStyles.resultStyle,
                 ),
               ),
 
@@ -132,6 +125,12 @@ class _CustomListPageState extends State<CustomListPage> {
               children: [
                 Expanded(
                   child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
                     onPressed: selected == null
                         ? null
                         : () async {
@@ -191,6 +190,12 @@ class _CustomListPageState extends State<CustomListPage> {
                 ),
                 const SizedBox(width: 12),
                 FilledButton(
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
                   onPressed: selected == null
                       ? null
                       : () async {

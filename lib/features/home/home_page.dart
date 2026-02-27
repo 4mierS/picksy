@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
               child: Row(
                 children: [
                   const Text(
-                    'Random Builder',
+                    'Picksy',
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
@@ -174,18 +174,37 @@ class _GeneratorTile extends StatelessWidget {
     }
   }
 
+  Color get _accent {
+    switch (type) {
+      case GeneratorType.color:
+        return Colors.pinkAccent;
+      case GeneratorType.number:
+        return Colors.blueAccent;
+      case GeneratorType.coin:
+        return Colors.amber;
+      case GeneratorType.letter:
+        return Colors.teal;
+      case GeneratorType.customList:
+        return Colors.deepPurple;
+      case GeneratorType.bottleSpin:
+        return Colors.orange;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onOpen,
         child: Ink(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: Theme.of(context).dividerColor.withOpacity(0.4),
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [_accent.withOpacity(0.18), _accent.withOpacity(0.06)],
             ),
           ),
           child: Padding(
@@ -195,12 +214,15 @@ class _GeneratorTile extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(_icon),
+                    Icon(_icon, size: 28, color: _accent),
                     const Spacer(),
                     IconButton(
                       tooltip: isFavorite ? 'Unfavorite' : 'Favorite',
                       onPressed: () => onFavoriteToggle(),
-                      icon: Icon(isFavorite ? Icons.star : Icons.star_border),
+                      icon: Icon(
+                        isFavorite ? Icons.star : Icons.star_border,
+                        color: isFavorite ? _accent : null,
+                      ),
                     ),
                   ],
                 ),
@@ -208,8 +230,8 @@ class _GeneratorTile extends StatelessWidget {
                 Text(
                   type.title,
                   style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 6),

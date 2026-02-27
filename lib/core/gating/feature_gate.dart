@@ -92,6 +92,12 @@ Future<void> showProDialog(
           child: const Text('Not now'),
         ),
         FilledButton(
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+          ),
           onPressed: () {
             Navigator.of(context).pop();
             // Navigate to Pro tab (index 1 in your AppShell)

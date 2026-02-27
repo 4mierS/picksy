@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import '../../../core/ui/app_styles.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../models/generator_type.dart';
@@ -78,6 +79,12 @@ class _LetterPageState extends State<LetterPage> {
           const SizedBox(height: 16),
 
           FilledButton.icon(
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+            ),
             icon: const Icon(Icons.casino),
             label: const Text('Generate'),
             onPressed: () async {
@@ -181,15 +188,12 @@ class _LetterPageState extends State<LetterPage> {
 
           if (!gate.isPro)
             Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor.withOpacity(0.4),
-                ),
-              ),
-              child: const Text(
+              width: double.infinity,
+              padding: const EdgeInsets.all(22),
+              decoration: AppStyles.glassCard(context),
+              child: Text(
                 'Free: Random A–Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.',
+                style: AppStyles.resultStyle,
               ),
             ),
         ],
@@ -313,6 +317,12 @@ class _LetterPageState extends State<LetterPage> {
                   child: const Text('Clear'),
                 ),
                 FilledButton(
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
                   onPressed: () {
                     setState(() {
                       _excluded

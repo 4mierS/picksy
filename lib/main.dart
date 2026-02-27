@@ -40,21 +40,28 @@ class RandomBuilderApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Random Builder',
+      title: 'Picksy',
       theme: ThemeData(
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
+          seedColor: const Color(0xFF6C5CE7), // schönes modernes Violett
           brightness: Brightness.light,
         ),
-        useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF7F8FC),
+        cardTheme: CardThemeData(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
       ),
 
       darkTheme: ThemeData(
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
+          seedColor: const Color(0xFF6C5CE7),
           brightness: Brightness.dark,
         ),
-        useMaterial3: true,
       ),
       themeMode: settings.themeMode,
       locale: Locale(settings.languageCode),

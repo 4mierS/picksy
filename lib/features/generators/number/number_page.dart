@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/ui/app_styles.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../models/generator_type.dart';
@@ -176,6 +177,12 @@ class _NumberPageState extends State<NumberPage> {
 
           // Generate button
           FilledButton.icon(
+            style: FilledButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
+            ),
             onPressed: !_isValidRange
                 ? null
                 : () async {
@@ -203,15 +210,12 @@ class _NumberPageState extends State<NumberPage> {
           // Free hint
           if (!gate.isPro)
             Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor.withOpacity(0.5),
-                ),
-              ),
-              child: const Text(
+              width: double.infinity,
+              padding: const EdgeInsets.all(22),
+              decoration: AppStyles.glassCard(context),
+              child: Text(
                 'Free limits: range 0–100, integer only.\nGo Pro for custom range, floats, and even/odd filters.',
+                style: AppStyles.resultStyle,
               ),
             ),
         ],
