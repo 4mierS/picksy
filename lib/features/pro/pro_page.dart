@@ -9,6 +9,21 @@ class ProPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final premium = context.watch<PremiumStore>();
+    final monthly = premium.productById(PremiumStore.monthlyId);
+    final lifetime = premium.productById(PremiumStore.lifetimeId);
+    final canBuyMonthly =
+        premium.isAvailable &&
+        !premium.isLoading &&
+        !premium.isPro &&
+        monthly != null;
+
+    final canBuyLifetime =
+        premium.isAvailable &&
+        !premium.isLoading &&
+        !premium.isPro &&
+        lifetime != null;
+    final monthlyPrice = monthly?.price ?? '€0.49 / month';
+    final lifetimePrice = lifetime?.price ?? '€7.49 one-time';
 
     return SafeArea(
       child: ListView(
@@ -60,15 +75,13 @@ class ProPage extends StatelessWidget {
           // Monthly plan
           _PlanTile(
             title: 'Pro Monthly',
-            price: '€0.49 / month',
+            price: monthlyPrice,
             subtitle: 'Best if you want to try it out',
             badge: 'POPULAR',
-            enabled: !premium.isPro,
-            onPressed: () async {
-              // MVP: DEV unlock
-              await _showDevPurchaseSnack(context, 'Monthly');
-              await context.read<PremiumStore>().setPro(true);
-            },
+            enabled: canBuyMonthly,
+            onPressed: canBuyMonthly
+                ? () => context.read<PremiumStore>().buyMonthly()
+                : null,
           ),
 
           const SizedBox(height: 10),
@@ -76,48 +89,26 @@ class ProPage extends StatelessWidget {
           // Lifetime plan
           _PlanTile(
             title: 'Lifetime Unlock',
-            price: '€4.99 one-time',
+            price: lifetimePrice,
             subtitle: 'Pay once, keep Pro forever',
-            enabled: !premium.isPro,
-            onPressed: () async {
-              // MVP: DEV unlock
-              await _showDevPurchaseSnack(context, 'Lifetime');
-              await context.read<PremiumStore>().setPro(true);
-            },
+            enabled: canBuyLifetime,
+            onPressed: canBuyLifetime
+                ? () => context.read<PremiumStore>().buyLifetime()
+                : null,
           ),
 
           const SizedBox(height: 16),
 
           // Restore purchases
           OutlinedButton.icon(
-            onPressed: () async {
-              // MVP: Stub
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Restore purchases (coming soon)'),
-                ),
-              );
-            },
+            onPressed: premium.isLoading
+                ? null
+                : () async {
+                    await context.read<PremiumStore>().restore();
+                  },
             icon: const Icon(Icons.restore),
             label: const Text('Restore purchases'),
           ),
-
-          const SizedBox(height: 10),
-
-          if (premium.isPro)
-            OutlinedButton.icon(
-              onPressed: () async {
-                // DEV-only reset
-                await context.read<PremiumStore>().setPro(false);
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Pro disabled (DEV)')),
-                  );
-                }
-              },
-              icon: const Icon(Icons.lock_open),
-              label: const Text('Disable Pro (DEV)'),
-            ),
 
           const SizedBox(height: 18),
 
@@ -139,13 +130,6 @@ class ProPage extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<void> _showDevPurchaseSnack(BuildContext context, String plan) async {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('$plan purchase (DEV mock)')));
-    await Future<void>.delayed(const Duration(milliseconds: 250));
   }
 }
 
@@ -218,14 +202,14 @@ class _PlanTile extends StatelessWidget {
   final String subtitle;
   final String? badge;
   final bool enabled;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const _PlanTile({
     required this.title,
     required this.price,
     required this.subtitle,
     required this.enabled,
-    required this.onPressed,
+    this.onPressed,
     this.badge,
   });
 
