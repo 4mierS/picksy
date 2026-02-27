@@ -19,7 +19,7 @@ dependencies:
 
   provider: ^6.1.2
 
-  in_app_purchase: ^3.2.0
+  in_app_purchase: ^3.2.3
 
 dev_dependencies:
   flutter_test:

@@ -22,6 +22,7 @@ enum ProFeature {
   workflowUnlimitedFields,
   presetsUnlimited,
   exportShare,
+  coinCustomLabels,
 }
 
 class FeatureGate {
@@ -58,6 +59,7 @@ class FeatureGate {
       case ProFeature.workflowUnlimitedFields:
       case ProFeature.presetsUnlimited:
       case ProFeature.exportShare:
+      case ProFeature.coinCustomLabels:
         return false;
     }
   }

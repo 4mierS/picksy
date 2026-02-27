@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/gating/feature_gate.dart';
+import '../../core/routing/generator_router.dart';
 import '../../models/generator_type.dart';
 import '../../storage/favorites_store.dart';
 
 import '../history/history_page.dart';
-import '../generators/custom_list/custom_list_page.dart';
-import '../generators/number/number_page.dart';
-import '../generators/color/color_page.dart';
-import '../generators/letter/letter_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -131,36 +128,7 @@ class _GeneratorGrid extends StatelessWidget {
                     );
                   }
                 },
-                onOpen: () {
-                  if (t == GeneratorType.customList) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const CustomListPage()),
-                    );
-                    return;
-                  }
-                  if (t == GeneratorType.number) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const NumberPage()),
-                    );
-                    return;
-                  }
-                  if (t == GeneratorType.color) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ColorPage()),
-                    );
-                    return;
-                  }
-                  if (t == GeneratorType.letter) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const LetterPage()),
-                    );
-                    return;
-                  }
-
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Open: ${t.title} (next step)')),
-                  );
-                },
+                onOpen: () => openGenerator(context, t),
               );
             }, childCount: items.length),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
