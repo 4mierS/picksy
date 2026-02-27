@@ -636,8 +636,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Pro : choisissez une plage personnalisée.';
 
   @override
-  String get timeFreeCustomRangeHint =>
-      'Gratuit : plage fixe de 2 à 10 secondes. Passez Pro pour des plages personnalisées.';
+  String timeFreeCustomRangeHint(int minSec, int maxSec) {
+    return 'Gratuit : plage fixe de $minSec à $maxSec secondes. Passez Pro pour des plages personnalisées.';
+  }
 
   @override
   String get timeHideTime => 'Masquer le temps';
@@ -653,7 +654,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get timeRangeSeconds => 'Plage (secondes)';
 
   @override
-  String get timeFreeFixedRange => 'Gratuit : fixe 2-10s';
+  String timeFreeFixedRange(int minSec, int maxSec) {
+    return 'Gratuit : fixe $minSec–${maxSec}s';
+  }
 
   @override
   String timeCurrentRange(int min, int max) {

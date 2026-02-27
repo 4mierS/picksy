@@ -635,8 +635,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get timeProCustomRangeHint => 'Pro: Wähle einen eigenen Bereich.';
 
   @override
-  String get timeFreeCustomRangeHint =>
-      'Free: fester Bereich 2-10 Sekunden. Upgrade für eigene Bereiche.';
+  String timeFreeCustomRangeHint(int minSec, int maxSec) {
+    return 'Free: fester Bereich $minSec–$maxSec Sekunden. Upgrade für eigene Bereiche.';
+  }
 
   @override
   String get timeHideTime => 'Zeit ausblenden';
@@ -652,7 +653,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get timeRangeSeconds => 'Bereich (Sekunden)';
 
   @override
-  String get timeFreeFixedRange => 'Free: fest 2-10s';
+  String timeFreeFixedRange(int minSec, int maxSec) {
+    return 'Free: fest $minSec–${maxSec}s';
+  }
 
   @override
   String timeCurrentRange(int min, int max) {

@@ -1283,8 +1283,8 @@ abstract class AppLocalizations {
   /// No description provided for @timeFreeCustomRangeHint.
   ///
   /// In en, this message translates to:
-  /// **'Free: fixed range 2-10 seconds. Upgrade for custom ranges.'**
-  String get timeFreeCustomRangeHint;
+  /// **'Free: fixed range {minSec}–{maxSec} seconds. Upgrade for custom ranges.'**
+  String timeFreeCustomRangeHint(int minSec, int maxSec);
 
   /// No description provided for @timeHideTime.
   ///
@@ -1313,8 +1313,8 @@ abstract class AppLocalizations {
   /// No description provided for @timeFreeFixedRange.
   ///
   /// In en, this message translates to:
-  /// **'Free: fixed 2-10s'**
-  String get timeFreeFixedRange;
+  /// **'Free: fixed {minSec}–{maxSec}s'**
+  String timeFreeFixedRange(int minSec, int maxSec);
 
   /// No description provided for @timeCurrentRange.
   ///

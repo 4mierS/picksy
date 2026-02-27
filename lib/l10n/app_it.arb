@@ -48,12 +48,32 @@
   "timeAgain": "Di nuovo",
   "timeStart": "Avvia",
   "timeProCustomRangeHint": "Pro: scegli un intervallo personalizzato.",
-  "timeFreeCustomRangeHint": "Gratis: intervallo fisso 2-10 secondi. Passa a Pro per intervalli personalizzati.",
+  "timeFreeCustomRangeHint": "Gratis: intervallo fisso {minSec}–{maxSec} secondi. Passa a Pro per intervalli personalizzati.",
+  "@timeFreeCustomRangeHint": {
+    "placeholders": {
+      "minSec": {
+        "type": "int"
+      },
+      "maxSec": {
+        "type": "int"
+      }
+    }
+  },
   "timeHideTime": "Nascondi tempo",
   "timeHideTimeSubtitle": "Mostra il tempo solo alla fine (Hot Potato).",
   "timeVibrateOnFinish": "Vibra alla fine",
   "timeRangeSeconds": "Intervallo (secondi)",
-  "timeFreeFixedRange": "Gratis: fisso 2-10s",
+  "timeFreeFixedRange": "Gratis: fisso {minSec}–{maxSec}s",
+  "@timeFreeFixedRange": {
+    "placeholders": {
+      "minSec": {
+        "type": "int"
+      },
+      "maxSec": {
+        "type": "int"
+      }
+    }
+  },
   "timeCurrentRange": "Attuale: {min} - {max} s",
   "@timeCurrentRange": {
     "placeholders": {

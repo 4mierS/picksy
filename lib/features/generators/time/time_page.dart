@@ -17,6 +17,8 @@ class TimePage extends StatefulWidget {
 
 class _TimePageState extends State<TimePage> {
   final _rng = Random();
+  static const int _freeMinSec = 3;
+  static const int _freeMaxSec = 12;
 
   // Settings
   bool _hideTime = false;
@@ -81,8 +83,8 @@ class _TimePageState extends State<TimePage> {
   void _start({required bool isPro}) {
     _tick?.cancel();
 
-    final min = isPro ? _minMs : 3000;
-    final max = isPro ? _maxMs : 12000;
+    final min = isPro ? _minMs * 1000 : _freeMinSec * 1000;
+    final max = isPro ? _maxMs * 1000 : _freeMaxSec * 1000;
 
     final picked = _pickRandomMs(min, max);
 
@@ -173,6 +175,8 @@ class _TimePageState extends State<TimePage> {
             _ControlsCard(
               isPro: isPro,
               running: _running,
+              freeMinSec: _freeMinSec,
+              freeMaxSec: _freeMaxSec,
               hideTime: _hideTime,
               vibrateOnFinish: _vibrateOnFinish,
               minSec: _minMs,
@@ -212,7 +216,7 @@ class _TimePageState extends State<TimePage> {
             Text(
               isPro
                   ? l10n.timeProCustomRangeHint
-                  : l10n.timeFreeCustomRangeHint,
+                  : l10n.timeFreeCustomRangeHint(_freeMinSec, _freeMaxSec),
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -227,6 +231,8 @@ class _ControlsCard extends StatelessWidget {
   const _ControlsCard({
     required this.isPro,
     required this.running,
+    required this.freeMinSec,
+    required this.freeMaxSec,
     required this.hideTime,
     required this.vibrateOnFinish,
     required this.minSec,
@@ -238,6 +244,8 @@ class _ControlsCard extends StatelessWidget {
 
   final bool isPro;
   final bool running;
+  final int freeMinSec;
+  final int freeMaxSec;
 
   final bool hideTime;
   final bool vibrateOnFinish;
@@ -301,7 +309,7 @@ class _ControlsCard extends StatelessWidget {
             if (!isPro)
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(l10n.timeFreeFixedRange),
+                child: Text(l10n.timeFreeFixedRange(freeMinSec, freeMaxSec)),
               ),
 
             if (isPro) ...[

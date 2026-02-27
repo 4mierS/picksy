@@ -635,8 +635,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timeProCustomRangeHint => 'Pro: choose a custom range.';
 
   @override
-  String get timeFreeCustomRangeHint =>
-      'Free: fixed range 2-10 seconds. Upgrade for custom ranges.';
+  String timeFreeCustomRangeHint(int minSec, int maxSec) {
+    return 'Free: fixed range $minSec–$maxSec seconds. Upgrade for custom ranges.';
+  }
 
   @override
   String get timeHideTime => 'Hide time';
@@ -652,7 +653,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timeRangeSeconds => 'Range (seconds)';
 
   @override
-  String get timeFreeFixedRange => 'Free: fixed 2-10s';
+  String timeFreeFixedRange(int minSec, int maxSec) {
+    return 'Free: fixed $minSec–${maxSec}s';
+  }
 
   @override
   String timeCurrentRange(int min, int max) {

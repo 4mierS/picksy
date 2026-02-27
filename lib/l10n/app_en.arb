@@ -239,12 +239,32 @@
   "timeAgain": "Again",
   "timeStart": "Start",
   "timeProCustomRangeHint": "Pro: choose a custom range.",
-  "timeFreeCustomRangeHint": "Free: fixed range 2-10 seconds. Upgrade for custom ranges.",
+  "timeFreeCustomRangeHint": "Free: fixed range {minSec}–{maxSec} seconds. Upgrade for custom ranges.",
+  "@timeFreeCustomRangeHint": {
+    "placeholders": {
+      "minSec": {
+        "type": "int"
+      },
+      "maxSec": {
+        "type": "int"
+      }
+    }
+  },
   "timeHideTime": "Hide time",
   "timeHideTimeSubtitle": "Reveal the time only when it ends (Hot Potato).",
   "timeVibrateOnFinish": "Vibrate on finish",
   "timeRangeSeconds": "Range (seconds)",
-  "timeFreeFixedRange": "Free: fixed 2-10s",
+  "timeFreeFixedRange": "Free: fixed {minSec}–{maxSec}s",
+  "@timeFreeFixedRange": {
+    "placeholders": {
+      "minSec": {
+        "type": "int"
+      },
+      "maxSec": {
+        "type": "int"
+      }
+    }
+  },
   "timeCurrentRange": "Current: {min} - {max} s",
   "@timeCurrentRange": {
     "placeholders": {

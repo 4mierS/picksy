@@ -636,8 +636,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Pro: scegli un intervallo personalizzato.';
 
   @override
-  String get timeFreeCustomRangeHint =>
-      'Gratis: intervallo fisso 2-10 secondi. Passa a Pro per intervalli personalizzati.';
+  String timeFreeCustomRangeHint(int minSec, int maxSec) {
+    return 'Gratis: intervallo fisso $minSec–$maxSec secondi. Passa a Pro per intervalli personalizzati.';
+  }
 
   @override
   String get timeHideTime => 'Nascondi tempo';
@@ -653,7 +654,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get timeRangeSeconds => 'Intervallo (secondi)';
 
   @override
-  String get timeFreeFixedRange => 'Gratis: fisso 2-10s';
+  String timeFreeFixedRange(int minSec, int maxSec) {
+    return 'Gratis: fisso $minSec–${maxSec}s';
+  }
 
   @override
   String timeCurrentRange(int min, int max) {

@@ -48,12 +48,32 @@
   "timeAgain": "Encore",
   "timeStart": "Démarrer",
   "timeProCustomRangeHint": "Pro : choisissez une plage personnalisée.",
-  "timeFreeCustomRangeHint": "Gratuit : plage fixe de 2 à 10 secondes. Passez Pro pour des plages personnalisées.",
+  "timeFreeCustomRangeHint": "Gratuit : plage fixe de {minSec} à {maxSec} secondes. Passez Pro pour des plages personnalisées.",
+  "@timeFreeCustomRangeHint": {
+    "placeholders": {
+      "minSec": {
+        "type": "int"
+      },
+      "maxSec": {
+        "type": "int"
+      }
+    }
+  },
   "timeHideTime": "Masquer le temps",
   "timeHideTimeSubtitle": "Révéler le temps uniquement à la fin (Hot Potato).",
   "timeVibrateOnFinish": "Vibrer à la fin",
   "timeRangeSeconds": "Plage (secondes)",
-  "timeFreeFixedRange": "Gratuit : fixe 2-10s",
+  "timeFreeFixedRange": "Gratuit : fixe {minSec}–{maxSec}s",
+  "@timeFreeFixedRange": {
+    "placeholders": {
+      "minSec": {
+        "type": "int"
+      },
+      "maxSec": {
+        "type": "int"
+      }
+    }
+  },
   "timeCurrentRange": "Actuel : {min} - {max} s",
   "@timeCurrentRange": {
     "placeholders": {
