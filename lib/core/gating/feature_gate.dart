@@ -24,6 +24,7 @@ enum ProFeature {
   presetsUnlimited,
   exportShare,
   coinCustomLabels,
+  timeCustomRange,
 }
 
 class FeatureGate {
@@ -61,6 +62,7 @@ class FeatureGate {
       case ProFeature.presetsUnlimited:
       case ProFeature.exportShare:
       case ProFeature.coinCustomLabels:
+      case ProFeature.timeCustomRange:
         return false;
     }
   }

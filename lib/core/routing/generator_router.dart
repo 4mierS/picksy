@@ -8,6 +8,7 @@ import '../../features/generators/coin/coin_page.dart';
 import '../../features/generators/letter/letter_page.dart';
 import '../../features/generators/custom_list/custom_list_page.dart';
 import '../../features/generators/bottle_spin/bottle_spin_page.dart';
+import '../../features/generators/time/time_page.dart';
 
 void openGenerator(BuildContext context, GeneratorType type) {
   final Widget page = switch (type) {
@@ -17,6 +18,7 @@ void openGenerator(BuildContext context, GeneratorType type) {
     GeneratorType.letter => const LetterPage(),
     GeneratorType.customList => const CustomListPage(),
     GeneratorType.bottleSpin => const BottleSpinPage(),
+    GeneratorType.time => const TimePage(),
   };
 
   Navigator.of(context).push(MaterialPageRoute(builder: (_) => page));

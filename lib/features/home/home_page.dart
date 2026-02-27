@@ -19,6 +19,7 @@ class HomePage extends StatelessWidget {
     GeneratorType.letter,
     GeneratorType.customList,
     GeneratorType.bottleSpin,
+    GeneratorType.time,
   ];
 
   @override
@@ -197,6 +198,8 @@ class _GeneratorTile extends StatelessWidget {
         return Icons.list_alt;
       case GeneratorType.bottleSpin:
         return Icons.explore_outlined;
+      case GeneratorType.time:
+        return Icons.access_time;
     }
   }
 
@@ -214,6 +217,8 @@ class _GeneratorTile extends StatelessWidget {
         return Colors.deepPurple;
       case GeneratorType.bottleSpin:
         return Colors.orange;
+      case GeneratorType.time:
+        return Colors.green;
     }
   }
 

@@ -23,6 +23,8 @@ extension GeneratorTypeL10n on GeneratorType {
         return l10n.generatorCustomList;
       case GeneratorType.bottleSpin:
         return l10n.generatorBottleSpin;
+      case GeneratorType.time:
+        return l10n.generatorTime;
     }
   }
 }

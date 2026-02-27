@@ -1,1 +1,5 @@
 include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  errors:
+    missing_metadata_for_key: ignore

@@ -164,6 +164,12 @@ abstract class AppLocalizations {
   /// **'Bottle Spin'**
   String get generatorBottleSpin;
 
+  /// No description provided for @generatorTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get generatorTime;
+
   /// No description provided for @commonGenerate.
   ///
   /// In en, this message translates to:

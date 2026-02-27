@@ -39,6 +39,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generatorBottleSpin => 'Flaschendrehen';
 
   @override
+  String get generatorTime => 'Zeit';
+
+  @override
   String get commonGenerate => 'Generieren';
 
   @override
