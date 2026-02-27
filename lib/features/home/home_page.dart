@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
     GeneratorType.customList,
     GeneratorType.bottleSpin,
     GeneratorType.time,
+    GeneratorType.reactionTest,
   ];
 
   @override
@@ -200,6 +201,8 @@ class _GeneratorTile extends StatelessWidget {
         return Icons.explore_outlined;
       case GeneratorType.time:
         return Icons.access_time;
+      case GeneratorType.reactionTest:
+        return Icons.flash_on;
     }
   }
 
@@ -219,6 +222,8 @@ class _GeneratorTile extends StatelessWidget {
         return Colors.orange;
       case GeneratorType.time:
         return Colors.green;
+      case GeneratorType.reactionTest:
+        return Colors.redAccent;
     }
   }
 

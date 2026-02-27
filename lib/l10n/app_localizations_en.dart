@@ -42,6 +42,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generatorTime => 'Time';
 
   @override
+  String get generatorReactionTest => 'Reaction Test';
+
+  @override
   String get commonGenerate => 'Generate';
 
   @override

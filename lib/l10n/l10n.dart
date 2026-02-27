@@ -25,6 +25,8 @@ extension GeneratorTypeL10n on GeneratorType {
         return l10n.generatorBottleSpin;
       case GeneratorType.time:
         return l10n.generatorTime;
+      case GeneratorType.reactionTest:
+        return l10n.generatorReactionTest;
     }
   }
 }

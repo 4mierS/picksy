@@ -170,6 +170,12 @@ abstract class AppLocalizations {
   /// **'Time'**
   String get generatorTime;
 
+  /// No description provided for @generatorReactionTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Reaction Test'**
+  String get generatorReactionTest;
+
   /// No description provided for @commonGenerate.
   ///
   /// In en, this message translates to:
