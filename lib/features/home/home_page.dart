@@ -28,14 +28,33 @@ class HomePage extends StatelessWidget {
     return SafeArea(
       child: CustomScrollView(
         slivers: [
+          // ✅ HEADER (must be a sliver)
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
               child: Row(
                 children: [
-                  const Text(
-                    'Picksy',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Picksy',
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Smart random decisions',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.color?.withOpacity(0.7),
+                        ),
+                      ),
+                    ],
                   ),
                   const Spacer(),
                   IconButton(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../storage/premium_store.dart';
+import '../../core/ui/app_styles.dart';
 
 class ProPage extends StatelessWidget {
   const ProPage({super.key});
@@ -9,8 +10,10 @@ class ProPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final premium = context.watch<PremiumStore>();
+
     final monthly = premium.productById(PremiumStore.monthlyId);
     final lifetime = premium.productById(PremiumStore.lifetimeId);
+
     final canBuyMonthly =
         premium.isAvailable &&
         !premium.isLoading &&
@@ -22,6 +25,7 @@ class ProPage extends StatelessWidget {
         !premium.isLoading &&
         !premium.isPro &&
         lifetime != null;
+
     final monthlyPrice = monthly?.price ?? '€0.49 / month';
     final lifetimePrice = lifetime?.price ?? '€7.49 one-time';
 
@@ -43,21 +47,21 @@ class ProPage extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(999),
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     colors: [Colors.amber, Colors.orange],
                   ),
                 ),
-                child: const Text(
-                  "PRO",
-                  style: TextStyle(
+                child: Text(
+                  premium.isPro ? 'PRO ACTIVE' : 'PRO',
+                  style: const TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 0.3,
                   ),
                 ),
               ),
             ],
           ),
-
           const SizedBox(height: 12),
 
           Text(
@@ -68,6 +72,24 @@ class ProPage extends StatelessWidget {
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
           ),
+
+          const SizedBox(height: 14),
+
+          if (!premium.isAvailable)
+            Container(
+              padding: const EdgeInsets.all(14),
+              decoration: AppStyles.glassCard(context),
+              child: const Text(
+                'In-app purchases are not available on this device/platform.\n'
+                'Tip: IAP works on Android/iOS when installed via the store test track.',
+              ),
+            ),
+
+          // ✅ Spinner nur zeigen, wenn User NICHT Pro ist
+          if (premium.isLoading && !premium.isPro) ...[
+            const SizedBox(height: 12),
+            const Center(child: CircularProgressIndicator()),
+          ],
 
           const SizedBox(height: 16),
 
@@ -81,22 +103,23 @@ class ProPage extends StatelessWidget {
               _Bullet('Letter: lowercase + umlauts + vowels + exclude'),
               _Bullet('Custom List: undo + weighted (V1)'),
               _Bullet('Bottle Spin: strength + haptics'),
-              _Bullet('Workflow builder: unlimited fields'),
             ],
           ),
 
           const SizedBox(height: 16),
 
-          _SectionTitle('Choose your plan'),
+          const _SectionTitle('Choose your plan'),
           const SizedBox(height: 10),
 
-          // Monthly plan
           _PlanTile(
             title: 'Pro Monthly',
             price: monthlyPrice,
             subtitle: 'Best if you want to try it out',
             badge: 'POPULAR',
             enabled: canBuyMonthly,
+            decoration: AppStyles.gradientCard(
+              Theme.of(context).colorScheme.primary,
+            ),
             onPressed: canBuyMonthly
                 ? () => context.read<PremiumStore>().buyMonthly()
                 : null,
@@ -104,12 +127,14 @@ class ProPage extends StatelessWidget {
 
           const SizedBox(height: 10),
 
-          // Lifetime plan
           _PlanTile(
             title: 'Lifetime Unlock',
             price: lifetimePrice,
             subtitle: 'Pay once, keep Pro forever',
             enabled: canBuyLifetime,
+            decoration: AppStyles.gradientCard(
+              Theme.of(context).colorScheme.primary,
+            ),
             onPressed: canBuyLifetime
                 ? () => context.read<PremiumStore>().buyLifetime()
                 : null,
@@ -117,13 +142,10 @@ class ProPage extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          // Restore purchases
           OutlinedButton.icon(
             onPressed: premium.isLoading
                 ? null
-                : () async {
-                    await context.read<PremiumStore>().restore();
-                  },
+                : () => context.read<PremiumStore>().restore(),
             icon: const Icon(Icons.restore),
             label: const Text('Restore purchases'),
           ),
@@ -136,11 +158,9 @@ class ProPage extends StatelessWidget {
               color: Theme.of(context).textTheme.bodySmall?.color,
             ),
           ),
-
           const SizedBox(height: 6),
-
           Text(
-            'Note: Payments and restore will be handled via the Apple / Google store account.',
+            'Payments and restore are handled via your Apple/Google store account.',
             style: TextStyle(
               color: Theme.of(context).textTheme.bodySmall?.color,
             ),
@@ -174,21 +194,13 @@ class _FeatureCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary.withOpacity(0.12),
-            Theme.of(context).colorScheme.primary.withOpacity(0.04),
-          ],
-        ),
-      ),
+      decoration: AppStyles.glassCard(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
           ),
           const SizedBox(height: 10),
           ...children,
@@ -224,6 +236,7 @@ class _PlanTile extends StatelessWidget {
   final String? badge;
   final bool enabled;
   final VoidCallback? onPressed;
+  final BoxDecoration? decoration;
 
   const _PlanTile({
     required this.title,
@@ -232,6 +245,7 @@ class _PlanTile extends StatelessWidget {
     required this.enabled,
     this.onPressed,
     this.badge,
+    this.decoration,
   });
 
   @override
@@ -240,12 +254,7 @@ class _PlanTile extends StatelessWidget {
       opacity: enabled ? 1.0 : 0.55,
       child: Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Theme.of(context).dividerColor.withOpacity(0.5),
-          ),
-        ),
+        decoration: decoration ?? AppStyles.glassCard(context),
         child: Row(
           children: [
             Expanded(
@@ -258,7 +267,7 @@ class _PlanTile extends StatelessWidget {
                         title,
                         style: const TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                       if (badge != null) ...[
@@ -278,7 +287,7 @@ class _PlanTile extends StatelessWidget {
                             badge!,
                             style: TextStyle(
                               fontSize: 12,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w800,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
@@ -291,7 +300,7 @@ class _PlanTile extends StatelessWidget {
                     price,
                     style: const TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -307,7 +316,10 @@ class _PlanTile extends StatelessWidget {
             const SizedBox(width: 12),
             FilledButton(
               style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 16,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18),
                 ),

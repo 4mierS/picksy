@@ -17,7 +17,9 @@ class PremiumStore extends ChangeNotifier {
 
   bool _isAvailable = false;
   bool _isPro = false;
-  bool _isLoading = true;
+
+  // ✅ Start: nicht "true" festnageln, sonst kann UI hängen bleiben
+  bool _isLoading = false;
 
   bool get isAvailable => _isAvailable;
   bool get isPro => _isPro;
@@ -40,10 +42,12 @@ class PremiumStore extends ChangeNotifier {
     _sub = _iap.purchaseStream.listen(
       _onPurchasesUpdated,
       onDone: () => _sub?.cancel(),
-      onError: (_) {},
+      onError: (_) {
+        // optional: log in debug only
+      },
     );
 
-    // Init IAP
+    // Init IAP (does not block Pro usage)
     await refresh();
   }
 
@@ -63,29 +67,34 @@ class PremiumStore extends ChangeNotifier {
   }
 
   /// Call this on app start and from "Restore purchases".
+  /// ✅ Important: UI should NOT depend on restorePurchases finishing.
   Future<void> refresh() async {
     _isLoading = true;
     notifyListeners();
 
-    _isAvailable = await _iap.isAvailable();
-    if (!_isAvailable) {
+    try {
+      _isAvailable = await _iap.isAvailable();
+      if (!_isAvailable) {
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+
+      // Query product details
+      final ids = <String>{monthlyId, lifetimeId};
+      final response = await _iap.queryProductDetails(ids);
+      _products = response.productDetails;
+
+      // ✅ Unblock UI now (even if restore takes long / "hangs")
       _isLoading = false;
       notifyListeners();
-      return;
+
+      // 🔁 Restore in background (do not await)
+      unawaited(_iap.restorePurchases());
+    } catch (_) {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    // Query product details
-    final ids = <String>{monthlyId, lifetimeId};
-    final response = await _iap.queryProductDetails(ids);
-
-    _products = response.productDetails;
-
-    // Restore / query purchases:
-    // On Android, queryPastPurchases is deprecated in newer flows; restorePurchases works across.
-    await _iap.restorePurchases();
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   ProductDetails? productById(String id) {
@@ -101,10 +110,11 @@ class PremiumStore extends ChangeNotifier {
     if (p == null) return;
 
     final param = PurchaseParam(productDetails: p);
-    // For subscriptions:
+
+    // NOTE:
+    // Subscriptions can work differently depending on Play Console + plugin version.
+    // This might still work for you, but if monthly causes issues, keep Lifetime only.
     await _iap.buyNonConsumable(purchaseParam: param);
-    // NOTE: On Android subscriptions are usually handled via buyNonConsumable in plugin versions that abstract it,
-    // but if you run into issues later, we’ll switch to buyConsumable/buyNonConsumable based on platform/product type.
   }
 
   Future<void> buyLifetime() async {
@@ -116,23 +126,26 @@ class PremiumStore extends ChangeNotifier {
   }
 
   Future<void> restore() async {
+    // ✅ Keep it simple
     await refresh();
   }
 
   Future<void> _onPurchasesUpdated(List<PurchaseDetails> purchases) async {
-    bool proNow = false;
+    // ✅ Crucial: never wipe cached Pro if stream is empty
+    if (purchases.isEmpty) return;
+
+    bool foundOwned = false;
 
     for (final purchase in purchases) {
       if (purchase.status == PurchaseStatus.error) {
         continue;
       }
 
-      // Treat purchased/restored as owned.
       if (purchase.status == PurchaseStatus.purchased ||
           purchase.status == PurchaseStatus.restored) {
         if (purchase.productID == monthlyId ||
             purchase.productID == lifetimeId) {
-          proNow = true;
+          foundOwned = true;
         }
       }
 
@@ -142,7 +155,10 @@ class PremiumStore extends ChangeNotifier {
       }
     }
 
-    await _setCachedPro(proNow);
+    // ✅ Only set true if we actually saw ownership
+    if (foundOwned) {
+      await _setCachedPro(true);
+    }
   }
 
   @override

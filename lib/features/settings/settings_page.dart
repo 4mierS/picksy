@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../storage/settings_store.dart';
 import '../../storage/premium_store.dart';
+import '../../core/links.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -50,6 +51,48 @@ class SettingsPage extends StatelessWidget {
                 DropdownMenuItem(value: 'de', child: Text('Deutsch')),
               ],
             ),
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.bug_report_rounded),
+            title: const Text('Report Bug'),
+            onTap: openBugReport,
+          ),
+          ListTile(
+            leading: const Icon(Icons.lightbulb_rounded),
+            title: const Text('Suggest Feature'),
+            onTap: openFeatureRequest,
+          ),
+          ListTile(
+            leading: const Icon(Icons.coffee_rounded),
+            title: const Text('Support Picksy'),
+            onTap: openCoffee,
+          ),
+
+          const Divider(height: 32),
+
+          ListTile(
+            leading: const Icon(Icons.star_rate_rounded),
+            title: const Text('Rate App'),
+            onTap: () {
+              // Später: Play Store Link rein
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_rounded),
+            title: const Text('Privacy Policy'),
+            onTap: () {
+              // Später: deine URL rein
+            },
+          ),
+
+          const SizedBox(height: 16),
+
+          // Optional: kleine Info
+          Text(
+            premium.isPro ? 'Pro active ✅' : 'Free version',
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),
