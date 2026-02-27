@@ -1,5 +1,5 @@
-name: random_builder
-description: "A new Flutter project."
+name: picksy
+description: "An app to generate random things like names, numbers, colors, and more."
 publish_to: "none"
 version: 0.1.0+1
 
@@ -28,3 +28,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"

@@ -10,8 +10,8 @@ class PremiumStore extends ChangeNotifier {
   static const _kLastCheck = 'premiumLastCheck';
 
   // Product IDs
-  static const monthlyId = 'random_builder_monthly';
-  static const lifetimeId = 'random_builder_lifetime';
+  static const monthlyId = 'picksy_monthly';
+  static const lifetimeId = 'picksy_lifetime';
 
   final InAppPurchase _iap = InAppPurchase.instance;
 

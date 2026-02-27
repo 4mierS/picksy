@@ -1,4 +1,4 @@
-package com.example.random_builder
+package com.amiershraideh.picksy
 
 import io.flutter.embedding.android.FlutterActivity
 

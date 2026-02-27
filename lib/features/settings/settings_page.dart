@@ -51,14 +51,6 @@ class SettingsPage extends StatelessWidget {
               ],
             ),
           ),
-          SwitchListTile(
-            title: const Text('Pro (DEV toggle)'),
-            subtitle: const Text(
-              'Temporary switch until Store purchases are integrated',
-            ),
-            value: premium.isPro,
-            onChanged: (v) => premium.setPro(v),
-          ),
         ],
       ),
     );

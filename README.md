@@ -1,3 +1,3 @@
-# random_builder
+# Picksy
 
 A new Flutter project.
