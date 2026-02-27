@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
+import '../../../core/gating/feature_gate.dart';
 import '../../../l10n/l10n.dart';
+import '../../../models/generator_type.dart';
+import '../../../storage/history_store.dart';
 import '../../../storage/premium_store.dart';
 
 class TimePage extends StatefulWidget {
@@ -25,8 +28,8 @@ class _TimePageState extends State<TimePage> {
   bool _vibrateOnFinish = true;
 
   // Pro Range settings (seconds)
-  int _minMs = 3;
-  int _maxMs = 8;
+  int _minSec = 3;
+  int _maxSec = 8;
 
   // Runtime
   bool _running = false;
@@ -35,7 +38,6 @@ class _TimePageState extends State<TimePage> {
 
   int _elapsedMs = 0; // for progress display, not critical to be exact
   int? _targetMs; // the picked random time to count down from
-  int? _remainingSec; // countdown
   Stopwatch? _sw;
   Timer? _tick;
 
@@ -64,27 +66,47 @@ class _TimePageState extends State<TimePage> {
     return minMs + _rng.nextInt(span);
   }
 
-  Future<void> _finish() async {
+  Future<void> _finish({
+    required bool hideTime,
+    required bool vibrateOnFinish,
+  }) async {
     _tick?.cancel();
     _sw?.stop();
 
     setState(() {
       _running = false;
       _finished = true;
-      _revealHiddenAtEnd = _hideTime;
+      _revealHiddenAtEnd = hideTime;
     });
 
-    if (_vibrateOnFinish) {
+    if (_targetMs != null) {
+      final sec = _targetMs! ~/ 1000;
+      final milli = (_targetMs! % 1000).toString().padLeft(3, '0');
+      final value = context.l10n.timeFormatted(sec, milli);
+      await context.read<HistoryStore>().add(
+        type: GeneratorType.time,
+        value: value,
+        maxEntries: context.gateRead.historyMax,
+      );
+    }
+
+    if (vibrateOnFinish) {
       final hasVibrator = await Vibration.hasVibrator() ?? false;
       if (hasVibrator) Vibration.vibrate(duration: 500);
     }
   }
 
-  void _start({required bool isPro}) {
+  void _start({
+    required bool isPro,
+    required int minSec,
+    required int maxSec,
+    required bool hideTime,
+    required bool vibrateOnFinish,
+  }) {
     _tick?.cancel();
 
-    final min = isPro ? _minMs * 1000 : _freeMinSec * 1000;
-    final max = isPro ? _maxMs * 1000 : _freeMaxSec * 1000;
+    final min = isPro ? minSec * 1000 : _freeMinSec * 1000;
+    final max = isPro ? maxSec * 1000 : _freeMaxSec * 1000;
 
     final picked = _pickRandomMs(min, max);
 
@@ -106,7 +128,7 @@ class _TimePageState extends State<TimePage> {
       if (_targetMs != null && elapsed >= _targetMs!) {
         _sw!.stop();
         setState(() => _elapsedMs = _targetMs!);
-        await _finish();
+        await _finish(hideTime: hideTime, vibrateOnFinish: vibrateOnFinish);
         return;
       }
 
@@ -119,12 +141,16 @@ class _TimePageState extends State<TimePage> {
     final l10n = context.l10n;
     final premium = context.watch<PremiumStore>();
     final isPro = premium.isPro;
+    final hideTime = _hideTime;
+    final vibrateOnFinish = _vibrateOnFinish;
+    final minSec = _minSec;
+    final maxSec = _maxSec;
 
     final bg = _finished
         ? Colors.red.shade700
         : Theme.of(context).scaffoldBackgroundColor;
 
-    final showTimeNow = !_hideTime || _revealHiddenAtEnd;
+    final showTimeNow = !hideTime || _revealHiddenAtEnd;
 
     String _formatMs(int ms) {
       final seconds = ms ~/ 1000;
@@ -177,15 +203,16 @@ class _TimePageState extends State<TimePage> {
               running: _running,
               freeMinSec: _freeMinSec,
               freeMaxSec: _freeMaxSec,
-              hideTime: _hideTime,
-              vibrateOnFinish: _vibrateOnFinish,
-              minSec: _minMs,
-              maxSec: _maxMs,
-              onToggleHide: (v) => setState(() => _hideTime = v),
-              onToggleVibrate: (v) => setState(() => _vibrateOnFinish = v),
+              hideTime: hideTime,
+              vibrateOnFinish: vibrateOnFinish,
+              minSec: minSec,
+              maxSec: maxSec,
+              onToggleHide: (value) => setState(() => _hideTime = value),
+              onToggleVibrate: (value) =>
+                  setState(() => _vibrateOnFinish = value),
               onRangeChanged: (min, max) => setState(() {
-                _minMs = min;
-                _maxMs = max;
+                _minSec = min;
+                _maxSec = max;
               }),
             ),
 
@@ -204,7 +231,15 @@ class _TimePageState extends State<TimePage> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _running ? null : () => _start(isPro: isPro),
+                    onPressed: _running
+                        ? null
+                        : () => _start(
+                            isPro: isPro,
+                            minSec: minSec,
+                            maxSec: maxSec,
+                            hideTime: hideTime,
+                            vibrateOnFinish: vibrateOnFinish,
+                          ),
                     child: Text(_finished ? l10n.timeAgain : l10n.timeStart),
                   ),
                 ),
