@@ -18,20 +18,22 @@ class _TimePageState extends State<TimePage> {
   final _rng = Random();
 
   // Settings
-  bool _hideTime = true;
+  bool _hideTime = false;
   bool _vibrateOnFinish = true;
 
   // Pro Range settings (seconds)
-  int _minSec = 3;
-  int _maxSec = 8;
+  int _minMs = 3;
+  int _maxMs = 8;
 
   // Runtime
   bool _running = false;
   bool _finished = false;
   bool _revealHiddenAtEnd = false;
 
-  int? _targetSec; // random chosen duration
+  int _elapsedMs = 0; // for progress display, not critical to be exact
+  int? _targetMs; // the picked random time to count down from
   int? _remainingSec; // countdown
+  Stopwatch? _sw;
   Timer? _tick;
 
   @override
@@ -42,23 +44,27 @@ class _TimePageState extends State<TimePage> {
 
   void _reset() {
     _tick?.cancel();
+    _sw?.stop();
+
     setState(() {
       _running = false;
       _finished = false;
       _revealHiddenAtEnd = false;
-      _targetSec = null;
-      _remainingSec = null;
+      _targetMs = null;
+      _elapsedMs = 0;
     });
   }
 
-  int _pickRandom(int minSec, int maxSec) {
-    if (maxSec < minSec) return minSec;
-    final span = maxSec - minSec + 1;
-    return minSec + _rng.nextInt(span);
+  int _pickRandomMs(int minMs, int maxMs) {
+    if (maxMs < minMs) return minMs;
+    final span = maxMs - minMs + 1;
+    return minMs + _rng.nextInt(span);
   }
 
   Future<void> _finish() async {
     _tick?.cancel();
+    _sw?.stop();
+
     setState(() {
       _running = false;
       _finished = true;
@@ -67,45 +73,41 @@ class _TimePageState extends State<TimePage> {
 
     if (_vibrateOnFinish) {
       final hasVibrator = await Vibration.hasVibrator() ?? false;
-      if (hasVibrator) {
-        Vibration.vibrate(duration: 500);
-      }
+      if (hasVibrator) Vibration.vibrate(duration: 500);
     }
   }
 
   void _start({required bool isPro}) {
     _tick?.cancel();
 
-    // Free: fix 2-10s
-    final min = isPro ? _minSec : 2;
-    final max = isPro ? _maxSec : 10;
+    final min = isPro ? _minMs : 3000;
+    final max = isPro ? _maxMs : 12000;
 
-    final picked = _pickRandom(min, max);
+    final picked = _pickRandomMs(min, max);
+
+    _sw = Stopwatch()..start();
 
     setState(() {
       _running = true;
       _finished = false;
       _revealHiddenAtEnd = false;
-      _targetSec = picked;
-      _remainingSec = picked;
+      _targetMs = picked;
+      _elapsedMs = 0;
     });
 
-    _tick = Timer.periodic(const Duration(seconds: 1), (t) async {
+    _tick = Timer.periodic(const Duration(milliseconds: 16), (t) async {
       if (!mounted) return;
 
-      final next = (_remainingSec ?? 0) - 1;
+      final elapsed = _sw!.elapsedMilliseconds;
 
-      if (next <= 0) {
-        setState(() {
-          _remainingSec = 0;
-        });
+      if (_targetMs != null && elapsed >= _targetMs!) {
+        _sw!.stop();
+        setState(() => _elapsedMs = _targetMs!);
         await _finish();
         return;
       }
 
-      setState(() {
-        _remainingSec = next;
-      });
+      setState(() => _elapsedMs = elapsed);
     });
   }
 
@@ -119,7 +121,14 @@ class _TimePageState extends State<TimePage> {
         : Theme.of(context).scaffoldBackgroundColor;
 
     final showTimeNow = !_hideTime || _revealHiddenAtEnd;
-    final timeText = _remainingSec == null ? '--' : '${_remainingSec}s';
+
+    String _formatMs(int ms) {
+      final seconds = ms ~/ 1000;
+      final milli = ms % 1000;
+      return '${seconds}s ${milli.toString().padLeft(3, '0')}ms';
+    }
+
+    final timeText = _formatMs(_elapsedMs);
 
     return Scaffold(
       backgroundColor: bg,
@@ -146,9 +155,9 @@ class _TimePageState extends State<TimePage> {
                   ),
                   child: showTimeNow
                       ? Text(
-                          timeText,
+                          _targetMs == null ? 'Ready?' : timeText,
                           style: const TextStyle(
-                            fontSize: 64,
+                            fontSize: 56,
                             fontWeight: FontWeight.w800,
                           ),
                         )
@@ -164,13 +173,13 @@ class _TimePageState extends State<TimePage> {
               running: _running,
               hideTime: _hideTime,
               vibrateOnFinish: _vibrateOnFinish,
-              minSec: _minSec,
-              maxSec: _maxSec,
+              minSec: _minMs,
+              maxSec: _maxMs,
               onToggleHide: (v) => setState(() => _hideTime = v),
               onToggleVibrate: (v) => setState(() => _vibrateOnFinish = v),
               onRangeChanged: (min, max) => setState(() {
-                _minSec = min;
-                _maxSec = max;
+                _minMs = min;
+                _maxMs = max;
               }),
             ),
 
@@ -182,7 +191,7 @@ class _TimePageState extends State<TimePage> {
                   child: OutlinedButton(
                     onPressed: _running
                         ? _reset
-                        : (_targetSec == null && !_finished ? null : _reset),
+                        : (_targetMs == null && !_finished ? null : _reset),
                     child: const Text('Reset'),
                   ),
                 ),
