@@ -53,8 +53,8 @@
   "timeHideTimeSubtitle": "Révéler le temps uniquement à la fin (Hot Potato).",
   "timeVibrateOnFinish": "Vibrer à la fin",
   "timeRangeSeconds": "Plage (secondes)",
-  "timeFreeFixedRange": "Gratuit : fixe 2–10s",
-  "timeCurrentRange": "Actuel : {min} – {max} s",
+  "timeFreeFixedRange": "Gratuit : fixe 2-10s",
+  "timeCurrentRange": "Actuel : {min} - {max} s",
   "@timeCurrentRange": {
     "placeholders": {
       "min": {

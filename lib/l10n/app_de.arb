@@ -48,13 +48,13 @@
   "timeAgain": "Nochmal",
   "timeStart": "Start",
   "timeProCustomRangeHint": "Pro: Wähle einen eigenen Bereich.",
-  "timeFreeCustomRangeHint": "Free: fester Bereich 2–10 Sekunden. Upgrade für eigene Bereiche.",
+  "timeFreeCustomRangeHint": "Free: fester Bereich 2-10 Sekunden. Upgrade für eigene Bereiche.",
   "timeHideTime": "Zeit ausblenden",
   "timeHideTimeSubtitle": "Zeige die Zeit erst am Ende an (Hot Potato).",
   "timeVibrateOnFinish": "Bei Ende vibrieren",
   "timeRangeSeconds": "Bereich (Sekunden)",
-  "timeFreeFixedRange": "Free: fest 2–10s",
-  "timeCurrentRange": "Aktuell: {min} – {max} s",
+  "timeFreeFixedRange": "Free: fest 2-10s",
+  "timeCurrentRange": "Aktuell: {min} - {max} s",
   "@timeCurrentRange": {
     "placeholders": {
       "min": {

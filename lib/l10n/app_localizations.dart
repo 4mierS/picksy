@@ -785,7 +785,7 @@ abstract class AppLocalizations {
   /// No description provided for @letterUppercaseSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Include A–Z'**
+  /// **'Include A-Z'**
   String get letterUppercaseSubtitle;
 
   /// No description provided for @letterLowercase.
@@ -797,7 +797,7 @@ abstract class AppLocalizations {
   /// No description provided for @letterLowercaseSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Include a–z'**
+  /// **'Include a-z'**
   String get letterLowercaseSubtitle;
 
   /// No description provided for @letterIncludeUmlauts.
@@ -851,7 +851,7 @@ abstract class AppLocalizations {
   /// No description provided for @letterFreeProHint.
   ///
   /// In en, this message translates to:
-  /// **'Free: Random A–Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.'**
+  /// **'Free: Random A-Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.'**
   String get letterFreeProHint;
 
   /// No description provided for @numberTitle.
@@ -971,7 +971,7 @@ abstract class AppLocalizations {
   /// No description provided for @numberFreeProHint.
   ///
   /// In en, this message translates to:
-  /// **'Free limits: range 0–100, integer only.\nGo Pro for custom range, floats, and even/odd filters.'**
+  /// **'Free limits: range 0-100, integer only.\nGo Pro for custom range, floats, and even/odd filters.'**
   String get numberFreeProHint;
 
   /// No description provided for @customListTitle.
@@ -1283,7 +1283,7 @@ abstract class AppLocalizations {
   /// No description provided for @timeFreeCustomRangeHint.
   ///
   /// In en, this message translates to:
-  /// **'Free: fixed range 2–10 seconds. Upgrade for custom ranges.'**
+  /// **'Free: fixed range 2-10 seconds. Upgrade for custom ranges.'**
   String get timeFreeCustomRangeHint;
 
   /// No description provided for @timeHideTime.
@@ -1313,13 +1313,13 @@ abstract class AppLocalizations {
   /// No description provided for @timeFreeFixedRange.
   ///
   /// In en, this message translates to:
-  /// **'Free: fixed 2–10s'**
+  /// **'Free: fixed 2-10s'**
   String get timeFreeFixedRange;
 
   /// No description provided for @timeCurrentRange.
   ///
   /// In en, this message translates to:
-  /// **'Current: {min} – {max} s'**
+  /// **'Current: {min} - {max} s'**
   String timeCurrentRange(int min, int max);
 
   /// No description provided for @timeRunning.

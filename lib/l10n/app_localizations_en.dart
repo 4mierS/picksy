@@ -363,13 +363,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get letterUppercase => 'Uppercase';
 
   @override
-  String get letterUppercaseSubtitle => 'Include A–Z';
+  String get letterUppercaseSubtitle => 'Include A-Z';
 
   @override
   String get letterLowercase => 'Lowercase';
 
   @override
-  String get letterLowercaseSubtitle => 'Include a–z';
+  String get letterLowercaseSubtitle => 'Include a-z';
 
   @override
   String get letterIncludeUmlauts => 'Include umlauts';
@@ -400,7 +400,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get letterFreeProHint =>
-      'Free: Random A–Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.';
+      'Free: Random A-Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.';
 
   @override
   String get numberTitle => 'Number';
@@ -463,7 +463,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get numberFreeProHint =>
-      'Free limits: range 0–100, integer only.\nGo Pro for custom range, floats, and even/odd filters.';
+      'Free limits: range 0-100, integer only.\nGo Pro for custom range, floats, and even/odd filters.';
 
   @override
   String get customListTitle => 'Custom List';
@@ -636,7 +636,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get timeFreeCustomRangeHint =>
-      'Free: fixed range 2–10 seconds. Upgrade for custom ranges.';
+      'Free: fixed range 2-10 seconds. Upgrade for custom ranges.';
 
   @override
   String get timeHideTime => 'Hide time';
@@ -652,11 +652,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timeRangeSeconds => 'Range (seconds)';
 
   @override
-  String get timeFreeFixedRange => 'Free: fixed 2–10s';
+  String get timeFreeFixedRange => 'Free: fixed 2-10s';
 
   @override
   String timeCurrentRange(int min, int max) {
-    return 'Current: $min – $max s';
+    return 'Current: $min - $max s';
   }
 
   @override

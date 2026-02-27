@@ -48,13 +48,13 @@
   "timeAgain": "Otra vez",
   "timeStart": "Iniciar",
   "timeProCustomRangeHint": "Pro: elige un rango personalizado.",
-  "timeFreeCustomRangeHint": "Gratis: rango fijo de 2–10 segundos. Mejora para rangos personalizados.",
+  "timeFreeCustomRangeHint": "Gratis: rango fijo de 2-10 segundos. Mejora para rangos personalizados.",
   "timeHideTime": "Ocultar tiempo",
   "timeHideTimeSubtitle": "Mostrar el tiempo solo al final (Hot Potato).",
   "timeVibrateOnFinish": "Vibrar al terminar",
   "timeRangeSeconds": "Rango (segundos)",
-  "timeFreeFixedRange": "Gratis: fijo 2–10s",
-  "timeCurrentRange": "Actual: {min} – {max} s",
+  "timeFreeFixedRange": "Gratis: fijo 2-10s",
+  "timeCurrentRange": "Actual: {min} - {max} s",
   "@timeCurrentRange": {
     "placeholders": {
       "min": {

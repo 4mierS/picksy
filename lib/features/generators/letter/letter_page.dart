@@ -202,7 +202,7 @@ class _LetterPageState extends State<LetterPage> {
   }
 
   String _generateLetter({required bool isProFilters}) {
-    // Free mode: A–Z uppercase
+    // Free mode: A-Z uppercase
     if (!isProFilters) {
       const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       return letters[_rng.nextInt(letters.length)];
