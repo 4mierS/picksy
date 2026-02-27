@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/l10n.dart';
 
 import '../../storage/premium_store.dart';
 
@@ -81,6 +82,7 @@ Future<void> showProDialog(
   required String title,
   required String message,
 }) async {
+  final l10n = context.l10n;
   await showDialog(
     context: context,
     builder: (_) => AlertDialog(
@@ -89,7 +91,7 @@ Future<void> showProDialog(
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Not now'),
+          child: Text(l10n.gateNotNow),
         ),
         FilledButton(
           style: FilledButton.styleFrom(
@@ -102,11 +104,11 @@ Future<void> showProDialog(
             Navigator.of(context).pop();
             // Navigate to Pro tab (index 1 in your AppShell)
             // For MVP: we just show a snack. Later, wire actual navigation.
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Open Pro tab to upgrade')),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(l10n.gateOpenProTab)));
           },
-          child: const Text('Go Pro'),
+          child: Text(l10n.gateGoPro),
         ),
       ],
     ),

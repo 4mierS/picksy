@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/ui/app_styles.dart';
+import '../../../l10n/l10n.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../models/generator_type.dart';
@@ -30,13 +31,14 @@ class _LetterPageState extends State<LetterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final gate = context.gate;
     final history = context.read<HistoryStore>();
 
     final isProFilters = gate.canUse(ProFeature.letterFilters);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Letter')),
+      appBar: AppBar(title: Text(l10n.letterTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -53,7 +55,7 @@ class _LetterPageState extends State<LetterPage> {
               children: [
                 Expanded(
                   child: Text(
-                    _last ?? 'Tap "Generate" to get a letter',
+                    _last ?? l10n.letterTapGenerate,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -61,13 +63,13 @@ class _LetterPageState extends State<LetterPage> {
                   ),
                 ),
                 IconButton(
-                  tooltip: 'Copy',
+                  tooltip: l10n.commonCopy,
                   onPressed: _last == null
                       ? null
                       : () {
                           Clipboard.setData(ClipboardData(text: _last!));
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Copied')),
+                            SnackBar(content: Text(l10n.commonCopied)),
                           );
                         },
                   icon: const Icon(Icons.copy),
@@ -86,7 +88,7 @@ class _LetterPageState extends State<LetterPage> {
               ),
             ),
             icon: const Icon(Icons.casino),
-            label: const Text('Generate'),
+            label: Text(l10n.commonGenerate),
             onPressed: () async {
               final letter = _generateLetter(isProFilters: isProFilters);
               setState(() => _last = letter);
@@ -101,13 +103,13 @@ class _LetterPageState extends State<LetterPage> {
 
           const SizedBox(height: 24),
 
-          _SectionTitle('Filters'),
+          _SectionTitle(l10n.letterSectionFilters),
           const SizedBox(height: 8),
 
           // Upper/lower toggles (Pro)
           _ProSwitch(
-            title: 'Uppercase',
-            subtitle: 'Include A–Z',
+            title: l10n.letterUppercase,
+            subtitle: l10n.letterUppercaseSubtitle,
             value: _upper,
             enabled: isProFilters,
             onChanged: (v) async {
@@ -120,8 +122,8 @@ class _LetterPageState extends State<LetterPage> {
           ),
 
           _ProSwitch(
-            title: 'Lowercase',
-            subtitle: 'Include a–z',
+            title: l10n.letterLowercase,
+            subtitle: l10n.letterLowercaseSubtitle,
             value: _lower,
             enabled: isProFilters,
             onChanged: (v) async {
@@ -136,8 +138,8 @@ class _LetterPageState extends State<LetterPage> {
           const SizedBox(height: 8),
 
           _ProSwitch(
-            title: 'Include umlauts',
-            subtitle: 'Add ä, ö, ü (and Ä, Ö, Ü if uppercase enabled)',
+            title: l10n.letterIncludeUmlauts,
+            subtitle: l10n.letterIncludeUmlautsSubtitle,
             value: _includeUmlauts,
             enabled: isProFilters,
             onChanged: (v) async {
@@ -150,9 +152,8 @@ class _LetterPageState extends State<LetterPage> {
           ),
 
           _ProSwitch(
-            title: 'Only vowels',
-            subtitle:
-                'Limit selection to vowels (A E I O U + optional umlauts)',
+            title: l10n.letterOnlyVowels,
+            subtitle: l10n.letterOnlyVowelsSubtitle,
             value: _onlyVowels,
             enabled: isProFilters,
             onChanged: (v) async {
@@ -168,11 +169,13 @@ class _LetterPageState extends State<LetterPage> {
 
           // Exclude letters (Pro)
           ListTile(
-            title: const Text('Exclude letters'),
+            title: Text(l10n.letterExcludeLetters),
             subtitle: Text(
               isProFilters
-                  ? (_excluded.isEmpty ? 'None' : _excluded.join(', '))
-                  : 'Pro feature',
+                  ? (_excluded.isEmpty
+                        ? l10n.letterExcludeNone
+                        : _excluded.join(', '))
+                  : l10n.commonProFeature,
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () async {
@@ -191,10 +194,7 @@ class _LetterPageState extends State<LetterPage> {
               width: double.infinity,
               padding: const EdgeInsets.all(22),
               decoration: AppStyles.glassCard(context),
-              child: Text(
-                'Free: Random A–Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.',
-                style: AppStyles.resultStyle,
-              ),
+              child: Text(l10n.letterFreeProHint, style: AppStyles.resultStyle),
             ),
         ],
       ),
@@ -247,11 +247,11 @@ class _LetterPageState extends State<LetterPage> {
   }
 
   Future<void> _showProFiltersDialog(BuildContext context) async {
+    final l10n = context.l10n;
     await showProDialog(
       context,
-      title: 'Letter filters are Pro',
-      message:
-          'Go Pro to unlock lowercase, umlauts, vowels-only, and exclusions.',
+      title: l10n.letterFiltersProTitle,
+      message: l10n.letterFiltersProMessage,
     );
   }
 
@@ -281,7 +281,7 @@ class _LetterPageState extends State<LetterPage> {
         return StatefulBuilder(
           builder: (context, setLocal) {
             return AlertDialog(
-              title: const Text('Exclude letters'),
+              title: Text(context.l10n.letterExcludeLetters),
               content: SizedBox(
                 width: double.maxFinite,
                 child: Wrap(
@@ -308,13 +308,13 @@ class _LetterPageState extends State<LetterPage> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
+                  child: Text(context.l10n.commonCancel),
                 ),
                 TextButton(
                   onPressed: () {
                     setLocal(() => temp.clear());
                   },
-                  child: const Text('Clear'),
+                  child: Text(context.l10n.commonClear),
                 ),
                 FilledButton(
                   style: FilledButton.styleFrom(
@@ -331,7 +331,7 @@ class _LetterPageState extends State<LetterPage> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Save'),
+                  child: Text(context.l10n.commonSave),
                 ),
               ],
             );
@@ -375,7 +375,7 @@ class _ProSwitch extends StatelessWidget {
     return SwitchListTile(
       contentPadding: EdgeInsets.zero,
       title: Text(title),
-      subtitle: Text(enabled ? subtitle : 'Pro feature'),
+      subtitle: Text(enabled ? subtitle : context.l10n.commonProFeature),
       value: value,
       onChanged: (v) => onChanged(v),
     );

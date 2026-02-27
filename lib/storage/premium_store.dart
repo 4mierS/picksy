@@ -18,7 +18,6 @@ class PremiumStore extends ChangeNotifier {
   bool _isAvailable = false;
   bool _isPro = false;
 
-  // ✅ Start: nicht "true" festnageln, sonst kann UI hängen bleiben
   bool _isLoading = false;
 
   bool get isAvailable => _isAvailable;
@@ -67,7 +66,6 @@ class PremiumStore extends ChangeNotifier {
   }
 
   /// Call this on app start and from "Restore purchases".
-  /// ✅ Important: UI should NOT depend on restorePurchases finishing.
   Future<void> refresh() async {
     _isLoading = true;
     notifyListeners();
@@ -85,11 +83,9 @@ class PremiumStore extends ChangeNotifier {
       final response = await _iap.queryProductDetails(ids);
       _products = response.productDetails;
 
-      // ✅ Unblock UI now (even if restore takes long / "hangs")
       _isLoading = false;
       notifyListeners();
 
-      // 🔁 Restore in background (do not await)
       unawaited(_iap.restorePurchases());
     } catch (_) {
       _isLoading = false;
@@ -126,12 +122,10 @@ class PremiumStore extends ChangeNotifier {
   }
 
   Future<void> restore() async {
-    // ✅ Keep it simple
     await refresh();
   }
 
   Future<void> _onPurchasesUpdated(List<PurchaseDetails> purchases) async {
-    // ✅ Crucial: never wipe cached Pro if stream is empty
     if (purchases.isEmpty) return;
 
     bool foundOwned = false;
@@ -155,7 +149,6 @@ class PremiumStore extends ChangeNotifier {
       }
     }
 
-    // ✅ Only set true if we actually saw ownership
     if (foundOwned) {
       await _setCachedPro(true);
     }

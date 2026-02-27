@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/l10n.dart';
 
 import '../../storage/premium_store.dart';
 import '../../core/ui/app_styles.dart';
@@ -9,6 +10,7 @@ class ProPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final premium = context.watch<PremiumStore>();
 
     final monthly = premium.productById(PremiumStore.monthlyId);
@@ -26,8 +28,8 @@ class ProPage extends StatelessWidget {
         !premium.isPro &&
         lifetime != null;
 
-    final monthlyPrice = monthly?.price ?? '€0.49 / month';
-    final lifetimePrice = lifetime?.price ?? '€7.49 one-time';
+    final monthlyPrice = monthly?.price ?? l10n.proMonthlyFallbackPrice;
+    final lifetimePrice = lifetime?.price ?? l10n.proLifetimeFallbackPrice;
 
     return SafeArea(
       child: ListView(
@@ -35,9 +37,12 @@ class ProPage extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Text(
-                'Go Pro',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              Text(
+                l10n.proGoPro,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const Spacer(),
               Container(
@@ -52,7 +57,7 @@ class ProPage extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  premium.isPro ? 'PRO ACTIVE' : 'PRO',
+                  premium.isPro ? l10n.proActiveBadge : l10n.proBadge,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
@@ -65,9 +70,7 @@ class ProPage extends StatelessWidget {
           const SizedBox(height: 12),
 
           Text(
-            premium.isPro
-                ? 'Thanks! Pro is active on this device.'
-                : 'Unlock Pro features: more history, unlimited favorites, and advanced generators.',
+            premium.isPro ? l10n.proThanksActive : l10n.proUnlockDescription,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyMedium?.color,
             ),
@@ -79,13 +82,9 @@ class ProPage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: AppStyles.glassCard(context),
-              child: const Text(
-                'In-app purchases are not available on this device/platform.\n'
-                'Tip: IAP works on Android/iOS when installed via the store test track.',
-              ),
+              child: Text(l10n.proIapUnavailable),
             ),
 
-          // ✅ Spinner nur zeigen, wenn User NICHT Pro ist
           if (premium.isLoading && !premium.isPro) ...[
             const SizedBox(height: 12),
             const Center(child: CircularProgressIndicator()),
@@ -94,28 +93,28 @@ class ProPage extends StatelessWidget {
           const SizedBox(height: 16),
 
           _FeatureCard(
-            title: 'What you get with Pro',
-            children: const [
-              _Bullet('History: 50 results (Free: 3)'),
-              _Bullet('Unlimited favorites (Free: 2)'),
-              _Bullet('Number: custom min/max + float + even/odd'),
-              _Bullet('Color: palette + modes + contrast'),
-              _Bullet('Letter: lowercase + umlauts + vowels + exclude'),
-              _Bullet('Custom List: undo + weighted (V1)'),
-              _Bullet('Bottle Spin: strength + haptics'),
+            title: l10n.proWhatYouGet,
+            children: [
+              _Bullet(l10n.proFeatureHistory),
+              _Bullet(l10n.proFeatureFavorites),
+              _Bullet(l10n.proFeatureNumber),
+              _Bullet(l10n.proFeatureColor),
+              _Bullet(l10n.proFeatureLetter),
+              _Bullet(l10n.proFeatureCustomList),
+              _Bullet(l10n.proFeatureBottleSpin),
             ],
           ),
 
           const SizedBox(height: 16),
 
-          const _SectionTitle('Choose your plan'),
+          _SectionTitle(l10n.proChoosePlan),
           const SizedBox(height: 10),
 
           _PlanTile(
-            title: 'Pro Monthly',
+            title: l10n.proMonthlyTitle,
             price: monthlyPrice,
-            subtitle: 'Best if you want to try it out',
-            badge: 'POPULAR',
+            subtitle: l10n.proMonthlySubtitle,
+            badge: l10n.proPopular,
             enabled: canBuyMonthly,
             decoration: AppStyles.gradientCard(
               Theme.of(context).colorScheme.primary,
@@ -128,9 +127,9 @@ class ProPage extends StatelessWidget {
           const SizedBox(height: 10),
 
           _PlanTile(
-            title: 'Lifetime Unlock',
+            title: l10n.proLifetimeTitle,
             price: lifetimePrice,
-            subtitle: 'Pay once, keep Pro forever',
+            subtitle: l10n.proLifetimeSubtitle,
             enabled: canBuyLifetime,
             decoration: AppStyles.gradientCard(
               Theme.of(context).colorScheme.primary,
@@ -147,20 +146,20 @@ class ProPage extends StatelessWidget {
                 ? null
                 : () => context.read<PremiumStore>().restore(),
             icon: const Icon(Icons.restore),
-            label: const Text('Restore purchases'),
+            label: Text(l10n.proRestorePurchases),
           ),
 
           const SizedBox(height: 18),
 
           Text(
-            'Privacy: No account required. All data stays on your device.',
+            l10n.proPrivacyNote,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodySmall?.color,
             ),
           ),
           const SizedBox(height: 6),
           Text(
-            'Payments and restore are handled via your Apple/Google store account.',
+            l10n.proPaymentsNote,
             style: TextStyle(
               color: Theme.of(context).textTheme.bodySmall?.color,
             ),
@@ -250,6 +249,7 @@ class _PlanTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Opacity(
       opacity: enabled ? 1.0 : 0.55,
       child: Container(
@@ -325,7 +325,9 @@ class _PlanTile extends StatelessWidget {
                 ),
               ),
               onPressed: enabled ? onPressed : null,
-              child: Text(enabled ? 'Unlock' : 'Active'),
+              child: Text(
+                enabled ? l10n.proUnlockButton : l10n.proActiveButton,
+              ),
             ),
           ],
         ),

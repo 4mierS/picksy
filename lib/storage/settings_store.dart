@@ -26,7 +26,8 @@ class SettingsStore extends ChangeNotifier {
       'dark' => ThemeMode.dark,
       _ => ThemeMode.system,
     };
-    _languageCode = (lang == 'de') ? 'de' : 'en';
+    const supported = {'en', 'de', 'es', 'fr', 'it'};
+    _languageCode = supported.contains(lang) ? lang : 'en';
 
     notifyListeners();
   }
@@ -44,7 +45,8 @@ class SettingsStore extends ChangeNotifier {
   }
 
   Future<void> setLanguageCode(String code) async {
-    _languageCode = (code == 'de') ? 'de' : 'en';
+    const supported = {'en', 'de', 'es', 'fr', 'it'};
+    _languageCode = supported.contains(code) ? code : 'en';
     await Boxes.box(Boxes.settings).put(_kLang, _languageCode);
     notifyListeners();
   }

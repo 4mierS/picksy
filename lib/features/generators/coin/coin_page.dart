@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/ui/app_styles.dart';
+import '../../../l10n/l10n.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../models/generator_type.dart';
@@ -22,8 +23,8 @@ class _CoinPageState extends State<CoinPage> {
   String? _last;
 
   // Pro-only
-  final _labelA = TextEditingController(text: 'Heads');
-  final _labelB = TextEditingController(text: 'Tails');
+  final _labelA = TextEditingController();
+  final _labelB = TextEditingController();
 
   @override
   void dispose() {
@@ -34,16 +35,23 @@ class _CoinPageState extends State<CoinPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    if (_labelA.text.isEmpty) _labelA.text = l10n.coinDefaultHeads;
+    if (_labelB.text.isEmpty) _labelB.text = l10n.coinDefaultTails;
     final gate = context.gate;
     final history = context.read<HistoryStore>();
 
     final canCustomLabels = gate.canUse(ProFeature.coinCustomLabels);
 
-    final currentA = canCustomLabels ? _labelA.text.trim() : 'Heads';
-    final currentB = canCustomLabels ? _labelB.text.trim() : 'Tails';
+    final currentA = canCustomLabels
+        ? _labelA.text.trim()
+        : l10n.coinDefaultHeads;
+    final currentB = canCustomLabels
+        ? _labelB.text.trim()
+        : l10n.coinDefaultTails;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Coin')),
+      appBar: AppBar(title: Text(l10n.coinTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -60,7 +68,7 @@ class _CoinPageState extends State<CoinPage> {
               children: [
                 Expanded(
                   child: Text(
-                    _last ?? 'Tap "Flip" to get a result',
+                    _last ?? l10n.coinTapFlip,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w700,
@@ -68,13 +76,13 @@ class _CoinPageState extends State<CoinPage> {
                   ),
                 ),
                 IconButton(
-                  tooltip: 'Copy',
+                  tooltip: l10n.commonCopy,
                   onPressed: _last == null
                       ? null
                       : () {
                           Clipboard.setData(ClipboardData(text: _last!));
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Copied')),
+                            SnackBar(content: Text(l10n.commonCopied)),
                           );
                         },
                   icon: const Icon(Icons.copy),
@@ -93,7 +101,7 @@ class _CoinPageState extends State<CoinPage> {
               ),
             ),
             icon: const Icon(Icons.casino),
-            label: const Text('Flip'),
+            label: Text(l10n.coinFlip),
             onPressed: () async {
               final result = (_rng.nextBool() ? currentA : currentB);
               setState(() => _last = result);
@@ -108,7 +116,7 @@ class _CoinPageState extends State<CoinPage> {
 
           const SizedBox(height: 24),
 
-          _SectionTitle('Labels'),
+          _SectionTitle(l10n.coinSectionLabels),
           const SizedBox(height: 8),
 
           // Pro-only label inputs
@@ -116,17 +124,16 @@ class _CoinPageState extends State<CoinPage> {
             controller: _labelA,
             enabled: canCustomLabels,
             decoration: InputDecoration(
-              labelText: 'Option A',
-              hintText: 'Heads / Yes / True...',
+              labelText: l10n.coinOptionA,
+              hintText: l10n.coinHintA,
               suffixIcon: canCustomLabels ? null : const Icon(Icons.lock),
             ),
             onTap: () async {
               if (!canCustomLabels) {
                 await showProDialog(
                   context,
-                  title: 'Custom labels are Pro',
-                  message:
-                      'Go Pro to define your own labels (e.g. Yes/No, True/False).',
+                  title: l10n.coinCustomLabelsProTitle,
+                  message: l10n.coinCustomLabelsProMessage,
                 );
               }
             },
@@ -136,17 +143,16 @@ class _CoinPageState extends State<CoinPage> {
             controller: _labelB,
             enabled: canCustomLabels,
             decoration: InputDecoration(
-              labelText: 'Option B',
-              hintText: 'Tails / No / False...',
+              labelText: l10n.coinOptionB,
+              hintText: l10n.coinHintB,
               suffixIcon: canCustomLabels ? null : const Icon(Icons.lock),
             ),
             onTap: () async {
               if (!canCustomLabels) {
                 await showProDialog(
                   context,
-                  title: 'Custom labels are Pro',
-                  message:
-                      'Go Pro to define your own labels (e.g. Yes/No, True/False).',
+                  title: l10n.coinCustomLabelsProTitle,
+                  message: l10n.coinCustomLabelsProMessage,
                 );
               }
             },
@@ -159,10 +165,7 @@ class _CoinPageState extends State<CoinPage> {
               width: double.infinity,
               padding: const EdgeInsets.all(22),
               decoration: AppStyles.glassCard(context),
-              child: Text(
-                'Free: Heads/Tails.\nPro: Custom labels.',
-                style: AppStyles.resultStyle,
-              ),
+              child: Text(l10n.coinFreeProHint, style: AppStyles.resultStyle),
             ),
         ],
       ),

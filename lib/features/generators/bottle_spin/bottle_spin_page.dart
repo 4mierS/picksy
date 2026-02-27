@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/ui/app_styles.dart';
+import '../../../l10n/l10n.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../models/generator_type.dart';
@@ -21,36 +22,41 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   final _rng = Random();
 
   late final AnimationController _controller;
+  late Animation<double> _animation;
 
-  double _currentAngle = 0.0; // radians
-  double _targetAngle = 0.0; // radians
+  double _currentAngle = 0.0;
+  double _targetAngle = 0.0;
   bool _spinning = false;
 
-  // Pro-only: stronger spin => more turns
-  double _spinStrength = 0.6; // 0..1
+  double _spinStrength = 0.6;
 
   @override
   void initState() {
     super.initState();
 
-    _controller =
-        AnimationController(
-          vsync: this,
-          duration: const Duration(milliseconds: 1400),
-        )..addListener(() {
-          // interpolate angle
-          final t = Curves.easeOutCubic.transform(_controller.value);
-          final angle = _lerp(_currentAngle, _targetAngle, t);
-          setState(() => _currentAngle = angle);
-        });
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 3000 + _rng.nextInt(3000)),
+    );
+
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutQuart,
+    );
+
+    _controller.addListener(() {
+      // interpolate angle using curved progress 0..1
+      final t = _animation.value;
+      final angle = _lerp(_currentAngle, _targetAngle, t);
+      setState(() => _currentAngle = angle);
+    });
 
     _controller.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         setState(() => _spinning = false);
 
-        // Save in history (degrees)
         final deg = ((_currentAngle * 180 / pi) % 360);
-        final value = 'Angle: ${deg.toStringAsFixed(0)}°';
+        final value = context.l10n.bottleSpinAngleValue(deg.toStringAsFixed(0));
 
         final history = context.read<HistoryStore>();
         await history.add(
@@ -70,17 +76,15 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final gate = context.gate;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Bottle Spin')),
+      appBar: AppBar(title: Text(l10n.bottleSpinTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text(
-            'Place your phone on the table. Tap Spin. The bottle points to someone in the circle.',
-            style: TextStyle(fontSize: 14),
-          ),
+          Text(l10n.bottleSpinInstructions, style: TextStyle(fontSize: 14)),
           const SizedBox(height: 16),
 
           // Bottle area
@@ -117,21 +121,23 @@ class _BottleSpinPageState extends State<BottleSpinPage>
                     await _spin(gate);
                   },
             icon: const Icon(Icons.casino),
-            label: Text(_spinning ? 'Spinning...' : 'Spin'),
+            label: Text(
+              _spinning ? l10n.bottleSpinSpinning : l10n.bottleSpinSpin,
+            ),
           ),
 
           const SizedBox(height: 16),
 
           // Pro-only controls
-          _SectionTitle('Controls'),
+          _SectionTitle(l10n.bottleSpinSectionControls),
           const SizedBox(height: 8),
 
           ListTile(
-            title: const Text('Spin strength'),
+            title: Text(l10n.bottleSpinStrength),
             subtitle: Text(
               gate.canUse(ProFeature.bottleSpinStrength)
-                  ? 'More strength = more rotations'
-                  : 'Pro feature',
+                  ? l10n.bottleSpinStrengthSubtitle
+                  : l10n.commonProFeature,
             ),
             trailing: SizedBox(
               width: 160,
@@ -141,8 +147,8 @@ class _BottleSpinPageState extends State<BottleSpinPage>
                   if (!gate.canUse(ProFeature.bottleSpinStrength)) {
                     await showProDialog(
                       context,
-                      title: 'Spin strength is Pro',
-                      message: 'Go Pro to adjust how strong the bottle spins.',
+                      title: l10n.bottleSpinStrengthProTitle,
+                      message: l10n.bottleSpinStrengthProMessage,
                     );
                     return;
                   }
@@ -154,27 +160,25 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            title: const Text('Haptic feedback'),
+            title: Text(l10n.bottleSpinHaptic),
             subtitle: Text(
               gate.canUse(ProFeature.bottleSpinHaptics)
-                  ? 'Vibrate when the bottle stops'
-                  : 'Pro feature',
+                  ? l10n.bottleSpinHapticSubtitle
+                  : l10n.commonProFeature,
             ),
             value: gate.canUse(ProFeature.bottleSpinHaptics) ? true : false,
             onChanged: (v) async {
               if (!gate.canUse(ProFeature.bottleSpinHaptics)) {
                 await showProDialog(
                   context,
-                  title: 'Haptics are Pro',
-                  message: 'Go Pro to enable vibration feedback.',
+                  title: l10n.bottleSpinHapticProTitle,
+                  message: l10n.bottleSpinHapticProMessage,
                 );
                 return;
               }
               // MVP: we just trigger vibration on stop; no stored setting yet
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Haptics enabled for this session'),
-                ),
+                SnackBar(content: Text(l10n.bottleSpinHapticEnabled)),
               );
             },
           ),
@@ -187,7 +191,7 @@ class _BottleSpinPageState extends State<BottleSpinPage>
               padding: const EdgeInsets.all(22),
               decoration: AppStyles.glassCard(context),
               child: Text(
-                'Free: Spin bottle.\nPro: Adjust spin strength + haptic feedback.',
+                l10n.bottleSpinFreeProHint,
                 style: AppStyles.resultStyle,
               ),
             ),

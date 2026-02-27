@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/app_localizations.dart';
 
 import '../../storage/settings_store.dart';
 import '../../storage/premium_store.dart';
@@ -10,6 +11,7 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final settings = context.watch<SettingsStore>();
     final premium = context.watch<PremiumStore>();
 
@@ -17,57 +19,81 @@ class SettingsPage extends StatelessWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text(
-            'Settings',
+          Text(
+            l10n.settingsTitle,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
 
           ListTile(
-            title: const Text('Theme'),
+            title: Text(l10n.settingsTheme),
             subtitle: Text(settings.themeMode.name),
             trailing: DropdownButton<ThemeMode>(
               value: settings.themeMode,
               onChanged: (m) => m == null ? null : settings.setThemeMode(m),
-              items: const [
+              items: [
                 DropdownMenuItem(
                   value: ThemeMode.system,
-                  child: Text('System'),
+                  child: Text(l10n.settingsSystem),
                 ),
-                DropdownMenuItem(value: ThemeMode.light, child: Text('Light')),
-                DropdownMenuItem(value: ThemeMode.dark, child: Text('Dark')),
+                DropdownMenuItem(
+                  value: ThemeMode.light,
+                  child: Text(l10n.settingsLight),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.dark,
+                  child: Text(l10n.settingsDark),
+                ),
               ],
             ),
           ),
 
           ListTile(
-            title: const Text('Language'),
+            title: Text(l10n.settingsLanguage),
             subtitle: Text(settings.languageCode),
             trailing: DropdownButton<String>(
               value: settings.languageCode,
               onChanged: (v) => v == null ? null : settings.setLanguageCode(v),
-              items: const [
-                DropdownMenuItem(value: 'en', child: Text('English')),
-                DropdownMenuItem(value: 'de', child: Text('Deutsch')),
+              items: [
+                DropdownMenuItem(
+                  value: 'en',
+                  child: Text(l10n.settingsLangEnglish),
+                ),
+                DropdownMenuItem(
+                  value: 'de',
+                  child: Text(l10n.settingsLangGerman),
+                ),
+                DropdownMenuItem(
+                  value: 'es',
+                  child: Text(l10n.settingsLangSpanish),
+                ),
+                DropdownMenuItem(
+                  value: 'fr',
+                  child: Text(l10n.settingsLangFrench),
+                ),
+                DropdownMenuItem(
+                  value: 'it',
+                  child: Text(l10n.settingsLangItalian),
+                ),
               ],
             ),
           ),
 
           ListTile(
             leading: const Icon(Icons.bug_report_rounded),
-            title: const Text('Report Bug'),
-            subtitle: const Text('Requires a GitHub account'),
+            title: Text(l10n.settingsReportBug),
+            subtitle: Text(l10n.settingsRequiresGithub),
             onTap: openBugReport,
           ),
           ListTile(
             leading: const Icon(Icons.lightbulb_rounded),
-            title: const Text('Suggest Feature'),
-            subtitle: const Text('Requires a GitHub account'),
+            title: Text(l10n.settingsSuggestFeature),
+            subtitle: Text(l10n.settingsRequiresGithub),
             onTap: openFeatureRequest,
           ),
           ListTile(
             leading: const Icon(Icons.coffee_rounded),
-            title: const Text('Support Picksy'),
+            title: Text(l10n.settingsSupportPicksy),
             onTap: openCoffee,
           ),
 
@@ -80,10 +106,9 @@ class SettingsPage extends StatelessWidget {
           //     openRateApp();
           //   },
           // ),
-
           ListTile(
             leading: const Icon(Icons.privacy_tip_rounded),
-            title: const Text('Privacy Policy'),
+            title: Text(l10n.settingsPrivacyPolicy),
             onTap: () {
               openPrivacyPolicy();
             },
@@ -93,7 +118,7 @@ class SettingsPage extends StatelessWidget {
 
           // Optional: kleine Info
           Text(
-            premium.isPro ? 'Pro active ✅' : 'Free version',
+            premium.isPro ? l10n.settingsProActive : l10n.settingsFreeVersion,
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ],

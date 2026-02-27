@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/ui/app_styles.dart';
+import '../../../l10n/l10n.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../models/generator_type.dart';
@@ -35,11 +36,12 @@ class _NumberPageState extends State<NumberPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final gate = context.gate; // watch premium changes automatically
     final history = context.read<HistoryStore>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Number')),
+      appBar: AppBar(title: Text(l10n.numberTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -56,7 +58,7 @@ class _NumberPageState extends State<NumberPage> {
               children: [
                 Expanded(
                   child: Text(
-                    _last ?? 'Tap "Generate" to get a number',
+                    _last ?? l10n.numberTapGenerate,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
@@ -64,13 +66,13 @@ class _NumberPageState extends State<NumberPage> {
                   ),
                 ),
                 IconButton(
-                  tooltip: 'Copy',
+                  tooltip: l10n.commonCopy,
                   onPressed: _last == null
                       ? null
                       : () {
                           Clipboard.setData(ClipboardData(text: _last!));
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Copied')),
+                            SnackBar(content: Text(l10n.commonCopied)),
                           );
                         },
                   icon: const Icon(Icons.copy),
@@ -82,7 +84,7 @@ class _NumberPageState extends State<NumberPage> {
           const SizedBox(height: 16),
 
           // Range settings
-          _SectionTitle('Range'),
+          _SectionTitle(l10n.numberSectionRange),
 
           const SizedBox(height: 8),
 
@@ -101,9 +103,8 @@ class _NumberPageState extends State<NumberPage> {
 
                 await showProDialog(
                   context,
-                  title: 'Custom range is Pro',
-                  message:
-                      'Free users can generate numbers from 0 to 100. Go Pro to set your own min/max.',
+                  title: l10n.numberCustomRangeProTitle,
+                  message: l10n.numberCustomRangeProMessage,
                 );
                 return;
               }
@@ -117,8 +118,8 @@ class _NumberPageState extends State<NumberPage> {
 
           if (!_isValidRange) ...[
             const SizedBox(height: 8),
-            const Text(
-              'Max must be >= Min',
+            Text(
+              l10n.numberInvalidRange,
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
           ],
@@ -126,24 +127,24 @@ class _NumberPageState extends State<NumberPage> {
           const SizedBox(height: 18),
 
           // Float toggle
-          _SectionTitle('Type'),
+          _SectionTitle(l10n.numberSectionType),
           const SizedBox(height: 8),
 
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            title: const Text('Float (decimals)'),
+            title: Text(l10n.numberFloat),
             subtitle: Text(
               gate.canUse(ProFeature.numberFloat)
-                  ? 'Generate decimal numbers'
-                  : 'Pro feature',
+                  ? l10n.numberFloatSubtitle
+                  : l10n.commonProFeature,
             ),
             value: _useFloat,
             onChanged: (v) async {
               if (!gate.canUse(ProFeature.numberFloat)) {
                 await showProDialog(
                   context,
-                  title: 'Float mode is Pro',
-                  message: 'Go Pro to generate decimal numbers.',
+                  title: l10n.numberFloatProTitle,
+                  message: l10n.numberFloatProMessage,
                 );
                 return;
               }
@@ -154,7 +155,7 @@ class _NumberPageState extends State<NumberPage> {
           const SizedBox(height: 8),
 
           // Parity filter
-          _SectionTitle('Filter'),
+          _SectionTitle(l10n.numberSectionFilter),
           const SizedBox(height: 8),
 
           _ParitySelector(
@@ -164,8 +165,8 @@ class _NumberPageState extends State<NumberPage> {
               if (!gate.canUse(ProFeature.numberEvenOdd)) {
                 await showProDialog(
                   context,
-                  title: 'Even/Odd filter is Pro',
-                  message: 'Go Pro to filter for even or odd numbers.',
+                  title: l10n.numberParityProTitle,
+                  message: l10n.numberParityProMessage,
                 );
                 return;
               }
@@ -202,7 +203,7 @@ class _NumberPageState extends State<NumberPage> {
                     );
                   },
             icon: const Icon(Icons.casino),
-            label: const Text('Generate'),
+            label: Text(l10n.commonGenerate),
           ),
 
           const SizedBox(height: 24),
@@ -213,10 +214,7 @@ class _NumberPageState extends State<NumberPage> {
               width: double.infinity,
               padding: const EdgeInsets.all(22),
               decoration: AppStyles.glassCard(context),
-              child: Text(
-                'Free limits: range 0–100, integer only.\nGo Pro for custom range, floats, and even/odd filters.',
-                style: AppStyles.resultStyle,
-              ),
+              child: Text(l10n.numberFreeProHint, style: AppStyles.resultStyle),
             ),
         ],
       ),
@@ -298,16 +296,17 @@ class _RangeRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     // For Free, show locked range.
     if (!isPro) {
       return Row(
-        children: const [
+        children: [
           Expanded(
-            child: _LockedField(label: 'Min', value: '0'),
+            child: _LockedField(label: l10n.numberMin, value: '0'),
           ),
-          SizedBox(width: 12),
+          const SizedBox(width: 12),
           Expanded(
-            child: _LockedField(label: 'Max', value: '100'),
+            child: _LockedField(label: l10n.numberMax, value: '100'),
           ),
         ],
       );
@@ -317,7 +316,7 @@ class _RangeRow extends StatelessWidget {
       children: [
         Expanded(
           child: _NumberField(
-            label: 'Min',
+            label: l10n.numberMin,
             initial: min,
             onSubmitted: (v) => onChanged(v, max),
           ),
@@ -325,7 +324,7 @@ class _RangeRow extends StatelessWidget {
         const SizedBox(width: 12),
         Expanded(
           child: _NumberField(
-            label: 'Max',
+            label: l10n.numberMax,
             initial: max,
             onSubmitted: (v) => onChanged(min, v),
           ),
@@ -418,11 +417,21 @@ class _ParitySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SegmentedButton<NumberParity>(
-      segments: const [
-        ButtonSegment(value: NumberParity.any, label: Text('Any')),
-        ButtonSegment(value: NumberParity.even, label: Text('Even')),
-        ButtonSegment(value: NumberParity.odd, label: Text('Odd')),
+      segments: [
+        ButtonSegment(
+          value: NumberParity.any,
+          label: Text(l10n.numberParityAny),
+        ),
+        ButtonSegment(
+          value: NumberParity.even,
+          label: Text(l10n.numberParityEven),
+        ),
+        ButtonSegment(
+          value: NumberParity.odd,
+          label: Text(l10n.numberParityOdd),
+        ),
       ],
       selected: {value},
       onSelectionChanged: enabled
@@ -430,8 +439,8 @@ class _ParitySelector extends StatelessWidget {
           : (_) async {
               await showProDialog(
                 context,
-                title: 'Even/Odd filter is Pro',
-                message: 'Go Pro to filter for even or odd numbers.',
+                title: l10n.numberParityProTitle,
+                message: l10n.numberParityProMessage,
               );
             },
     );

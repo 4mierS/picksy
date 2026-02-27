@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 
 import '../features/home/home_page.dart';
 import '../features/pro/pro_page.dart';
@@ -18,18 +19,25 @@ class _AppShellState extends State<AppShell> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       body: _pages[_index],
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
         onDestinationSelected: (i) => setState(() => _index = i),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.grid_view), label: 'Home'),
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.workspace_premium),
-            label: 'Pro',
+            icon: const Icon(Icons.grid_view),
+            label: l10n.navHome,
           ),
-          NavigationDestination(icon: Icon(Icons.settings), label: 'Settings'),
+          NavigationDestination(
+            icon: const Icon(Icons.workspace_premium),
+            label: l10n.navPro,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.settings),
+            label: l10n.navSettings,
+          ),
         ],
       ),
     );

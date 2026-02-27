@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/l10n.dart';
 
 import '../../core/gating/feature_gate.dart';
 import '../../core/routing/generator_router.dart';
@@ -22,13 +23,13 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final favStore = context.watch<FavoritesStore>();
     final favorites = favStore.favorites;
 
     return SafeArea(
       child: CustomScrollView(
         slivers: [
-          // ✅ HEADER (must be a sliver)
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
@@ -37,8 +38,8 @@ class HomePage extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Picksy',
+                      Text(
+                        l10n.appTitle,
                         style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w800,
@@ -46,7 +47,7 @@ class HomePage extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Smart random decisions',
+                        l10n.homeSmartRandomDecisions,
                         style: TextStyle(
                           fontSize: 14,
                           color: Theme.of(
@@ -58,7 +59,7 @@ class HomePage extends StatelessWidget {
                   ),
                   const Spacer(),
                   IconButton(
-                    tooltip: 'History',
+                    tooltip: l10n.homeHistoryTooltip,
                     icon: const Icon(Icons.history),
                     onPressed: () {
                       Navigator.of(context).push(
@@ -72,24 +73,30 @@ class HomePage extends StatelessWidget {
           ),
 
           if (favorites.isNotEmpty) ...[
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
                 child: Text(
-                  'Favorites',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  l10n.homeFavorites,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
             _GeneratorGrid(items: favorites),
           ],
 
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: Text(
-                'All Generators',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                l10n.homeAllGenerators,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -110,6 +117,7 @@ class _GeneratorGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final favStore = context.watch<FavoritesStore>();
 
     return SliverPadding(
@@ -141,9 +149,8 @@ class _GeneratorGrid extends StatelessWidget {
                   if (!ok && context.mounted) {
                     await showProDialog(
                       context,
-                      title: 'Favorites limit reached',
-                      message:
-                          'Free users can pin up to 2 generators. Go Pro for unlimited favorites.',
+                      title: l10n.homeFavoritesLimitReachedTitle,
+                      message: l10n.homeFavoritesLimitReachedMessage,
                     );
                   }
                 },
@@ -212,6 +219,7 @@ class _GeneratorTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Material(
       borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
@@ -236,7 +244,9 @@ class _GeneratorTile extends StatelessWidget {
                     Icon(_icon, size: 28, color: _accent),
                     const Spacer(),
                     IconButton(
-                      tooltip: isFavorite ? 'Unfavorite' : 'Favorite',
+                      tooltip: isFavorite
+                          ? l10n.homeUnfavorite
+                          : l10n.homeFavorite,
                       onPressed: () => onFavoriteToggle(),
                       icon: Icon(
                         isFavorite ? Icons.star : Icons.star_border,
@@ -247,7 +257,7 @@ class _GeneratorTile extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  type.title,
+                  type.localizedTitle(context),
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -255,7 +265,7 @@ class _GeneratorTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Tap to open',
+                  l10n.homeTapToOpen,
                   style: TextStyle(
                     color: Theme.of(context).textTheme.bodySmall?.color,
                   ),

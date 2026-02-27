@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/ui/app_styles.dart';
+import '../../../l10n/l10n.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../models/generator_type.dart';
@@ -26,11 +27,12 @@ class _ColorPageState extends State<ColorPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final gate = context.gate;
     final history = context.read<HistoryStore>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Color")),
+      appBar: AppBar(title: Text(l10n.colorTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -49,7 +51,7 @@ class _ColorPageState extends State<ColorPage> {
               ),
             ),
             icon: const Icon(Icons.casino),
-            label: const Text("Generate"),
+            label: Text(l10n.commonGenerate),
             onPressed: () async {
               final color = _generateColor(mode: _mode);
               setState(() => _current = color);
@@ -64,7 +66,7 @@ class _ColorPageState extends State<ColorPage> {
 
           const SizedBox(height: 16),
 
-          _SectionTitle("Mode"),
+          _SectionTitle(l10n.colorSectionMode),
 
           const SizedBox(height: 8),
 
@@ -75,8 +77,8 @@ class _ColorPageState extends State<ColorPage> {
               if (!gate.canUse(ProFeature.colorModes)) {
                 await showProDialog(
                   context,
-                  title: "Color Modes are Pro",
-                  message: "Go Pro to unlock Pastel, Neon and Dark modes.",
+                  title: l10n.colorModesProTitle,
+                  message: l10n.colorModesProMessage,
                 );
                 return;
               }
@@ -86,7 +88,7 @@ class _ColorPageState extends State<ColorPage> {
 
           const SizedBox(height: 24),
 
-          _SectionTitle("Palette"),
+          _SectionTitle(l10n.colorSectionPalette),
 
           const SizedBox(height: 8),
 
@@ -101,8 +103,8 @@ class _ColorPageState extends State<ColorPage> {
               if (!gate.canUse(ProFeature.colorPalette)) {
                 await showProDialog(
                   context,
-                  title: "Palette is Pro",
-                  message: "Generate harmonious color palettes with Pro.",
+                  title: l10n.colorPaletteProTitle,
+                  message: l10n.colorPaletteProMessage,
                 );
                 return;
               }
@@ -111,7 +113,7 @@ class _ColorPageState extends State<ColorPage> {
                 _palette = List.generate(5, (_) => _generateColor(mode: _mode));
               });
             },
-            child: const Text("Generate Palette (5)"),
+            child: Text(l10n.colorGeneratePalette),
           ),
 
           const SizedBox(height: 12),
@@ -126,7 +128,7 @@ class _ColorPageState extends State<ColorPage> {
                       onTap: () {
                         Clipboard.setData(ClipboardData(text: _toHex(c)));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Copied HEX")),
+                          SnackBar(content: Text(l10n.colorCopiedHex)),
                         );
                       },
                       child: _ColorBox(c),
@@ -142,10 +144,7 @@ class _ColorPageState extends State<ColorPage> {
               width: double.infinity,
               padding: const EdgeInsets.all(22),
               decoration: AppStyles.glassCard(context),
-              child: Text(
-                "Free: Random HEX color.\nPro: Color modes, palette, contrast detection.",
-                style: AppStyles.resultStyle,
-              ),
+              child: Text(l10n.colorFreeProHint, style: AppStyles.resultStyle),
             ),
         ],
       ),
@@ -271,12 +270,19 @@ class _ModeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return SegmentedButton<ColorMode>(
-      segments: const [
-        ButtonSegment(value: ColorMode.normal, label: Text("Normal")),
-        ButtonSegment(value: ColorMode.pastel, label: Text("Pastel")),
-        ButtonSegment(value: ColorMode.neon, label: Text("Neon")),
-        ButtonSegment(value: ColorMode.dark, label: Text("Dark")),
+      segments: [
+        ButtonSegment(
+          value: ColorMode.normal,
+          label: Text(l10n.colorModeNormal),
+        ),
+        ButtonSegment(
+          value: ColorMode.pastel,
+          label: Text(l10n.colorModePastel),
+        ),
+        ButtonSegment(value: ColorMode.neon, label: Text(l10n.colorModeNeon)),
+        ButtonSegment(value: ColorMode.dark, label: Text(l10n.colorModeDark)),
       ],
       selected: {mode},
       onSelectionChanged: enabled
@@ -284,8 +290,8 @@ class _ModeSelector extends StatelessWidget {
           : (_) async {
               await showProDialog(
                 context,
-                title: "Color Modes are Pro",
-                message: "Upgrade to use different color styles.",
+                title: l10n.colorModesProTitle,
+                message: l10n.colorModesUpgradeMessage,
               );
             },
     );

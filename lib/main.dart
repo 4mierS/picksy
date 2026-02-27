@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'l10n/app_localizations.dart';
 
 import 'app/app.dart';
 import 'storage/boxes.dart';
@@ -14,13 +14,6 @@ import 'storage/history_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  Future<void> openCoffee() async {
-    final Uri url = Uri.parse("https://buymeacoffee.com/4miers");
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      throw Exception('Could not launch');
-    }
-  }
 
   await Hive.initFlutter();
   await Boxes.init(); // opens Hive boxes
@@ -48,7 +41,7 @@ class RandomBuilderApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Picksy',
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -73,8 +66,15 @@ class RandomBuilderApp extends StatelessWidget {
       ),
       themeMode: settings.themeMode,
       locale: Locale(settings.languageCode),
-      supportedLocales: const [Locale('en'), Locale('de')],
-      localizationsDelegates: const [
+      supportedLocales: const [
+        Locale('en'),
+        Locale('de'),
+        Locale('es'),
+        Locale('fr'),
+        Locale('it'),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,

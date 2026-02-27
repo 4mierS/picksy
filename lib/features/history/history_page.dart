@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../l10n/l10n.dart';
 
 import '../../storage/history_store.dart';
 
@@ -8,21 +9,22 @@ class HistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final history = context.watch<HistoryStore>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('History'),
+        title: Text(l10n.historyTitle),
         actions: [
           IconButton(
-            tooltip: 'Clear all',
+            tooltip: l10n.historyClearAll,
             onPressed: history.entries.isEmpty ? null : history.clearAll,
             icon: const Icon(Icons.delete_outline),
           ),
         ],
       ),
       body: history.entries.isEmpty
-          ? const Center(child: Text('No history yet'))
+          ? Center(child: Text(l10n.historyEmpty))
           : ListView.separated(
               itemCount: history.entries.length,
               separatorBuilder: (_, __) => const Divider(height: 1),
@@ -30,7 +32,12 @@ class HistoryPage extends StatelessWidget {
                 final e = history.entries[i];
                 return ListTile(
                   title: Text(e.value),
-                  subtitle: Text('${e.generatorType.name} • ${e.timestamp}'),
+                  subtitle: Text(
+                    l10n.historyItemSubtitle(
+                      e.generatorType.localizedTitle(context),
+                      e.timestamp.toString(),
+                    ),
+                  ),
                 );
               },
             ),
