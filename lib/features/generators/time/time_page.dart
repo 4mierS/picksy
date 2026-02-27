@@ -7,9 +7,9 @@ import 'package:vibration/vibration.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../l10n/l10n.dart';
-import '../../../models/generator_type.dart';
-import '../../../storage/history_store.dart';
-import '../../../storage/premium_store.dart';
+import 'package:picksy/models/generator_type.dart';
+import 'package:picksy/storage/history_store.dart';
+import 'package:picksy/storage/premium_store.dart';
 
 class TimePage extends StatefulWidget {
   const TimePage({super.key});

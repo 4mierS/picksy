@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../../../core/ui/app_styles.dart';
-import '../../../l10n/l10n.dart';
+import 'package:picksy/core/ui/app_styles.dart';
+import 'package:picksy/l10n/l10n.dart';
 
-import '../../../core/gating/feature_gate.dart';
-import '../../../models/generator_type.dart';
-import '../../../storage/history_store.dart';
+import 'package:picksy/core/gating/feature_gate.dart';
+import 'package:picksy/models/generator_type.dart';
+import 'package:picksy/storage/history_store.dart';
 
 class LetterPage extends StatefulWidget {
   const LetterPage({super.key});

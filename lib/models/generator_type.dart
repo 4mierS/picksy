@@ -1,1 +1,10 @@
-enum GeneratorType { color, number, coin, letter, customList, bottleSpin, time }
+enum GeneratorType {
+  color,
+  number,
+  coin,
+  letter,
+  customList,
+  bottleSpin,
+  time,
+  reactionTest,
+}
