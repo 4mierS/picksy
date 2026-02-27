@@ -615,4 +615,58 @@ class AppLocalizationsEs extends AppLocalizations {
   String bottleSpinAngleValue(Object degree) {
     return 'Angle: $degree°';
   }
+
+  @override
+  String get timeTitle => 'Tiempo aleatorio';
+
+  @override
+  String get timeReady => '¿Listo?';
+
+  @override
+  String get timeReset => 'Reiniciar';
+
+  @override
+  String get timeAgain => 'Otra vez';
+
+  @override
+  String get timeStart => 'Iniciar';
+
+  @override
+  String get timeProCustomRangeHint => 'Pro: elige un rango personalizado.';
+
+  @override
+  String get timeFreeCustomRangeHint =>
+      'Gratis: rango fijo de 2–10 segundos. Mejora para rangos personalizados.';
+
+  @override
+  String get timeHideTime => 'Ocultar tiempo';
+
+  @override
+  String get timeHideTimeSubtitle =>
+      'Mostrar el tiempo solo al final (Hot Potato).';
+
+  @override
+  String get timeVibrateOnFinish => 'Vibrar al terminar';
+
+  @override
+  String get timeRangeSeconds => 'Rango (segundos)';
+
+  @override
+  String get timeFreeFixedRange => 'Gratis: fijo 2–10s';
+
+  @override
+  String timeCurrentRange(int min, int max) {
+    return 'Actual: $min – $max s';
+  }
+
+  @override
+  String get timeRunning => 'En curso…';
+
+  @override
+  String get timeHidden => 'Oculto';
+
+  @override
+  String timeFormatted(int seconds, Object milliseconds) {
+    return '${seconds}s ${milliseconds}ms';
+  }
 }

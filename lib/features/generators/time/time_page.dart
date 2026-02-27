@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 
+import '../../../l10n/l10n.dart';
 import '../../../storage/premium_store.dart';
 
 class TimePage extends StatefulWidget {
@@ -113,6 +114,7 @@ class _TimePageState extends State<TimePage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final premium = context.watch<PremiumStore>();
     final isPro = premium.isPro;
 
@@ -125,14 +127,14 @@ class _TimePageState extends State<TimePage> {
     String _formatMs(int ms) {
       final seconds = ms ~/ 1000;
       final milli = ms % 1000;
-      return '${seconds}s ${milli.toString().padLeft(3, '0')}ms';
+      return l10n.timeFormatted(seconds, milli.toString().padLeft(3, '0'));
     }
 
     final timeText = _formatMs(_elapsedMs);
 
     return Scaffold(
       backgroundColor: bg,
-      appBar: AppBar(title: const Text('Random Time')),
+      appBar: AppBar(title: Text(l10n.timeTitle)),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -155,7 +157,7 @@ class _TimePageState extends State<TimePage> {
                   ),
                   child: showTimeNow
                       ? Text(
-                          _targetMs == null ? 'Ready?' : timeText,
+                          _targetMs == null ? l10n.timeReady : timeText,
                           style: const TextStyle(
                             fontSize: 56,
                             fontWeight: FontWeight.w800,
@@ -192,14 +194,14 @@ class _TimePageState extends State<TimePage> {
                     onPressed: _running
                         ? _reset
                         : (_targetMs == null && !_finished ? null : _reset),
-                    child: const Text('Reset'),
+                    child: Text(l10n.timeReset),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: _running ? null : () => _start(isPro: isPro),
-                    child: Text(_finished ? 'Again' : 'Start'),
+                    child: Text(_finished ? l10n.timeAgain : l10n.timeStart),
                   ),
                 ),
               ],
@@ -209,8 +211,8 @@ class _TimePageState extends State<TimePage> {
 
             Text(
               isPro
-                  ? 'Pro: choose a custom range.'
-                  : 'Free: fixed range 2–10 seconds. Upgrade for custom ranges.',
+                  ? l10n.timeProCustomRangeHint
+                  : l10n.timeFreeCustomRangeHint,
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
@@ -249,6 +251,7 @@ class _ControlsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final disabled = running;
 
     return Card(
@@ -259,15 +262,13 @@ class _ControlsCard extends StatelessWidget {
             SwitchListTile(
               value: hideTime,
               onChanged: disabled ? null : onToggleHide,
-              title: const Text('Hide time'),
-              subtitle: const Text(
-                'Reveal the time only when it ends (Hot Potato).',
-              ),
+              title: Text(l10n.timeHideTime),
+              subtitle: Text(l10n.timeHideTimeSubtitle),
             ),
             SwitchListTile(
               value: vibrateOnFinish,
               onChanged: disabled ? null : onToggleVibrate,
-              title: const Text('Vibrate on finish'),
+              title: Text(l10n.timeVibrateOnFinish),
             ),
             const Divider(),
 
@@ -276,7 +277,7 @@ class _ControlsCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    'Range (seconds)',
+                    l10n.timeRangeSeconds,
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
@@ -290,7 +291,7 @@ class _ControlsCard extends StatelessWidget {
                       color: Colors.black.withOpacity(0.06),
                       borderRadius: BorderRadius.circular(999),
                     ),
-                    child: const Text('PRO'),
+                    child: Text(l10n.proBadge),
                   ),
               ],
             ),
@@ -298,9 +299,9 @@ class _ControlsCard extends StatelessWidget {
             const SizedBox(height: 10),
 
             if (!isPro)
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: Text('Free: fixed 2–10s'),
+                child: Text(l10n.timeFreeFixedRange),
               ),
 
             if (isPro) ...[
@@ -308,7 +309,7 @@ class _ControlsCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _NumberStepper(
-                      label: 'Min',
+                      label: l10n.numberMin,
                       value: minSec,
                       min: 1,
                       max: 3600,
@@ -324,7 +325,7 @@ class _ControlsCard extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _NumberStepper(
-                      label: 'Max',
+                      label: l10n.numberMax,
                       value: maxSec,
                       min: 1,
                       max: 3600,
@@ -343,7 +344,7 @@ class _ControlsCard extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Current: $minSec – $maxSec s',
+                  l10n.timeCurrentRange(minSec, maxSec),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ),
@@ -421,6 +422,7 @@ class _HiddenPulse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AnimatedOpacity(
       duration: const Duration(milliseconds: 300),
       opacity: running ? 1 : 0.65,
@@ -430,7 +432,7 @@ class _HiddenPulse extends StatelessWidget {
           const Icon(Icons.timer, size: 56),
           const SizedBox(height: 10),
           Text(
-            running ? 'Running…' : 'Hidden',
+            running ? l10n.timeRunning : l10n.timeHidden,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),

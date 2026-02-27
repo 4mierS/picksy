@@ -232,5 +232,39 @@
     "placeholders": {
       "degree": {}
     }
+  },
+  "timeTitle": "Random Time",
+  "timeReady": "Ready?",
+  "timeReset": "Reset",
+  "timeAgain": "Again",
+  "timeStart": "Start",
+  "timeProCustomRangeHint": "Pro: choose a custom range.",
+  "timeFreeCustomRangeHint": "Free: fixed range 2–10 seconds. Upgrade for custom ranges.",
+  "timeHideTime": "Hide time",
+  "timeHideTimeSubtitle": "Reveal the time only when it ends (Hot Potato).",
+  "timeVibrateOnFinish": "Vibrate on finish",
+  "timeRangeSeconds": "Range (seconds)",
+  "timeFreeFixedRange": "Free: fixed 2–10s",
+  "timeCurrentRange": "Current: {min} – {max} s",
+  "@timeCurrentRange": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "timeRunning": "Running…",
+  "timeHidden": "Hidden",
+  "timeFormatted": "{seconds}s {milliseconds}ms",
+  "@timeFormatted": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "milliseconds": {}
+    }
   }
 }

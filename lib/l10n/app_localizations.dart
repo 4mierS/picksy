@@ -1243,6 +1243,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Angle: {degree}°'**
   String bottleSpinAngleValue(Object degree);
+
+  /// No description provided for @timeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Random Time'**
+  String get timeTitle;
+
+  /// No description provided for @timeReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready?'**
+  String get timeReady;
+
+  /// No description provided for @timeReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get timeReset;
+
+  /// No description provided for @timeAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Again'**
+  String get timeAgain;
+
+  /// No description provided for @timeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get timeStart;
+
+  /// No description provided for @timeProCustomRangeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro: choose a custom range.'**
+  String get timeProCustomRangeHint;
+
+  /// No description provided for @timeFreeCustomRangeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: fixed range 2–10 seconds. Upgrade for custom ranges.'**
+  String get timeFreeCustomRangeHint;
+
+  /// No description provided for @timeHideTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide time'**
+  String get timeHideTime;
+
+  /// No description provided for @timeHideTimeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reveal the time only when it ends (Hot Potato).'**
+  String get timeHideTimeSubtitle;
+
+  /// No description provided for @timeVibrateOnFinish.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrate on finish'**
+  String get timeVibrateOnFinish;
+
+  /// No description provided for @timeRangeSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Range (seconds)'**
+  String get timeRangeSeconds;
+
+  /// No description provided for @timeFreeFixedRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: fixed 2–10s'**
+  String get timeFreeFixedRange;
+
+  /// No description provided for @timeCurrentRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Current: {min} – {max} s'**
+  String timeCurrentRange(int min, int max);
+
+  /// No description provided for @timeRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running…'**
+  String get timeRunning;
+
+  /// No description provided for @timeHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden'**
+  String get timeHidden;
+
+  /// No description provided for @timeFormatted.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s {milliseconds}ms'**
+  String timeFormatted(int seconds, Object milliseconds);
 }
 
 class _AppLocalizationsDelegate

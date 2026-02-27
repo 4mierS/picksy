@@ -41,5 +41,39 @@
   "homeTapToOpen": "Toca para abrir",
   "historyTitle": "Historial",
   "historyClearAll": "Borrar todo",
-  "historyEmpty": "Sin historial aún"
+  "historyEmpty": "Sin historial aún",
+  "timeTitle": "Tiempo aleatorio",
+  "timeReady": "¿Listo?",
+  "timeReset": "Reiniciar",
+  "timeAgain": "Otra vez",
+  "timeStart": "Iniciar",
+  "timeProCustomRangeHint": "Pro: elige un rango personalizado.",
+  "timeFreeCustomRangeHint": "Gratis: rango fijo de 2–10 segundos. Mejora para rangos personalizados.",
+  "timeHideTime": "Ocultar tiempo",
+  "timeHideTimeSubtitle": "Mostrar el tiempo solo al final (Hot Potato).",
+  "timeVibrateOnFinish": "Vibrar al terminar",
+  "timeRangeSeconds": "Rango (segundos)",
+  "timeFreeFixedRange": "Gratis: fijo 2–10s",
+  "timeCurrentRange": "Actual: {min} – {max} s",
+  "@timeCurrentRange": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "timeRunning": "En curso…",
+  "timeHidden": "Oculto",
+  "timeFormatted": "{seconds}s {milliseconds}ms",
+  "@timeFormatted": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "milliseconds": {}
+    }
+  }
 }
