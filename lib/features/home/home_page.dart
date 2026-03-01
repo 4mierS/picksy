@@ -23,6 +23,7 @@ class HomePage extends StatelessWidget {
     GeneratorType.time,
     GeneratorType.reactionTest,
     GeneratorType.hangman,
+    GeneratorType.card,
   ];
 
   @override

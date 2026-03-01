@@ -51,6 +51,45 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generatorHangman => 'Galgenmännchen';
 
   @override
+  String get generatorCard => 'Karte ziehen';
+
+  @override
+  String get cardTitle => 'Karte ziehen';
+
+  @override
+  String get cardTapDraw => '"Ziehen" tippen, um eine Karte zu ziehen';
+
+  @override
+  String get cardDraw => 'Ziehen';
+
+  @override
+  String get cardSectionOptions => 'Optionen';
+
+  @override
+  String get cardIncludeJokers => 'Joker einbeziehen';
+
+  @override
+  String get cardIncludeJokersSubtitle => 'Zwei Joker zum Stapel hinzufügen';
+
+  @override
+  String get cardIncludeJokersProTitle => 'Joker sind Pro';
+
+  @override
+  String get cardIncludeJokersProMessage => 'Werde Pro, um Joker hinzuzufügen.';
+
+  @override
+  String get cardMultiDrawCount => 'Karten pro Zug';
+
+  @override
+  String get cardMultiDrawProTitle => 'Mehrfachzug ist Pro';
+
+  @override
+  String get cardMultiDrawProMessage => 'Werde Pro, um mehrere Karten auf einmal zu ziehen.';
+
+  @override
+  String get cardFreeProHint => 'Kostenlos: Einzelzug.\nPro: Joker + Mehrfachzug.';
+
+  @override
   String get commonGenerate => 'Generieren';
 
   @override
