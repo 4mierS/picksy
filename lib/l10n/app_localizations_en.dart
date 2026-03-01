@@ -21,6 +21,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navSettings => 'Settings';
 
   @override
+  String get navAnalytics => 'Analytics';
+
+  @override
   String get generatorColor => 'Color';
 
   @override
@@ -698,13 +701,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hangmanYouWon => 'You won!';
 
   @override
-  String hangmanYouLost(Object word) => 'Game over! The word was: $word';
+  String hangmanYouLost(Object word) {
+    return 'Game over! The word was: $word';
+  }
 
   @override
   String get hangmanGuessWord => 'Guess the word';
 
   @override
-  String hangmanAttemptsLeft(int count) => 'Attempts left: $count';
+  String hangmanAttemptsLeft(int count) {
+    return 'Attempts left: $count';
+  }
 
   @override
   String get hangmanWrongLetters => 'Wrong letters:';
@@ -717,9 +724,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hangmanMaxLength => 'Max word length';
-
-  @override
-  String get navAnalytics => 'Analytics';
 
   @override
   String get analyticsTitle => 'Analytics';
@@ -738,7 +742,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analyticsViewAll => 'View All';
 
   @override
-  String analyticsGeneratorTitle(Object generator) => '$generator Analytics';
+  String analyticsGeneratorTitle(Object generator) {
+    return '$generator Analytics';
+  }
 
   @override
   String get analyticsAutoRun => 'Auto-Run';

@@ -21,6 +21,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get navSettings => 'Ajustes';
 
   @override
+  String get navAnalytics => 'Analíticas';
+
+  @override
   String get generatorColor => 'Color';
 
   @override
@@ -175,7 +178,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String routerComingNext(Object generator) {
-    return 'Coming next: $generator';
+    return 'A continuación: $generator';
   }
 
   @override
@@ -698,13 +701,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hangmanYouWon => '¡Ganaste!';
 
   @override
-  String hangmanYouLost(Object word) => '¡Perdiste! La palabra era: $word';
+  String hangmanYouLost(Object word) {
+    return '¡Perdiste! La palabra era: $word';
+  }
 
   @override
   String get hangmanGuessWord => 'Adivina la palabra';
 
   @override
-  String hangmanAttemptsLeft(int count) => 'Intentos restantes: $count';
+  String hangmanAttemptsLeft(int count) {
+    return 'Intentos restantes: $count';
+  }
 
   @override
   String get hangmanWrongLetters => 'Letras incorrectas:';
@@ -717,9 +724,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hangmanMaxLength => 'Longitud máxima';
-
-  @override
-  String get navAnalytics => 'Analíticas';
 
   @override
   String get analyticsTitle => 'Analíticas';
@@ -738,7 +742,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get analyticsViewAll => 'View All';
 
   @override
-  String analyticsGeneratorTitle(Object generator) => '$generator Analytics';
+  String analyticsGeneratorTitle(Object generator) {
+    return '$generator Analíticas';
+  }
 
   @override
   String get analyticsAutoRun => 'Auto-Run';
