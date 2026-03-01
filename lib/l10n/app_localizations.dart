@@ -188,6 +188,84 @@ abstract class AppLocalizations {
   /// **'Hangman'**
   String get generatorHangman;
 
+  /// No description provided for @generatorCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Draw'**
+  String get generatorCard;
+
+  /// No description provided for @cardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Draw'**
+  String get cardTitle;
+
+  /// No description provided for @cardTapDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap "Draw" to draw a card'**
+  String get cardTapDraw;
+
+  /// No description provided for @cardDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw'**
+  String get cardDraw;
+
+  /// No description provided for @cardSectionOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get cardSectionOptions;
+
+  /// No description provided for @cardIncludeJokers.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Jokers'**
+  String get cardIncludeJokers;
+
+  /// No description provided for @cardIncludeJokersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add two Jokers to the deck'**
+  String get cardIncludeJokersSubtitle;
+
+  /// No description provided for @cardIncludeJokersProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Jokers are Pro'**
+  String get cardIncludeJokersProTitle;
+
+  /// No description provided for @cardIncludeJokersProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to add Jokers to the deck.'**
+  String get cardIncludeJokersProMessage;
+
+  /// No description provided for @cardMultiDrawCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards per draw'**
+  String get cardMultiDrawCount;
+
+  /// No description provided for @cardMultiDrawProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-draw is Pro'**
+  String get cardMultiDrawProTitle;
+
+  /// No description provided for @cardMultiDrawProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to draw multiple cards at once.'**
+  String get cardMultiDrawProMessage;
+
+  /// No description provided for @cardFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: Single draw.\nPro: Jokers + multi-draw.'**
+  String get cardFreeProHint;
+
   /// No description provided for @commonGenerate.
   ///
   /// In en, this message translates to:

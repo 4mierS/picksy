@@ -8,5 +8,6 @@ enum GeneratorType {
   time,
   reactionTest,
   hangman,
+  card,
   colorReflex,
 }

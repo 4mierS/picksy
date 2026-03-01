@@ -198,6 +198,16 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         return rng.nextBool() ? 'Won' : 'Lost';
       case GeneratorType.customList:
         return 'Item ${rng.nextInt(10) + 1}';
+
+      // ✅ from copilot/add-random-card-generator
+      case GeneratorType.card:
+        const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        const suits = ['♠', '♥', '♦', '♣'];
+        final rank = ranks[rng.nextInt(ranks.length)];
+        final suit = suits[rng.nextInt(suits.length)];
+        return '$rank $suit';
+
+      // ✅ from main
       case GeneratorType.colorReflex:
         final correct = rng.nextInt(30);
         final total = correct + rng.nextInt(15);
@@ -241,6 +251,8 @@ class _StatsSection extends StatelessWidget {
         return _HangmanStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.customList:
         return _CustomListStats(entries: entries, l10n: l10n, accent: accent);
+      case GeneratorType.card:
+        return _CardStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.colorReflex:
         return _ColorReflexStats(entries: entries, l10n: l10n, accent: accent);
     }
@@ -759,6 +771,88 @@ class _CustomListStats extends StatelessWidget {
       ],
     );
   }
+}// ─── Card ────────────────────────────────────────────────────────────────────
+
+class _CardStats extends StatelessWidget {
+  final List<HistoryEntry> entries;
+  final AppLocalizations l10n;
+  final Color accent;
+
+  const _CardStats({
+    required this.entries,
+    required this.l10n,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Count suit distribution from metadata or parse value
+    final suitFreq = <String, int>{};
+    final rankFreq = <String, int>{};
+
+    for (final e in entries) {
+      // Only process single-card entries (skip multi-draw)
+      if (e.value.contains(',')) continue;
+
+      final meta = e.metadata;
+      if (meta != null) {
+        final suit = meta['suit'] as String?;
+        final rank = meta['rank'] as String?;
+        if (suit != null && suit.isNotEmpty) {
+          suitFreq[suit] = (suitFreq[suit] ?? 0) + 1;
+        }
+        if (rank != null && rank.isNotEmpty) {
+          rankFreq[rank] = (rankFreq[rank] ?? 0) + 1;
+        }
+      } else {
+        // Fall back to parsing "rank suit" from value
+        final parts = e.value.trim().split(' ');
+        if (parts.length >= 2) {
+          final rank = parts[0];
+          final suit = parts[1];
+          suitFreq[suit] = (suitFreq[suit] ?? 0) + 1;
+          rankFreq[rank] = (rankFreq[rank] ?? 0) + 1;
+        }
+      }
+    }
+
+    final suitMax = suitFreq.values.isNotEmpty
+        ? suitFreq.values.reduce((a, b) => a > b ? a : b)
+        : 1;
+
+    final rankSorted = rankFreq.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    final rankMax = rankSorted.isNotEmpty ? rankSorted.first.value : 1;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionTitle('Suit Distribution'),
+        for (final suit in ['♠', '♥', '♦', '♣']) ...[
+          _BarRow(
+            label: suit,
+            fraction: suitMax > 0 ? (suitFreq[suit] ?? 0) / suitMax : 0,
+            accent: accent,
+            trailing: '${suitFreq[suit] ?? 0}',
+          ),
+          const SizedBox(height: 6),
+        ],
+        if (rankSorted.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          _SectionTitle('Rank Distribution'),
+          for (final entry in rankSorted.take(13)) ...[
+            _BarRow(
+              label: entry.key,
+              fraction: rankMax > 0 ? entry.value / rankMax : 0,
+              accent: accent,
+              trailing: '${entry.value}',
+            ),
+            const SizedBox(height: 6),
+          ],
+        ],
+      ],
+    );
+  }
 }
 
 // ─── ColorReflex ─────────────────────────────────────────────────────────────
@@ -805,14 +899,10 @@ class _ColorReflexStats extends StatelessWidget {
     }
 
     final bestAccuracy = accuracies.reduce(max);
-    final avgAccuracy =
-        accuracies.reduce((a, b) => a + b) / accuracies.length;
-    final bestScore =
-        correctCounts.isNotEmpty ? correctCounts.reduce(max) : 0;
+    final avgAccuracy = accuracies.reduce((a, b) => a + b) / accuracies.length;
+    final bestScore = correctCounts.isNotEmpty ? correctCounts.reduce(max) : 0;
     final avgReaction =
-        reactionMs.isNotEmpty
-            ? reactionMs.reduce((a, b) => a + b) ~/ reactionMs.length
-            : 0;
+        reactionMs.isNotEmpty ? reactionMs.reduce((a, b) => a + b) ~/ reactionMs.length : 0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

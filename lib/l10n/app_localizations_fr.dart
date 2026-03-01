@@ -51,6 +51,45 @@ class AppLocalizationsFr extends AppLocalizations {
   String get generatorHangman => 'Pendu';
 
   @override
+  String get generatorCard => 'Tirage de carte';
+
+  @override
+  String get cardTitle => 'Tirage de carte';
+
+  @override
+  String get cardTapDraw => 'Appuyez sur "Tirer" pour obtenir une carte';
+
+  @override
+  String get cardDraw => 'Tirer';
+
+  @override
+  String get cardSectionOptions => 'Options';
+
+  @override
+  String get cardIncludeJokers => 'Inclure les jokers';
+
+  @override
+  String get cardIncludeJokersSubtitle => 'Ajouter deux jokers au jeu';
+
+  @override
+  String get cardIncludeJokersProTitle => 'Les jokers sont Pro';
+
+  @override
+  String get cardIncludeJokersProMessage => 'Passez Pro pour ajouter des jokers au jeu.';
+
+  @override
+  String get cardMultiDrawCount => 'Cartes par tirage';
+
+  @override
+  String get cardMultiDrawProTitle => 'Le tirage multiple est Pro';
+
+  @override
+  String get cardMultiDrawProMessage => 'Passez Pro pour tirer plusieurs cartes à la fois.';
+
+  @override
+  String get cardFreeProHint => 'Gratuit : Une carte.\nPro : Jokers + tirage multiple.';
+
+  @override
   String get commonGenerate => 'Générer';
 
   @override

@@ -51,6 +51,45 @@ class AppLocalizationsIt extends AppLocalizations {
   String get generatorHangman => 'Impiccato';
 
   @override
+  String get generatorCard => 'Pesca carta';
+
+  @override
+  String get cardTitle => 'Pesca carta';
+
+  @override
+  String get cardTapDraw => 'Tocca "Pesca" per ottenere una carta';
+
+  @override
+  String get cardDraw => 'Pesca';
+
+  @override
+  String get cardSectionOptions => 'Opzioni';
+
+  @override
+  String get cardIncludeJokers => 'Includi jolly';
+
+  @override
+  String get cardIncludeJokersSubtitle => 'Aggiungi due jolly al mazzo';
+
+  @override
+  String get cardIncludeJokersProTitle => 'I jolly sono Pro';
+
+  @override
+  String get cardIncludeJokersProMessage => 'Passa a Pro per aggiungere i jolly al mazzo.';
+
+  @override
+  String get cardMultiDrawCount => 'Carte per pesca';
+
+  @override
+  String get cardMultiDrawProTitle => 'La pesca multipla è Pro';
+
+  @override
+  String get cardMultiDrawProMessage => 'Passa a Pro per pescare più carte alla volta.';
+
+  @override
+  String get cardFreeProHint => 'Gratis: Una carta.\nPro: Jolly + pesca multipla.';
+
+  @override
   String get commonGenerate => 'Genera';
 
   @override

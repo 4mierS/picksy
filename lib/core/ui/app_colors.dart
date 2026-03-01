@@ -27,6 +27,7 @@ extension GeneratorTypeColorX on GeneratorType {
         return Colors.redAccent;
       case GeneratorType.hangman:
         return Colors.indigoAccent;
+      case GeneratorType.card:
       case GeneratorType.colorReflex:
         return Colors.cyanAccent;
     }
@@ -54,6 +55,8 @@ extension GeneratorTypeIconX on GeneratorType {
         return Icons.flash_on;
       case GeneratorType.hangman:
         return Icons.sports_esports_outlined;
+      case GeneratorType.card:
+        return Icons.style_outlined;
       case GeneratorType.colorReflex:
         return Icons.psychology_outlined;
     }

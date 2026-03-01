@@ -29,6 +29,8 @@ extension GeneratorTypeL10n on GeneratorType {
         return l10n.generatorReactionTest;
       case GeneratorType.hangman:
         return l10n.generatorHangman;
+      case GeneratorType.card:
+        return l10n.generatorCard;
       case GeneratorType.colorReflex:
         return l10n.generatorColorReflex;
     }
