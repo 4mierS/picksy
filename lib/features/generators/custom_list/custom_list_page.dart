@@ -161,7 +161,7 @@ class _CustomListPageState extends State<CustomListPage> {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: store.selectedListId,
+                    initialValue: store.selectedListId,
                     items: [
                       for (final l in lists)
                         DropdownMenuItem(value: l.id, child: Text(l.name)),
@@ -388,7 +388,7 @@ class _CustomListPageState extends State<CustomListPage> {
                   ? Center(child: Text(l10n.customListNoListSelected))
                   : ListView.separated(
                       itemCount: selected.items.length,
-                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      separatorBuilder: (_, _) => const Divider(height: 1),
                       itemBuilder: (context, i) {
                         final item = selected.items[i];
                         return ListTile(

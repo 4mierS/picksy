@@ -152,13 +152,13 @@ class _TimePageState extends State<TimePage> {
 
     final showTimeNow = !hideTime || _revealHiddenAtEnd;
 
-    String _formatMs(int ms) {
+    String formatMs(int ms) {
       final seconds = ms ~/ 1000;
       final milli = ms % 1000;
       return l10n.timeFormatted(seconds, milli.toString().padLeft(3, '0'));
     }
 
-    final timeText = _formatMs(_elapsedMs);
+    final timeText = formatMs(_elapsedMs);
 
     return Scaffold(
       backgroundColor: bg,
