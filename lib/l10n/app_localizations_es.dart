@@ -868,4 +868,62 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get analyticsFrequency => 'Frequency';
+
+  @override
+  String get analyticsBestAccuracy => 'Mejor precisión';
+
+  @override
+  String get analyticsAvgAccuracy => 'Precisión media';
+
+  @override
+  String get generatorColorReflex => 'Reflejo de Color';
+
+  @override
+  String get colorReflexInstructions =>
+      '¡Toca el color del TEXTO, no de la palabra!';
+
+  @override
+  String get colorReflexDescription =>
+      'Usa el Efecto Stroop para poner a prueba tus reflejos.';
+
+  @override
+  String get colorReflexDurationLabel => 'Duración';
+
+  @override
+  String get colorReflexGetReady => '¡Prepárate!';
+
+  @override
+  String get colorReflexTapPrompt => 'Toca el COLOR del texto de arriba';
+
+  @override
+  String get colorReflexTimeUp => '¡Tiempo!';
+
+  @override
+  String get colorReflexCorrectLabel => 'Correcto';
+
+  @override
+  String get colorReflexWrongLabel => 'Incorrecto';
+
+  @override
+  String get colorReflexAccuracyLabel => 'Precisión';
+
+  @override
+  String get colorReflexAvgReactionLabel => 'Reacción media';
+
+  @override
+  String get colorReflexPlayAgain => 'Jugar de nuevo';
+
+  @override
+  String get colorReflexBackToMenu => 'Volver al menú';
+
+  @override
+  String get colorReflexDurationProTitle => 'La duración personalizada es Pro';
+
+  @override
+  String get colorReflexDurationProMessage =>
+      'Hazte Pro para elegir entre 15s, 30s y 60s.';
+
+  @override
+  String get colorReflexFreeProHint =>
+      'Gratis: 30 segundos fijo.\nPro: elige 15s, 30s o 60s.';
 }
