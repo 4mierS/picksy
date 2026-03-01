@@ -14,6 +14,7 @@
   "generatorTime": "Time",
   "generatorReactionTest": "Reaction Test",
   "generatorHangman": "Hangman",
+  "generatorTapChallenge": "Tap Challenge",
   "commonGenerate": "Generate",
   "commonCopy": "Copy",
   "commonCopied": "Copied",
@@ -397,5 +398,33 @@
   "colorReflexBackToMenu": "Back to menu",
   "colorReflexDurationProTitle": "Custom duration is Pro",
   "colorReflexDurationProMessage": "Go Pro to choose between 15s, 30s, and 60s durations.",
-  "colorReflexFreeProHint": "Free: 30 seconds fixed.\nPro: choose 15s, 30s, or 60s."
+  "colorReflexFreeProHint": "Free: 30 seconds fixed.\nPro: choose 15s, 30s, or 60s.",
+  "tapChallengeTitle": "Tap Challenge",
+  "tapChallengeInstructions": "Tap as fast as you can when GO appears!",
+  "tapChallengeStart": "Start",
+  "tapChallengeAgain": "Try Again",
+  "tapChallengeTaps": "Taps",
+  "tapChallengeTPS": "Taps/sec",
+  "tapChallengePersonalBest": "Personal Best",
+  "tapChallengeDurationLabel": "Duration",
+  "tapChallengeDurationSeconds": "{seconds}s",
+  "@tapChallengeDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "tapChallengeDurationProTitle": "Custom Duration is Pro",
+  "tapChallengeDurationProMessage": "Go Pro to set the challenge duration to 5s, 10s, 15s, 30s, or 60s.",
+  "tapChallengeVibrateOnGo": "Vibrate on GO",
+  "tapChallengeVibrateOnEnd": "Vibrate on end",
+  "tapChallengeFreeProHint": "Free: 5-second run.\nPro: choose duration (5s, 10s, 15s, 30s, 60s) + advanced analytics.",
+  "tapChallengeGo": "GO!",
+  "tapChallengeGetReady": "Get Ready",
+  "tapChallengeResultTitle": "Run Complete!",
+  "tapChallengeAnalyticsPersonalBest": "Best Taps",
+  "tapChallengeAnalyticsAvgTaps": "Avg Taps",
+  "tapChallengeAnalyticsAvgTPS": "Avg TPS",
+  "tapChallengeAnalyticsBestTPS": "Best TPS"
 }

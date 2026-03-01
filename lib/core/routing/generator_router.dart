@@ -9,9 +9,11 @@ import '../../features/generators/letter/letter_page.dart';
 import '../../features/generators/custom_list/custom_list_page.dart';
 import '../../features/generators/bottle_spin/bottle_spin_page.dart';
 import '../../features/generators/time/time_page.dart';
+
 import '../../features/generators/reaction_test/reaction_test_page.dart';
 import '../../features/generators/card/card_page.dart';
 import '../../features/generators/hangman/hangman_page.dart';
+import '../../features/generators/tap_challenge/tap_challenge_page.dart';
 import '../../features/generators/color_reflex/color_reflex_page.dart';
 
 void openGenerator(BuildContext context, GeneratorType type) {
@@ -25,6 +27,7 @@ void openGenerator(BuildContext context, GeneratorType type) {
     GeneratorType.time => const TimePage(),
     GeneratorType.reactionTest => const ReactionTestPage(),
     GeneratorType.hangman => const HangmanPage(),
+    GeneratorType.tapChallenge => const TapChallengePage(),
     GeneratorType.card => const CardPage(),
     GeneratorType.colorReflex => const ColorReflexPage(),
   };

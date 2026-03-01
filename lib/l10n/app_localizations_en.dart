@@ -84,10 +84,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cardMultiDrawProTitle => 'Multi-draw is Pro';
 
   @override
-  String get cardMultiDrawProMessage => 'Go Pro to draw multiple cards at once.';
+  String get cardMultiDrawProMessage =>
+      'Go Pro to draw multiple cards at once.';
 
   @override
   String get cardFreeProHint => 'Free: Single draw.\nPro: Jokers + multi-draw.';
+
+  @override
+  String get generatorTapChallenge => 'Tap Challenge';
 
   @override
   String get commonGenerate => 'Generate';
@@ -965,4 +969,70 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get colorReflexFreeProHint =>
       'Free: 30 seconds fixed.\nPro: choose 15s, 30s, or 60s.';
+
+  @override
+  String get tapChallengeTitle => 'Tap Challenge';
+
+  @override
+  String get tapChallengeInstructions =>
+      'Tap as fast as you can when GO appears!';
+
+  @override
+  String get tapChallengeStart => 'Start';
+
+  @override
+  String get tapChallengeAgain => 'Try Again';
+
+  @override
+  String get tapChallengeTaps => 'Taps';
+
+  @override
+  String get tapChallengeTPS => 'Taps/sec';
+
+  @override
+  String get tapChallengePersonalBest => 'Personal Best';
+
+  @override
+  String get tapChallengeDurationLabel => 'Duration';
+
+  @override
+  String tapChallengeDurationSeconds(int seconds) => '${seconds}s';
+
+  @override
+  String get tapChallengeDurationProTitle => 'Custom Duration is Pro';
+
+  @override
+  String get tapChallengeDurationProMessage =>
+      'Go Pro to set the challenge duration to 5s, 10s, 15s, 30s, or 60s.';
+
+  @override
+  String get tapChallengeVibrateOnGo => 'Vibrate on GO';
+
+  @override
+  String get tapChallengeVibrateOnEnd => 'Vibrate on end';
+
+  @override
+  String get tapChallengeFreeProHint =>
+      'Free: 5-second run.\nPro: choose duration (5s, 10s, 15s, 30s, 60s) + advanced analytics.';
+
+  @override
+  String get tapChallengeGo => 'GO!';
+
+  @override
+  String get tapChallengeGetReady => 'Get Ready';
+
+  @override
+  String get tapChallengeResultTitle => 'Run Complete!';
+
+  @override
+  String get tapChallengeAnalyticsPersonalBest => 'Best Taps';
+
+  @override
+  String get tapChallengeAnalyticsAvgTaps => 'Avg Taps';
+
+  @override
+  String get tapChallengeAnalyticsAvgTPS => 'Avg TPS';
+
+  @override
+  String get tapChallengeAnalyticsBestTPS => 'Best TPS';
 }

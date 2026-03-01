@@ -14,6 +14,7 @@
   "generatorTime": "Zeit",
   "generatorReactionTest": "Reaktionstest",
   "generatorHangman": "Galgenmännchen",
+  "generatorTapChallenge": "Tipp-Challenge",
   "commonGenerate": "Generieren",
   "commonCopy": "Kopieren",
   "commonCopied": "Kopiert",
@@ -69,6 +70,7 @@
   "proPromoCodeApply": "Einlösen",
   "proPromoCodeSuccess": "Promo-Code eingelöst! Pro ist jetzt aktiv.",
   "proPromoCodeInvalid": "Ungültiger Promo-Code. Bitte erneut versuchen.",
+  "homeSmartRandomDecisions": "Smarte Zufallsentscheidungen",
   "homeHistoryTooltip": "Verlauf",
   "homeFavorites": "Favoriten",
   "homeAllGenerators": "Alle Generatoren",
@@ -396,5 +398,33 @@
   "colorReflexBackToMenu": "Zurück zum Menü",
   "colorReflexDurationProTitle": "Individuelle Dauer ist Pro",
   "colorReflexDurationProMessage": "Upgrade auf Pro, um zwischen 15s, 30s und 60s zu wählen.",
-  "colorReflexFreeProHint": "Gratis: 30 Sekunden fest.\nPro: wähle 15s, 30s oder 60s."
+  "colorReflexFreeProHint": "Gratis: 30 Sekunden fest.\nPro: wähle 15s, 30s oder 60s.",
+  "tapChallengeTitle": "Tipp-Challenge",
+  "tapChallengeInstructions": "Tippe so schnell wie möglich, wenn GO erscheint!",
+  "tapChallengeStart": "Start",
+  "tapChallengeAgain": "Nochmal",
+  "tapChallengeTaps": "Tipps",
+  "tapChallengeTPS": "Tipps/Sek",
+  "tapChallengePersonalBest": "Persönliche Bestleistung",
+  "tapChallengeDurationLabel": "Dauer",
+  "tapChallengeDurationSeconds": "{seconds}s",
+  "@tapChallengeDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "tapChallengeDurationProTitle": "Benutzerdefinierte Dauer ist Pro",
+  "tapChallengeDurationProMessage": "Werde Pro, um die Challenge-Dauer auf 5s, 10s, 15s, 30s oder 60s einzustellen.",
+  "tapChallengeVibrateOnGo": "Vibration bei GO",
+  "tapChallengeVibrateOnEnd": "Vibration am Ende",
+  "tapChallengeFreeProHint": "Kostenlos: 5-Sekunden-Run.\nPro: Dauer wählen (5s, 10s, 15s, 30s, 60s) + erweiterte Analytik.",
+  "tapChallengeGo": "LOS!",
+  "tapChallengeGetReady": "Bereit machen",
+  "tapChallengeResultTitle": "Run abgeschlossen!",
+  "tapChallengeAnalyticsPersonalBest": "Beste Tipps",
+  "tapChallengeAnalyticsAvgTaps": "Ø Tipps",
+  "tapChallengeAnalyticsAvgTPS": "Ø TPS",
+  "tapChallengeAnalyticsBestTPS": "Beste TPS"
 }

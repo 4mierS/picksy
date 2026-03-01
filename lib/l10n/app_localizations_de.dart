@@ -84,10 +84,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cardMultiDrawProTitle => 'Mehrfachzug ist Pro';
 
   @override
-  String get cardMultiDrawProMessage => 'Werde Pro, um mehrere Karten auf einmal zu ziehen.';
+  String get cardMultiDrawProMessage =>
+      'Werde Pro, um mehrere Karten auf einmal zu ziehen.';
 
   @override
-  String get cardFreeProHint => 'Kostenlos: Einzelzug.\nPro: Joker + Mehrfachzug.';
+  String get cardFreeProHint =>
+      'Kostenlos: Einzelzug.\nPro: Joker + Mehrfachzug.';
+
+  @override
+  String get generatorTapChallenge => 'Tipp-Challenge';
 
   @override
   String get commonGenerate => 'Generieren';
@@ -257,7 +262,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Ungültiger Promo-Code. Bitte erneut versuchen.';
 
   @override
-  String get homeSmartRandomDecisions => 'Smart random decisions';
+  String get homeSmartRandomDecisions => 'Smarte Zufallsentscheidungen';
 
   @override
   String get homeHistoryTooltip => 'Verlauf';
@@ -967,4 +972,70 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get colorReflexFreeProHint =>
       'Gratis: 30 Sekunden fest.\nPro: wähle 15s, 30s oder 60s.';
+
+  @override
+  String get tapChallengeTitle => 'Tipp-Challenge';
+
+  @override
+  String get tapChallengeInstructions =>
+      'Tippe so schnell wie möglich, wenn GO erscheint!';
+
+  @override
+  String get tapChallengeStart => 'Start';
+
+  @override
+  String get tapChallengeAgain => 'Nochmal';
+
+  @override
+  String get tapChallengeTaps => 'Tipps';
+
+  @override
+  String get tapChallengeTPS => 'Tipps/Sek';
+
+  @override
+  String get tapChallengePersonalBest => 'Persönliche Bestleistung';
+
+  @override
+  String get tapChallengeDurationLabel => 'Dauer';
+
+  @override
+  String tapChallengeDurationSeconds(int seconds) => '${seconds}s';
+
+  @override
+  String get tapChallengeDurationProTitle => 'Benutzerdefinierte Dauer ist Pro';
+
+  @override
+  String get tapChallengeDurationProMessage =>
+      'Werde Pro, um die Challenge-Dauer auf 5s, 10s, 15s, 30s oder 60s einzustellen.';
+
+  @override
+  String get tapChallengeVibrateOnGo => 'Vibration bei GO';
+
+  @override
+  String get tapChallengeVibrateOnEnd => 'Vibration am Ende';
+
+  @override
+  String get tapChallengeFreeProHint =>
+      'Kostenlos: 5-Sekunden-Run.\nPro: Dauer wählen (5s, 10s, 15s, 30s, 60s) + erweiterte Analytik.';
+
+  @override
+  String get tapChallengeGo => 'LOS!';
+
+  @override
+  String get tapChallengeGetReady => 'Bereit machen';
+
+  @override
+  String get tapChallengeResultTitle => 'Run abgeschlossen!';
+
+  @override
+  String get tapChallengeAnalyticsPersonalBest => 'Beste Tipps';
+
+  @override
+  String get tapChallengeAnalyticsAvgTaps => 'Ø Tipps';
+
+  @override
+  String get tapChallengeAnalyticsAvgTPS => 'Ø TPS';
+
+  @override
+  String get tapChallengeAnalyticsBestTPS => 'Beste TPS';
 }

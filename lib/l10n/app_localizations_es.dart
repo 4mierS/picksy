@@ -75,7 +75,8 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardIncludeJokersProTitle => 'Los comodines son Pro';
 
   @override
-  String get cardIncludeJokersProMessage => 'Hazte Pro para añadir comodines al mazo.';
+  String get cardIncludeJokersProMessage =>
+      'Hazte Pro para añadir comodines al mazo.';
 
   @override
   String get cardMultiDrawCount => 'Cartas por extracción';
@@ -84,10 +85,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cardMultiDrawProTitle => 'Sacar múltiples es Pro';
 
   @override
-  String get cardMultiDrawProMessage => 'Hazte Pro para sacar varias cartas a la vez.';
+  String get cardMultiDrawProMessage =>
+      'Hazte Pro para sacar varias cartas a la vez.';
 
   @override
-  String get cardFreeProHint => 'Gratis: Una carta.\nPro: Comodines + sacar múltiples.';
+  String get cardFreeProHint =>
+      'Gratis: Una carta.\nPro: Comodines + sacar múltiples.';
+
+  @override
+  String get generatorTapChallenge => 'Desafío de Toque';
 
   @override
   String get commonGenerate => 'Generar';
@@ -965,4 +971,70 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get colorReflexFreeProHint =>
       'Gratis: 30 segundos fijo.\nPro: elige 15s, 30s o 60s.';
+
+  @override
+  String get tapChallengeTitle => 'Desafío de Toque';
+
+  @override
+  String get tapChallengeInstructions =>
+      '¡Toca lo más rápido posible cuando aparezca GO!';
+
+  @override
+  String get tapChallengeStart => 'Iniciar';
+
+  @override
+  String get tapChallengeAgain => 'Intentar de Nuevo';
+
+  @override
+  String get tapChallengeTaps => 'Toques';
+
+  @override
+  String get tapChallengeTPS => 'Toques/seg';
+
+  @override
+  String get tapChallengePersonalBest => 'Mejor Personal';
+
+  @override
+  String get tapChallengeDurationLabel => 'Duración';
+
+  @override
+  String tapChallengeDurationSeconds(int seconds) => '${seconds}s';
+
+  @override
+  String get tapChallengeDurationProTitle => 'Duración personalizada es Pro';
+
+  @override
+  String get tapChallengeDurationProMessage =>
+      'Hazte Pro para configurar la duración a 5s, 10s, 15s, 30s o 60s.';
+
+  @override
+  String get tapChallengeVibrateOnGo => 'Vibrar en GO';
+
+  @override
+  String get tapChallengeVibrateOnEnd => 'Vibrar al final';
+
+  @override
+  String get tapChallengeFreeProHint =>
+      'Gratis: 5 segundos.\nPro: elige duración (5s, 10s, 15s, 30s, 60s) + analíticas avanzadas.';
+
+  @override
+  String get tapChallengeGo => '¡VAMOS!';
+
+  @override
+  String get tapChallengeGetReady => 'Prepárate';
+
+  @override
+  String get tapChallengeResultTitle => '¡Carrera completada!';
+
+  @override
+  String get tapChallengeAnalyticsPersonalBest => 'Mejores Toques';
+
+  @override
+  String get tapChallengeAnalyticsAvgTaps => 'Prom. Toques';
+
+  @override
+  String get tapChallengeAnalyticsAvgTPS => 'Prom. TPS';
+
+  @override
+  String get tapChallengeAnalyticsBestTPS => 'Mejor TPS';
 }
