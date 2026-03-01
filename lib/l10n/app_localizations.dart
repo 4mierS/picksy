@@ -1555,6 +1555,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Frequency'**
   String get analyticsFrequency;
+
+  /// No description provided for @analyticsBestAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Best accuracy'**
+  String get analyticsBestAccuracy;
+
+  /// No description provided for @analyticsAvgAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg accuracy'**
+  String get analyticsAvgAccuracy;
+
+  /// No description provided for @generatorColorReflex.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Reflex'**
+  String get generatorColorReflex;
+
+  /// No description provided for @colorReflexInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the color of the TEXT, not the word!'**
+  String get colorReflexInstructions;
+
+  /// No description provided for @colorReflexDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses the Stroop Effect to test your reflexes.'**
+  String get colorReflexDescription;
+
+  /// No description provided for @colorReflexDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get colorReflexDurationLabel;
+
+  /// No description provided for @colorReflexGetReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Get ready!'**
+  String get colorReflexGetReady;
+
+  /// No description provided for @colorReflexTapPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the COLOR of the text above'**
+  String get colorReflexTapPrompt;
+
+  /// No description provided for @colorReflexTimeUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Time\'s up!'**
+  String get colorReflexTimeUp;
+
+  /// No description provided for @colorReflexCorrectLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get colorReflexCorrectLabel;
+
+  /// No description provided for @colorReflexWrongLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get colorReflexWrongLabel;
+
+  /// No description provided for @colorReflexAccuracyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy'**
+  String get colorReflexAccuracyLabel;
+
+  /// No description provided for @colorReflexAvgReactionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg reaction'**
+  String get colorReflexAvgReactionLabel;
+
+  /// No description provided for @colorReflexPlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get colorReflexPlayAgain;
+
+  /// No description provided for @colorReflexBackToMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to menu'**
+  String get colorReflexBackToMenu;
+
+  /// No description provided for @colorReflexDurationProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom duration is Pro'**
+  String get colorReflexDurationProTitle;
+
+  /// No description provided for @colorReflexDurationProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to choose between 15s, 30s, and 60s durations.'**
+  String get colorReflexDurationProMessage;
+
+  /// No description provided for @colorReflexFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: 30 seconds fixed.\nPro: choose 15s, 30s, or 60s.'**
+  String get colorReflexFreeProHint;
 }
 
 class _AppLocalizationsDelegate

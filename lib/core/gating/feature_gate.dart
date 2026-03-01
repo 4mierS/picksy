@@ -29,6 +29,7 @@ enum ProFeature {
   timeCustomRange,
   analyticsAccess,
   autoRun,
+  colorReflexDuration,
 }
 
 class FeatureGate {
@@ -69,6 +70,7 @@ class FeatureGate {
       case ProFeature.timeCustomRange:
       case ProFeature.analyticsAccess:
       case ProFeature.autoRun:
+      case ProFeature.colorReflexDuration:
         return false;
     }
   }
