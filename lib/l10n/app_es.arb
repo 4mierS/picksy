@@ -339,5 +339,18 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "generatorCard": "Sacar carta",
+  "cardTitle": "Sacar carta",
+  "cardTapDraw": "Toca \"Sacar\" para obtener una carta",
+  "cardDraw": "Sacar",
+  "cardSectionOptions": "Opciones",
+  "cardIncludeJokers": "Incluir comodines",
+  "cardIncludeJokersSubtitle": "Añadir dos comodines al mazo",
+  "cardIncludeJokersProTitle": "Los comodines son Pro",
+  "cardIncludeJokersProMessage": "Hazte Pro para añadir comodines al mazo.",
+  "cardMultiDrawCount": "Cartas por extracción",
+  "cardMultiDrawProTitle": "Sacar múltiples es Pro",
+  "cardMultiDrawProMessage": "Hazte Pro para sacar varias cartas a la vez.",
+  "cardFreeProHint": "Gratis: Una carta.\nPro: Comodines + sacar múltiples."
 }

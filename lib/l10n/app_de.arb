@@ -339,5 +339,18 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "generatorCard": "Karte ziehen",
+  "cardTitle": "Karte ziehen",
+  "cardTapDraw": "\"Ziehen\" tippen, um eine Karte zu ziehen",
+  "cardDraw": "Ziehen",
+  "cardSectionOptions": "Optionen",
+  "cardIncludeJokers": "Joker einbeziehen",
+  "cardIncludeJokersSubtitle": "Zwei Joker zum Stapel hinzufügen",
+  "cardIncludeJokersProTitle": "Joker sind Pro",
+  "cardIncludeJokersProMessage": "Werde Pro, um Joker hinzuzufügen.",
+  "cardMultiDrawCount": "Karten pro Zug",
+  "cardMultiDrawProTitle": "Mehrfachzug ist Pro",
+  "cardMultiDrawProMessage": "Werde Pro, um mehrere Karten auf einmal zu ziehen.",
+  "cardFreeProHint": "Kostenlos: Einzelzug.\nPro: Joker + Mehrfachzug."
 }

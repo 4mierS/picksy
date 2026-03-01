@@ -339,5 +339,18 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "generatorCard": "Card Draw",
+  "cardTitle": "Card Draw",
+  "cardTapDraw": "Tap \"Draw\" to draw a card",
+  "cardDraw": "Draw",
+  "cardSectionOptions": "Options",
+  "cardIncludeJokers": "Include Jokers",
+  "cardIncludeJokersSubtitle": "Add two Jokers to the deck",
+  "cardIncludeJokersProTitle": "Jokers are Pro",
+  "cardIncludeJokersProMessage": "Go Pro to add Jokers to the deck.",
+  "cardMultiDrawCount": "Cards per draw",
+  "cardMultiDrawProTitle": "Multi-draw is Pro",
+  "cardMultiDrawProMessage": "Go Pro to draw multiple cards at once.",
+  "cardFreeProHint": "Free: Single draw.\nPro: Jokers + multi-draw."
 }

@@ -339,5 +339,18 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "generatorCard": "Pesca carta",
+  "cardTitle": "Pesca carta",
+  "cardTapDraw": "Tocca \"Pesca\" per ottenere una carta",
+  "cardDraw": "Pesca",
+  "cardSectionOptions": "Opzioni",
+  "cardIncludeJokers": "Includi jolly",
+  "cardIncludeJokersSubtitle": "Aggiungi due jolly al mazzo",
+  "cardIncludeJokersProTitle": "I jolly sono Pro",
+  "cardIncludeJokersProMessage": "Passa a Pro per aggiungere i jolly al mazzo.",
+  "cardMultiDrawCount": "Carte per pesca",
+  "cardMultiDrawProTitle": "La pesca multipla è Pro",
+  "cardMultiDrawProMessage": "Passa a Pro per pescare più carte alla volta.",
+  "cardFreeProHint": "Gratis: Una carta.\nPro: Jolly + pesca multipla."
 }
