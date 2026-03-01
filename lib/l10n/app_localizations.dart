@@ -1687,6 +1687,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Free: addition & subtraction, 30 seconds.\nPro: all operations, custom duration.'**
   String get mathFreeProHint;
+
+  /// No description provided for @mathAvgAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Accuracy'**
+  String get mathAvgAccuracy;
 }
 
 class _AppLocalizationsDelegate

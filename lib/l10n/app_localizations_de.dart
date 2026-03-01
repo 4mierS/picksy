@@ -855,4 +855,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get mathFreeProHint => 'Free: Addition & Subtraktion, 30 Sekunden.\nPro: alle Operationen, benutzerdefinierte Dauer.';
+
+  @override
+  String get mathAvgAccuracy => 'Durchschn. Genauigkeit';
 }

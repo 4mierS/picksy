@@ -368,5 +368,6 @@
   "mathPPS": "Por seg.",
   "mathPlayAgain": "Jugar de nuevo",
   "mathBackToMenu": "Volver al menú",
-  "mathFreeProHint": "Free: suma y resta, 30 segundos.\nPro: todas las operaciones, duración personalizada."
+  "mathFreeProHint": "Free: suma y resta, 30 segundos.\nPro: todas las operaciones, duración personalizada.",
+  "mathAvgAccuracy": "Precisión media"
 }

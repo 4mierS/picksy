@@ -815,7 +815,7 @@ class _MathChallengeStats extends StatelessWidget {
             ),
             _StatCard(label: l10n.analyticsTotal, value: '${entries.length}', accent: accent),
             _StatCard(
-              label: 'Avg Accuracy',
+              label: l10n.mathAvgAccuracy,
               value: '${avgAccuracy.toStringAsFixed(1)}%',
               accent: accent,
             ),

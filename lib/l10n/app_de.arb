@@ -368,5 +368,6 @@
   "mathPPS": "Pro Sek.",
   "mathPlayAgain": "Nochmal spielen",
   "mathBackToMenu": "Zurück zum Menü",
-  "mathFreeProHint": "Free: Addition & Subtraktion, 30 Sekunden.\nPro: alle Operationen, benutzerdefinierte Dauer."
+  "mathFreeProHint": "Free: Addition & Subtraktion, 30 Sekunden.\nPro: alle Operationen, benutzerdefinierte Dauer.",
+  "mathAvgAccuracy": "Durchschn. Genauigkeit"
 }
