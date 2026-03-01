@@ -27,6 +27,12 @@ extension GeneratorTypeColorX on GeneratorType {
         return Colors.redAccent;
       case GeneratorType.hangman:
         return Colors.indigoAccent;
+      case GeneratorType.tapChallenge:
+        return Colors.cyan;
+      case GeneratorType.card:
+        return Colors.brown;
+      case GeneratorType.colorReflex:
+        return Colors.purpleAccent;
       case GeneratorType.mathChallenge:
         return Colors.deepOrangeAccent;
     }
@@ -54,6 +60,12 @@ extension GeneratorTypeIconX on GeneratorType {
         return Icons.flash_on;
       case GeneratorType.hangman:
         return Icons.sports_esports_outlined;
+      case GeneratorType.tapChallenge:
+        return Icons.touch_app_outlined;
+      case GeneratorType.card:
+        return Icons.style_outlined;
+      case GeneratorType.colorReflex:
+        return Icons.psychology_outlined;
       case GeneratorType.mathChallenge:
         return Icons.calculate_outlined;
     }

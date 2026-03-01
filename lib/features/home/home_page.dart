@@ -23,6 +23,9 @@ class HomePage extends StatelessWidget {
     GeneratorType.time,
     GeneratorType.reactionTest,
     GeneratorType.hangman,
+    GeneratorType.tapChallenge,
+    GeneratorType.card,
+    GeneratorType.colorReflex,
     GeneratorType.mathChallenge,
   ];
 

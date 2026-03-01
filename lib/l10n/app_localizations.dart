@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Hangman'**
   String get generatorHangman;
 
+  /// No description provided for @generatorTapChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Challenge'**
+  String get generatorTapChallenge;
+
   /// No description provided for @generatorMathChallenge.
   ///
   /// In en, this message translates to:
@@ -362,6 +368,168 @@ abstract class AppLocalizations {
   /// **'Italiano'**
   String get settingsLangItalian;
 
+  /// No description provided for @settingsRateApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate App'**
+  String get settingsRateApp;
+
+  /// No description provided for @settingsShareApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Share App'**
+  String get settingsShareApp;
+
+  /// No description provided for @settingsShareAppSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite friends to try Picksy'**
+  String get settingsShareAppSubtitle;
+
+  /// No description provided for @settingsCompareFreePro.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare Free vs Pro'**
+  String get settingsCompareFreePro;
+
+  /// No description provided for @compareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free vs Pro'**
+  String get compareTitle;
+
+  /// No description provided for @compareFeatureLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature'**
+  String get compareFeatureLabel;
+
+  /// No description provided for @compareFreeColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get compareFreeColumn;
+
+  /// No description provided for @compareProColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get compareProColumn;
+
+  /// No description provided for @compareFeatureHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get compareFeatureHistory;
+
+  /// No description provided for @compareFreeHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'3 results'**
+  String get compareFreeHistory;
+
+  /// No description provided for @compareProHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'1000 results'**
+  String get compareProHistory;
+
+  /// No description provided for @compareFeatureFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get compareFeatureFavorites;
+
+  /// No description provided for @compareFreeFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 2'**
+  String get compareFreeFavorites;
+
+  /// No description provided for @compareProFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 999'**
+  String get compareProFavorites;
+
+  /// No description provided for @compareFeatureCoinLabels.
+  ///
+  /// In en, this message translates to:
+  /// **'Coin Labels'**
+  String get compareFeatureCoinLabels;
+
+  /// No description provided for @compareFeatureColorModes.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Features'**
+  String get compareFeatureColorModes;
+
+  /// No description provided for @compareFeatureCustomRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Number Features'**
+  String get compareFeatureCustomRange;
+
+  /// No description provided for @compareFeatureCustomListExtras.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom List'**
+  String get compareFeatureCustomListExtras;
+
+  /// No description provided for @compareFeatureTimeRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer Range'**
+  String get compareFeatureTimeRange;
+
+  /// No description provided for @compareFeatureLetterFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter Filters'**
+  String get compareFeatureLetterFilters;
+
+  /// No description provided for @compareFeatureBottleHaptics.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle Spin Controls'**
+  String get compareFeatureBottleHaptics;
+
+  /// No description provided for @compareFeatureAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get compareFeatureAnalytics;
+
+  /// No description provided for @proPromoCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo Code'**
+  String get proPromoCode;
+
+  /// No description provided for @proPromoCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter promo code'**
+  String get proPromoCodeHint;
+
+  /// No description provided for @proPromoCodeApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get proPromoCodeApply;
+
+  /// No description provided for @proPromoCodeSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo code applied! Pro is now active.'**
+  String get proPromoCodeSuccess;
+
+  /// No description provided for @proPromoCodeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid promo code. Please try again.'**
+  String get proPromoCodeInvalid;
+
   /// No description provided for @homeSmartRandomDecisions.
   ///
   /// In en, this message translates to:
@@ -509,7 +677,7 @@ abstract class AppLocalizations {
   /// No description provided for @proFeatureHistory.
   ///
   /// In en, this message translates to:
-  /// **'History: 50 results (Free: 3)'**
+  /// **'History: 1000 results (Free: 3)'**
   String get proFeatureHistory;
 
   /// No description provided for @proFeatureFavorites.
@@ -1561,6 +1729,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Frequency'**
   String get analyticsFrequency;
+
+  /// No description provided for @generatorCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Draw'**
+  String get generatorCard;
+
+  /// No description provided for @cardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Draw'**
+  String get cardTitle;
+
+  /// No description provided for @cardTapDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \"Draw\" to draw a card'**
+  String get cardTapDraw;
+
+  /// No description provided for @cardDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw'**
+  String get cardDraw;
+
+  /// No description provided for @cardSectionOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get cardSectionOptions;
+
+  /// No description provided for @cardIncludeJokers.
+  ///
+  /// In en, this message translates to:
+  /// **'Include Jokers'**
+  String get cardIncludeJokers;
+
+  /// No description provided for @cardIncludeJokersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add two Jokers to the deck'**
+  String get cardIncludeJokersSubtitle;
+
+  /// No description provided for @cardIncludeJokersProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Jokers are Pro'**
+  String get cardIncludeJokersProTitle;
+
+  /// No description provided for @cardIncludeJokersProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to add Jokers to the deck.'**
+  String get cardIncludeJokersProMessage;
+
+  /// No description provided for @cardMultiDrawCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards per draw'**
+  String get cardMultiDrawCount;
+
+  /// No description provided for @cardMultiDrawProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-draw is Pro'**
+  String get cardMultiDrawProTitle;
+
+  /// No description provided for @cardMultiDrawProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to draw multiple cards at once.'**
+  String get cardMultiDrawProMessage;
+
+  /// No description provided for @cardFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: Single draw.\nPro: Jokers + multi-draw.'**
+  String get cardFreeProHint;
+
+  /// No description provided for @analyticsBestAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Best accuracy'**
+  String get analyticsBestAccuracy;
+
+  /// No description provided for @analyticsAvgAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg accuracy'**
+  String get analyticsAvgAccuracy;
+
+  /// No description provided for @generatorColorReflex.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Reflex'**
+  String get generatorColorReflex;
+
+  /// No description provided for @colorReflexInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the color of the TEXT, not the word!'**
+  String get colorReflexInstructions;
+
+  /// No description provided for @colorReflexDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses the Stroop Effect to test your reflexes.'**
+  String get colorReflexDescription;
+
+  /// No description provided for @colorReflexDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get colorReflexDurationLabel;
+
+  /// No description provided for @colorReflexGetReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Get ready!'**
+  String get colorReflexGetReady;
+
+  /// No description provided for @colorReflexTapPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the COLOR of the text above'**
+  String get colorReflexTapPrompt;
+
+  /// No description provided for @colorReflexTimeUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Time\'s up!'**
+  String get colorReflexTimeUp;
+
+  /// No description provided for @colorReflexCorrectLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get colorReflexCorrectLabel;
+
+  /// No description provided for @colorReflexWrongLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get colorReflexWrongLabel;
+
+  /// No description provided for @colorReflexAccuracyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy'**
+  String get colorReflexAccuracyLabel;
+
+  /// No description provided for @colorReflexAvgReactionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg reaction'**
+  String get colorReflexAvgReactionLabel;
+
+  /// No description provided for @colorReflexPlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get colorReflexPlayAgain;
+
+  /// No description provided for @colorReflexBackToMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to menu'**
+  String get colorReflexBackToMenu;
+
+  /// No description provided for @colorReflexDurationProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom duration is Pro'**
+  String get colorReflexDurationProTitle;
+
+  /// No description provided for @colorReflexDurationProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to choose between 15s, 30s, and 60s durations.'**
+  String get colorReflexDurationProMessage;
+
+  /// No description provided for @colorReflexFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: 30 seconds fixed.\nPro: choose 15s, 30s, or 60s.'**
+  String get colorReflexFreeProHint;
+
+  /// No description provided for @tapChallengeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Challenge'**
+  String get tapChallengeTitle;
+
+  /// No description provided for @tapChallengeInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap as fast as you can when GO appears!'**
+  String get tapChallengeInstructions;
+
+  /// No description provided for @tapChallengeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get tapChallengeStart;
+
+  /// No description provided for @tapChallengeAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tapChallengeAgain;
+
+  /// No description provided for @tapChallengeTaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Taps'**
+  String get tapChallengeTaps;
+
+  /// No description provided for @tapChallengeTPS.
+  ///
+  /// In en, this message translates to:
+  /// **'Taps/sec'**
+  String get tapChallengeTPS;
+
+  /// No description provided for @tapChallengePersonalBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Best'**
+  String get tapChallengePersonalBest;
+
+  /// No description provided for @tapChallengeDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get tapChallengeDurationLabel;
+
+  /// No description provided for @tapChallengeDurationSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String tapChallengeDurationSeconds(int seconds);
+
+  /// No description provided for @tapChallengeDurationProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Duration is Pro'**
+  String get tapChallengeDurationProTitle;
+
+  /// No description provided for @tapChallengeDurationProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to set the challenge duration to 5s, 10s, 15s, 30s, or 60s.'**
+  String get tapChallengeDurationProMessage;
+
+  /// No description provided for @tapChallengeVibrateOnGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrate on GO'**
+  String get tapChallengeVibrateOnGo;
+
+  /// No description provided for @tapChallengeVibrateOnEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrate on end'**
+  String get tapChallengeVibrateOnEnd;
+
+  /// No description provided for @tapChallengeFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: 5-second run.\nPro: choose duration (5s, 10s, 15s, 30s, 60s) + advanced analytics.'**
+  String get tapChallengeFreeProHint;
+
+  /// No description provided for @tapChallengeGo.
+  ///
+  /// In en, this message translates to:
+  /// **'GO!'**
+  String get tapChallengeGo;
+
+  /// No description provided for @tapChallengeGetReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Ready'**
+  String get tapChallengeGetReady;
+
+  /// No description provided for @tapChallengeResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Run Complete!'**
+  String get tapChallengeResultTitle;
+
+  /// No description provided for @tapChallengeAnalyticsPersonalBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Taps'**
+  String get tapChallengeAnalyticsPersonalBest;
+
+  /// No description provided for @tapChallengeAnalyticsAvgTaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Taps'**
+  String get tapChallengeAnalyticsAvgTaps;
+
+  /// No description provided for @tapChallengeAnalyticsAvgTPS.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg TPS'**
+  String get tapChallengeAnalyticsAvgTPS;
+
+  /// No description provided for @tapChallengeAnalyticsBestTPS.
+  ///
+  /// In en, this message translates to:
+  /// **'Best TPS'**
+  String get tapChallengeAnalyticsBestTPS;
 
   /// No description provided for @mathChallengeTitle.
   ///

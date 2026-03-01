@@ -31,6 +31,10 @@ enum ProFeature {
   autoRun,
   mathChallengeProDifficulty,
   mathChallengeProDuration,
+  cardJokers,
+  cardMultiDraw,
+  colorReflexDuration,
+  tapChallengeDuration,
 }
 
 class FeatureGate {
@@ -73,6 +77,10 @@ class FeatureGate {
       case ProFeature.autoRun:
       case ProFeature.mathChallengeProDifficulty:
       case ProFeature.mathChallengeProDuration:
+      case ProFeature.cardJokers:
+      case ProFeature.cardMultiDraw:
+      case ProFeature.colorReflexDuration:
+      case ProFeature.tapChallengeDuration:
         return false;
     }
   }

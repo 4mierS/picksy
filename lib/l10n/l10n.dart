@@ -31,6 +31,12 @@ extension GeneratorTypeL10n on GeneratorType {
         return l10n.generatorHangman;
       case GeneratorType.mathChallenge:
         return l10n.generatorMathChallenge;
+      case GeneratorType.tapChallenge:
+        return l10n.generatorTapChallenge;
+      case GeneratorType.card:
+        return l10n.generatorCard;
+      case GeneratorType.colorReflex:
+        return l10n.generatorColorReflex;
     }
   }
 }

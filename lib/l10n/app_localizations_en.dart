@@ -51,6 +51,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generatorHangman => 'Hangman';
 
   @override
+  String get generatorTapChallenge => 'Tap Challenge';
+
+  @override
   String get generatorMathChallenge => 'Math Challenge';
 
   @override
@@ -138,6 +141,87 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLangItalian => 'Italiano';
 
   @override
+  String get settingsRateApp => 'Rate App';
+
+  @override
+  String get settingsShareApp => 'Share App';
+
+  @override
+  String get settingsShareAppSubtitle => 'Invite friends to try Picksy';
+
+  @override
+  String get settingsCompareFreePro => 'Compare Free vs Pro';
+
+  @override
+  String get compareTitle => 'Free vs Pro';
+
+  @override
+  String get compareFeatureLabel => 'Feature';
+
+  @override
+  String get compareFreeColumn => 'Free';
+
+  @override
+  String get compareProColumn => 'Pro';
+
+  @override
+  String get compareFeatureHistory => 'History';
+
+  @override
+  String get compareFreeHistory => '3 results';
+
+  @override
+  String get compareProHistory => '1000 results';
+
+  @override
+  String get compareFeatureFavorites => 'Favorites';
+
+  @override
+  String get compareFreeFavorites => 'Up to 2';
+
+  @override
+  String get compareProFavorites => 'Up to 999';
+
+  @override
+  String get compareFeatureCoinLabels => 'Coin Labels';
+
+  @override
+  String get compareFeatureColorModes => 'Color Features';
+
+  @override
+  String get compareFeatureCustomRange => 'Number Features';
+
+  @override
+  String get compareFeatureCustomListExtras => 'Custom List';
+
+  @override
+  String get compareFeatureTimeRange => 'Timer Range';
+
+  @override
+  String get compareFeatureLetterFilters => 'Letter Filters';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Bottle Spin Controls';
+
+  @override
+  String get compareFeatureAnalytics => 'Analytics';
+
+  @override
+  String get proPromoCode => 'Promo Code';
+
+  @override
+  String get proPromoCodeHint => 'Enter promo code';
+
+  @override
+  String get proPromoCodeApply => 'Apply';
+
+  @override
+  String get proPromoCodeSuccess => 'Promo code applied! Pro is now active.';
+
+  @override
+  String get proPromoCodeInvalid => 'Invalid promo code. Please try again.';
+
+  @override
   String get homeSmartRandomDecisions => 'Smart random decisions';
 
   @override
@@ -217,7 +301,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proWhatYouGet => 'What you get with Pro';
 
   @override
-  String get proFeatureHistory => 'History: 50 results (Free: 3)';
+  String get proFeatureHistory => 'History: 1000 results (Free: 3)';
 
   @override
   String get proFeatureFavorites => 'Unlimited favorites (Free: 2)';
@@ -792,6 +876,172 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analyticsFrequency => 'Frequency';
 
   @override
+  String get generatorCard => 'Card Draw';
+
+  @override
+  String get cardTitle => 'Card Draw';
+
+  @override
+  String get cardTapDraw => 'Tap \"Draw\" to draw a card';
+
+  @override
+  String get cardDraw => 'Draw';
+
+  @override
+  String get cardSectionOptions => 'Options';
+
+  @override
+  String get cardIncludeJokers => 'Include Jokers';
+
+  @override
+  String get cardIncludeJokersSubtitle => 'Add two Jokers to the deck';
+
+  @override
+  String get cardIncludeJokersProTitle => 'Jokers are Pro';
+
+  @override
+  String get cardIncludeJokersProMessage => 'Go Pro to add Jokers to the deck.';
+
+  @override
+  String get cardMultiDrawCount => 'Cards per draw';
+
+  @override
+  String get cardMultiDrawProTitle => 'Multi-draw is Pro';
+
+  @override
+  String get cardMultiDrawProMessage =>
+      'Go Pro to draw multiple cards at once.';
+
+  @override
+  String get cardFreeProHint => 'Free: Single draw.\nPro: Jokers + multi-draw.';
+
+  @override
+  String get analyticsBestAccuracy => 'Best accuracy';
+
+  @override
+  String get analyticsAvgAccuracy => 'Avg accuracy';
+
+  @override
+  String get generatorColorReflex => 'Color Reflex';
+
+  @override
+  String get colorReflexInstructions =>
+      'Tap the color of the TEXT, not the word!';
+
+  @override
+  String get colorReflexDescription =>
+      'Uses the Stroop Effect to test your reflexes.';
+
+  @override
+  String get colorReflexDurationLabel => 'Duration';
+
+  @override
+  String get colorReflexGetReady => 'Get ready!';
+
+  @override
+  String get colorReflexTapPrompt => 'Tap the COLOR of the text above';
+
+  @override
+  String get colorReflexTimeUp => 'Time\'s up!';
+
+  @override
+  String get colorReflexCorrectLabel => 'Correct';
+
+  @override
+  String get colorReflexWrongLabel => 'Wrong';
+
+  @override
+  String get colorReflexAccuracyLabel => 'Accuracy';
+
+  @override
+  String get colorReflexAvgReactionLabel => 'Avg reaction';
+
+  @override
+  String get colorReflexPlayAgain => 'Play Again';
+
+  @override
+  String get colorReflexBackToMenu => 'Back to menu';
+
+  @override
+  String get colorReflexDurationProTitle => 'Custom duration is Pro';
+
+  @override
+  String get colorReflexDurationProMessage =>
+      'Go Pro to choose between 15s, 30s, and 60s durations.';
+
+  @override
+  String get colorReflexFreeProHint =>
+      'Free: 30 seconds fixed.\nPro: choose 15s, 30s, or 60s.';
+
+  @override
+  String get tapChallengeTitle => 'Tap Challenge';
+
+  @override
+  String get tapChallengeInstructions =>
+      'Tap as fast as you can when GO appears!';
+
+  @override
+  String get tapChallengeStart => 'Start';
+
+  @override
+  String get tapChallengeAgain => 'Try Again';
+
+  @override
+  String get tapChallengeTaps => 'Taps';
+
+  @override
+  String get tapChallengeTPS => 'Taps/sec';
+
+  @override
+  String get tapChallengePersonalBest => 'Personal Best';
+
+  @override
+  String get tapChallengeDurationLabel => 'Duration';
+
+  @override
+  String tapChallengeDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get tapChallengeDurationProTitle => 'Custom Duration is Pro';
+
+  @override
+  String get tapChallengeDurationProMessage =>
+      'Go Pro to set the challenge duration to 5s, 10s, 15s, 30s, or 60s.';
+
+  @override
+  String get tapChallengeVibrateOnGo => 'Vibrate on GO';
+
+  @override
+  String get tapChallengeVibrateOnEnd => 'Vibrate on end';
+
+  @override
+  String get tapChallengeFreeProHint =>
+      'Free: 5-second run.\nPro: choose duration (5s, 10s, 15s, 30s, 60s) + advanced analytics.';
+
+  @override
+  String get tapChallengeGo => 'GO!';
+
+  @override
+  String get tapChallengeGetReady => 'Get Ready';
+
+  @override
+  String get tapChallengeResultTitle => 'Run Complete!';
+
+  @override
+  String get tapChallengeAnalyticsPersonalBest => 'Best Taps';
+
+  @override
+  String get tapChallengeAnalyticsAvgTaps => 'Avg Taps';
+
+  @override
+  String get tapChallengeAnalyticsAvgTPS => 'Avg TPS';
+
+  @override
+  String get tapChallengeAnalyticsBestTPS => 'Best TPS';
+
+  @override
   String get mathChallengeTitle => 'Math Challenge';
 
   @override
@@ -807,7 +1057,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mathDifficultyProTitle => 'Hard mode is Pro';
 
   @override
-  String get mathDifficultyProMessage => 'Go Pro to unlock multiplication, division and larger numbers.';
+  String get mathDifficultyProMessage =>
+      'Go Pro to unlock multiplication, division and larger numbers.';
 
   @override
   String get mathDuration => 'Duration';
@@ -824,7 +1075,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mathDurationProTitle => 'Custom duration is Pro';
 
   @override
-  String get mathDurationProMessage => 'Go Pro to select a custom duration from 15 to 60 seconds.';
+  String get mathDurationProMessage =>
+      'Go Pro to select a custom duration from 15 to 60 seconds.';
 
   @override
   String get mathStart => 'Start';
@@ -854,7 +1106,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mathBackToMenu => 'Back to Menu';
 
   @override
-  String get mathFreeProHint => 'Free: addition & subtraction, 30 seconds.\nPro: all operations, custom duration.';
+  String get mathFreeProHint =>
+      'Free: addition & subtraction, 30 seconds.\nPro: all operations, custom duration.';
 
   @override
   String get mathAvgAccuracy => 'Avg Accuracy';
