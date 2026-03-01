@@ -8,4 +8,5 @@ enum GeneratorType {
   time,
   reactionTest,
   hangman,
+  mathChallenge,
 }

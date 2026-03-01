@@ -51,6 +51,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get generatorHangman => 'Ahorcado';
 
   @override
+  String get generatorMathChallenge => 'Desafío Matemático';
+
+  @override
   String get commonGenerate => 'Generar';
 
   @override
@@ -787,4 +790,69 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get analyticsFrequency => 'Frequency';
+
+  @override
+  String get mathChallengeTitle => 'Desafío Matemático';
+
+  @override
+  String get mathDifficulty => 'Dificultad';
+
+  @override
+  String get mathDifficultyEasy => 'Fácil';
+
+  @override
+  String get mathDifficultyHard => 'Difícil';
+
+  @override
+  String get mathDifficultyProTitle => 'El modo difícil es Pro';
+
+  @override
+  String get mathDifficultyProMessage => 'Hazte Pro para desbloquear multiplicación, división y números más grandes.';
+
+  @override
+  String get mathDuration => 'Duración';
+
+  @override
+  String mathDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get mathDurationFree => 'Fijo: 30 segundos';
+
+  @override
+  String get mathDurationProTitle => 'Duración personalizada es Pro';
+
+  @override
+  String get mathDurationProMessage => 'Hazte Pro para elegir una duración de 15 a 60 segundos.';
+
+  @override
+  String get mathStart => 'Iniciar';
+
+  @override
+  String get mathTimeLeft => 'Tiempo';
+
+  @override
+  String get mathCorrect => 'Correcto';
+
+  @override
+  String get mathWrong => 'Incorrecto';
+
+  @override
+  String get mathResultTitle => 'Resultados';
+
+  @override
+  String get mathAccuracy => 'Precisión';
+
+  @override
+  String get mathPPS => 'Por seg.';
+
+  @override
+  String get mathPlayAgain => 'Jugar de nuevo';
+
+  @override
+  String get mathBackToMenu => 'Volver al menú';
+
+  @override
+  String get mathFreeProHint => 'Free: suma y resta, 30 segundos.\nPro: todas las operaciones, duración personalizada.';
 }

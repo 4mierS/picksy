@@ -14,6 +14,7 @@
   "generatorTime": "Tempo",
   "generatorReactionTest": "Test di reazione",
   "generatorHangman": "Impiccato",
+  "generatorMathChallenge": "Sfida Matematica",
   "commonGenerate": "Genera",
   "commonCopy": "Copia",
   "commonCopied": "Copiato",
@@ -339,5 +340,33 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "mathChallengeTitle": "Sfida Matematica",
+  "mathDifficulty": "Difficoltà",
+  "mathDifficultyEasy": "Facile",
+  "mathDifficultyHard": "Difficile",
+  "mathDifficultyProTitle": "La modalità difficile è Pro",
+  "mathDifficultyProMessage": "Passa a Pro per sbloccare moltiplicazione, divisione e numeri più grandi.",
+  "mathDuration": "Durata",
+  "mathDurationSeconds": "{seconds}s",
+  "@mathDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "mathDurationFree": "Fisso: 30 secondi",
+  "mathDurationProTitle": "La durata personalizzata è Pro",
+  "mathDurationProMessage": "Passa a Pro per scegliere una durata da 15 a 60 secondi.",
+  "mathStart": "Inizia",
+  "mathTimeLeft": "Tempo",
+  "mathCorrect": "Giusto",
+  "mathWrong": "Sbagliato",
+  "mathResultTitle": "Risultati",
+  "mathAccuracy": "Precisione",
+  "mathPPS": "Al sec.",
+  "mathPlayAgain": "Gioca di nuovo",
+  "mathBackToMenu": "Torna al menu",
+  "mathFreeProHint": "Free: addizione e sottrazione, 30 secondi.\nPro: tutte le operazioni, durata personalizzata."
 }

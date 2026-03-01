@@ -31,7 +31,8 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         title: Text(l10n.analyticsGeneratorTitle(generatorType.localizedTitle(context))),
         actions: [
           if (generatorType != GeneratorType.reactionTest &&
-              generatorType != GeneratorType.hangman)
+              generatorType != GeneratorType.hangman &&
+              generatorType != GeneratorType.mathChallenge)
             if (gate.canUse(ProFeature.autoRun))
               IconButton(
                 icon: const Icon(Icons.play_circle_outline),
@@ -197,6 +198,12 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         return rng.nextBool() ? 'Won' : 'Lost';
       case GeneratorType.customList:
         return 'Item ${rng.nextInt(10) + 1}';
+      case GeneratorType.mathChallenge:
+        final correct = rng.nextInt(15);
+        final wrong = rng.nextInt(5);
+        final total = correct + wrong;
+        final accuracy = total > 0 ? (correct / total * 100).round() : 0;
+        return '$correct correct, $wrong wrong (${accuracy}%)';
     }
   }
 }
@@ -235,6 +242,8 @@ class _StatsSection extends StatelessWidget {
         return _HangmanStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.customList:
         return _CustomListStats(entries: entries, l10n: l10n, accent: accent);
+      case GeneratorType.mathChallenge:
+        return _MathChallengeStats(entries: entries, l10n: l10n, accent: accent);
     }
   }
 }
@@ -748,6 +757,82 @@ class _CustomListStats extends StatelessWidget {
           ),
           const SizedBox(height: 6),
         ],
+      ],
+    );
+  }
+}
+
+// ─── MathChallenge ───────────────────────────────────────────────────────────
+
+class _MathChallengeStats extends StatelessWidget {
+  final List<HistoryEntry> entries;
+  final AppLocalizations l10n;
+  final Color accent;
+
+  const _MathChallengeStats({
+    required this.entries,
+    required this.l10n,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    int totalCorrect = 0;
+    int totalWrong = 0;
+    int bestCorrect = 0;
+    final accuracies = <double>[];
+
+    for (final e in entries) {
+      final meta = e.metadata;
+      if (meta != null) {
+        final correct = (meta['correctCount'] as num?)?.toInt() ?? 0;
+        final wrong = (meta['wrongCount'] as num?)?.toInt() ?? 0;
+        final accuracy = (meta['accuracy'] as num?)?.toDouble() ?? 0.0;
+        totalCorrect += correct;
+        totalWrong += wrong;
+        if (correct > bestCorrect) bestCorrect = correct;
+        accuracies.add(accuracy);
+      }
+    }
+
+    final avgAccuracy = accuracies.isNotEmpty
+        ? accuracies.reduce((a, b) => a + b) / accuracies.length
+        : 0.0;
+    final overallTotal = totalCorrect + totalWrong;
+    final overallAccuracy =
+        overallTotal > 0 ? totalCorrect / overallTotal * 100 : 0.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _StatsGrid(
+          children: [
+            _StatCard(label: l10n.analyticsHighScore, value: '$bestCorrect', accent: accent),
+            _StatCard(
+              label: l10n.mathAccuracy,
+              value: '${overallAccuracy.toStringAsFixed(1)}%',
+              accent: accent,
+            ),
+            _StatCard(label: l10n.analyticsTotal, value: '${entries.length}', accent: accent),
+            _StatCard(
+              label: 'Avg Accuracy',
+              value: '${avgAccuracy.toStringAsFixed(1)}%',
+              accent: accent,
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        _BarRow(
+          label: l10n.mathCorrect,
+          fraction: overallTotal > 0 ? totalCorrect / overallTotal : 0.0,
+          accent: Colors.green,
+        ),
+        const SizedBox(height: 6),
+        _BarRow(
+          label: l10n.mathWrong,
+          fraction: overallTotal > 0 ? totalWrong / overallTotal : 0.0,
+          accent: Colors.redAccent,
+        ),
       ],
     );
   }

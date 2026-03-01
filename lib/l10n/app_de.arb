@@ -14,6 +14,7 @@
   "generatorTime": "Zeit",
   "generatorReactionTest": "Reaktionstest",
   "generatorHangman": "Galgenmännchen",
+  "generatorMathChallenge": "Mathe-Challenge",
   "commonGenerate": "Generieren",
   "commonCopy": "Kopieren",
   "commonCopied": "Kopiert",
@@ -339,5 +340,33 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "mathChallengeTitle": "Mathe-Challenge",
+  "mathDifficulty": "Schwierigkeit",
+  "mathDifficultyEasy": "Einfach",
+  "mathDifficultyHard": "Schwer",
+  "mathDifficultyProTitle": "Schwerer Modus ist Pro",
+  "mathDifficultyProMessage": "Werde Pro, um Multiplikation, Division und größere Zahlen freizuschalten.",
+  "mathDuration": "Dauer",
+  "mathDurationSeconds": "{seconds}s",
+  "@mathDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "mathDurationFree": "Fest: 30 Sekunden",
+  "mathDurationProTitle": "Benutzerdefinierte Dauer ist Pro",
+  "mathDurationProMessage": "Werde Pro, um eine Dauer von 15 bis 60 Sekunden zu wählen.",
+  "mathStart": "Start",
+  "mathTimeLeft": "Zeit",
+  "mathCorrect": "Richtig",
+  "mathWrong": "Falsch",
+  "mathResultTitle": "Ergebnis",
+  "mathAccuracy": "Genauigkeit",
+  "mathPPS": "Pro Sek.",
+  "mathPlayAgain": "Nochmal spielen",
+  "mathBackToMenu": "Zurück zum Menü",
+  "mathFreeProHint": "Free: Addition & Subtraktion, 30 Sekunden.\nPro: alle Operationen, benutzerdefinierte Dauer."
 }

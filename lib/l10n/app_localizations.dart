@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Hangman'**
   String get generatorHangman;
 
+  /// No description provided for @generatorMathChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'Math Challenge'**
+  String get generatorMathChallenge;
+
   /// No description provided for @commonGenerate.
   ///
   /// In en, this message translates to:
@@ -1555,6 +1561,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Frequency'**
   String get analyticsFrequency;
+
+  /// No description provided for @mathChallengeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Math Challenge'**
+  String get mathChallengeTitle;
+
+  /// No description provided for @mathDifficulty.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty'**
+  String get mathDifficulty;
+
+  /// No description provided for @mathDifficultyEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get mathDifficultyEasy;
+
+  /// No description provided for @mathDifficultyHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get mathDifficultyHard;
+
+  /// No description provided for @mathDifficultyProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard mode is Pro'**
+  String get mathDifficultyProTitle;
+
+  /// No description provided for @mathDifficultyProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to unlock multiplication, division and larger numbers.'**
+  String get mathDifficultyProMessage;
+
+  /// No description provided for @mathDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get mathDuration;
+
+  /// No description provided for @mathDurationSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String mathDurationSeconds(int seconds);
+
+  /// No description provided for @mathDurationFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed: 30 seconds'**
+  String get mathDurationFree;
+
+  /// No description provided for @mathDurationProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom duration is Pro'**
+  String get mathDurationProTitle;
+
+  /// No description provided for @mathDurationProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to select a custom duration from 15 to 60 seconds.'**
+  String get mathDurationProMessage;
+
+  /// No description provided for @mathStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get mathStart;
+
+  /// No description provided for @mathTimeLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get mathTimeLeft;
+
+  /// No description provided for @mathCorrect.
+  ///
+  /// In en, this message translates to:
+  /// **'Correct'**
+  String get mathCorrect;
+
+  /// No description provided for @mathWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong'**
+  String get mathWrong;
+
+  /// No description provided for @mathResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get mathResultTitle;
+
+  /// No description provided for @mathAccuracy.
+  ///
+  /// In en, this message translates to:
+  /// **'Accuracy'**
+  String get mathAccuracy;
+
+  /// No description provided for @mathPPS.
+  ///
+  /// In en, this message translates to:
+  /// **'Per sec'**
+  String get mathPPS;
+
+  /// No description provided for @mathPlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get mathPlayAgain;
+
+  /// No description provided for @mathBackToMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Menu'**
+  String get mathBackToMenu;
+
+  /// No description provided for @mathFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: addition & subtraction, 30 seconds.\nPro: all operations, custom duration.'**
+  String get mathFreeProHint;
 }
 
 class _AppLocalizationsDelegate

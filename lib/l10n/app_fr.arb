@@ -14,6 +14,7 @@
   "generatorTime": "Temps",
   "generatorReactionTest": "Test de réaction",
   "generatorHangman": "Pendu",
+  "generatorMathChallenge": "Défi Mathématique",
   "commonGenerate": "Générer",
   "commonCopy": "Copier",
   "commonCopied": "Copié",
@@ -339,5 +340,33 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "mathChallengeTitle": "Défi Mathématique",
+  "mathDifficulty": "Difficulté",
+  "mathDifficultyEasy": "Facile",
+  "mathDifficultyHard": "Difficile",
+  "mathDifficultyProTitle": "Le mode difficile est Pro",
+  "mathDifficultyProMessage": "Passez Pro pour débloquer la multiplication, la division et les grands nombres.",
+  "mathDuration": "Durée",
+  "mathDurationSeconds": "{seconds}s",
+  "@mathDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "mathDurationFree": "Fixé : 30 secondes",
+  "mathDurationProTitle": "Durée personnalisée est Pro",
+  "mathDurationProMessage": "Passez Pro pour choisir une durée de 15 à 60 secondes.",
+  "mathStart": "Démarrer",
+  "mathTimeLeft": "Temps",
+  "mathCorrect": "Correct",
+  "mathWrong": "Faux",
+  "mathResultTitle": "Résultats",
+  "mathAccuracy": "Précision",
+  "mathPPS": "Par sec.",
+  "mathPlayAgain": "Rejouer",
+  "mathBackToMenu": "Retour au menu",
+  "mathFreeProHint": "Free : addition & soustraction, 30 secondes.\nPro : toutes les opérations, durée personnalisée."
 }

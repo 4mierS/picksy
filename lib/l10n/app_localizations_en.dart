@@ -51,6 +51,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generatorHangman => 'Hangman';
 
   @override
+  String get generatorMathChallenge => 'Math Challenge';
+
+  @override
   String get commonGenerate => 'Generate';
 
   @override
@@ -787,4 +790,69 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get analyticsFrequency => 'Frequency';
+
+  @override
+  String get mathChallengeTitle => 'Math Challenge';
+
+  @override
+  String get mathDifficulty => 'Difficulty';
+
+  @override
+  String get mathDifficultyEasy => 'Easy';
+
+  @override
+  String get mathDifficultyHard => 'Hard';
+
+  @override
+  String get mathDifficultyProTitle => 'Hard mode is Pro';
+
+  @override
+  String get mathDifficultyProMessage => 'Go Pro to unlock multiplication, division and larger numbers.';
+
+  @override
+  String get mathDuration => 'Duration';
+
+  @override
+  String mathDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get mathDurationFree => 'Fixed: 30 seconds';
+
+  @override
+  String get mathDurationProTitle => 'Custom duration is Pro';
+
+  @override
+  String get mathDurationProMessage => 'Go Pro to select a custom duration from 15 to 60 seconds.';
+
+  @override
+  String get mathStart => 'Start';
+
+  @override
+  String get mathTimeLeft => 'Time';
+
+  @override
+  String get mathCorrect => 'Correct';
+
+  @override
+  String get mathWrong => 'Wrong';
+
+  @override
+  String get mathResultTitle => 'Results';
+
+  @override
+  String get mathAccuracy => 'Accuracy';
+
+  @override
+  String get mathPPS => 'Per sec';
+
+  @override
+  String get mathPlayAgain => 'Play Again';
+
+  @override
+  String get mathBackToMenu => 'Back to Menu';
+
+  @override
+  String get mathFreeProHint => 'Free: addition & subtraction, 30 seconds.\nPro: all operations, custom duration.';
 }
