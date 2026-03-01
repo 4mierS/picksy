@@ -356,6 +356,168 @@ abstract class AppLocalizations {
   /// **'Italiano'**
   String get settingsLangItalian;
 
+  /// No description provided for @settingsRateApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate App'**
+  String get settingsRateApp;
+
+  /// No description provided for @settingsShareApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Share App'**
+  String get settingsShareApp;
+
+  /// No description provided for @settingsShareAppSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Invite friends to try Picksy'**
+  String get settingsShareAppSubtitle;
+
+  /// No description provided for @settingsCompareFreePro.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare Free vs Pro'**
+  String get settingsCompareFreePro;
+
+  /// No description provided for @compareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free vs Pro'**
+  String get compareTitle;
+
+  /// No description provided for @compareFeatureLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature'**
+  String get compareFeatureLabel;
+
+  /// No description provided for @compareFreeColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get compareFreeColumn;
+
+  /// No description provided for @compareProColumn.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get compareProColumn;
+
+  /// No description provided for @compareFeatureHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get compareFeatureHistory;
+
+  /// No description provided for @compareFreeHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'3 results'**
+  String get compareFreeHistory;
+
+  /// No description provided for @compareProHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'1000 results'**
+  String get compareProHistory;
+
+  /// No description provided for @compareFeatureFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get compareFeatureFavorites;
+
+  /// No description provided for @compareFreeFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 2'**
+  String get compareFreeFavorites;
+
+  /// No description provided for @compareProFavorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 999'**
+  String get compareProFavorites;
+
+  /// No description provided for @compareFeatureCoinLabels.
+  ///
+  /// In en, this message translates to:
+  /// **'Coin Labels'**
+  String get compareFeatureCoinLabels;
+
+  /// No description provided for @compareFeatureColorModes.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Features'**
+  String get compareFeatureColorModes;
+
+  /// No description provided for @compareFeatureCustomRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Number Features'**
+  String get compareFeatureCustomRange;
+
+  /// No description provided for @compareFeatureCustomListExtras.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom List'**
+  String get compareFeatureCustomListExtras;
+
+  /// No description provided for @compareFeatureTimeRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer Range'**
+  String get compareFeatureTimeRange;
+
+  /// No description provided for @compareFeatureLetterFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter Filters'**
+  String get compareFeatureLetterFilters;
+
+  /// No description provided for @compareFeatureBottleHaptics.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle Spin Controls'**
+  String get compareFeatureBottleHaptics;
+
+  /// No description provided for @compareFeatureAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get compareFeatureAnalytics;
+
+  /// No description provided for @proPromoCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo Code'**
+  String get proPromoCode;
+
+  /// No description provided for @proPromoCodeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter promo code'**
+  String get proPromoCodeHint;
+
+  /// No description provided for @proPromoCodeApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get proPromoCodeApply;
+
+  /// No description provided for @proPromoCodeSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Promo code applied! Pro is now active.'**
+  String get proPromoCodeSuccess;
+
+  /// No description provided for @proPromoCodeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid promo code. Please try again.'**
+  String get proPromoCodeInvalid;
+
   /// No description provided for @homeSmartRandomDecisions.
   ///
   /// In en, this message translates to:
@@ -503,7 +665,7 @@ abstract class AppLocalizations {
   /// No description provided for @proFeatureHistory.
   ///
   /// In en, this message translates to:
-  /// **'History: 50 results (Free: 3)'**
+  /// **'History: 1000 results (Free: 3)'**
   String get proFeatureHistory;
 
   /// No description provided for @proFeatureFavorites.
