@@ -814,16 +814,20 @@ class AppLocalizationsFr extends AppLocalizations {
   String get memoryFlashYourTurn => 'À vous !';
 
   @override
-  String memoryFlashLevel(int level) => 'Niveau $level';
+  String memoryFlashLevel(int level) {
+    return 'Niveau $level';
+  }
 
   @override
   String get memoryFlashGameOver => 'Fin de partie';
 
   @override
-  String memoryFlashResult(int level) => 'Niveau atteint : $level';
+  String memoryFlashResult(int level) {
+    return 'Niveau atteint : $level';
+  }
 
   @override
-  String get memoryFlashFlashSpeed => "Vitesse d'affichage";
+  String get memoryFlashFlashSpeed => 'Vitesse d\'affichage';
 
   @override
   String get memoryFlashSpeedSlow => 'Lent';
@@ -846,12 +850,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get memoryFlashProSpeedMessage =>
-      "Passez Pro pour régler la vitesse d'affichage.";
+      'Passez Pro pour régler la vitesse d\'affichage.';
 
   @override
   String get memoryFlashFreeProHint =>
-      "Gratuit : Jusqu'à 10 niveaux.\nPro : Mode infini + vitesse réglable.";
+      'Gratuit : Jusqu\'à 10 niveaux.\nPro : Mode infini + vitesse réglable.';
 
   @override
-  String memoryFlashSequenceLength(int length) => 'Séquence : $length';
+  String memoryFlashSequenceLength(int length) {
+    return 'Séquence : $length';
+  }
 }

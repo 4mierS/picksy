@@ -813,13 +813,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get memoryFlashYourTurn => 'Du bist dran!';
 
   @override
-  String memoryFlashLevel(int level) => 'Level $level';
+  String memoryFlashLevel(int level) {
+    return 'Level $level';
+  }
 
   @override
   String get memoryFlashGameOver => 'Spiel vorbei';
 
   @override
-  String memoryFlashResult(int level) => 'Erreichtes Level: $level';
+  String memoryFlashResult(int level) {
+    return 'Erreichtes Level: $level';
+  }
 
   @override
   String get memoryFlashFlashSpeed => 'Blitzgeschwindigkeit';
@@ -852,5 +856,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Kostenlos: Bis zu 10 Level.\nPro: Endlosmodus + einstellbare Geschwindigkeit.';
 
   @override
-  String memoryFlashSequenceLength(int length) => 'Sequenz: $length';
+  String memoryFlashSequenceLength(int length) {
+    return 'Sequenz: $length';
+  }
 }
