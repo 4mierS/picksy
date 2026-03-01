@@ -29,6 +29,8 @@ enum ProFeature {
   timeCustomRange,
   analyticsAccess,
   autoRun,
+  memoryFlashEndless,
+  memoryFlashSpeed,
 }
 
 class FeatureGate {
@@ -69,6 +71,8 @@ class FeatureGate {
       case ProFeature.timeCustomRange:
       case ProFeature.analyticsAccess:
       case ProFeature.autoRun:
+      case ProFeature.memoryFlashEndless:
+      case ProFeature.memoryFlashSpeed:
         return false;
     }
   }

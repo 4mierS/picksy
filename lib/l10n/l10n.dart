@@ -29,6 +29,8 @@ extension GeneratorTypeL10n on GeneratorType {
         return l10n.generatorReactionTest;
       case GeneratorType.hangman:
         return l10n.generatorHangman;
+      case GeneratorType.memoryFlash:
+        return l10n.generatorMemoryFlash;
     }
   }
 }

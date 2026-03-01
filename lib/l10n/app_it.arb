@@ -14,6 +14,7 @@
   "generatorTime": "Tempo",
   "generatorReactionTest": "Test di reazione",
   "generatorHangman": "Impiccato",
+  "generatorMemoryFlash": "Memory Flash",
   "commonGenerate": "Genera",
   "commonCopy": "Copia",
   "commonCopied": "Copiato",
@@ -366,5 +367,45 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "analyticsAvgLevel": "Livello medio",
+  "analyticsLevelDistribution": "Distribuzione livelli",
+  "memoryFlashStart": "Inizia",
+  "memoryFlashPlayAgain": "Gioca ancora",
+  "memoryFlashWatchSequence": "Guarda la sequenza…",
+  "memoryFlashYourTurn": "Tocca a te!",
+  "memoryFlashLevel": "Livello {level}",
+  "@memoryFlashLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "memoryFlashGameOver": "Game Over",
+  "memoryFlashResult": "Livello raggiunto: {level}",
+  "@memoryFlashResult": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "memoryFlashFlashSpeed": "Velocità di lampeggio",
+  "memoryFlashSpeedSlow": "Lento",
+  "memoryFlashSpeedNormal": "Normale",
+  "memoryFlashSpeedFast": "Veloce",
+  "memoryFlashProEndlessTitle": "La modalità infinita è Pro",
+  "memoryFlashProEndlessMessage": "La modalità gratuita è limitata a 10 livelli. Passa a Pro per giocare senza limiti.",
+  "memoryFlashProSpeedTitle": "La velocità regolabile è Pro",
+  "memoryFlashProSpeedMessage": "Passa a Pro per regolare la velocità di lampeggio.",
+  "memoryFlashFreeProHint": "Gratuito: Fino a 10 livelli.\nPro: Modalità infinita + velocità regolabile.",
+  "memoryFlashSequenceLength": "Sequenza: {length}",
+  "@memoryFlashSequenceLength": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  }
 }

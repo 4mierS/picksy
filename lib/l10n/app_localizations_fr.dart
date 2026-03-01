@@ -51,6 +51,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get generatorHangman => 'Pendu';
 
   @override
+  String get generatorMemoryFlash => 'Memory Flash';
+
+  @override
   String get commonGenerate => 'Générer';
 
   @override
@@ -869,4 +872,73 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get analyticsFrequency => 'Frequency';
+
+  @override
+  String get analyticsAvgLevel => 'Niveau moyen';
+
+  @override
+  String get analyticsLevelDistribution => 'Distribution des niveaux';
+
+  @override
+  String get memoryFlashTitle => 'Memory Flash';
+
+  @override
+  String get memoryFlashStart => 'Démarrer';
+
+  @override
+  String get memoryFlashPlayAgain => 'Rejouer';
+
+  @override
+  String get memoryFlashWatchSequence => 'Regardez la séquence…';
+
+  @override
+  String get memoryFlashYourTurn => 'À vous !';
+
+  @override
+  String memoryFlashLevel(int level) {
+    return 'Niveau $level';
+  }
+
+  @override
+  String get memoryFlashGameOver => 'Fin de partie';
+
+  @override
+  String memoryFlashResult(int level) {
+    return 'Niveau atteint : $level';
+  }
+
+  @override
+  String get memoryFlashFlashSpeed => 'Vitesse d\'affichage';
+
+  @override
+  String get memoryFlashSpeedSlow => 'Lent';
+
+  @override
+  String get memoryFlashSpeedNormal => 'Normal';
+
+  @override
+  String get memoryFlashSpeedFast => 'Rapide';
+
+  @override
+  String get memoryFlashProEndlessTitle => 'Le mode infini est Pro';
+
+  @override
+  String get memoryFlashProEndlessMessage =>
+      'Le mode gratuit est limité à 10 niveaux. Passez Pro pour jouer sans limite.';
+
+  @override
+  String get memoryFlashProSpeedTitle => 'La vitesse réglable est Pro';
+
+  @override
+  String get memoryFlashProSpeedMessage =>
+      'Passez Pro pour régler la vitesse d\'affichage.';
+
+  @override
+  String get memoryFlashFreeProHint =>
+      'Gratuit : Jusqu\'à 10 niveaux.\nPro : Mode infini + vitesse réglable.';
+
+  @override
+  String memoryFlashSequenceLength(int length) {
+    return 'Séquence : $length';
+  }
 }
