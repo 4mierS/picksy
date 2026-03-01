@@ -54,6 +54,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get generatorTapChallenge => 'Défi de Touche';
 
   @override
+  String get generatorMathChallenge => 'Défi Mathématique';
+
+  @override
   String get commonGenerate => 'Générer';
 
   @override
@@ -1040,4 +1043,75 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get tapChallengeAnalyticsBestTPS => 'Meilleur TPS';
+
+  @override
+  String get mathChallengeTitle => 'Défi Mathématique';
+
+  @override
+  String get mathDifficulty => 'Difficulté';
+
+  @override
+  String get mathDifficultyEasy => 'Facile';
+
+  @override
+  String get mathDifficultyHard => 'Difficile';
+
+  @override
+  String get mathDifficultyProTitle => 'Le mode difficile est Pro';
+
+  @override
+  String get mathDifficultyProMessage =>
+      'Passez Pro pour débloquer la multiplication, la division et les grands nombres.';
+
+  @override
+  String get mathDuration => 'Durée';
+
+  @override
+  String mathDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get mathDurationFree => 'Fixé : 30 secondes';
+
+  @override
+  String get mathDurationProTitle => 'Durée personnalisée est Pro';
+
+  @override
+  String get mathDurationProMessage =>
+      'Passez Pro pour choisir une durée de 15 à 60 secondes.';
+
+  @override
+  String get mathStart => 'Démarrer';
+
+  @override
+  String get mathTimeLeft => 'Temps';
+
+  @override
+  String get mathCorrect => 'Correct';
+
+  @override
+  String get mathWrong => 'Faux';
+
+  @override
+  String get mathResultTitle => 'Résultats';
+
+  @override
+  String get mathAccuracy => 'Précision';
+
+  @override
+  String get mathPPS => 'Par sec.';
+
+  @override
+  String get mathPlayAgain => 'Rejouer';
+
+  @override
+  String get mathBackToMenu => 'Retour au menu';
+
+  @override
+  String get mathFreeProHint =>
+      'Free : addition & soustraction, 30 secondes.\nPro : toutes les opérations, durée personnalisée.';
+
+  @override
+  String get mathAvgAccuracy => 'Précision moyenne';
 }

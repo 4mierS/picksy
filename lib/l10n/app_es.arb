@@ -15,6 +15,7 @@
   "generatorReactionTest": "Test de reacción",
   "generatorHangman": "Ahorcado",
   "generatorTapChallenge": "Desafío de Toque",
+  "generatorMathChallenge": "Desafío Matemático",
   "commonGenerate": "Generar",
   "commonCopy": "Copiar",
   "commonCopied": "Copiado",
@@ -426,5 +427,34 @@
   "tapChallengeAnalyticsPersonalBest": "Mejores Toques",
   "tapChallengeAnalyticsAvgTaps": "Prom. Toques",
   "tapChallengeAnalyticsAvgTPS": "Prom. TPS",
-  "tapChallengeAnalyticsBestTPS": "Mejor TPS"
+  "tapChallengeAnalyticsBestTPS": "Mejor TPS",
+  "mathChallengeTitle": "Desafío Matemático",
+  "mathDifficulty": "Dificultad",
+  "mathDifficultyEasy": "Fácil",
+  "mathDifficultyHard": "Difícil",
+  "mathDifficultyProTitle": "El modo difícil es Pro",
+  "mathDifficultyProMessage": "Hazte Pro para desbloquear multiplicación, división y números más grandes.",
+  "mathDuration": "Duración",
+  "mathDurationSeconds": "{seconds}s",
+  "@mathDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "mathDurationFree": "Fijo: 30 segundos",
+  "mathDurationProTitle": "Duración personalizada es Pro",
+  "mathDurationProMessage": "Hazte Pro para elegir una duración de 15 a 60 segundos.",
+  "mathStart": "Iniciar",
+  "mathTimeLeft": "Tiempo",
+  "mathCorrect": "Correcto",
+  "mathWrong": "Incorrecto",
+  "mathResultTitle": "Resultados",
+  "mathAccuracy": "Precisión",
+  "mathPPS": "Por seg.",
+  "mathPlayAgain": "Jugar de nuevo",
+  "mathBackToMenu": "Volver al menú",
+  "mathFreeProHint": "Free: suma y resta, 30 segundos.\nPro: todas las operaciones, duración personalizada.",
+  "mathAvgAccuracy": "Precisión media"
 }

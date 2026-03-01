@@ -33,6 +33,8 @@ extension GeneratorTypeColorX on GeneratorType {
         return Colors.brown;
       case GeneratorType.colorReflex:
         return Colors.purpleAccent;
+      case GeneratorType.mathChallenge:
+        return Colors.deepOrangeAccent;
     }
   }
 }
@@ -64,6 +66,8 @@ extension GeneratorTypeIconX on GeneratorType {
         return Icons.style_outlined;
       case GeneratorType.colorReflex:
         return Icons.psychology_outlined;
+      case GeneratorType.mathChallenge:
+        return Icons.calculate_outlined;
     }
   }
 }

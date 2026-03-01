@@ -26,6 +26,7 @@ class HomePage extends StatelessWidget {
     GeneratorType.tapChallenge,
     GeneratorType.card,
     GeneratorType.colorReflex,
+    GeneratorType.mathChallenge,
   ];
 
   @override

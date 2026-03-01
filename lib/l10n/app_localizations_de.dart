@@ -54,6 +54,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generatorTapChallenge => 'Tipp-Challenge';
 
   @override
+  String get generatorMathChallenge => 'Mathe-Challenge';
+
+  @override
   String get commonGenerate => 'Generieren';
 
   @override
@@ -1040,4 +1043,75 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get tapChallengeAnalyticsBestTPS => 'Beste TPS';
+
+  @override
+  String get mathChallengeTitle => 'Mathe-Challenge';
+
+  @override
+  String get mathDifficulty => 'Schwierigkeit';
+
+  @override
+  String get mathDifficultyEasy => 'Einfach';
+
+  @override
+  String get mathDifficultyHard => 'Schwer';
+
+  @override
+  String get mathDifficultyProTitle => 'Schwerer Modus ist Pro';
+
+  @override
+  String get mathDifficultyProMessage =>
+      'Werde Pro, um Multiplikation, Division und größere Zahlen freizuschalten.';
+
+  @override
+  String get mathDuration => 'Dauer';
+
+  @override
+  String mathDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get mathDurationFree => 'Fest: 30 Sekunden';
+
+  @override
+  String get mathDurationProTitle => 'Benutzerdefinierte Dauer ist Pro';
+
+  @override
+  String get mathDurationProMessage =>
+      'Werde Pro, um eine Dauer von 15 bis 60 Sekunden zu wählen.';
+
+  @override
+  String get mathStart => 'Start';
+
+  @override
+  String get mathTimeLeft => 'Zeit';
+
+  @override
+  String get mathCorrect => 'Richtig';
+
+  @override
+  String get mathWrong => 'Falsch';
+
+  @override
+  String get mathResultTitle => 'Ergebnis';
+
+  @override
+  String get mathAccuracy => 'Genauigkeit';
+
+  @override
+  String get mathPPS => 'Pro Sek.';
+
+  @override
+  String get mathPlayAgain => 'Nochmal spielen';
+
+  @override
+  String get mathBackToMenu => 'Zurück zum Menü';
+
+  @override
+  String get mathFreeProHint =>
+      'Free: Addition & Subtraktion, 30 Sekunden.\nPro: alle Operationen, benutzerdefinierte Dauer.';
+
+  @override
+  String get mathAvgAccuracy => 'Durchschn. Genauigkeit';
 }

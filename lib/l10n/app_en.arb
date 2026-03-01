@@ -15,6 +15,7 @@
   "generatorReactionTest": "Reaction Test",
   "generatorHangman": "Hangman",
   "generatorTapChallenge": "Tap Challenge",
+  "generatorMathChallenge": "Math Challenge",
   "commonGenerate": "Generate",
   "commonCopy": "Copy",
   "commonCopied": "Copied",
@@ -426,5 +427,34 @@
   "tapChallengeAnalyticsPersonalBest": "Best Taps",
   "tapChallengeAnalyticsAvgTaps": "Avg Taps",
   "tapChallengeAnalyticsAvgTPS": "Avg TPS",
-  "tapChallengeAnalyticsBestTPS": "Best TPS"
+  "tapChallengeAnalyticsBestTPS": "Best TPS",
+  "mathChallengeTitle": "Math Challenge",
+  "mathDifficulty": "Difficulty",
+  "mathDifficultyEasy": "Easy",
+  "mathDifficultyHard": "Hard",
+  "mathDifficultyProTitle": "Hard mode is Pro",
+  "mathDifficultyProMessage": "Go Pro to unlock multiplication, division and larger numbers.",
+  "mathDuration": "Duration",
+  "mathDurationSeconds": "{seconds}s",
+  "@mathDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "mathDurationFree": "Fixed: 30 seconds",
+  "mathDurationProTitle": "Custom duration is Pro",
+  "mathDurationProMessage": "Go Pro to select a custom duration from 15 to 60 seconds.",
+  "mathStart": "Start",
+  "mathTimeLeft": "Time",
+  "mathCorrect": "Correct",
+  "mathWrong": "Wrong",
+  "mathResultTitle": "Results",
+  "mathAccuracy": "Accuracy",
+  "mathPPS": "Per sec",
+  "mathPlayAgain": "Play Again",
+  "mathBackToMenu": "Back to Menu",
+  "mathFreeProHint": "Free: addition & subtraction, 30 seconds.\nPro: all operations, custom duration.",
+  "mathAvgAccuracy": "Avg Accuracy"
 }

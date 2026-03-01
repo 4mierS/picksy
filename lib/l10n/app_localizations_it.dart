@@ -54,6 +54,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get generatorTapChallenge => 'Sfida Toccata';
 
   @override
+  String get generatorMathChallenge => 'Sfida Matematica';
+
+  @override
   String get commonGenerate => 'Genera';
 
   @override
@@ -1040,4 +1043,75 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get tapChallengeAnalyticsBestTPS => 'Miglior TPS';
+
+  @override
+  String get mathChallengeTitle => 'Sfida Matematica';
+
+  @override
+  String get mathDifficulty => 'Difficoltà';
+
+  @override
+  String get mathDifficultyEasy => 'Facile';
+
+  @override
+  String get mathDifficultyHard => 'Difficile';
+
+  @override
+  String get mathDifficultyProTitle => 'La modalità difficile è Pro';
+
+  @override
+  String get mathDifficultyProMessage =>
+      'Passa a Pro per sbloccare moltiplicazione, divisione e numeri più grandi.';
+
+  @override
+  String get mathDuration => 'Durata';
+
+  @override
+  String mathDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
+  String get mathDurationFree => 'Fisso: 30 secondi';
+
+  @override
+  String get mathDurationProTitle => 'La durata personalizzata è Pro';
+
+  @override
+  String get mathDurationProMessage =>
+      'Passa a Pro per scegliere una durata da 15 a 60 secondi.';
+
+  @override
+  String get mathStart => 'Inizia';
+
+  @override
+  String get mathTimeLeft => 'Tempo';
+
+  @override
+  String get mathCorrect => 'Giusto';
+
+  @override
+  String get mathWrong => 'Sbagliato';
+
+  @override
+  String get mathResultTitle => 'Risultati';
+
+  @override
+  String get mathAccuracy => 'Precisione';
+
+  @override
+  String get mathPPS => 'Al sec.';
+
+  @override
+  String get mathPlayAgain => 'Gioca di nuovo';
+
+  @override
+  String get mathBackToMenu => 'Torna al menu';
+
+  @override
+  String get mathFreeProHint =>
+      'Free: addizione e sottrazione, 30 secondi.\nPro: tutte le operazioni, durata personalizzata.';
+
+  @override
+  String get mathAvgAccuracy => 'Precisione media';
 }
