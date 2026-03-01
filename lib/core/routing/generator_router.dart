@@ -9,7 +9,7 @@ import '../../features/generators/letter/letter_page.dart';
 import '../../features/generators/custom_list/custom_list_page.dart';
 import '../../features/generators/bottle_spin/bottle_spin_page.dart';
 import '../../features/generators/time/time_page.dart';
-import '../../features//generators/reaction_test/reaction_test_page.dart';
+import '../../features/generators/reaction_test/reaction_test_page.dart';
 import '../../features/generators/hangman/hangman_page.dart';
 
 void openGenerator(BuildContext context, GeneratorType type) {

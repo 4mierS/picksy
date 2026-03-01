@@ -187,28 +187,7 @@ class _GeneratorTile extends StatelessWidget {
     required this.onOpen,
   });
 
-  IconData get _icon {
-    switch (type) {
-      case GeneratorType.color:
-        return Icons.palette_outlined;
-      case GeneratorType.number:
-        return Icons.numbers;
-      case GeneratorType.coin:
-        return Icons.sync_alt;
-      case GeneratorType.letter:
-        return Icons.text_fields;
-      case GeneratorType.customList:
-        return Icons.list_alt;
-      case GeneratorType.bottleSpin:
-        return Icons.explore_outlined;
-      case GeneratorType.time:
-        return Icons.access_time;
-      case GeneratorType.reactionTest:
-        return Icons.flash_on;
-      case GeneratorType.hangman:
-        return Icons.sports_esports_outlined;
-    }
-  }
+  IconData get _icon => type.homeIcon;
 
   Color get _accent {
     return type.accentColor;
