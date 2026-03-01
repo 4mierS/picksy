@@ -419,7 +419,7 @@ abstract class AppLocalizations {
   /// No description provided for @compareProHistory.
   ///
   /// In en, this message translates to:
-  /// **'50 results'**
+  /// **'1000 results'**
   String get compareProHistory;
 
   /// No description provided for @compareFeatureFavorites.
@@ -437,19 +437,25 @@ abstract class AppLocalizations {
   /// No description provided for @compareProFavorites.
   ///
   /// In en, this message translates to:
-  /// **'Unlimited'**
+  /// **'Up to 999'**
   String get compareProFavorites;
+
+  /// No description provided for @compareFeatureCoinLabels.
+  ///
+  /// In en, this message translates to:
+  /// **'Coin Labels'**
+  String get compareFeatureCoinLabels;
 
   /// No description provided for @compareFeatureColorModes.
   ///
   /// In en, this message translates to:
-  /// **'Color Modes'**
+  /// **'Color Features'**
   String get compareFeatureColorModes;
 
   /// No description provided for @compareFeatureCustomRange.
   ///
   /// In en, this message translates to:
-  /// **'Custom Number Range'**
+  /// **'Number Features'**
   String get compareFeatureCustomRange;
 
   /// No description provided for @compareFeatureLetterFilters.
@@ -458,11 +464,23 @@ abstract class AppLocalizations {
   /// **'Letter Filters'**
   String get compareFeatureLetterFilters;
 
+  /// No description provided for @compareFeatureCustomListExtras.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom List'**
+  String get compareFeatureCustomListExtras;
+
   /// No description provided for @compareFeatureBottleHaptics.
   ///
   /// In en, this message translates to:
-  /// **'Bottle Haptics'**
+  /// **'Bottle Spin Controls'**
   String get compareFeatureBottleHaptics;
+
+  /// No description provided for @compareFeatureTimeRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer Range'**
+  String get compareFeatureTimeRange;
 
   /// No description provided for @compareFeatureAnalytics.
   ///

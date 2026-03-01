@@ -165,7 +165,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get compareFreeHistory => '3 Ergebnisse';
 
   @override
-  String get compareProHistory => '50 Ergebnisse';
+  String get compareProHistory => '1000 Ergebnisse';
 
   @override
   String get compareFeatureFavorites => 'Favoriten';
@@ -174,19 +174,28 @@ class AppLocalizationsDe extends AppLocalizations {
   String get compareFreeFavorites => 'Bis zu 2';
 
   @override
-  String get compareProFavorites => 'Unbegrenzt';
+  String get compareProFavorites => 'Bis zu 999';
 
   @override
-  String get compareFeatureColorModes => 'Farbmodi';
+  String get compareFeatureCoinLabels => 'Münzenbezeichnungen';
 
   @override
-  String get compareFeatureCustomRange => 'Eigener Zahlenbereich';
+  String get compareFeatureColorModes => 'Farbfunktionen';
+
+  @override
+  String get compareFeatureCustomRange => 'Zahlenfunktionen';
 
   @override
   String get compareFeatureLetterFilters => 'Buchstabenfilter';
 
   @override
-  String get compareFeatureBottleHaptics => 'Flaschen-Haptik';
+  String get compareFeatureCustomListExtras => 'Eigene Liste';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Flaschendrehen-Steuerung';
+
+  @override
+  String get compareFeatureTimeRange => 'Zeitbereich';
 
   @override
   String get compareFeatureAnalytics => 'Analytik';
@@ -288,7 +297,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get proWhatYouGet => 'What you get with Pro';
 
   @override
-  String get proFeatureHistory => 'History: 50 results (Free: 3)';
+  String get proFeatureHistory => 'History: 1000 results (Free: 3)';
 
   @override
   String get proFeatureFavorites => 'Unlimited favorites (Free: 2)';

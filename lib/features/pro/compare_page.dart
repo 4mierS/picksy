@@ -14,10 +14,13 @@ class CompareFreePro extends StatelessWidget {
     final features = [
       (l10n.compareFeatureHistory, l10n.compareFreeHistory, l10n.compareProHistory),
       (l10n.compareFeatureFavorites, l10n.compareFreeFavorites, l10n.compareProFavorites),
+      (l10n.compareFeatureCoinLabels, '✗', '✓'),
       (l10n.compareFeatureColorModes, '✗', '✓'),
       (l10n.compareFeatureCustomRange, '✗', '✓'),
       (l10n.compareFeatureLetterFilters, '✗', '✓'),
+      (l10n.compareFeatureCustomListExtras, '✗', '✓'),
       (l10n.compareFeatureBottleHaptics, '✗', '✓'),
+      (l10n.compareFeatureTimeRange, '✗', '✓'),
       (l10n.compareFeatureAnalytics, '✗', '✓'),
     ];
 
