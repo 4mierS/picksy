@@ -45,6 +45,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get generatorReactionTest => 'Test di reazione';
 
   @override
+  String get generatorHangman => 'Impiccato';
+
+  @override
   String get commonGenerate => 'Genera';
 
   @override
@@ -676,4 +679,37 @@ class AppLocalizationsIt extends AppLocalizations {
   String timeFormatted(int seconds, Object milliseconds) {
     return '${seconds}s ${milliseconds}ms';
   }
+
+  @override
+  String get hangmanTitle => 'Impiccato';
+
+  @override
+  String get hangmanNewGame => 'Nuova partita';
+
+  @override
+  String get hangmanPlayAgain => 'Gioca di nuovo';
+
+  @override
+  String get hangmanYouWon => 'Hai vinto!';
+
+  @override
+  String hangmanYouLost(Object word) => 'Hai perso! La parola era: $word';
+
+  @override
+  String get hangmanGuessWord => 'Indovina la parola';
+
+  @override
+  String hangmanAttemptsLeft(int count) => 'Tentativi rimasti: $count';
+
+  @override
+  String get hangmanWrongLetters => 'Lettere errate:';
+
+  @override
+  String get hangmanSettings => 'Impostazioni';
+
+  @override
+  String get hangmanMinLength => 'Lunghezza minima';
+
+  @override
+  String get hangmanMaxLength => 'Lunghezza massima';
 }

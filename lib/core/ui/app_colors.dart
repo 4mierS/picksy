@@ -25,6 +25,8 @@ extension GeneratorTypeColorX on GeneratorType {
         return Colors.green;
       case GeneratorType.reactionTest:
         return Colors.redAccent;
+      case GeneratorType.hangman:
+        return Colors.indigoAccent;
     }
   }
 }
@@ -48,6 +50,8 @@ extension GeneratorTypeIconX on GeneratorType {
         return Icons.access_time;
       case GeneratorType.reactionTest:
         return Icons.flash_on;
+      case GeneratorType.hangman:
+        return Icons.sports_esports_outlined;
     }
   }
 }

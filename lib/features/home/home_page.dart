@@ -22,6 +22,7 @@ class HomePage extends StatelessWidget {
     GeneratorType.bottleSpin,
     GeneratorType.time,
     GeneratorType.reactionTest,
+    GeneratorType.hangman,
   ];
 
   @override
@@ -204,6 +205,8 @@ class _GeneratorTile extends StatelessWidget {
         return Icons.access_time;
       case GeneratorType.reactionTest:
         return Icons.flash_on;
+      case GeneratorType.hangman:
+        return Icons.sports_esports_outlined;
     }
   }
 

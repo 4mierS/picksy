@@ -12,6 +12,7 @@
   "generatorBottleSpin": "Flaschendrehen",
   "generatorTime": "Zeit",
   "generatorReactionTest": "Reaktionstest",
+  "generatorHangman": "Galgenmännchen",
   "commonGenerate": "Generieren",
   "commonCopy": "Kopieren",
   "commonCopied": "Kopiert",
@@ -96,5 +97,28 @@
       },
       "milliseconds": {}
     }
-  }
+  },
+  "hangmanTitle": "Galgenmännchen",
+  "hangmanNewGame": "Neues Spiel",
+  "hangmanPlayAgain": "Nochmal spielen",
+  "hangmanYouWon": "Gewonnen!",
+  "hangmanYouLost": "Verloren! Das Wort war: {word}",
+  "@hangmanYouLost": {
+    "placeholders": {
+      "word": {}
+    }
+  },
+  "hangmanGuessWord": "Rate das Wort",
+  "hangmanAttemptsLeft": "Versuche übrig: {count}",
+  "@hangmanAttemptsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hangmanWrongLetters": "Falsche Buchstaben:",
+  "hangmanSettings": "Einstellungen",
+  "hangmanMinLength": "Minimale Wortlänge",
+  "hangmanMaxLength": "Maximale Wortlänge"
 }

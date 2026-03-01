@@ -7,4 +7,5 @@ enum GeneratorType {
   bottleSpin,
   time,
   reactionTest,
+  hangman,
 }
