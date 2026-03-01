@@ -30,8 +30,9 @@ extension GeneratorTypeColorX on GeneratorType {
       case GeneratorType.tapChallenge:
         return Colors.cyan;
       case GeneratorType.card:
+        return Colors.brown;
       case GeneratorType.colorReflex:
-        return Colors.cyanAccent;
+        return Colors.purpleAccent;
     }
   }
 }
