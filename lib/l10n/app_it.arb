@@ -242,9 +242,9 @@
   "timeReady": "Pronto?",
   "timeReset": "Reimposta",
   "timeAgain": "Di nuovo",
-  "timeStart": "Start",
+  "timeStart": "Avvia",
   "timeProCustomRangeHint": "Pro: scegli un intervallo personalizzato.",
-  "timeFreeCustomRangeHint": "Gratuito: intervallo fisso {minSec}–{maxSec} secondi. Passa a Pro per intervalli personalizzati.",
+  "timeFreeCustomRangeHint": "Gratis: intervallo fisso {minSec}–{maxSec} secondi. Passa a Pro per intervalli personalizzati.",
   "@timeFreeCustomRangeHint": {
     "placeholders": {
       "minSec": {
@@ -256,10 +256,10 @@
     }
   },
   "timeHideTime": "Nascondi tempo",
-  "timeHideTimeSubtitle": "Rivela il tempo solo alla fine (Hot Potato).",
+  "timeHideTimeSubtitle": "Mostra il tempo solo alla fine (Hot Potato).",
   "timeVibrateOnFinish": "Vibra alla fine",
   "timeRangeSeconds": "Intervallo (secondi)",
-  "timeFreeFixedRange": "Gratuito: fisso {minSec}–{maxSec}s",
+  "timeFreeFixedRange": "Gratis: fisso {minSec}–{maxSec}s",
   "@timeFreeFixedRange": {
     "placeholders": {
       "minSec": {

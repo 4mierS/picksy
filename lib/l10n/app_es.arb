@@ -242,7 +242,7 @@
   "timeReady": "¿Listo?",
   "timeReset": "Reiniciar",
   "timeAgain": "Otra vez",
-  "timeStart": "Start",
+  "timeStart": "Iniciar",
   "timeProCustomRangeHint": "Pro: elige un rango personalizado.",
   "timeFreeCustomRangeHint": "Gratis: rango fijo de {minSec}–{maxSec} segundos. Mejora para rangos personalizados.",
   "@timeFreeCustomRangeHint": {
