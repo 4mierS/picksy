@@ -176,6 +176,12 @@ abstract class AppLocalizations {
   /// **'Reaction Test'**
   String get generatorReactionTest;
 
+  /// No description provided for @generatorHangman.
+  ///
+  /// In en, this message translates to:
+  /// **'Hangman'**
+  String get generatorHangman;
+
   /// No description provided for @commonGenerate.
   ///
   /// In en, this message translates to:
@@ -1357,6 +1363,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{seconds}s {milliseconds}ms'**
   String timeFormatted(int seconds, Object milliseconds);
+
+  /// No description provided for @hangmanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hangman'**
+  String get hangmanTitle;
+
+  /// No description provided for @hangmanNewGame.
+  ///
+  /// In en, this message translates to:
+  /// **'New Game'**
+  String get hangmanNewGame;
+
+  /// No description provided for @hangmanPlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get hangmanPlayAgain;
+
+  /// No description provided for @hangmanYouWon.
+  ///
+  /// In en, this message translates to:
+  /// **'You won!'**
+  String get hangmanYouWon;
+
+  /// No description provided for @hangmanYouLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Game over! The word was: {word}'**
+  String hangmanYouLost(Object word);
+
+  /// No description provided for @hangmanGuessWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Guess the word'**
+  String get hangmanGuessWord;
+
+  /// No description provided for @hangmanAttemptsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempts left: {count}'**
+  String hangmanAttemptsLeft(int count);
+
+  /// No description provided for @hangmanWrongLetters.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrong letters:'**
+  String get hangmanWrongLetters;
+
+  /// No description provided for @hangmanSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get hangmanSettings;
+
+  /// No description provided for @hangmanMinLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Min word length'**
+  String get hangmanMinLength;
+
+  /// No description provided for @hangmanMaxLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Max word length'**
+  String get hangmanMaxLength;
 }
 
 class _AppLocalizationsDelegate

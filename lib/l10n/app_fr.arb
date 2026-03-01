@@ -12,6 +12,7 @@
   "generatorBottleSpin": "Bouteille",
   "generatorTime": "Temps",
   "generatorReactionTest": "Test de réaction",
+  "generatorHangman": "Pendu",
   "commonGenerate": "Générer",
   "commonCopy": "Copier",
   "commonCopied": "Copié",
@@ -98,5 +99,28 @@
       },
       "milliseconds": {}
     }
-  }
+  },
+  "hangmanTitle": "Pendu",
+  "hangmanNewGame": "Nouvelle partie",
+  "hangmanPlayAgain": "Rejouer",
+  "hangmanYouWon": "Vous avez gagné !",
+  "hangmanYouLost": "Perdu ! Le mot était : {word}",
+  "@hangmanYouLost": {
+    "placeholders": {
+      "word": {}
+    }
+  },
+  "hangmanGuessWord": "Devinez le mot",
+  "hangmanAttemptsLeft": "Tentatives restantes : {count}",
+  "@hangmanAttemptsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hangmanWrongLetters": "Lettres incorrectes :",
+  "hangmanSettings": "Paramètres",
+  "hangmanMinLength": "Longueur minimale",
+  "hangmanMaxLength": "Longueur maximale"
 }

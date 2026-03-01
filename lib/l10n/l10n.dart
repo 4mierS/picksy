@@ -27,6 +27,8 @@ extension GeneratorTypeL10n on GeneratorType {
         return l10n.generatorTime;
       case GeneratorType.reactionTest:
         return l10n.generatorReactionTest;
+      case GeneratorType.hangman:
+        return l10n.generatorHangman;
     }
   }
 }

@@ -12,6 +12,7 @@
   "generatorBottleSpin": "Botella",
   "generatorTime": "Tiempo",
   "generatorReactionTest": "Test de reacción",
+  "generatorHangman": "Ahorcado",
   "commonGenerate": "Generar",
   "commonCopy": "Copiar",
   "commonCopied": "Copiado",
@@ -98,5 +99,28 @@
       },
       "milliseconds": {}
     }
-  }
+  },
+  "hangmanTitle": "Ahorcado",
+  "hangmanNewGame": "Nuevo juego",
+  "hangmanPlayAgain": "Jugar de nuevo",
+  "hangmanYouWon": "¡Ganaste!",
+  "hangmanYouLost": "¡Perdiste! La palabra era: {word}",
+  "@hangmanYouLost": {
+    "placeholders": {
+      "word": {}
+    }
+  },
+  "hangmanGuessWord": "Adivina la palabra",
+  "hangmanAttemptsLeft": "Intentos restantes: {count}",
+  "@hangmanAttemptsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hangmanWrongLetters": "Letras incorrectas:",
+  "hangmanSettings": "Ajustes",
+  "hangmanMinLength": "Longitud mínima",
+  "hangmanMaxLength": "Longitud máxima"
 }
