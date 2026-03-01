@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Hangman'**
   String get generatorHangman;
 
+  /// No description provided for @generatorTapChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Challenge'**
+  String get generatorTapChallenge;
+
   /// No description provided for @commonGenerate.
   ///
   /// In en, this message translates to:
@@ -1555,6 +1561,132 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Frequency'**
   String get analyticsFrequency;
+
+  /// No description provided for @tapChallengeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap Challenge'**
+  String get tapChallengeTitle;
+
+  /// No description provided for @tapChallengeInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap as fast as you can when GO appears!'**
+  String get tapChallengeInstructions;
+
+  /// No description provided for @tapChallengeStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get tapChallengeStart;
+
+  /// No description provided for @tapChallengeAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tapChallengeAgain;
+
+  /// No description provided for @tapChallengeTaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Taps'**
+  String get tapChallengeTaps;
+
+  /// No description provided for @tapChallengeTPS.
+  ///
+  /// In en, this message translates to:
+  /// **'Taps/sec'**
+  String get tapChallengeTPS;
+
+  /// No description provided for @tapChallengePersonalBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Best'**
+  String get tapChallengePersonalBest;
+
+  /// No description provided for @tapChallengeDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get tapChallengeDurationLabel;
+
+  /// No description provided for @tapChallengeDurationSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String tapChallengeDurationSeconds(int seconds);
+
+  /// No description provided for @tapChallengeDurationProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Duration is Pro'**
+  String get tapChallengeDurationProTitle;
+
+  /// No description provided for @tapChallengeDurationProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to set the challenge duration to 5s, 10s, 15s, 30s, or 60s.'**
+  String get tapChallengeDurationProMessage;
+
+  /// No description provided for @tapChallengeVibrateOnGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrate on GO'**
+  String get tapChallengeVibrateOnGo;
+
+  /// No description provided for @tapChallengeVibrateOnEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibrate on end'**
+  String get tapChallengeVibrateOnEnd;
+
+  /// No description provided for @tapChallengeFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: 5-second run.\nPro: choose duration (5s, 10s, 15s, 30s, 60s) + advanced analytics.'**
+  String get tapChallengeFreeProHint;
+
+  /// No description provided for @tapChallengeGo.
+  ///
+  /// In en, this message translates to:
+  /// **'GO!'**
+  String get tapChallengeGo;
+
+  /// No description provided for @tapChallengeGetReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Ready'**
+  String get tapChallengeGetReady;
+
+  /// No description provided for @tapChallengeResultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Run Complete!'**
+  String get tapChallengeResultTitle;
+
+  /// No description provided for @tapChallengeAnalyticsPersonalBest.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Taps'**
+  String get tapChallengeAnalyticsPersonalBest;
+
+  /// No description provided for @tapChallengeAnalyticsAvgTaps.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Taps'**
+  String get tapChallengeAnalyticsAvgTaps;
+
+  /// No description provided for @tapChallengeAnalyticsAvgTPS.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg TPS'**
+  String get tapChallengeAnalyticsAvgTPS;
+
+  /// No description provided for @tapChallengeAnalyticsBestTPS.
+  ///
+  /// In en, this message translates to:
+  /// **'Best TPS'**
+  String get tapChallengeAnalyticsBestTPS;
 }
 
 class _AppLocalizationsDelegate

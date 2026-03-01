@@ -31,7 +31,8 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         title: Text(l10n.analyticsGeneratorTitle(generatorType.localizedTitle(context))),
         actions: [
           if (generatorType != GeneratorType.reactionTest &&
-              generatorType != GeneratorType.hangman)
+              generatorType != GeneratorType.hangman &&
+              generatorType != GeneratorType.tapChallenge)
             if (gate.canUse(ProFeature.autoRun))
               IconButton(
                 icon: const Icon(Icons.play_circle_outline),
@@ -197,6 +198,8 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         return rng.nextBool() ? 'Won' : 'Lost';
       case GeneratorType.customList:
         return 'Item ${rng.nextInt(10) + 1}';
+      case GeneratorType.tapChallenge:
+        return '${20 + rng.nextInt(60)} taps';
     }
   }
 }
@@ -235,6 +238,8 @@ class _StatsSection extends StatelessWidget {
         return _HangmanStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.customList:
         return _CustomListStats(entries: entries, l10n: l10n, accent: accent);
+      case GeneratorType.tapChallenge:
+        return _TapChallengeStats(entries: entries, l10n: l10n, accent: accent);
     }
   }
 }
@@ -748,6 +753,86 @@ class _CustomListStats extends StatelessWidget {
           ),
           const SizedBox(height: 6),
         ],
+      ],
+    );
+  }
+}
+
+// ─── TapChallenge ────────────────────────────────────────────────────────────
+
+class _TapChallengeStats extends StatelessWidget {
+  final List<HistoryEntry> entries;
+  final AppLocalizations l10n;
+  final Color accent;
+
+  const _TapChallengeStats({
+    required this.entries,
+    required this.l10n,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final taps = entries.map((e) {
+      final meta = e.metadata;
+      if (meta != null && meta['tapsCount'] != null) {
+        return (meta['tapsCount'] as num).toInt();
+      }
+      final match = RegExp(r'(\d+)\s*taps?').firstMatch(e.value);
+      return match != null ? int.tryParse(match.group(1)!) : null;
+    }).whereType<int>().toList();
+
+    final tpsValues = entries.map((e) {
+      final meta = e.metadata;
+      if (meta != null && meta['tapsPerSecond'] != null) {
+        return (meta['tapsPerSecond'] as num).toDouble();
+      }
+      return null;
+    }).whereType<double>().toList();
+
+    if (taps.isEmpty) return const SizedBox.shrink();
+
+    final bestTaps = taps.reduce(max);
+    final avgTaps = taps.reduce((a, b) => a + b) / taps.length;
+    final bestTPS = tpsValues.isNotEmpty ? tpsValues.reduce(max) : null;
+    final avgTPS = tpsValues.isNotEmpty
+        ? tpsValues.reduce((a, b) => a + b) / tpsValues.length
+        : null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _StatsGrid(
+          children: [
+            _StatCard(
+              label: l10n.tapChallengeAnalyticsPersonalBest,
+              value: '$bestTaps',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.tapChallengeAnalyticsAvgTaps,
+              value: avgTaps.toStringAsFixed(1),
+              accent: accent,
+            ),
+            if (bestTPS != null)
+              _StatCard(
+                label: l10n.tapChallengeAnalyticsBestTPS,
+                value: bestTPS.toStringAsFixed(2),
+                accent: accent,
+              ),
+            if (avgTPS != null)
+              _StatCard(
+                label: l10n.tapChallengeAnalyticsAvgTPS,
+                value: avgTPS.toStringAsFixed(2),
+                accent: accent,
+              ),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '${taps.length}',
+              accent: accent,
+            ),
+          ],
+        ),
       ],
     );
   }

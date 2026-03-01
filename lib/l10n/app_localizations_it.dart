@@ -51,6 +51,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get generatorHangman => 'Impiccato';
 
   @override
+  String get generatorTapChallenge => 'Sfida Toccata';
+
+  @override
   String get commonGenerate => 'Genera';
 
   @override
@@ -788,4 +791,67 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get analyticsFrequency => 'Frequency';
+
+  @override
+  String get tapChallengeTitle => 'Sfida Toccata';
+
+  @override
+  String get tapChallengeInstructions => 'Tocca il più velocemente possibile quando appare GO!';
+
+  @override
+  String get tapChallengeStart => 'Inizia';
+
+  @override
+  String get tapChallengeAgain => 'Riprova';
+
+  @override
+  String get tapChallengeTaps => 'Tocchi';
+
+  @override
+  String get tapChallengeTPS => 'Tocchi/sec';
+
+  @override
+  String get tapChallengePersonalBest => 'Record Personale';
+
+  @override
+  String get tapChallengeDurationLabel => 'Durata';
+
+  @override
+  String tapChallengeDurationSeconds(int seconds) => '${seconds}s';
+
+  @override
+  String get tapChallengeDurationProTitle => 'Durata personalizzata è Pro';
+
+  @override
+  String get tapChallengeDurationProMessage => 'Diventa Pro per impostare la durata a 5s, 10s, 15s, 30s o 60s.';
+
+  @override
+  String get tapChallengeVibrateOnGo => 'Vibra al GO';
+
+  @override
+  String get tapChallengeVibrateOnEnd => 'Vibra alla fine';
+
+  @override
+  String get tapChallengeFreeProHint => 'Gratis: 5 secondi.\nPro: scegli la durata (5s, 10s, 15s, 30s, 60s) + analisi avanzate.';
+
+  @override
+  String get tapChallengeGo => 'VIA!';
+
+  @override
+  String get tapChallengeGetReady => 'Preparati';
+
+  @override
+  String get tapChallengeResultTitle => 'Corsa completata!';
+
+  @override
+  String get tapChallengeAnalyticsPersonalBest => 'Migliori Tocchi';
+
+  @override
+  String get tapChallengeAnalyticsAvgTaps => 'Media Tocchi';
+
+  @override
+  String get tapChallengeAnalyticsAvgTPS => 'Media TPS';
+
+  @override
+  String get tapChallengeAnalyticsBestTPS => 'Miglior TPS';
 }

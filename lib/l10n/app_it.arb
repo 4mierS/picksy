@@ -14,6 +14,7 @@
   "generatorTime": "Tempo",
   "generatorReactionTest": "Test di reazione",
   "generatorHangman": "Impiccato",
+  "generatorTapChallenge": "Sfida Toccata",
   "commonGenerate": "Genera",
   "commonCopy": "Copia",
   "commonCopied": "Copiato",
@@ -339,5 +340,33 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "tapChallengeTitle": "Sfida Toccata",
+  "tapChallengeInstructions": "Tocca il più velocemente possibile quando appare GO!",
+  "tapChallengeStart": "Inizia",
+  "tapChallengeAgain": "Riprova",
+  "tapChallengeTaps": "Tocchi",
+  "tapChallengeTPS": "Tocchi/sec",
+  "tapChallengePersonalBest": "Record Personale",
+  "tapChallengeDurationLabel": "Durata",
+  "tapChallengeDurationSeconds": "{seconds}s",
+  "@tapChallengeDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "tapChallengeDurationProTitle": "Durata personalizzata è Pro",
+  "tapChallengeDurationProMessage": "Diventa Pro per impostare la durata a 5s, 10s, 15s, 30s o 60s.",
+  "tapChallengeVibrateOnGo": "Vibra al GO",
+  "tapChallengeVibrateOnEnd": "Vibra alla fine",
+  "tapChallengeFreeProHint": "Gratis: 5 secondi.\nPro: scegli la durata (5s, 10s, 15s, 30s, 60s) + analisi avanzate.",
+  "tapChallengeGo": "VIA!",
+  "tapChallengeGetReady": "Preparati",
+  "tapChallengeResultTitle": "Corsa completata!",
+  "tapChallengeAnalyticsPersonalBest": "Migliori Tocchi",
+  "tapChallengeAnalyticsAvgTaps": "Media Tocchi",
+  "tapChallengeAnalyticsAvgTPS": "Media TPS",
+  "tapChallengeAnalyticsBestTPS": "Miglior TPS"
 }
