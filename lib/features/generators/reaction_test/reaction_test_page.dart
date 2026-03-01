@@ -85,6 +85,7 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
         type: GeneratorType.reactionTest,
         value: "Too soon",
         maxEntries: _historyMaxEntries,
+        metadata: {'tooSoon': true},
       );
       setState(() => _phase = _Phase.tooSoon);
 

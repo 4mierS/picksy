@@ -30,30 +30,32 @@ class GeneratorAnalyticsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.analyticsGeneratorTitle(generatorType.localizedTitle(context))),
         actions: [
-          if (gate.canUse(ProFeature.autoRun))
-            IconButton(
-              icon: const Icon(Icons.play_circle_outline),
-              tooltip: l10n.analyticsAutoRun,
-              onPressed: () {
-                showAutoRunSheet(
-                  context,
-                  generator: () => _simulateGenerate(generatorType),
-                  generatorName: generatorType.localizedTitle(context),
-                );
-              },
-            )
-          else
-            IconButton(
-              icon: const Icon(Icons.play_circle_outline),
-              tooltip: l10n.analyticsAutoRun,
-              onPressed: () {
-                showProDialog(
-                  context,
-                  title: l10n.analyticsAutoRun,
-                  message: l10n.analyticsProMessage,
-                );
-              },
-            ),
+          if (generatorType != GeneratorType.reactionTest &&
+              generatorType != GeneratorType.hangman)
+            if (gate.canUse(ProFeature.autoRun))
+              IconButton(
+                icon: const Icon(Icons.play_circle_outline),
+                tooltip: l10n.analyticsAutoRun,
+                onPressed: () {
+                  showAutoRunSheet(
+                    context,
+                    generator: () => _simulateGenerate(generatorType),
+                    generatorName: generatorType.localizedTitle(context),
+                  );
+                },
+              )
+            else
+              IconButton(
+                icon: const Icon(Icons.play_circle_outline),
+                tooltip: l10n.analyticsAutoRun,
+                onPressed: () {
+                  showProDialog(
+                    context,
+                    title: l10n.analyticsAutoRun,
+                    message: l10n.analyticsProMessage,
+                  );
+                },
+              ),
         ],
       ),
       body: entries.isEmpty
@@ -604,6 +606,7 @@ class _ReactionStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tooSoonCount = entries.where((e) => e.value == 'Too soon').length;
     final validEntries = entries.where((e) => e.value != 'Too soon').toList();
     final ms = validEntries.map((e) {
       final meta = e.metadata;
@@ -615,10 +618,11 @@ class _ReactionStats extends StatelessWidget {
     }).whereType<double>().toList();
 
     if (ms.isEmpty) {
-      return _StatCard(
-        label: l10n.analyticsTotal,
-        value: '${entries.length}',
-        accent: accent,
+      return _StatsGrid(
+        children: [
+          _StatCard(label: l10n.analyticsTotal, value: '${entries.length}', accent: accent),
+          _StatCard(label: 'Too Soon', value: '$tooSoonCount', accent: Colors.orange),
+        ],
       );
     }
 
@@ -633,6 +637,7 @@ class _ReactionStats extends StatelessWidget {
             _StatCard(label: l10n.analyticsBestTime, value: '${best.toStringAsFixed(0)} ms', accent: accent),
             _StatCard(label: l10n.analyticsAvgTime, value: '${avg.toStringAsFixed(0)} ms', accent: accent),
             _StatCard(label: l10n.analyticsTotal, value: '${ms.length}', accent: accent),
+            _StatCard(label: 'Too Soon', value: '$tooSoonCount', accent: Colors.orange),
           ],
         ),
       ],
