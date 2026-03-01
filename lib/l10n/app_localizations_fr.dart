@@ -135,7 +135,76 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsLangItalian => 'Italiano';
 
   @override
-  String get homeSmartRandomDecisions => 'Décisions aléatoires intelligentes';
+  String get settingsRateApp => "Noter l'app";
+
+  @override
+  String get settingsShareApp => "Partager l'app";
+
+  @override
+  String get settingsShareAppSubtitle => 'Invitez des amis à essayer Picksy';
+
+  @override
+  String get settingsCompareFreePro => 'Comparer Gratuit vs Pro';
+
+  @override
+  String get compareTitle => 'Gratuit vs Pro';
+
+  @override
+  String get compareFeatureLabel => 'Fonctionnalité';
+
+  @override
+  String get compareFreeColumn => 'Gratuit';
+
+  @override
+  String get compareProColumn => 'Pro';
+
+  @override
+  String get compareFeatureHistory => 'Historique';
+
+  @override
+  String get compareFreeHistory => '3 résultats';
+
+  @override
+  String get compareProHistory => '50 résultats';
+
+  @override
+  String get compareFeatureFavorites => 'Favoris';
+
+  @override
+  String get compareFreeFavorites => "Jusqu'à 2";
+
+  @override
+  String get compareProFavorites => 'Illimités';
+
+  @override
+  String get compareFeatureColorModes => 'Modes couleur';
+
+  @override
+  String get compareFeatureCustomRange => 'Plage de nombres personnalisée';
+
+  @override
+  String get compareFeatureLetterFilters => 'Filtres de lettres';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Haptique bouteille';
+
+  @override
+  String get compareFeatureAnalytics => 'Analytique';
+
+  @override
+  String get proPromoCode => 'Code promo';
+
+  @override
+  String get proPromoCodeHint => 'Saisissez le code';
+
+  @override
+  String get proPromoCodeApply => 'Appliquer';
+
+  @override
+  String get proPromoCodeSuccess => 'Code appliqué ! Pro est maintenant actif.';
+
+  @override
+  String get proPromoCodeInvalid => 'Code invalide. Veuillez réessayer.';
 
   @override
   String get homeHistoryTooltip => 'Historique';
