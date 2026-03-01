@@ -135,10 +135,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsLangItalian => 'Italiano';
 
   @override
-  String get settingsRateApp => "Noter l'app";
+  String get settingsRateApp => 'Noter l\'app';
 
   @override
-  String get settingsShareApp => "Partager l'app";
+  String get settingsShareApp => 'Partager l\'app';
 
   @override
   String get settingsShareAppSubtitle => 'Invitez des amis à essayer Picksy';
@@ -171,7 +171,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get compareFeatureFavorites => 'Favoris';
 
   @override
-  String get compareFreeFavorites => "Jusqu'à 2";
+  String get compareFreeFavorites => 'Jusqu\'à 2';
 
   @override
   String get compareProFavorites => 'Illimités';
@@ -205,6 +205,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get proPromoCodeInvalid => 'Code invalide. Veuillez réessayer.';
+
+  @override
+  String get homeSmartRandomDecisions => 'Décisions aléatoires intelligentes';
 
   @override
   String get homeHistoryTooltip => 'Historique';

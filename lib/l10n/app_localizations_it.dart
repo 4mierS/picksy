@@ -135,7 +135,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsLangItalian => 'Italiano';
 
   @override
-  String get settingsRateApp => "Valuta l'app";
+  String get settingsRateApp => 'Valuta l\'app';
 
   @override
   String get settingsShareApp => 'Condividi app';
@@ -205,6 +205,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get proPromoCodeInvalid => 'Codice non valido. Riprova.';
+
+  @override
+  String get homeSmartRandomDecisions => 'Decisioni casuali intelligenti';
 
   @override
   String get homeHistoryTooltip => 'Cronologia';

@@ -207,6 +207,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get proPromoCodeInvalid => 'Código inválido. Inténtalo de nuevo.';
 
   @override
+  String get homeSmartRandomDecisions => 'Decisiones aleatorias inteligentes';
+
+  @override
   String get homeHistoryTooltip => 'Historial';
 
   @override

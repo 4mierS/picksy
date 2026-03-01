@@ -201,10 +201,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get proPromoCodeApply => 'Einlösen';
 
   @override
-  String get proPromoCodeSuccess => 'Promo-Code eingelöst! Pro ist jetzt aktiv.';
+  String get proPromoCodeSuccess =>
+      'Promo-Code eingelöst! Pro ist jetzt aktiv.';
 
   @override
-  String get proPromoCodeInvalid => 'Ungültiger Promo-Code. Bitte erneut versuchen.';
+  String get proPromoCodeInvalid =>
+      'Ungültiger Promo-Code. Bitte erneut versuchen.';
+
+  @override
+  String get homeSmartRandomDecisions => 'Smart random decisions';
 
   @override
   String get homeHistoryTooltip => 'Verlauf';
