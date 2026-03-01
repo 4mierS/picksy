@@ -816,7 +816,7 @@ class _MemoryFlashStats extends StatelessWidget {
               accent: accent,
             ),
             _StatCard(
-              label: 'Avg level',
+              label: l10n.analyticsAvgLevel,
               value: avg.toStringAsFixed(1),
               accent: accent,
             ),
@@ -828,7 +828,7 @@ class _MemoryFlashStats extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        _SectionTitle('Level distribution'),
+        _SectionTitle(l10n.analyticsLevelDistribution),
         _BarRow(
           label: '1–3',
           fraction: maxBucket > 0 ? buckets[0] / maxBucket : 0,

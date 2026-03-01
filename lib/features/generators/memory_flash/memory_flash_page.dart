@@ -25,6 +25,9 @@ class MemoryFlashPage extends StatefulWidget {
 }
 
 class _MemoryFlashPageState extends State<MemoryFlashPage> {
+  static const double _maxGridWidth = 320.0;
+  static const int _gridColumns = 2;
+  static const double _tileSpacing = 12.0;
   static const int _freeLevelCap = 10;
   static const int _historyMaxEntriesFree = 50;
   static const int _historyMaxEntriesPro = 1000;
@@ -249,9 +252,10 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
                 child: Center(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final size = (constraints.maxWidth.clamp(0.0, 320.0)) /
-                          2 -
-                          12;
+                      final size =
+                          (constraints.maxWidth.clamp(0.0, _maxGridWidth)) /
+                              _gridColumns -
+                          _tileSpacing;
                       return Wrap(
                         spacing: 12,
                         runSpacing: 12,
@@ -321,7 +325,7 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
               const SizedBox(height: 8),
               Card(
                 child: ExpansionTile(
-                  title: Text(l10n.hangmanSettings),
+                  title: Text(l10n.settingsTitle),
                   leading: const Icon(Icons.tune),
                   children: [
                     Padding(
@@ -548,8 +552,6 @@ class _SpeedSettings extends StatelessWidget {
           children: List.generate(speeds.length, (i) {
             final s = speeds[i];
             final selected = speed == s;
-            final canChange =
-                enabled && gate.canUse(ProFeature.memoryFlashSpeed);
             return Expanded(
               child: Padding(
                 padding: EdgeInsets.only(right: i < speeds.length - 1 ? 8 : 0),
@@ -564,9 +566,7 @@ class _SpeedSettings extends StatelessWidget {
                         selected ? accent.withOpacity(0.1) : null,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
-                  onPressed: (canChange || !gate.canUse(ProFeature.memoryFlashSpeed))
-                      ? () => onSpeedChanged(s)
-                      : null,
+                  onPressed: enabled ? () => onSpeedChanged(s) : null,
                   child: Text(labels[i], style: const TextStyle(fontSize: 13)),
                 ),
               ),

@@ -792,6 +792,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get analyticsFrequency => 'Frequency';
 
   @override
+  String get analyticsAvgLevel => 'Durchschn. Level';
+
+  @override
+  String get analyticsLevelDistribution => 'Level-Verteilung';
+
+  @override
   String get memoryFlashTitle => 'Memory Flash';
 
   @override

@@ -1562,6 +1562,18 @@ abstract class AppLocalizations {
   /// **'Frequency'**
   String get analyticsFrequency;
 
+  /// No description provided for @analyticsAvgLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg level'**
+  String get analyticsAvgLevel;
+
+  /// No description provided for @analyticsLevelDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Level distribution'**
+  String get analyticsLevelDistribution;
+
   /// No description provided for @memoryFlashTitle.
   ///
   /// In en, this message translates to:
