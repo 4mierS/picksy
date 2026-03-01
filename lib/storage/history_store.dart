@@ -36,12 +36,14 @@ class HistoryStore extends ChangeNotifier {
     required GeneratorType type,
     required String value,
     required int maxEntries,
+    Map<String, dynamic>? metadata,
   }) async {
     final entry = HistoryEntry(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
       generatorType: type,
       value: value,
       timestamp: DateTime.now(),
+      metadata: metadata,
     );
 
     _entries.insert(0, entry);

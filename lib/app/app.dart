@@ -3,6 +3,7 @@ import '../l10n/l10n.dart';
 
 import '../features/home/home_page.dart';
 import '../features/pro/pro_page.dart';
+import '../features/analytics/analytics_page.dart';
 import '../features/settings/settings_page.dart';
 
 class AppShell extends StatefulWidget {
@@ -15,7 +16,7 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _index = 0;
 
-  final _pages = const [HomePage(), ProPage(), SettingsPage()];
+  final _pages = const [HomePage(), ProPage(), AnalyticsPage(), SettingsPage()];
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +34,10 @@ class _AppShellState extends State<AppShell> {
           NavigationDestination(
             icon: const Icon(Icons.workspace_premium),
             label: l10n.navPro,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.bar_chart),
+            label: l10n.navAnalytics,
           ),
           NavigationDestination(
             icon: const Icon(Icons.settings),

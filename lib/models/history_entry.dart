@@ -5,12 +5,14 @@ class HistoryEntry {
   final GeneratorType generatorType;
   final String value;
   final DateTime timestamp;
+  final Map<String, dynamic>? metadata;
 
   HistoryEntry({
     required this.id,
     required this.generatorType,
     required this.value,
     required this.timestamp,
+    this.metadata,
   });
 
   Map<String, dynamic> toMap() => {
@@ -18,6 +20,7 @@ class HistoryEntry {
     'generatorType': generatorType.name,
     'value': value,
     'timestamp': timestamp.toIso8601String(),
+    if (metadata != null) 'metadata': metadata,
   };
 
   factory HistoryEntry.fromMap(Map<dynamic, dynamic> map) {
@@ -27,6 +30,11 @@ class HistoryEntry {
       orElse: () => GeneratorType.number,
     );
 
+    Map<String, dynamic>? metadata;
+    if (map['metadata'] != null) {
+      metadata = Map<String, dynamic>.from(map['metadata'] as Map);
+    }
+
     return HistoryEntry(
       id: (map['id'] ?? '') as String,
       generatorType: type,
@@ -34,6 +42,7 @@ class HistoryEntry {
       timestamp:
           DateTime.tryParse((map['timestamp'] ?? '') as String) ??
           DateTime.now(),
+      metadata: metadata,
     );
   }
 }

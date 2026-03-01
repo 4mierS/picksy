@@ -1429,6 +1429,69 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Max word length'**
   String get hangmanMaxLength;
+
+  /// No description provided for @navAnalytics.
+  String get navAnalytics;
+
+  /// No description provided for @analyticsTitle.
+  String get analyticsTitle;
+
+  /// No description provided for @analyticsProOnly.
+  String get analyticsProOnly;
+
+  /// No description provided for @analyticsProMessage.
+  String get analyticsProMessage;
+
+  /// No description provided for @analyticsEmpty.
+  String get analyticsEmpty;
+
+  /// No description provided for @analyticsViewAll.
+  String get analyticsViewAll;
+
+  /// No description provided for @analyticsGeneratorTitle.
+  String analyticsGeneratorTitle(Object generator);
+
+  /// No description provided for @analyticsAutoRun.
+  String get analyticsAutoRun;
+
+  /// No description provided for @analyticsAutoRunCount.
+  String get analyticsAutoRunCount;
+
+  /// No description provided for @analyticsAutoRunStart.
+  String get analyticsAutoRunStart;
+
+  /// No description provided for @analyticsAutoRunRunning.
+  String get analyticsAutoRunRunning;
+
+  /// No description provided for @analyticsAutoRunResults.
+  String get analyticsAutoRunResults;
+
+  /// No description provided for @analyticsAutoRunDistribution.
+  String get analyticsAutoRunDistribution;
+
+  /// No description provided for @analyticsBestTime.
+  String get analyticsBestTime;
+
+  /// No description provided for @analyticsAvgTime.
+  String get analyticsAvgTime;
+
+  /// No description provided for @analyticsTotal.
+  String get analyticsTotal;
+
+  /// No description provided for @analyticsWins.
+  String get analyticsWins;
+
+  /// No description provided for @analyticsLosses.
+  String get analyticsLosses;
+
+  /// No description provided for @analyticsWinRate.
+  String get analyticsWinRate;
+
+  /// No description provided for @analyticsHighScore.
+  String get analyticsHighScore;
+
+  /// No description provided for @analyticsFrequency.
+  String get analyticsFrequency;
 }
 
 class _AppLocalizationsDelegate

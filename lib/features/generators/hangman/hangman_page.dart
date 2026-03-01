@@ -8,6 +8,8 @@ import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
+import 'package:picksy/core/gating/feature_gate.dart';
+import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 
 enum _HangmanPhase { idle, playing, won, lost }
 
@@ -100,10 +102,15 @@ class _HangmanPageState extends State<HangmanPage> {
 
   void _saveHistory(String value) {
     final history = context.read<HistoryStore>();
+    final won = value.startsWith('Won');
     history.add(
       type: GeneratorType.hangman,
       value: value,
       maxEntries: _historyMaxEntries,
+      metadata: {
+        'won': won,
+        'wordLength': _word.length,
+      },
     );
   }
 
@@ -114,9 +121,37 @@ class _HangmanPageState extends State<HangmanPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final accent = GeneratorType.hangman.accentColor;
+    final gate = context.gateRead;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.hangmanTitle)),
+      appBar: AppBar(
+        title: Text(l10n.hangmanTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart),
+            tooltip: l10n.analyticsTitle,
+            onPressed: () {
+              if (gate.canUse(ProFeature.analyticsAccess)) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const GeneratorAnalyticsPage(
+                      generatorType: GeneratorType.hangman,
+                    ),
+                  ),
+                );
+              } else {
+                showProDialog(
+                  context,
+                  title: l10n.analyticsProOnly,
+                  message: l10n.analyticsProMessage,
+                  generatorType: GeneratorType.hangman,
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
