@@ -27,6 +27,8 @@ enum ProFeature {
   exportShare,
   coinCustomLabels,
   timeCustomRange,
+  analyticsAccess,
+  autoRun,
 }
 
 class FeatureGate {
@@ -35,7 +37,7 @@ class FeatureGate {
 
   /// Limits
   int get favoritesMax => isPro ? 999 : 2;
-  int get historyMax => isPro ? 50 : 3;
+  int get historyMax => isPro ? 1000 : 3;
   int get workflowFieldsMax => isPro ? 999 : 3;
   int get presetsMax => isPro ? 999 : 2;
 
@@ -65,6 +67,8 @@ class FeatureGate {
       case ProFeature.exportShare:
       case ProFeature.coinCustomLabels:
       case ProFeature.timeCustomRange:
+      case ProFeature.analyticsAccess:
+      case ProFeature.autoRun:
         return false;
     }
   }

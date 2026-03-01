@@ -21,6 +21,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get navSettings => 'Paramètres';
 
   @override
+  String get navAnalytics => 'Analytique';
+
+  @override
   String get generatorColor => 'Couleur';
 
   @override
@@ -175,7 +178,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String routerComingNext(Object generator) {
-    return 'Coming next: $generator';
+    return 'Ensuite : $generator';
   }
 
   @override
@@ -722,4 +725,67 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get hangmanMaxLength => 'Longueur maximale';
+
+  @override
+  String get analyticsTitle => 'Analytique';
+
+  @override
+  String get analyticsProOnly => 'Analytics is a Pro feature';
+
+  @override
+  String get analyticsProMessage =>
+      'Unlock advanced analytics, trends and auto-run with Picksy Pro.';
+
+  @override
+  String get analyticsEmpty => 'No data yet. Generate some results first.';
+
+  @override
+  String get analyticsViewAll => 'View All';
+
+  @override
+  String analyticsGeneratorTitle(Object generator) {
+    return '$generator Analytique';
+  }
+
+  @override
+  String get analyticsAutoRun => 'Auto-Run';
+
+  @override
+  String get analyticsAutoRunCount => 'Count';
+
+  @override
+  String get analyticsAutoRunStart => 'Start';
+
+  @override
+  String get analyticsAutoRunRunning => 'Running…';
+
+  @override
+  String get analyticsAutoRunResults => 'Results';
+
+  @override
+  String get analyticsAutoRunDistribution => 'Distribution';
+
+  @override
+  String get analyticsBestTime => 'Best time';
+
+  @override
+  String get analyticsAvgTime => 'Avg time';
+
+  @override
+  String get analyticsTotal => 'Total';
+
+  @override
+  String get analyticsWins => 'Wins';
+
+  @override
+  String get analyticsLosses => 'Losses';
+
+  @override
+  String get analyticsWinRate => 'Win rate';
+
+  @override
+  String get analyticsHighScore => 'High score';
+
+  @override
+  String get analyticsFrequency => 'Frequency';
 }

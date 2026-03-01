@@ -12,6 +12,7 @@ import '../../../l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/storage/premium_store.dart';
+import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 
 class TimePage extends StatefulWidget {
   const TimePage({super.key});
@@ -89,6 +90,7 @@ class _TimePageState extends State<TimePage> {
         type: GeneratorType.time,
         value: value,
         maxEntries: context.gateRead.historyMax,
+        metadata: {'targetMs': _targetMs},
       );
     }
 
@@ -164,7 +166,34 @@ class _TimePageState extends State<TimePage> {
 
     return Scaffold(
       backgroundColor: bg,
-      appBar: AppBar(title: Text(l10n.timeTitle)),
+      appBar: AppBar(
+        title: Text(l10n.timeTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart),
+            tooltip: l10n.analyticsTitle,
+            onPressed: () {
+              if (isPro) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const GeneratorAnalyticsPage(
+                      generatorType: GeneratorType.time,
+                    ),
+                  ),
+                );
+              } else {
+                showProDialog(
+                  context,
+                  title: l10n.analyticsProOnly,
+                  message: l10n.analyticsProMessage,
+                  generatorType: GeneratorType.time,
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

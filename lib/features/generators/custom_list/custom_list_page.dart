@@ -11,6 +11,7 @@ import 'package:picksy/storage/custom_lists_store.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
+import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 
 class CustomListPage extends StatefulWidget {
   const CustomListPage({super.key});
@@ -54,6 +55,10 @@ class _CustomListPageState extends State<CustomListPage> {
       type: GeneratorType.customList,
       value: value,
       maxEntries: gate.historyMax,
+      metadata: {
+        'listId': selected.id,
+        'value': value,
+      },
     );
 
     setState(() {
@@ -146,6 +151,30 @@ class _CustomListPageState extends State<CustomListPage> {
       appBar: AppBar(
         title: Text(l10n.customListTitle),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart),
+            tooltip: l10n.analyticsTitle,
+            onPressed: () {
+              final gate = context.gateRead;
+              if (gate.canUse(ProFeature.analyticsAccess)) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const GeneratorAnalyticsPage(
+                      generatorType: GeneratorType.customList,
+                    ),
+                  ),
+                );
+              } else {
+                showProDialog(
+                  context,
+                  title: l10n.analyticsProOnly,
+                  message: l10n.analyticsProMessage,
+                  generatorType: GeneratorType.customList,
+                );
+              }
+            },
+          ),
           IconButton(
             tooltip: l10n.customListNewList,
             icon: const Icon(Icons.add),

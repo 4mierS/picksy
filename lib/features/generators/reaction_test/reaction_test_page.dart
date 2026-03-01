@@ -8,6 +8,9 @@ import 'package:picksy/core/ui/app_styles.dart';
 
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
+import 'package:picksy/core/gating/feature_gate.dart';
+import 'package:picksy/l10n/l10n.dart';
+import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 
 enum _Phase { idle, waiting, ready, result, tooSoon }
 
@@ -82,8 +85,8 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
         type: GeneratorType.reactionTest,
         value: "Too soon",
         maxEntries: _historyMaxEntries,
+        metadata: {'tooSoon': true},
       );
-
       setState(() => _phase = _Phase.tooSoon);
 
       if (_vibrateOnResult) {
@@ -105,6 +108,7 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
         type: GeneratorType.reactionTest,
         value: "$ms ms",
         maxEntries: _historyMaxEntries,
+        metadata: {'ms': ms},
       );
 
       if (_vibrateOnResult) {
@@ -164,13 +168,42 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
   @override
   Widget build(BuildContext context) {
     final bg = _bgColor(context);
+    final l10n = context.l10n;
+    final gate = context.gateRead;
 
     final showStart = _phase == _Phase.idle;
     final showAgain = _phase == _Phase.result || _phase == _Phase.tooSoon;
 
     return Scaffold(
       backgroundColor: bg,
-      appBar: AppBar(title: const Text("Reaction Test")),
+      appBar: AppBar(
+        title: const Text("Reaction Test"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart),
+            tooltip: l10n.analyticsTitle,
+            onPressed: () {
+              if (gate.canUse(ProFeature.analyticsAccess)) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const GeneratorAnalyticsPage(
+                      generatorType: GeneratorType.reactionTest,
+                    ),
+                  ),
+                );
+              } else {
+                showProDialog(
+                  context,
+                  title: l10n.analyticsProOnly,
+                  message: l10n.analyticsProMessage,
+                  generatorType: GeneratorType.reactionTest,
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: _onTap,

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/app_localizations.dart';
@@ -135,6 +136,20 @@ class SettingsPage extends StatelessWidget {
             premium.isPro ? l10n.settingsProActive : l10n.settingsFreeVersion,
             style: Theme.of(context).textTheme.bodySmall,
           ),
+
+          if (kDebugMode) ...[
+            const Divider(height: 32),
+            ListTile(
+              leading: const Icon(Icons.science_rounded),
+              title: const Text('Debug: Toggle Pro'),
+              subtitle: Text(premium.isPro ? 'Pro ON — tap to disable' : 'Pro OFF — tap to enable'),
+              trailing: Switch(
+                value: premium.isPro,
+                onChanged: (_) => context.read<PremiumStore>().toggleDebugPro(),
+              ),
+              onTap: () => context.read<PremiumStore>().toggleDebugPro(),
+            ),
+          ],
         ],
       ),
     );

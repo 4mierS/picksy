@@ -128,6 +128,12 @@ abstract class AppLocalizations {
   /// **'Settings'**
   String get navSettings;
 
+  /// No description provided for @navAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get navAnalytics;
+
   /// No description provided for @generatorColor.
   ///
   /// In en, this message translates to:
@@ -1429,6 +1435,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Max word length'**
   String get hangmanMaxLength;
+
+  /// No description provided for @analyticsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics'**
+  String get analyticsTitle;
+
+  /// No description provided for @analyticsProOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Analytics is a Pro feature'**
+  String get analyticsProOnly;
+
+  /// No description provided for @analyticsProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock advanced analytics, trends and auto-run with Picksy Pro.'**
+  String get analyticsProMessage;
+
+  /// No description provided for @analyticsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No data yet. Generate some results first.'**
+  String get analyticsEmpty;
+
+  /// No description provided for @analyticsViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get analyticsViewAll;
+
+  /// No description provided for @analyticsGeneratorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{generator} Analytics'**
+  String analyticsGeneratorTitle(Object generator);
+
+  /// No description provided for @analyticsAutoRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto-Run'**
+  String get analyticsAutoRun;
+
+  /// No description provided for @analyticsAutoRunCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Count'**
+  String get analyticsAutoRunCount;
+
+  /// No description provided for @analyticsAutoRunStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get analyticsAutoRunStart;
+
+  /// No description provided for @analyticsAutoRunRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'Running…'**
+  String get analyticsAutoRunRunning;
+
+  /// No description provided for @analyticsAutoRunResults.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get analyticsAutoRunResults;
+
+  /// No description provided for @analyticsAutoRunDistribution.
+  ///
+  /// In en, this message translates to:
+  /// **'Distribution'**
+  String get analyticsAutoRunDistribution;
+
+  /// No description provided for @analyticsBestTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Best time'**
+  String get analyticsBestTime;
+
+  /// No description provided for @analyticsAvgTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg time'**
+  String get analyticsAvgTime;
+
+  /// No description provided for @analyticsTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get analyticsTotal;
+
+  /// No description provided for @analyticsWins.
+  ///
+  /// In en, this message translates to:
+  /// **'Wins'**
+  String get analyticsWins;
+
+  /// No description provided for @analyticsLosses.
+  ///
+  /// In en, this message translates to:
+  /// **'Losses'**
+  String get analyticsLosses;
+
+  /// No description provided for @analyticsWinRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Win rate'**
+  String get analyticsWinRate;
+
+  /// No description provided for @analyticsHighScore.
+  ///
+  /// In en, this message translates to:
+  /// **'High score'**
+  String get analyticsHighScore;
+
+  /// No description provided for @analyticsFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get analyticsFrequency;
 }
 
 class _AppLocalizationsDelegate
