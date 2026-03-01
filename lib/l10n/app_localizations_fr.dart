@@ -720,10 +720,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hangmanMaxLength => 'Longueur maximale';
 
   @override
-  String get navAnalytics => 'Analytics';
+  String get navAnalytics => 'Analytique';
 
   @override
-  String get analyticsTitle => 'Analytics';
+  String get analyticsTitle => 'Analytique';
 
   @override
   String get analyticsProOnly => 'Analytics is a Pro feature';

@@ -719,10 +719,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get hangmanMaxLength => 'Maximale Wortlänge';
 
   @override
-  String get navAnalytics => 'Analytics';
+  String get navAnalytics => 'Analytik';
 
   @override
-  String get analyticsTitle => 'Analytics';
+  String get analyticsTitle => 'Analytik';
 
   @override
   String get analyticsProOnly => 'Analytics is a Pro feature';
