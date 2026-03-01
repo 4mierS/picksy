@@ -125,6 +125,15 @@ class PremiumStore extends ChangeNotifier {
     await refresh();
   }
 
+  /// Debug-only: toggles Pro status without a real purchase.
+  Future<void> toggleDebugPro() async {
+    assert(() {
+      return true;
+    }(), 'toggleDebugPro must only be called in debug mode');
+    if (!kDebugMode) return;
+    await _setCachedPro(!_isPro);
+  }
+
   Future<void> _onPurchasesUpdated(List<PurchaseDetails> purchases) async {
     if (purchases.isEmpty) return;
 
