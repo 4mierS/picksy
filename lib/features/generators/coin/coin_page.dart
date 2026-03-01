@@ -41,6 +41,7 @@ class _CoinPageState extends State<CoinPage> {
     if (_labelB.text.isEmpty) _labelB.text = l10n.coinDefaultTails;
     final gate = context.gate;
     final history = context.read<HistoryStore>();
+    final proDefinitions = [l10n.coinCustomLabelsProMessage];
 
     final canCustomLabels = gate.canUse(ProFeature.coinCustomLabels);
 
@@ -90,24 +91,6 @@ class _CoinPageState extends State<CoinPage> {
             ),
           ),
 
-          const SizedBox(height: 16),
-
-          FilledButton.icon(
-            style: AppStyles.generatorButton(GeneratorType.coin.accentColor),
-            icon: const Icon(Icons.casino),
-            label: Text(l10n.coinFlip),
-            onPressed: () async {
-              final result = (_rng.nextBool() ? currentA : currentB);
-              setState(() => _last = result);
-
-              await history.add(
-                type: GeneratorType.coin,
-                value: result,
-                maxEntries: context.gateRead.historyMax,
-              );
-            },
-          ),
-
           const SizedBox(height: 24),
 
           _SectionTitle(l10n.coinSectionLabels),
@@ -128,6 +111,8 @@ class _CoinPageState extends State<CoinPage> {
                   context,
                   title: l10n.coinCustomLabelsProTitle,
                   message: l10n.coinCustomLabelsProMessage,
+                  generatorType: GeneratorType.coin,
+                  featureDefinitions: proDefinitions,
                 );
               }
             },
@@ -147,6 +132,8 @@ class _CoinPageState extends State<CoinPage> {
                   context,
                   title: l10n.coinCustomLabelsProTitle,
                   message: l10n.coinCustomLabelsProMessage,
+                  generatorType: GeneratorType.coin,
+                  featureDefinitions: proDefinitions,
                 );
               }
             },
@@ -161,6 +148,24 @@ class _CoinPageState extends State<CoinPage> {
               decoration: AppStyles.proCard(),
               child: Text(l10n.coinFreeProHint, style: AppStyles.resultStyle),
             ),
+
+          const SizedBox(height: 16),
+
+          FilledButton.icon(
+            style: AppStyles.generatorButton(GeneratorType.coin.accentColor),
+            icon: const Icon(Icons.casino),
+            label: Text(l10n.coinFlip),
+            onPressed: () async {
+              final result = (_rng.nextBool() ? currentA : currentB);
+              setState(() => _last = result);
+
+              await history.add(
+                type: GeneratorType.coin,
+                value: result,
+                maxEntries: context.gateRead.historyMax,
+              );
+            },
+          ),
         ],
       ),
     );

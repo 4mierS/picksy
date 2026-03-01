@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/l10n.dart';
 import '../ui/app_colors.dart';
+import '../../models/generator_type.dart';
 
 import '../../storage/premium_store.dart';
 
@@ -84,19 +85,92 @@ Future<void> showProDialog(
   BuildContext context, {
   required String title,
   required String message,
+  GeneratorType? generatorType,
+  List<String> featureDefinitions = const [],
 }) async {
   final l10n = context.l10n;
+  final dedupedDefinitions = featureDefinitions
+      .where((e) => e.trim().isNotEmpty)
+      .toSet()
+      .toList();
+
   await showDialog(
     context: context,
     builder: (_) => AlertDialog(
-      title: Text(
-        title,
-        style: const TextStyle(
-          color: AppColors.proPurple,
-          fontWeight: FontWeight.w700,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+      contentPadding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
+      actionsPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+      title: Row(
+        children: [
+          if (generatorType != null)
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: generatorType.accentColor.withOpacity(0.16),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                generatorType.homeIcon,
+                color: generatorType.accentColor,
+                size: 20,
+              ),
+            ),
+          if (generatorType != null) const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: AppColors.proPurple,
+                fontWeight: FontWeight.w800,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 420),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(message, style: const TextStyle(fontSize: 15, height: 1.3)),
+              if (dedupedDefinitions.isNotEmpty) ...[
+                const SizedBox(height: 14),
+                const Text(
+                  'PRO includes:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.proPurple,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                for (final d in dedupedDefinitions)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(top: 1),
+                          child: Icon(
+                            Icons.check_circle,
+                            size: 16,
+                            color: AppColors.proPurple,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(child: Text(d)),
+                      ],
+                    ),
+                  ),
+              ],
+            ],
+          ),
         ),
       ),
-      content: Text(message),
       actions: [
         TextButton(
           style: TextButton.styleFrom(foregroundColor: AppColors.proPurple),
@@ -107,7 +181,7 @@ Future<void> showProDialog(
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.proPurple,
             foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18),
             ),

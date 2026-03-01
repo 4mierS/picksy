@@ -83,6 +83,10 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
+    final proDefinitions = [
+      l10n.bottleSpinStrengthSubtitle,
+      l10n.bottleSpinHapticSubtitle,
+    ];
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.bottleSpinTitle)),
@@ -108,23 +112,6 @@ class _BottleSpinPageState extends State<BottleSpinPage>
                   child: _BottleShape(),
                 ),
               ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          FilledButton.icon(
-            style: AppStyles.generatorButton(
-              GeneratorType.bottleSpin.accentColor,
-            ),
-            onPressed: _spinning
-                ? null
-                : () async {
-                    await _spin(gate);
-                  },
-            icon: const Icon(Icons.casino),
-            label: Text(
-              _spinning ? l10n.bottleSpinSpinning : l10n.bottleSpinSpin,
             ),
           ),
 
@@ -167,6 +154,8 @@ class _BottleSpinPageState extends State<BottleSpinPage>
                       context,
                       title: l10n.bottleSpinStrengthProTitle,
                       message: l10n.bottleSpinStrengthProMessage,
+                      generatorType: GeneratorType.bottleSpin,
+                      featureDefinitions: proDefinitions,
                     );
                     return;
                   }
@@ -191,6 +180,8 @@ class _BottleSpinPageState extends State<BottleSpinPage>
                   context,
                   title: l10n.bottleSpinHapticProTitle,
                   message: l10n.bottleSpinHapticProMessage,
+                  generatorType: GeneratorType.bottleSpin,
+                  featureDefinitions: proDefinitions,
                 );
                 return;
               }
@@ -213,6 +204,23 @@ class _BottleSpinPageState extends State<BottleSpinPage>
                 style: AppStyles.resultStyle,
               ),
             ),
+
+          const SizedBox(height: 14),
+
+          FilledButton.icon(
+            style: AppStyles.generatorButton(
+              GeneratorType.bottleSpin.accentColor,
+            ),
+            onPressed: _spinning
+                ? null
+                : () async {
+                    await _spin(gate);
+                  },
+            icon: const Icon(Icons.casino),
+            label: Text(
+              _spinning ? l10n.bottleSpinSpinning : l10n.bottleSpinSpin,
+            ),
+          ),
         ],
       ),
     );

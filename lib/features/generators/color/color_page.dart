@@ -31,6 +31,12 @@ class _ColorPageState extends State<ColorPage> {
     final l10n = context.l10n;
     final gate = context.gate;
     final history = context.read<HistoryStore>();
+    final currentHex = _toHex(_current);
+    final proDefinitions = [
+      l10n.colorModesProMessage,
+      l10n.colorPaletteProMessage,
+      l10n.colorModesUpgradeMessage,
+    ];
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.colorTitle)),
@@ -44,24 +50,6 @@ class _ColorPageState extends State<ColorPage> {
 
           const SizedBox(height: 16),
 
-          FilledButton.icon(
-            style: AppStyles.generatorButton(GeneratorType.color.accentColor),
-            icon: const Icon(Icons.casino),
-            label: Text(l10n.commonGenerate),
-            onPressed: () async {
-              final color = _generateColor(mode: _mode);
-              setState(() => _current = color);
-
-              await history.add(
-                type: GeneratorType.color,
-                value: _toHex(color),
-                maxEntries: context.gateRead.historyMax,
-              );
-            },
-          ),
-
-          const SizedBox(height: 16),
-
           _SectionTitle(l10n.colorSectionMode),
 
           const SizedBox(height: 8),
@@ -69,12 +57,15 @@ class _ColorPageState extends State<ColorPage> {
           _ModeSelector(
             mode: _mode,
             enabled: gate.canUse(ProFeature.colorModes),
+            proDefinitions: proDefinitions,
             onChanged: (m) async {
               if (!gate.canUse(ProFeature.colorModes)) {
                 await showProDialog(
                   context,
                   title: l10n.colorModesProTitle,
                   message: l10n.colorModesProMessage,
+                  generatorType: GeneratorType.color,
+                  featureDefinitions: proDefinitions,
                 );
                 return;
               }
@@ -96,6 +87,8 @@ class _ColorPageState extends State<ColorPage> {
                   context,
                   title: l10n.colorPaletteProTitle,
                   message: l10n.colorPaletteProMessage,
+                  generatorType: GeneratorType.color,
+                  featureDefinitions: proDefinitions,
                 );
                 return;
               }
@@ -137,6 +130,37 @@ class _ColorPageState extends State<ColorPage> {
               decoration: AppStyles.proCard(),
               child: Text(l10n.colorFreeProHint, style: AppStyles.resultStyle),
             ),
+
+          const SizedBox(height: 12),
+
+          OutlinedButton.icon(
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: currentHex));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(l10n.commonCopied)));
+            },
+            icon: const Icon(Icons.copy),
+            label: Text(l10n.commonCopy),
+          ),
+
+          const SizedBox(height: 12),
+
+          FilledButton.icon(
+            style: AppStyles.generatorButton(GeneratorType.color.accentColor),
+            icon: const Icon(Icons.casino),
+            label: Text(l10n.commonGenerate),
+            onPressed: () async {
+              final color = _generateColor(mode: _mode);
+              setState(() => _current = color);
+
+              await history.add(
+                type: GeneratorType.color,
+                value: _toHex(color),
+                maxEntries: context.gateRead.historyMax,
+              );
+            },
+          ),
         ],
       ),
     );
@@ -251,11 +275,13 @@ class _SectionTitle extends StatelessWidget {
 class _ModeSelector extends StatelessWidget {
   final ColorMode mode;
   final bool enabled;
+  final List<String> proDefinitions;
   final ValueChanged<ColorMode> onChanged;
 
   const _ModeSelector({
     required this.mode,
     required this.enabled,
+    required this.proDefinitions,
     required this.onChanged,
   });
 
@@ -283,6 +309,8 @@ class _ModeSelector extends StatelessWidget {
                 context,
                 title: l10n.colorModesProTitle,
                 message: l10n.colorModesUpgradeMessage,
+                generatorType: GeneratorType.color,
+                featureDefinitions: proDefinitions,
               );
             },
     );

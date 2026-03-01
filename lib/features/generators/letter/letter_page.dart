@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
@@ -61,38 +60,8 @@ class _LetterPageState extends State<LetterPage> {
                     ),
                   ),
                 ),
-                IconButton(
-                  tooltip: l10n.commonCopy,
-                  onPressed: _last == null
-                      ? null
-                      : () {
-                          Clipboard.setData(ClipboardData(text: _last!));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(l10n.commonCopied)),
-                          );
-                        },
-                  icon: const Icon(Icons.copy),
-                ),
               ],
             ),
-          ),
-
-          const SizedBox(height: 16),
-
-          FilledButton.icon(
-            style: AppStyles.generatorButton(GeneratorType.letter.accentColor),
-            icon: const Icon(Icons.casino),
-            label: Text(l10n.commonGenerate),
-            onPressed: () async {
-              final letter = _generateLetter(isProFilters: isProFilters);
-              setState(() => _last = letter);
-
-              await history.add(
-                type: GeneratorType.letter,
-                value: letter,
-                maxEntries: context.gateRead.historyMax,
-              );
-            },
           ),
 
           const SizedBox(height: 24),
@@ -190,6 +159,24 @@ class _LetterPageState extends State<LetterPage> {
               decoration: AppStyles.proCard(),
               child: Text(l10n.letterFreeProHint, style: AppStyles.resultStyle),
             ),
+
+          const SizedBox(height: 16),
+
+          FilledButton.icon(
+            style: AppStyles.generatorButton(GeneratorType.letter.accentColor),
+            icon: const Icon(Icons.casino),
+            label: Text(l10n.commonGenerate),
+            onPressed: () async {
+              final letter = _generateLetter(isProFilters: isProFilters);
+              setState(() => _last = letter);
+
+              await history.add(
+                type: GeneratorType.letter,
+                value: letter,
+                maxEntries: context.gateRead.historyMax,
+              );
+            },
+          ),
         ],
       ),
     );
@@ -246,6 +233,14 @@ class _LetterPageState extends State<LetterPage> {
       context,
       title: l10n.letterFiltersProTitle,
       message: l10n.letterFiltersProMessage,
+      generatorType: GeneratorType.letter,
+      featureDefinitions: [
+        l10n.letterUppercaseSubtitle,
+        l10n.letterLowercaseSubtitle,
+        l10n.letterIncludeUmlautsSubtitle,
+        l10n.letterOnlyVowelsSubtitle,
+        l10n.letterFiltersProMessage,
+      ],
     );
   }
 

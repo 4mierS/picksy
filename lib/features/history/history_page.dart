@@ -36,7 +36,10 @@ class HistoryPage extends StatelessWidget {
                     backgroundColor: e.generatorType.accentColor.withOpacity(
                       0.16,
                     ),
-                    child: Icon(Icons.bolt, color: e.generatorType.accentColor),
+                    child: Icon(
+                      e.generatorType.homeIcon,
+                      color: e.generatorType.accentColor,
+                    ),
                   ),
                   title: Text(e.value),
                   subtitle: Text(

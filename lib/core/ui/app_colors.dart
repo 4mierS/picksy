@@ -28,3 +28,26 @@ extension GeneratorTypeColorX on GeneratorType {
     }
   }
 }
+
+extension GeneratorTypeIconX on GeneratorType {
+  IconData get homeIcon {
+    switch (this) {
+      case GeneratorType.color:
+        return Icons.palette_outlined;
+      case GeneratorType.number:
+        return Icons.numbers;
+      case GeneratorType.coin:
+        return Icons.sync_alt;
+      case GeneratorType.letter:
+        return Icons.text_fields;
+      case GeneratorType.customList:
+        return Icons.list_alt;
+      case GeneratorType.bottleSpin:
+        return Icons.explore_outlined;
+      case GeneratorType.time:
+        return Icons.access_time;
+      case GeneratorType.reactionTest:
+        return Icons.flash_on;
+    }
+  }
+}

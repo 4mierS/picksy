@@ -9,7 +9,6 @@ import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
-import 'package:flutter/services.dart';
 
 enum NumberParity { any, even, odd }
 
@@ -40,6 +39,11 @@ class _NumberPageState extends State<NumberPage> {
     final l10n = context.l10n;
     final gate = context.gate; // watch premium changes automatically
     final history = context.read<HistoryStore>();
+    final proDefinitions = [
+      l10n.numberCustomRangeProMessage,
+      l10n.numberFloatProMessage,
+      l10n.numberParityProMessage,
+    ];
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.numberTitle)),
@@ -63,18 +67,6 @@ class _NumberPageState extends State<NumberPage> {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                ),
-                IconButton(
-                  tooltip: l10n.commonCopy,
-                  onPressed: _last == null
-                      ? null
-                      : () {
-                          Clipboard.setData(ClipboardData(text: _last!));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(l10n.commonCopied)),
-                          );
-                        },
-                  icon: const Icon(Icons.copy),
                 ),
               ],
             ),
@@ -104,6 +96,8 @@ class _NumberPageState extends State<NumberPage> {
                   context,
                   title: l10n.numberCustomRangeProTitle,
                   message: l10n.numberCustomRangeProMessage,
+                  generatorType: GeneratorType.number,
+                  featureDefinitions: proDefinitions,
                 );
                 return;
               }
@@ -144,6 +138,8 @@ class _NumberPageState extends State<NumberPage> {
                   context,
                   title: l10n.numberFloatProTitle,
                   message: l10n.numberFloatProMessage,
+                  generatorType: GeneratorType.number,
+                  featureDefinitions: proDefinitions,
                 );
                 return;
               }
@@ -151,31 +147,47 @@ class _NumberPageState extends State<NumberPage> {
             },
           ),
 
-          const SizedBox(height: 8),
+          if (!_useFloat) ...[
+            const SizedBox(height: 8),
 
-          // Parity filter
-          _SectionTitle(l10n.numberSectionFilter),
-          const SizedBox(height: 8),
+            // Parity filter
+            _SectionTitle(l10n.numberSectionFilter),
+            const SizedBox(height: 8),
 
-          _ParitySelector(
-            value: _parity,
-            enabled: gate.canUse(ProFeature.numberEvenOdd),
-            onChanged: (p) async {
-              if (!gate.canUse(ProFeature.numberEvenOdd)) {
-                await showProDialog(
-                  context,
-                  title: l10n.numberParityProTitle,
-                  message: l10n.numberParityProMessage,
-                );
-                return;
-              }
-              setState(() => _parity = p);
-            },
-          ),
+            _ParitySelector(
+              value: _parity,
+              enabled: gate.canUse(ProFeature.numberEvenOdd),
+              proDefinitions: proDefinitions,
+              onChanged: (p) async {
+                if (!gate.canUse(ProFeature.numberEvenOdd)) {
+                  await showProDialog(
+                    context,
+                    title: l10n.numberParityProTitle,
+                    message: l10n.numberParityProMessage,
+                    generatorType: GeneratorType.number,
+                    featureDefinitions: proDefinitions,
+                  );
+                  return;
+                }
+                setState(() => _parity = p);
+              },
+            ),
+          ],
 
           const SizedBox(height: 24),
 
-          // Generate button
+          // Free hint
+          if (!gate.isPro)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(22),
+              decoration: AppStyles.proCard(),
+              child: Text(l10n.numberFreeProHint, style: AppStyles.resultStyle),
+            ),
+
+          const SizedBox(height: 16),
+
+          // Generate button (bottom)
           FilledButton.icon(
             style: AppStyles.generatorButton(GeneratorType.number.accentColor),
             onPressed: !_isValidRange
@@ -199,17 +211,6 @@ class _NumberPageState extends State<NumberPage> {
             icon: const Icon(Icons.casino),
             label: Text(l10n.commonGenerate),
           ),
-
-          const SizedBox(height: 24),
-
-          // Free hint
-          if (!gate.isPro)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: AppStyles.proCard(),
-              child: Text(l10n.numberFreeProHint, style: AppStyles.resultStyle),
-            ),
         ],
       ),
     );
@@ -401,11 +402,13 @@ class _NumberFieldState extends State<_NumberField> {
 class _ParitySelector extends StatelessWidget {
   final NumberParity value;
   final bool enabled;
+  final List<String> proDefinitions;
   final ValueChanged<NumberParity> onChanged;
 
   const _ParitySelector({
     required this.value,
     required this.enabled,
+    required this.proDefinitions,
     required this.onChanged,
   });
 
@@ -435,6 +438,8 @@ class _ParitySelector extends StatelessWidget {
                 context,
                 title: l10n.numberParityProTitle,
                 message: l10n.numberParityProMessage,
+                generatorType: GeneratorType.number,
+                featureDefinitions: proDefinitions,
               );
             },
     );
