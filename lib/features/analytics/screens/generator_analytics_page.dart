@@ -28,10 +28,13 @@ class GeneratorAnalyticsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.analyticsGeneratorTitle(generatorType.localizedTitle(context))),
+        title: Text(
+          l10n.analyticsGeneratorTitle(generatorType.localizedTitle(context)),
+        ),
         actions: [
           if (generatorType != GeneratorType.reactionTest &&
               generatorType != GeneratorType.hangman &&
+              generatorType != GeneratorType.colorReflex &&
               generatorType != GeneratorType.tapChallenge)
             if (gate.canUse(ProFeature.autoRun))
               IconButton(
@@ -186,7 +189,8 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         final r = rng.nextInt(256);
         final g = rng.nextInt(256);
         final b = rng.nextInt(256);
-        return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}'.toUpperCase();
+        return '#${r.toRadixString(16).padLeft(2, '0')}${g.toRadixString(16).padLeft(2, '0')}${b.toRadixString(16).padLeft(2, '0')}'
+            .toUpperCase();
       case GeneratorType.bottleSpin:
         return '${rng.nextInt(360)}°';
       case GeneratorType.time:
@@ -198,6 +202,31 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         return rng.nextBool() ? 'Won' : 'Lost';
       case GeneratorType.customList:
         return 'Item ${rng.nextInt(10) + 1}';
+      case GeneratorType.card:
+        const ranks = [
+          'A',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          '10',
+          'J',
+          'Q',
+          'K',
+        ];
+        const suits = ['♠', '♥', '♦', '♣'];
+        final rank = ranks[rng.nextInt(ranks.length)];
+        final suit = suits[rng.nextInt(suits.length)];
+        return '$rank $suit';
+      case GeneratorType.colorReflex:
+        final correct = rng.nextInt(30);
+        final total = correct + rng.nextInt(15);
+        final pct = total > 0 ? (correct / total * 100) : 0.0;
+        return '$correct/$total (${pct.toStringAsFixed(1)}%)';
       case GeneratorType.tapChallenge:
         return '${20 + rng.nextInt(60)} taps';
     }
@@ -209,10 +238,7 @@ class _StatsSection extends StatelessWidget {
   final GeneratorType generatorType;
   final List<HistoryEntry> entries;
 
-  const _StatsSection({
-    required this.generatorType,
-    required this.entries,
-  });
+  const _StatsSection({required this.generatorType, required this.entries});
 
   @override
   Widget build(BuildContext context) {
@@ -238,6 +264,10 @@ class _StatsSection extends StatelessWidget {
         return _HangmanStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.customList:
         return _CustomListStats(entries: entries, l10n: l10n, accent: accent);
+      case GeneratorType.card:
+        return _CardStats(entries: entries, l10n: l10n, accent: accent);
+      case GeneratorType.colorReflex:
+        return _ColorReflexStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.tapChallenge:
         return _TapChallengeStats(entries: entries, l10n: l10n, accent: accent);
     }
@@ -353,8 +383,16 @@ class _CoinStats extends StatelessWidget {
         _SectionTitle(l10n.analyticsFrequency),
         _StatsGrid(
           children: [
-            _StatCard(label: 'Heads', value: '$heads (${(headPct * 100).toStringAsFixed(1)}%)', accent: accent),
-            _StatCard(label: 'Tails', value: '$tails (${(tailPct * 100).toStringAsFixed(1)}%)', accent: accent),
+            _StatCard(
+              label: 'Heads',
+              value: '$heads (${(headPct * 100).toStringAsFixed(1)}%)',
+              accent: accent,
+            ),
+            _StatCard(
+              label: 'Tails',
+              value: '$tails (${(tailPct * 100).toStringAsFixed(1)}%)',
+              accent: accent,
+            ),
           ],
         ),
         const SizedBox(height: 12),
@@ -398,10 +436,30 @@ class _NumberStats extends StatelessWidget {
         _SectionTitle(l10n.analyticsFrequency),
         _StatsGrid(
           children: [
-            _StatCard(label: 'Min', value: minVal.toStringAsFixed(nums.any((n) => n != n.roundToDouble()) ? 2 : 0), accent: accent),
-            _StatCard(label: 'Max', value: maxVal.toStringAsFixed(nums.any((n) => n != n.roundToDouble()) ? 2 : 0), accent: accent),
-            _StatCard(label: 'Avg', value: avg.toStringAsFixed(2), accent: accent),
-            _StatCard(label: l10n.analyticsTotal, value: '${nums.length}', accent: accent),
+            _StatCard(
+              label: 'Min',
+              value: minVal.toStringAsFixed(
+                nums.any((n) => n != n.roundToDouble()) ? 2 : 0,
+              ),
+              accent: accent,
+            ),
+            _StatCard(
+              label: 'Max',
+              value: maxVal.toStringAsFixed(
+                nums.any((n) => n != n.roundToDouble()) ? 2 : 0,
+              ),
+              accent: accent,
+            ),
+            _StatCard(
+              label: 'Avg',
+              value: avg.toStringAsFixed(2),
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '${nums.length}',
+              accent: accent,
+            ),
           ],
         ),
       ],
@@ -489,9 +547,7 @@ class _ColorStats extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: color ?? Colors.grey,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: Colors.grey.withOpacity(0.3),
-                  ),
+                  border: Border.all(color: Colors.grey.withOpacity(0.3)),
                 ),
               ),
             );
@@ -518,10 +574,13 @@ class _BottleSpinStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Extract degree numbers from "Angle: 123°" format
-    final angles = entries.map((e) {
-      final match = RegExp(r'(\d+(?:\.\d+)?)').firstMatch(e.value);
-      return match != null ? double.tryParse(match.group(1)!) : null;
-    }).whereType<double>().toList();
+    final angles = entries
+        .map((e) {
+          final match = RegExp(r'(\d+(?:\.\d+)?)').firstMatch(e.value);
+          return match != null ? double.tryParse(match.group(1)!) : null;
+        })
+        .whereType<double>()
+        .toList();
 
     if (angles.isEmpty) return const SizedBox.shrink();
 
@@ -532,8 +591,16 @@ class _BottleSpinStats extends StatelessWidget {
       children: [
         _StatsGrid(
           children: [
-            _StatCard(label: l10n.analyticsTotal, value: '${angles.length}', accent: accent),
-            _StatCard(label: 'Avg Angle', value: '${avg.toStringAsFixed(1)}°', accent: accent),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '${angles.length}',
+              accent: accent,
+            ),
+            _StatCard(
+              label: 'Avg Angle',
+              value: '${avg.toStringAsFixed(1)}°',
+              accent: accent,
+            ),
           ],
         ),
       ],
@@ -557,20 +624,23 @@ class _TimeStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Parse "Xs Yms" or use metadata targetMs
-    final ms = entries.map((e) {
-      final meta = e.metadata;
-      if (meta != null && meta['targetMs'] != null) {
-        return (meta['targetMs'] as num).toDouble();
-      }
-      // Parse "Xs Yms"
-      final match = RegExp(r'(\d+)s\s*(\d+)ms').firstMatch(e.value);
-      if (match != null) {
-        final sec = int.tryParse(match.group(1)!) ?? 0;
-        final milli = int.tryParse(match.group(2)!) ?? 0;
-        return (sec * 1000 + milli).toDouble();
-      }
-      return null;
-    }).whereType<double>().toList();
+    final ms = entries
+        .map((e) {
+          final meta = e.metadata;
+          if (meta != null && meta['targetMs'] != null) {
+            return (meta['targetMs'] as num).toDouble();
+          }
+          // Parse "Xs Yms"
+          final match = RegExp(r'(\d+)s\s*(\d+)ms').firstMatch(e.value);
+          if (match != null) {
+            final sec = int.tryParse(match.group(1)!) ?? 0;
+            final milli = int.tryParse(match.group(2)!) ?? 0;
+            return (sec * 1000 + milli).toDouble();
+          }
+          return null;
+        })
+        .whereType<double>()
+        .toList();
 
     if (ms.isEmpty) return const SizedBox.shrink();
 
@@ -587,8 +657,16 @@ class _TimeStats extends StatelessWidget {
           children: [
             _StatCard(label: 'Min', value: fmt(minMs), accent: accent),
             _StatCard(label: 'Max', value: fmt(maxMs), accent: accent),
-            _StatCard(label: l10n.analyticsAvgTime, value: fmt(avgMs), accent: accent),
-            _StatCard(label: l10n.analyticsTotal, value: '${ms.length}', accent: accent),
+            _StatCard(
+              label: l10n.analyticsAvgTime,
+              value: fmt(avgMs),
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '${ms.length}',
+              accent: accent,
+            ),
           ],
         ),
       ],
@@ -613,20 +691,31 @@ class _ReactionStats extends StatelessWidget {
   Widget build(BuildContext context) {
     final tooSoonCount = entries.where((e) => e.value == 'Too soon').length;
     final validEntries = entries.where((e) => e.value != 'Too soon').toList();
-    final ms = validEntries.map((e) {
-      final meta = e.metadata;
-      if (meta != null && meta['ms'] != null) {
-        return (meta['ms'] as num).toDouble();
-      }
-      final match = RegExp(r'(\d+)\s*ms').firstMatch(e.value);
-      return match != null ? double.tryParse(match.group(1)!) : null;
-    }).whereType<double>().toList();
+    final ms = validEntries
+        .map((e) {
+          final meta = e.metadata;
+          if (meta != null && meta['ms'] != null) {
+            return (meta['ms'] as num).toDouble();
+          }
+          final match = RegExp(r'(\d+)\s*ms').firstMatch(e.value);
+          return match != null ? double.tryParse(match.group(1)!) : null;
+        })
+        .whereType<double>()
+        .toList();
 
     if (ms.isEmpty) {
       return _StatsGrid(
         children: [
-          _StatCard(label: l10n.analyticsTotal, value: '${entries.length}', accent: accent),
-          _StatCard(label: 'Too Soon', value: '$tooSoonCount', accent: Colors.orange),
+          _StatCard(
+            label: l10n.analyticsTotal,
+            value: '${entries.length}',
+            accent: accent,
+          ),
+          _StatCard(
+            label: 'Too Soon',
+            value: '$tooSoonCount',
+            accent: Colors.orange,
+          ),
         ],
       );
     }
@@ -639,10 +728,26 @@ class _ReactionStats extends StatelessWidget {
       children: [
         _StatsGrid(
           children: [
-            _StatCard(label: l10n.analyticsBestTime, value: '${best.toStringAsFixed(0)} ms', accent: accent),
-            _StatCard(label: l10n.analyticsAvgTime, value: '${avg.toStringAsFixed(0)} ms', accent: accent),
-            _StatCard(label: l10n.analyticsTotal, value: '${ms.length}', accent: accent),
-            _StatCard(label: 'Too Soon', value: '$tooSoonCount', accent: Colors.orange),
+            _StatCard(
+              label: l10n.analyticsBestTime,
+              value: '${best.toStringAsFixed(0)} ms',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsAvgTime,
+              value: '${avg.toStringAsFixed(0)} ms',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '${ms.length}',
+              accent: accent,
+            ),
+            _StatCard(
+              label: 'Too Soon',
+              value: '$tooSoonCount',
+              accent: Colors.orange,
+            ),
           ],
         ),
       ],
@@ -690,16 +795,40 @@ class _HangmanStats extends StatelessWidget {
       children: [
         _StatsGrid(
           children: [
-            _StatCard(label: l10n.analyticsWins, value: '$wins', accent: accent),
-            _StatCard(label: l10n.analyticsLosses, value: '$losses', accent: accent),
-            _StatCard(label: l10n.analyticsWinRate, value: '${(winRate * 100).toStringAsFixed(1)}%', accent: accent),
-            _StatCard(label: l10n.analyticsTotal, value: '$total', accent: accent),
+            _StatCard(
+              label: l10n.analyticsWins,
+              value: '$wins',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsLosses,
+              value: '$losses',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsWinRate,
+              value: '${(winRate * 100).toStringAsFixed(1)}%',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '$total',
+              accent: accent,
+            ),
           ],
         ),
         const SizedBox(height: 12),
-        _BarRow(label: l10n.analyticsWins, fraction: winRate, accent: Colors.green),
+        _BarRow(
+          label: l10n.analyticsWins,
+          fraction: winRate,
+          accent: Colors.green,
+        ),
         const SizedBox(height: 6),
-        _BarRow(label: l10n.analyticsLosses, fraction: 1 - winRate, accent: Colors.redAccent),
+        _BarRow(
+          label: l10n.analyticsLosses,
+          fraction: 1 - winRate,
+          accent: Colors.redAccent,
+        ),
       ],
     );
   }
@@ -756,6 +885,178 @@ class _CustomListStats extends StatelessWidget {
       ],
     );
   }
+} // ─── Card ────────────────────────────────────────────────────────────────────
+
+class _CardStats extends StatelessWidget {
+  final List<HistoryEntry> entries;
+  final AppLocalizations l10n;
+  final Color accent;
+
+  const _CardStats({
+    required this.entries,
+    required this.l10n,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Count suit distribution from metadata or parse value
+    final suitFreq = <String, int>{};
+    final rankFreq = <String, int>{};
+
+    for (final e in entries) {
+      // Only process single-card entries (skip multi-draw)
+      if (e.value.contains(',')) continue;
+
+      final meta = e.metadata;
+      if (meta != null) {
+        final suit = meta['suit'] as String?;
+        final rank = meta['rank'] as String?;
+        if (suit != null && suit.isNotEmpty) {
+          suitFreq[suit] = (suitFreq[suit] ?? 0) + 1;
+        }
+        if (rank != null && rank.isNotEmpty) {
+          rankFreq[rank] = (rankFreq[rank] ?? 0) + 1;
+        }
+      } else {
+        // Fall back to parsing "rank suit" from value
+        final parts = e.value.trim().split(' ');
+        if (parts.length >= 2) {
+          final rank = parts[0];
+          final suit = parts[1];
+          suitFreq[suit] = (suitFreq[suit] ?? 0) + 1;
+          rankFreq[rank] = (rankFreq[rank] ?? 0) + 1;
+        }
+      }
+    }
+
+    final suitMax = suitFreq.values.isNotEmpty
+        ? suitFreq.values.reduce((a, b) => a > b ? a : b)
+        : 1;
+
+    final rankSorted = rankFreq.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    final rankMax = rankSorted.isNotEmpty ? rankSorted.first.value : 1;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SectionTitle('Suit Distribution'),
+        for (final suit in ['♠', '♥', '♦', '♣']) ...[
+          _BarRow(
+            label: suit,
+            fraction: suitMax > 0 ? (suitFreq[suit] ?? 0) / suitMax : 0,
+            accent: accent,
+            trailing: '${suitFreq[suit] ?? 0}',
+          ),
+          const SizedBox(height: 6),
+        ],
+        if (rankSorted.isNotEmpty) ...[
+          const SizedBox(height: 12),
+          _SectionTitle('Rank Distribution'),
+          for (final entry in rankSorted.take(13)) ...[
+            _BarRow(
+              label: entry.key,
+              fraction: rankMax > 0 ? entry.value / rankMax : 0,
+              accent: accent,
+              trailing: '${entry.value}',
+            ),
+            const SizedBox(height: 6),
+          ],
+        ],
+      ],
+    );
+  }
+}
+
+// ─── ColorReflex ─────────────────────────────────────────────────────────────
+
+class _ColorReflexStats extends StatelessWidget {
+  final List<HistoryEntry> entries;
+  final AppLocalizations l10n;
+  final Color accent;
+
+  const _ColorReflexStats({
+    required this.entries,
+    required this.l10n,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final accuracies = <double>[];
+    final correctCounts = <int>[];
+    final reactionMs = <int>[];
+
+    for (final e in entries) {
+      final meta = e.metadata;
+      if (meta == null) continue;
+
+      if (meta['accuracy'] != null) {
+        accuracies.add((meta['accuracy'] as num).toDouble());
+      }
+      if (meta['totalCorrect'] != null) {
+        correctCounts.add((meta['totalCorrect'] as num).toInt());
+      }
+      if (meta['avgReactionMs'] != null) {
+        final ms = (meta['avgReactionMs'] as num).toInt();
+        if (ms > 0) reactionMs.add(ms);
+      }
+    }
+
+    if (accuracies.isEmpty) {
+      return _StatCard(
+        label: l10n.analyticsTotal,
+        value: '${entries.length}',
+        accent: accent,
+      );
+    }
+
+    final bestAccuracy = accuracies.reduce(max);
+    final avgAccuracy = accuracies.reduce((a, b) => a + b) / accuracies.length;
+    final bestScore = correctCounts.isNotEmpty ? correctCounts.reduce(max) : 0;
+    final avgReaction = reactionMs.isNotEmpty
+        ? reactionMs.reduce((a, b) => a + b) ~/ reactionMs.length
+        : 0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _StatsGrid(
+          children: [
+            _StatCard(
+              label: l10n.analyticsHighScore,
+              value: '$bestScore',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsBestAccuracy,
+              value: '${bestAccuracy.toStringAsFixed(1)}%',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsAvgAccuracy,
+              value: '${avgAccuracy.toStringAsFixed(1)}%',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '${entries.length}',
+              accent: accent,
+            ),
+          ],
+        ),
+        if (avgReaction > 0) ...[
+          const SizedBox(height: 10),
+          _StatCard(
+            label: l10n.analyticsAvgTime,
+            value: '$avgReaction ms',
+            accent: accent,
+          ),
+        ],
+      ],
+    );
+  }
 }
 
 // ─── TapChallenge ────────────────────────────────────────────────────────────
@@ -773,22 +1074,28 @@ class _TapChallengeStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final taps = entries.map((e) {
-      final meta = e.metadata;
-      if (meta != null && meta['tapsCount'] != null) {
-        return (meta['tapsCount'] as num).toInt();
-      }
-      final match = RegExp(r'(\d+)\s*taps?').firstMatch(e.value);
-      return match != null ? int.tryParse(match.group(1)!) : null;
-    }).whereType<int>().toList();
+    final taps = entries
+        .map((e) {
+          final meta = e.metadata;
+          if (meta != null && meta['tapsCount'] != null) {
+            return (meta['tapsCount'] as num).toInt();
+          }
+          final match = RegExp(r'(\d+)\s*taps?').firstMatch(e.value);
+          return match != null ? int.tryParse(match.group(1)!) : null;
+        })
+        .whereType<int>()
+        .toList();
 
-    final tpsValues = entries.map((e) {
-      final meta = e.metadata;
-      if (meta != null && meta['tapsPerSecond'] != null) {
-        return (meta['tapsPerSecond'] as num).toDouble();
-      }
-      return null;
-    }).whereType<double>().toList();
+    final tpsValues = entries
+        .map((e) {
+          final meta = e.metadata;
+          if (meta != null && meta['tapsPerSecond'] != null) {
+            return (meta['tapsPerSecond'] as num).toDouble();
+          }
+          return null;
+        })
+        .whereType<double>()
+        .toList();
 
     if (taps.isEmpty) return const SizedBox.shrink();
 

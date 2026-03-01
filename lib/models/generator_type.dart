@@ -9,4 +9,6 @@ enum GeneratorType {
   reactionTest,
   hangman,
   tapChallenge,
+  card,
+  colorReflex,
 }

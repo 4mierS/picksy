@@ -51,6 +51,47 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generatorHangman => 'Galgenmännchen';
 
   @override
+  String get generatorCard => 'Karte ziehen';
+
+  @override
+  String get cardTitle => 'Karte ziehen';
+
+  @override
+  String get cardTapDraw => '"Ziehen" tippen, um eine Karte zu ziehen';
+
+  @override
+  String get cardDraw => 'Ziehen';
+
+  @override
+  String get cardSectionOptions => 'Optionen';
+
+  @override
+  String get cardIncludeJokers => 'Joker einbeziehen';
+
+  @override
+  String get cardIncludeJokersSubtitle => 'Zwei Joker zum Stapel hinzufügen';
+
+  @override
+  String get cardIncludeJokersProTitle => 'Joker sind Pro';
+
+  @override
+  String get cardIncludeJokersProMessage => 'Werde Pro, um Joker hinzuzufügen.';
+
+  @override
+  String get cardMultiDrawCount => 'Karten pro Zug';
+
+  @override
+  String get cardMultiDrawProTitle => 'Mehrfachzug ist Pro';
+
+  @override
+  String get cardMultiDrawProMessage =>
+      'Werde Pro, um mehrere Karten auf einmal zu ziehen.';
+
+  @override
+  String get cardFreeProHint =>
+      'Kostenlos: Einzelzug.\nPro: Joker + Mehrfachzug.';
+
+  @override
   String get generatorTapChallenge => 'Tipp-Challenge';
 
   @override
@@ -138,7 +179,90 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsLangItalian => 'Italiano';
 
   @override
-  String get homeSmartRandomDecisions => 'Smarte Zufallsentscheidungen';
+  String get settingsRateApp => 'App bewerten';
+
+  @override
+  String get settingsShareApp => 'App teilen';
+
+  @override
+  String get settingsShareAppSubtitle => 'Freunde zu Picksy einladen';
+
+  @override
+  String get settingsCompareFreePro => 'Kostenlos vs. Pro vergleichen';
+
+  @override
+  String get compareTitle => 'Kostenlos vs. Pro';
+
+  @override
+  String get compareFeatureLabel => 'Funktion';
+
+  @override
+  String get compareFreeColumn => 'Kostenlos';
+
+  @override
+  String get compareProColumn => 'Pro';
+
+  @override
+  String get compareFeatureHistory => 'Verlauf';
+
+  @override
+  String get compareFreeHistory => '3 Ergebnisse';
+
+  @override
+  String get compareProHistory => '1000 Ergebnisse';
+
+  @override
+  String get compareFeatureFavorites => 'Favoriten';
+
+  @override
+  String get compareFreeFavorites => 'Bis zu 2';
+
+  @override
+  String get compareProFavorites => 'Bis zu 999';
+
+  @override
+  String get compareFeatureCoinLabels => 'Münzenbezeichnungen';
+
+  @override
+  String get compareFeatureColorModes => 'Farbfunktionen';
+
+  @override
+  String get compareFeatureCustomRange => 'Zahlenfunktionen';
+
+  @override
+  String get compareFeatureCustomListExtras => 'Eigene Liste';
+
+  @override
+  String get compareFeatureTimeRange => 'Zeitbereich';
+
+  @override
+  String get compareFeatureLetterFilters => 'Buchstabenfilter';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Flaschendrehen-Steuerung';
+
+  @override
+  String get compareFeatureAnalytics => 'Analytik';
+
+  @override
+  String get proPromoCode => 'Promo-Code';
+
+  @override
+  String get proPromoCodeHint => 'Promo-Code eingeben';
+
+  @override
+  String get proPromoCodeApply => 'Einlösen';
+
+  @override
+  String get proPromoCodeSuccess =>
+      'Promo-Code eingelöst! Pro ist jetzt aktiv.';
+
+  @override
+  String get proPromoCodeInvalid =>
+      'Ungültiger Promo-Code. Bitte erneut versuchen.';
+
+  @override
+  String get homeSmartRandomDecisions => 'Smart random decisions';
 
   @override
   String get homeHistoryTooltip => 'Verlauf';
@@ -217,7 +341,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get proWhatYouGet => 'What you get with Pro';
 
   @override
-  String get proFeatureHistory => 'History: 50 results (Free: 3)';
+  String get proFeatureHistory => 'History: 1000 results (Free: 3)';
 
   @override
   String get proFeatureFavorites => 'Unlimited favorites (Free: 2)';
@@ -792,10 +916,69 @@ class AppLocalizationsDe extends AppLocalizations {
   String get analyticsFrequency => 'Frequency';
 
   @override
+  String get analyticsBestAccuracy => 'Beste Genauigkeit';
+
+  @override
+  String get analyticsAvgAccuracy => 'Ø Genauigkeit';
+
+  @override
+  String get generatorColorReflex => 'Farbreflexe';
+
+  @override
+  String get colorReflexInstructions =>
+      'Tippe auf die Farbe des TEXTES, nicht auf das Wort!';
+
+  @override
+  String get colorReflexDescription =>
+      'Nutzt den Stroop-Effekt, um deine Reflexe zu testen.';
+
+  @override
+  String get colorReflexDurationLabel => 'Dauer';
+
+  @override
+  String get colorReflexGetReady => 'Mach dich bereit!';
+
+  @override
+  String get colorReflexTapPrompt => 'Tippe auf die FARBE des Textes oben';
+
+  @override
+  String get colorReflexTimeUp => 'Zeit abgelaufen!';
+
+  @override
+  String get colorReflexCorrectLabel => 'Richtig';
+
+  @override
+  String get colorReflexWrongLabel => 'Falsch';
+
+  @override
+  String get colorReflexAccuracyLabel => 'Genauigkeit';
+
+  @override
+  String get colorReflexAvgReactionLabel => 'Ø Reaktion';
+
+  @override
+  String get colorReflexPlayAgain => 'Nochmal spielen';
+
+  @override
+  String get colorReflexBackToMenu => 'Zurück zum Menü';
+
+  @override
+  String get colorReflexDurationProTitle => 'Individuelle Dauer ist Pro';
+
+  @override
+  String get colorReflexDurationProMessage =>
+      'Upgrade auf Pro, um zwischen 15s, 30s und 60s zu wählen.';
+
+  @override
+  String get colorReflexFreeProHint =>
+      'Gratis: 30 Sekunden fest.\nPro: wähle 15s, 30s oder 60s.';
+
+  @override
   String get tapChallengeTitle => 'Tipp-Challenge';
 
   @override
-  String get tapChallengeInstructions => 'Tippe so schnell wie möglich, wenn GO erscheint!';
+  String get tapChallengeInstructions =>
+      'Tippe so schnell wie möglich, wenn GO erscheint!';
 
   @override
   String get tapChallengeStart => 'Start';
@@ -822,7 +1005,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tapChallengeDurationProTitle => 'Benutzerdefinierte Dauer ist Pro';
 
   @override
-  String get tapChallengeDurationProMessage => 'Werde Pro, um die Challenge-Dauer auf 5s, 10s, 15s, 30s oder 60s einzustellen.';
+  String get tapChallengeDurationProMessage =>
+      'Werde Pro, um die Challenge-Dauer auf 5s, 10s, 15s, 30s oder 60s einzustellen.';
 
   @override
   String get tapChallengeVibrateOnGo => 'Vibration bei GO';
@@ -831,7 +1015,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get tapChallengeVibrateOnEnd => 'Vibration am Ende';
 
   @override
-  String get tapChallengeFreeProHint => 'Kostenlos: 5-Sekunden-Run.\nPro: Dauer wählen (5s, 10s, 15s, 30s, 60s) + erweiterte Analytik.';
+  String get tapChallengeFreeProHint =>
+      'Kostenlos: 5-Sekunden-Run.\nPro: Dauer wählen (5s, 10s, 15s, 30s, 60s) + erweiterte Analytik.';
 
   @override
   String get tapChallengeGo => 'LOS!';

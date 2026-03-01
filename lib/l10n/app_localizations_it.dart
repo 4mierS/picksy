@@ -51,6 +51,48 @@ class AppLocalizationsIt extends AppLocalizations {
   String get generatorHangman => 'Impiccato';
 
   @override
+  String get generatorCard => 'Pesca carta';
+
+  @override
+  String get cardTitle => 'Pesca carta';
+
+  @override
+  String get cardTapDraw => 'Tocca "Pesca" per ottenere una carta';
+
+  @override
+  String get cardDraw => 'Pesca';
+
+  @override
+  String get cardSectionOptions => 'Opzioni';
+
+  @override
+  String get cardIncludeJokers => 'Includi jolly';
+
+  @override
+  String get cardIncludeJokersSubtitle => 'Aggiungi due jolly al mazzo';
+
+  @override
+  String get cardIncludeJokersProTitle => 'I jolly sono Pro';
+
+  @override
+  String get cardIncludeJokersProMessage =>
+      'Passa a Pro per aggiungere i jolly al mazzo.';
+
+  @override
+  String get cardMultiDrawCount => 'Carte per pesca';
+
+  @override
+  String get cardMultiDrawProTitle => 'La pesca multipla è Pro';
+
+  @override
+  String get cardMultiDrawProMessage =>
+      'Passa a Pro per pescare più carte alla volta.';
+
+  @override
+  String get cardFreeProHint =>
+      'Gratis: Una carta.\nPro: Jolly + pesca multipla.';
+
+  @override
   String get generatorTapChallenge => 'Sfida Toccata';
 
   @override
@@ -138,6 +180,87 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsLangItalian => 'Italiano';
 
   @override
+  String get settingsRateApp => 'Valuta l\'app';
+
+  @override
+  String get settingsShareApp => 'Condividi app';
+
+  @override
+  String get settingsShareAppSubtitle => 'Invita amici a provare Picksy';
+
+  @override
+  String get settingsCompareFreePro => 'Confronta Gratis vs Pro';
+
+  @override
+  String get compareTitle => 'Gratis vs Pro';
+
+  @override
+  String get compareFeatureLabel => 'Funzione';
+
+  @override
+  String get compareFreeColumn => 'Gratis';
+
+  @override
+  String get compareProColumn => 'Pro';
+
+  @override
+  String get compareFeatureHistory => 'Cronologia';
+
+  @override
+  String get compareFreeHistory => '3 risultati';
+
+  @override
+  String get compareProHistory => '1000 risultati';
+
+  @override
+  String get compareFeatureFavorites => 'Preferiti';
+
+  @override
+  String get compareFreeFavorites => 'Fino a 2';
+
+  @override
+  String get compareProFavorites => 'Fino a 999';
+
+  @override
+  String get compareFeatureCoinLabels => 'Etichette moneta';
+
+  @override
+  String get compareFeatureColorModes => 'Funzioni colore';
+
+  @override
+  String get compareFeatureCustomRange => 'Funzioni numero';
+
+  @override
+  String get compareFeatureCustomListExtras => 'Lista personalizzata';
+
+  @override
+  String get compareFeatureTimeRange => 'Intervallo timer';
+
+  @override
+  String get compareFeatureLetterFilters => 'Filtri lettere';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Controlli bottiglia';
+
+  @override
+  String get compareFeatureAnalytics => 'Analisi';
+
+  @override
+  String get proPromoCode => 'Codice promo';
+
+  @override
+  String get proPromoCodeHint => 'Inserisci il codice';
+
+  @override
+  String get proPromoCodeApply => 'Applica';
+
+  @override
+  String get proPromoCodeSuccess => 'Codice applicato! Pro è ora attivo.';
+
+  @override
+  String get proPromoCodeInvalid => 'Codice non valido. Riprova.';
+
+  @override
   String get homeSmartRandomDecisions => 'Decisioni casuali intelligenti';
 
   @override
@@ -217,7 +340,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get proWhatYouGet => 'What you get with Pro';
 
   @override
-  String get proFeatureHistory => 'History: 50 results (Free: 3)';
+  String get proFeatureHistory => 'History: 1000 results (Free: 3)';
 
   @override
   String get proFeatureFavorites => 'Unlimited favorites (Free: 2)';
@@ -793,10 +916,69 @@ class AppLocalizationsIt extends AppLocalizations {
   String get analyticsFrequency => 'Frequency';
 
   @override
+  String get analyticsBestAccuracy => 'Migliore precisione';
+
+  @override
+  String get analyticsAvgAccuracy => 'Precisione media';
+
+  @override
+  String get generatorColorReflex => 'Riflessi di Colore';
+
+  @override
+  String get colorReflexInstructions =>
+      'Tocca il colore del TESTO, non della parola!';
+
+  @override
+  String get colorReflexDescription =>
+      'Usa l\'Effetto Stroop per testare i tuoi riflessi.';
+
+  @override
+  String get colorReflexDurationLabel => 'Durata';
+
+  @override
+  String get colorReflexGetReady => 'Preparati!';
+
+  @override
+  String get colorReflexTapPrompt => 'Tocca il COLORE del testo sopra';
+
+  @override
+  String get colorReflexTimeUp => 'Tempo scaduto!';
+
+  @override
+  String get colorReflexCorrectLabel => 'Corretto';
+
+  @override
+  String get colorReflexWrongLabel => 'Sbagliato';
+
+  @override
+  String get colorReflexAccuracyLabel => 'Precisione';
+
+  @override
+  String get colorReflexAvgReactionLabel => 'Reazione media';
+
+  @override
+  String get colorReflexPlayAgain => 'Gioca ancora';
+
+  @override
+  String get colorReflexBackToMenu => 'Torna al menu';
+
+  @override
+  String get colorReflexDurationProTitle => 'La durata personalizzata è Pro';
+
+  @override
+  String get colorReflexDurationProMessage =>
+      'Passa a Pro per scegliere tra 15s, 30s e 60s.';
+
+  @override
+  String get colorReflexFreeProHint =>
+      'Gratis: 30 secondi fissi.\nPro: scegli 15s, 30s o 60s.';
+
+  @override
   String get tapChallengeTitle => 'Sfida Toccata';
 
   @override
-  String get tapChallengeInstructions => 'Tocca il più velocemente possibile quando appare GO!';
+  String get tapChallengeInstructions =>
+      'Tocca il più velocemente possibile quando appare GO!';
 
   @override
   String get tapChallengeStart => 'Inizia';
@@ -823,7 +1005,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tapChallengeDurationProTitle => 'Durata personalizzata è Pro';
 
   @override
-  String get tapChallengeDurationProMessage => 'Diventa Pro per impostare la durata a 5s, 10s, 15s, 30s o 60s.';
+  String get tapChallengeDurationProMessage =>
+      'Diventa Pro per impostare la durata a 5s, 10s, 15s, 30s o 60s.';
 
   @override
   String get tapChallengeVibrateOnGo => 'Vibra al GO';
@@ -832,7 +1015,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tapChallengeVibrateOnEnd => 'Vibra alla fine';
 
   @override
-  String get tapChallengeFreeProHint => 'Gratis: 5 secondi.\nPro: scegli la durata (5s, 10s, 15s, 30s, 60s) + analisi avanzate.';
+  String get tapChallengeFreeProHint =>
+      'Gratis: 5 secondi.\nPro: scegli la durata (5s, 10s, 15s, 30s, 60s) + analisi avanzate.';
 
   @override
   String get tapChallengeGo => 'VIA!';

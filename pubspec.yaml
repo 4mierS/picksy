@@ -23,6 +23,9 @@ dependencies:
   # Links (Buy me a coffee, GitHub issues, etc.)
   url_launcher: ^6.3.0
 
+  # Sharing
+  share_plus: ^10.1.4
+
   # Localization
   flutter_localizations:
     sdk: flutter

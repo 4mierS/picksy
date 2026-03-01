@@ -29,6 +29,9 @@ extension GeneratorTypeColorX on GeneratorType {
         return Colors.indigoAccent;
       case GeneratorType.tapChallenge:
         return Colors.cyan;
+      case GeneratorType.card:
+      case GeneratorType.colorReflex:
+        return Colors.cyanAccent;
     }
   }
 }
@@ -56,6 +59,10 @@ extension GeneratorTypeIconX on GeneratorType {
         return Icons.sports_esports_outlined;
       case GeneratorType.tapChallenge:
         return Icons.touch_app_outlined;
+      case GeneratorType.card:
+        return Icons.style_outlined;
+      case GeneratorType.colorReflex:
+        return Icons.psychology_outlined;
     }
   }
 }

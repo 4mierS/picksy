@@ -29,6 +29,9 @@ enum ProFeature {
   timeCustomRange,
   analyticsAccess,
   autoRun,
+  cardJokers,
+  cardMultiDraw,
+  colorReflexDuration,
   tapChallengeDuration,
 }
 
@@ -70,6 +73,9 @@ class FeatureGate {
       case ProFeature.timeCustomRange:
       case ProFeature.analyticsAccess:
       case ProFeature.autoRun:
+      case ProFeature.cardJokers:
+      case ProFeature.cardMultiDraw:
+      case ProFeature.colorReflexDuration:
       case ProFeature.tapChallengeDuration:
         return false;
     }
