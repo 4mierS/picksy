@@ -51,48 +51,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get generatorHangman => 'Ahorcado';
 
   @override
-  String get generatorCard => 'Sacar carta';
-
-  @override
-  String get cardTitle => 'Sacar carta';
-
-  @override
-  String get cardTapDraw => 'Toca "Sacar" para obtener una carta';
-
-  @override
-  String get cardDraw => 'Sacar';
-
-  @override
-  String get cardSectionOptions => 'Opciones';
-
-  @override
-  String get cardIncludeJokers => 'Incluir comodines';
-
-  @override
-  String get cardIncludeJokersSubtitle => 'Añadir dos comodines al mazo';
-
-  @override
-  String get cardIncludeJokersProTitle => 'Los comodines son Pro';
-
-  @override
-  String get cardIncludeJokersProMessage =>
-      'Hazte Pro para añadir comodines al mazo.';
-
-  @override
-  String get cardMultiDrawCount => 'Cartas por extracción';
-
-  @override
-  String get cardMultiDrawProTitle => 'Sacar múltiples es Pro';
-
-  @override
-  String get cardMultiDrawProMessage =>
-      'Hazte Pro para sacar varias cartas a la vez.';
-
-  @override
-  String get cardFreeProHint =>
-      'Gratis: Una carta.\nPro: Comodines + sacar múltiples.';
-
-  @override
   String get generatorTapChallenge => 'Desafío de Toque';
 
   @override
@@ -915,6 +873,48 @@ class AppLocalizationsEs extends AppLocalizations {
   String get analyticsFrequency => 'Frequency';
 
   @override
+  String get generatorCard => 'Sacar carta';
+
+  @override
+  String get cardTitle => 'Sacar carta';
+
+  @override
+  String get cardTapDraw => 'Toca \"Sacar\" para obtener una carta';
+
+  @override
+  String get cardDraw => 'Sacar';
+
+  @override
+  String get cardSectionOptions => 'Opciones';
+
+  @override
+  String get cardIncludeJokers => 'Incluir comodines';
+
+  @override
+  String get cardIncludeJokersSubtitle => 'Añadir dos comodines al mazo';
+
+  @override
+  String get cardIncludeJokersProTitle => 'Los comodines son Pro';
+
+  @override
+  String get cardIncludeJokersProMessage =>
+      'Hazte Pro para añadir comodines al mazo.';
+
+  @override
+  String get cardMultiDrawCount => 'Cartas por extracción';
+
+  @override
+  String get cardMultiDrawProTitle => 'Sacar múltiples es Pro';
+
+  @override
+  String get cardMultiDrawProMessage =>
+      'Hazte Pro para sacar varias cartas a la vez.';
+
+  @override
+  String get cardFreeProHint =>
+      'Gratis: Una carta.\nPro: Comodines + sacar múltiples.';
+
+  @override
   String get analyticsBestAccuracy => 'Mejor precisión';
 
   @override
@@ -998,7 +998,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tapChallengeDurationLabel => 'Duración';
 
   @override
-  String tapChallengeDurationSeconds(int seconds) => '${seconds}s';
+  String tapChallengeDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
 
   @override
   String get tapChallengeDurationProTitle => 'Duración personalizada es Pro';

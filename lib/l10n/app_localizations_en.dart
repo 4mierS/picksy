@@ -51,46 +51,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get generatorHangman => 'Hangman';
 
   @override
-  String get generatorCard => 'Card Draw';
-
-  @override
-  String get cardTitle => 'Card Draw';
-
-  @override
-  String get cardTapDraw => 'Tap "Draw" to draw a card';
-
-  @override
-  String get cardDraw => 'Draw';
-
-  @override
-  String get cardSectionOptions => 'Options';
-
-  @override
-  String get cardIncludeJokers => 'Include Jokers';
-
-  @override
-  String get cardIncludeJokersSubtitle => 'Add two Jokers to the deck';
-
-  @override
-  String get cardIncludeJokersProTitle => 'Jokers are Pro';
-
-  @override
-  String get cardIncludeJokersProMessage => 'Go Pro to add Jokers to the deck.';
-
-  @override
-  String get cardMultiDrawCount => 'Cards per draw';
-
-  @override
-  String get cardMultiDrawProTitle => 'Multi-draw is Pro';
-
-  @override
-  String get cardMultiDrawProMessage =>
-      'Go Pro to draw multiple cards at once.';
-
-  @override
-  String get cardFreeProHint => 'Free: Single draw.\nPro: Jokers + multi-draw.';
-
-  @override
   String get generatorTapChallenge => 'Tap Challenge';
 
   @override
@@ -913,6 +873,46 @@ class AppLocalizationsEn extends AppLocalizations {
   String get analyticsFrequency => 'Frequency';
 
   @override
+  String get generatorCard => 'Card Draw';
+
+  @override
+  String get cardTitle => 'Card Draw';
+
+  @override
+  String get cardTapDraw => 'Tap \"Draw\" to draw a card';
+
+  @override
+  String get cardDraw => 'Draw';
+
+  @override
+  String get cardSectionOptions => 'Options';
+
+  @override
+  String get cardIncludeJokers => 'Include Jokers';
+
+  @override
+  String get cardIncludeJokersSubtitle => 'Add two Jokers to the deck';
+
+  @override
+  String get cardIncludeJokersProTitle => 'Jokers are Pro';
+
+  @override
+  String get cardIncludeJokersProMessage => 'Go Pro to add Jokers to the deck.';
+
+  @override
+  String get cardMultiDrawCount => 'Cards per draw';
+
+  @override
+  String get cardMultiDrawProTitle => 'Multi-draw is Pro';
+
+  @override
+  String get cardMultiDrawProMessage =>
+      'Go Pro to draw multiple cards at once.';
+
+  @override
+  String get cardFreeProHint => 'Free: Single draw.\nPro: Jokers + multi-draw.';
+
+  @override
   String get analyticsBestAccuracy => 'Best accuracy';
 
   @override
@@ -996,7 +996,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tapChallengeDurationLabel => 'Duration';
 
   @override
-  String tapChallengeDurationSeconds(int seconds) => '${seconds}s';
+  String tapChallengeDurationSeconds(int seconds) {
+    return '${seconds}s';
+  }
 
   @override
   String get tapChallengeDurationProTitle => 'Custom Duration is Pro';
