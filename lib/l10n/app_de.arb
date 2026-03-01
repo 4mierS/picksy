@@ -70,6 +70,7 @@
   "proPromoCodeApply": "Einlösen",
   "proPromoCodeSuccess": "Promo-Code eingelöst! Pro ist jetzt aktiv.",
   "proPromoCodeInvalid": "Ungültiger Promo-Code. Bitte erneut versuchen.",
+  "homeSmartRandomDecisions": "Smarte Zufallsentscheidungen",
   "homeHistoryTooltip": "Verlauf",
   "homeFavorites": "Favoriten",
   "homeAllGenerators": "Alle Generatoren",

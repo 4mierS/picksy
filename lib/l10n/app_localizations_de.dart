@@ -262,7 +262,7 @@ class AppLocalizationsDe extends AppLocalizations {
       'Ungültiger Promo-Code. Bitte erneut versuchen.';
 
   @override
-  String get homeSmartRandomDecisions => 'Smart random decisions';
+  String get homeSmartRandomDecisions => 'Smarte Zufallsentscheidungen';
 
   @override
   String get homeHistoryTooltip => 'Verlauf';
