@@ -885,7 +885,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get colorReflexDescription =>
-      "Usa l'Effetto Stroop per testare i tuoi riflessi.";
+      'Usa l\'Effetto Stroop per testare i tuoi riflessi.';
 
   @override
   String get colorReflexDurationLabel => 'Durata';

@@ -896,7 +896,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get colorReflexTapPrompt => 'Tap the COLOR of the text above';
 
   @override
-  String get colorReflexTimeUp => "Time's up!";
+  String get colorReflexTimeUp => 'Time\'s up!';
 
   @override
   String get colorReflexCorrectLabel => 'Correct';
