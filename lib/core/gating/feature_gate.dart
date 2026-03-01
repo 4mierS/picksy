@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/l10n.dart';
+import '../ui/app_colors.dart';
 
 import '../../storage/premium_store.dart';
 
@@ -88,15 +89,24 @@ Future<void> showProDialog(
   await showDialog(
     context: context,
     builder: (_) => AlertDialog(
-      title: Text(title),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: AppColors.proPurple,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
       content: Text(message),
       actions: [
         TextButton(
+          style: TextButton.styleFrom(foregroundColor: AppColors.proPurple),
           onPressed: () => Navigator.of(context).pop(),
           child: Text(l10n.gateNotNow),
         ),
         FilledButton(
           style: FilledButton.styleFrom(
+            backgroundColor: AppColors.proPurple,
+            foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(vertical: 16),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18),

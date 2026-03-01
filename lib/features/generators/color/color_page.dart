@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 
@@ -44,12 +45,7 @@ class _ColorPageState extends State<ColorPage> {
           const SizedBox(height: 16),
 
           FilledButton.icon(
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
+            style: AppStyles.generatorButton(GeneratorType.color.accentColor),
             icon: const Icon(Icons.casino),
             label: Text(l10n.commonGenerate),
             onPressed: () async {
@@ -93,12 +89,7 @@ class _ColorPageState extends State<ColorPage> {
           const SizedBox(height: 8),
 
           FilledButton(
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
+            style: AppStyles.generatorButton(GeneratorType.color.accentColor),
             onPressed: () async {
               if (!gate.canUse(ProFeature.colorPalette)) {
                 await showProDialog(
@@ -143,7 +134,7 @@ class _ColorPageState extends State<ColorPage> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(22),
-              decoration: AppStyles.glassCard(context),
+              decoration: AppStyles.proCard(),
               child: Text(l10n.colorFreeProHint, style: AppStyles.resultStyle),
             ),
         ],

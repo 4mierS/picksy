@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 
@@ -57,12 +58,10 @@ class _CoinPageState extends State<CoinPage> {
         children: [
           // Result card
           Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: Theme.of(context).dividerColor.withOpacity(0.5),
-              ),
+            constraints: const BoxConstraints(minHeight: 120),
+            padding: const EdgeInsets.all(20),
+            decoration: AppStyles.generatorResultCard(
+              GeneratorType.coin.accentColor,
             ),
             child: Row(
               children: [
@@ -70,8 +69,8 @@ class _CoinPageState extends State<CoinPage> {
                   child: Text(
                     _last ?? l10n.coinTapFlip,
                     style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
@@ -94,12 +93,7 @@ class _CoinPageState extends State<CoinPage> {
           const SizedBox(height: 16),
 
           FilledButton.icon(
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
+            style: AppStyles.generatorButton(GeneratorType.coin.accentColor),
             icon: const Icon(Icons.casino),
             label: Text(l10n.coinFlip),
             onPressed: () async {
@@ -164,7 +158,7 @@ class _CoinPageState extends State<CoinPage> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(22),
-              decoration: AppStyles.glassCard(context),
+              decoration: AppStyles.proCard(),
               child: Text(l10n.coinFreeProHint, style: AppStyles.resultStyle),
             ),
         ],

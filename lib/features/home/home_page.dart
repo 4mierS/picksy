@@ -4,6 +4,7 @@ import '../../l10n/l10n.dart';
 
 import '../../core/gating/feature_gate.dart';
 import '../../core/routing/generator_router.dart';
+import '../../core/ui/app_colors.dart';
 import '../../models/generator_type.dart';
 import '../../storage/favorites_store.dart';
 
@@ -207,24 +208,7 @@ class _GeneratorTile extends StatelessWidget {
   }
 
   Color get _accent {
-    switch (type) {
-      case GeneratorType.color:
-        return Colors.pinkAccent;
-      case GeneratorType.number:
-        return Colors.blueAccent;
-      case GeneratorType.coin:
-        return Colors.amber;
-      case GeneratorType.letter:
-        return Colors.teal;
-      case GeneratorType.customList:
-        return Colors.deepPurple;
-      case GeneratorType.bottleSpin:
-        return Colors.orange;
-      case GeneratorType.time:
-        return Colors.green;
-      case GeneratorType.reactionTest:
-        return Colors.redAccent;
-    }
+    return type.accentColor;
   }
 
   @override

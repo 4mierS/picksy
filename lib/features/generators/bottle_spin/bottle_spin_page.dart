@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 
@@ -27,6 +28,7 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   double _currentAngle = 0.0;
   double _targetAngle = 0.0;
   bool _spinning = false;
+  String? _lastResult;
 
   double _spinStrength = 0.6;
 
@@ -53,10 +55,13 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 
     _controller.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
-        setState(() => _spinning = false);
-
         final deg = ((_currentAngle * 180 / pi) % 360);
         final value = context.l10n.bottleSpinAngleValue(deg.toStringAsFixed(0));
+
+        setState(() {
+          _spinning = false;
+          _lastResult = value;
+        });
 
         final history = context.read<HistoryStore>();
         await history.add(
@@ -109,11 +114,8 @@ class _BottleSpinPageState extends State<BottleSpinPage>
           const SizedBox(height: 16),
 
           FilledButton.icon(
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
+            style: AppStyles.generatorButton(
+              GeneratorType.bottleSpin.accentColor,
             ),
             onPressed: _spinning
                 ? null
@@ -123,6 +125,22 @@ class _BottleSpinPageState extends State<BottleSpinPage>
             icon: const Icon(Icons.casino),
             label: Text(
               _spinning ? l10n.bottleSpinSpinning : l10n.bottleSpinSpin,
+            ),
+          ),
+
+          const SizedBox(height: 14),
+
+          Container(
+            width: double.infinity,
+            constraints: const BoxConstraints(minHeight: 110),
+            padding: const EdgeInsets.all(20),
+            decoration: AppStyles.generatorResultCard(
+              GeneratorType.bottleSpin.accentColor,
+            ),
+            child: Text(
+              _lastResult ?? l10n.bottleSpinSpin,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+              textAlign: TextAlign.center,
             ),
           ),
 
@@ -189,7 +207,7 @@ class _BottleSpinPageState extends State<BottleSpinPage>
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(22),
-              decoration: AppStyles.glassCard(context),
+              decoration: AppStyles.proCard(),
               child: Text(
                 l10n.bottleSpinFreeProHint,
                 style: AppStyles.resultStyle,

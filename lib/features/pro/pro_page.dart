@@ -4,6 +4,7 @@ import '../../l10n/l10n.dart';
 
 import '../../storage/premium_store.dart';
 import '../../core/ui/app_styles.dart';
+import '../../core/ui/app_colors.dart';
 
 class ProPage extends StatelessWidget {
   const ProPage({super.key});
@@ -52,8 +53,11 @@ class ProPage extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(999),
-                  gradient: const LinearGradient(
-                    colors: [Colors.amber, Colors.orange],
+                  gradient: LinearGradient(
+                    colors: [
+                      AppColors.proPurple.withOpacity(0.95),
+                      AppColors.proPurple.withOpacity(0.75),
+                    ],
                   ),
                 ),
                 child: Text(
@@ -116,9 +120,7 @@ class ProPage extends StatelessWidget {
             subtitle: l10n.proMonthlySubtitle,
             badge: l10n.proPopular,
             enabled: canBuyMonthly,
-            decoration: AppStyles.gradientCard(
-              Theme.of(context).colorScheme.primary,
-            ),
+            decoration: AppStyles.gradientCard(AppColors.proPurple),
             onPressed: canBuyMonthly
                 ? () => context.read<PremiumStore>().buyMonthly()
                 : null,
@@ -131,9 +133,7 @@ class ProPage extends StatelessWidget {
             price: lifetimePrice,
             subtitle: l10n.proLifetimeSubtitle,
             enabled: canBuyLifetime,
-            decoration: AppStyles.gradientCard(
-              Theme.of(context).colorScheme.primary,
-            ),
+            decoration: AppStyles.gradientCard(AppColors.proPurple),
             onPressed: canBuyLifetime
                 ? () => context.read<PremiumStore>().buyLifetime()
                 : null,
@@ -279,16 +279,14 @@ class _PlanTile extends StatelessWidget {
                           ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(999),
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withOpacity(0.12),
+                            color: AppColors.proPurple.withOpacity(0.12),
                           ),
                           child: Text(
                             badge!,
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: AppColors.proPurple,
                             ),
                           ),
                         ),
@@ -316,6 +314,8 @@ class _PlanTile extends StatelessWidget {
             const SizedBox(width: 12),
             FilledButton(
               style: FilledButton.styleFrom(
+                backgroundColor: AppColors.proPurple,
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   vertical: 14,
                   horizontal: 16,

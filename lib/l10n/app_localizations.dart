@@ -275,7 +275,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsSupportPicksy.
   ///
   /// In en, this message translates to:
-  /// **'Support Picksy'**
+  /// **'Buy me a coffee'**
   String get settingsSupportPicksy;
 
   /// No description provided for @settingsPrivacyPolicy.

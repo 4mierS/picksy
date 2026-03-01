@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
+import 'package:picksy/core/ui/app_colors.dart';
+import 'package:picksy/core/ui/app_styles.dart';
 
 import '../../../core/gating/feature_gate.dart';
 import '../../../l10n/l10n.dart';
@@ -177,11 +179,8 @@ class _TimePageState extends State<TimePage> {
                     horizontal: 28,
                     vertical: 22,
                   ),
-                  decoration: BoxDecoration(
-                    color: _finished
-                        ? Colors.white.withOpacity(0.15)
-                        : Colors.black.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(22),
+                  decoration: AppStyles.generatorResultCard(
+                    GeneratorType.time.accentColor,
                   ),
                   child: showTimeNow
                       ? Text(
@@ -231,6 +230,9 @@ class _TimePageState extends State<TimePage> {
                 const SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
+                    style: AppStyles.generatorButton(
+                      GeneratorType.time.accentColor,
+                    ),
                     onPressed: _running
                         ? null
                         : () => _start(
@@ -331,10 +333,13 @@ class _ControlsCard extends StatelessWidget {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.06),
+                      color: AppColors.proPurple.withOpacity(0.14),
                       borderRadius: BorderRadius.circular(999),
                     ),
-                    child: Text(l10n.proBadge),
+                    child: Text(
+                      l10n.proBadge,
+                      style: const TextStyle(color: AppColors.proPurple),
+                    ),
                   ),
               ],
             ),

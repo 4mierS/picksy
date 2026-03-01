@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/l10n/l10n.dart';
 
 import 'package:picksy/core/ui/app_styles.dart';
@@ -259,11 +260,14 @@ class _CustomListPageState extends State<CustomListPage> {
             if (_lastPicked != null)
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(22),
-                decoration: AppStyles.glassCard(context),
+                constraints: const BoxConstraints(minHeight: 120),
+                padding: const EdgeInsets.all(24),
+                decoration: AppStyles.generatorResultCard(
+                  GeneratorType.customList.accentColor,
+                ),
                 child: Text(
                   l10n.customListPicked(_lastPicked!),
-                  style: AppStyles.resultStyle,
+                  style: AppStyles.resultStyle.copyWith(fontSize: 22),
                 ),
               ),
 
@@ -278,11 +282,8 @@ class _CustomListPageState extends State<CustomListPage> {
             SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
+                style: AppStyles.generatorButton(
+                  GeneratorType.customList.accentColor,
                 ),
                 onPressed: selected == null
                     ? null

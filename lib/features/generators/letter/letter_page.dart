@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 
@@ -44,12 +45,10 @@ class _LetterPageState extends State<LetterPage> {
         children: [
           // Result
           Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: Theme.of(context).dividerColor.withOpacity(0.5),
-              ),
+            constraints: const BoxConstraints(minHeight: 120),
+            padding: const EdgeInsets.all(20),
+            decoration: AppStyles.generatorResultCard(
+              GeneratorType.letter.accentColor,
             ),
             child: Row(
               children: [
@@ -57,8 +56,8 @@ class _LetterPageState extends State<LetterPage> {
                   child: Text(
                     _last ?? l10n.letterTapGenerate,
                     style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
@@ -81,12 +80,7 @@ class _LetterPageState extends State<LetterPage> {
           const SizedBox(height: 16),
 
           FilledButton.icon(
-            style: FilledButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18),
-              ),
-            ),
+            style: AppStyles.generatorButton(GeneratorType.letter.accentColor),
             icon: const Icon(Icons.casino),
             label: Text(l10n.commonGenerate),
             onPressed: () async {
@@ -193,7 +187,7 @@ class _LetterPageState extends State<LetterPage> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(22),
-              decoration: AppStyles.glassCard(context),
+              decoration: AppStyles.proCard(),
               child: Text(l10n.letterFreeProHint, style: AppStyles.resultStyle),
             ),
         ],

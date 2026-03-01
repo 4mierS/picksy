@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class AppStyles {
   static BorderRadius cardRadius = BorderRadius.circular(22);
 
@@ -21,6 +23,44 @@ class AppStyles {
       gradient: LinearGradient(
         colors: [primary.withOpacity(0.10), primary.withOpacity(0.03)],
       ),
+    );
+  }
+
+  static BoxDecoration proCard() {
+    return BoxDecoration(
+      borderRadius: cardRadius,
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          AppColors.proPurple.withOpacity(0.20),
+          AppColors.proPurple.withOpacity(0.06),
+        ],
+      ),
+    );
+  }
+
+  static BoxDecoration generatorResultCard(Color accent) {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(20),
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [accent.withOpacity(0.20), accent.withOpacity(0.06)],
+      ),
+      border: Border.all(color: accent.withOpacity(0.28)),
+    );
+  }
+
+  static ButtonStyle generatorButton(Color accent) {
+    return FilledButton.styleFrom(
+      backgroundColor: accent.withOpacity(0.16),
+      foregroundColor: accent,
+      disabledBackgroundColor: accent.withOpacity(0.08),
+      disabledForegroundColor: accent.withOpacity(0.45),
+      side: BorderSide(color: accent.withOpacity(0.35)),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
     );
   }
 

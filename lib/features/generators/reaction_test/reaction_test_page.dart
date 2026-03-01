@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
+import 'package:picksy/core/ui/app_colors.dart';
+import 'package:picksy/core/ui/app_styles.dart';
 
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
@@ -177,19 +179,35 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
           child: Column(
             children: [
               const SizedBox(height: 18),
-              Text(
-                _headline(),
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
+              Container(
+                width: double.infinity,
+                constraints: const BoxConstraints(minHeight: 150),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 20,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                _subtext(),
-                style: const TextStyle(fontSize: 18),
-                textAlign: TextAlign.center,
+                decoration: AppStyles.generatorResultCard(
+                  GeneratorType.reactionTest.accentColor,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _headline(),
+                      style: const TextStyle(
+                        fontSize: 34,
+                        fontWeight: FontWeight.w800,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      _subtext(),
+                      style: const TextStyle(fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 18),
 
@@ -208,6 +226,9 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
+                    style: AppStyles.generatorButton(
+                      GeneratorType.reactionTest.accentColor,
+                    ),
                     onPressed: _start,
                     child: const Text("Start"),
                   ),
@@ -217,6 +238,9 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
+                    style: AppStyles.generatorButton(
+                      GeneratorType.reactionTest.accentColor,
+                    ),
                     onPressed: _start,
                     child: const Text("Try again"),
                   ),

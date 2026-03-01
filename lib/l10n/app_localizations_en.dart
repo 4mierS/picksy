@@ -93,7 +93,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsSuggestFeature => 'Suggest Feature';
 
   @override
-  String get settingsSupportPicksy => 'Support Picksy';
+  String get settingsSupportPicksy => 'Buy me a coffee';
 
   @override
   String get settingsPrivacyPolicy => 'Privacy Policy';

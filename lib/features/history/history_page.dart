@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../l10n/l10n.dart';
 
+import '../../core/ui/app_colors.dart';
 import '../../storage/history_store.dart';
 
 class HistoryPage extends StatelessWidget {
@@ -31,6 +32,12 @@ class HistoryPage extends StatelessWidget {
               itemBuilder: (context, i) {
                 final e = history.entries[i];
                 return ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: e.generatorType.accentColor.withOpacity(
+                      0.16,
+                    ),
+                    child: Icon(Icons.bolt, color: e.generatorType.accentColor),
+                  ),
                   title: Text(e.value),
                   subtitle: Text(
                     l10n.historyItemSubtitle(
