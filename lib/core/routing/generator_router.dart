@@ -12,6 +12,7 @@ import '../../features/generators/time/time_page.dart';
 import '../../features/generators/reaction_test/reaction_test_page.dart';
 import '../../features/generators/card/card_page.dart';
 import '../../features/generators/hangman/hangman_page.dart';
+import '../../features/generators/color_reflex/color_reflex_page.dart';
 
 void openGenerator(BuildContext context, GeneratorType type) {
   final Widget page = switch (type) {
@@ -25,6 +26,7 @@ void openGenerator(BuildContext context, GeneratorType type) {
     GeneratorType.reactionTest => const ReactionTestPage(),
     GeneratorType.hangman => const HangmanPage(),
     GeneratorType.card => const CardPage(),
+    GeneratorType.colorReflex => const ColorReflexPage(),
   };
 
   Navigator.of(context).push(MaterialPageRoute(builder: (_) => page));

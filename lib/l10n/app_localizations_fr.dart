@@ -174,6 +174,87 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsLangItalian => 'Italiano';
 
   @override
+  String get settingsRateApp => 'Noter l\'app';
+
+  @override
+  String get settingsShareApp => 'Partager l\'app';
+
+  @override
+  String get settingsShareAppSubtitle => 'Invitez des amis à essayer Picksy';
+
+  @override
+  String get settingsCompareFreePro => 'Comparer Gratuit vs Pro';
+
+  @override
+  String get compareTitle => 'Gratuit vs Pro';
+
+  @override
+  String get compareFeatureLabel => 'Fonctionnalité';
+
+  @override
+  String get compareFreeColumn => 'Gratuit';
+
+  @override
+  String get compareProColumn => 'Pro';
+
+  @override
+  String get compareFeatureHistory => 'Historique';
+
+  @override
+  String get compareFreeHistory => '3 résultats';
+
+  @override
+  String get compareProHistory => '1000 résultats';
+
+  @override
+  String get compareFeatureFavorites => 'Favoris';
+
+  @override
+  String get compareFreeFavorites => 'Jusqu\'à 2';
+
+  @override
+  String get compareProFavorites => 'Jusqu\'à 999';
+
+  @override
+  String get compareFeatureCoinLabels => 'Libellés pièce';
+
+  @override
+  String get compareFeatureColorModes => 'Fonctions couleur';
+
+  @override
+  String get compareFeatureCustomRange => 'Fonctions nombre';
+
+  @override
+  String get compareFeatureCustomListExtras => 'Liste personnalisée';
+
+  @override
+  String get compareFeatureTimeRange => 'Plage de temps';
+
+  @override
+  String get compareFeatureLetterFilters => 'Filtres de lettres';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Contrôles bouteille';
+
+  @override
+  String get compareFeatureAnalytics => 'Analytique';
+
+  @override
+  String get proPromoCode => 'Code promo';
+
+  @override
+  String get proPromoCodeHint => 'Saisissez le code';
+
+  @override
+  String get proPromoCodeApply => 'Appliquer';
+
+  @override
+  String get proPromoCodeSuccess => 'Code appliqué ! Pro est maintenant actif.';
+
+  @override
+  String get proPromoCodeInvalid => 'Code invalide. Veuillez réessayer.';
+
+  @override
   String get homeSmartRandomDecisions => 'Décisions aléatoires intelligentes';
 
   @override
@@ -253,7 +334,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get proWhatYouGet => 'What you get with Pro';
 
   @override
-  String get proFeatureHistory => 'History: 50 results (Free: 3)';
+  String get proFeatureHistory => 'History: 1000 results (Free: 3)';
 
   @override
   String get proFeatureFavorites => 'Unlimited favorites (Free: 2)';
@@ -827,4 +908,62 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get analyticsFrequency => 'Frequency';
+
+  @override
+  String get analyticsBestAccuracy => 'Meilleure précision';
+
+  @override
+  String get analyticsAvgAccuracy => 'Précision moyenne';
+
+  @override
+  String get generatorColorReflex => 'Réflexe Couleur';
+
+  @override
+  String get colorReflexInstructions =>
+      'Touchez la couleur du TEXTE, pas du mot !';
+
+  @override
+  String get colorReflexDescription =>
+      'Utilise l\'Effet Stroop pour tester vos réflexes.';
+
+  @override
+  String get colorReflexDurationLabel => 'Durée';
+
+  @override
+  String get colorReflexGetReady => 'Préparez-vous !';
+
+  @override
+  String get colorReflexTapPrompt => 'Touchez la COULEUR du texte ci-dessus';
+
+  @override
+  String get colorReflexTimeUp => 'Temps écoulé !';
+
+  @override
+  String get colorReflexCorrectLabel => 'Correct';
+
+  @override
+  String get colorReflexWrongLabel => 'Incorrect';
+
+  @override
+  String get colorReflexAccuracyLabel => 'Précision';
+
+  @override
+  String get colorReflexAvgReactionLabel => 'Réaction moy.';
+
+  @override
+  String get colorReflexPlayAgain => 'Rejouer';
+
+  @override
+  String get colorReflexBackToMenu => 'Retour au menu';
+
+  @override
+  String get colorReflexDurationProTitle => 'La durée personnalisée est Pro';
+
+  @override
+  String get colorReflexDurationProMessage =>
+      'Passez Pro pour choisir entre 15s, 30s et 60s.';
+
+  @override
+  String get colorReflexFreeProHint =>
+      'Gratuit : 30 secondes fixes.\nPro : choisissez 15s, 30s ou 60s.';
 }

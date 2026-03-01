@@ -31,6 +31,7 @@ enum ProFeature {
   autoRun,
   cardJokers,
   cardMultiDraw,
+  colorReflexDuration,
 }
 
 class FeatureGate {
@@ -73,6 +74,7 @@ class FeatureGate {
       case ProFeature.autoRun:
       case ProFeature.cardJokers:
       case ProFeature.cardMultiDraw:
+      case ProFeature.colorReflexDuration:
         return false;
     }
   }

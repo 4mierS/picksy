@@ -31,7 +31,8 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         title: Text(l10n.analyticsGeneratorTitle(generatorType.localizedTitle(context))),
         actions: [
           if (generatorType != GeneratorType.reactionTest &&
-              generatorType != GeneratorType.hangman)
+              generatorType != GeneratorType.hangman &&
+              generatorType != GeneratorType.colorReflex)
             if (gate.canUse(ProFeature.autoRun))
               IconButton(
                 icon: const Icon(Icons.play_circle_outline),
@@ -197,12 +198,21 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         return rng.nextBool() ? 'Won' : 'Lost';
       case GeneratorType.customList:
         return 'Item ${rng.nextInt(10) + 1}';
+
+      // ✅ from copilot/add-random-card-generator
       case GeneratorType.card:
         const ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const suits = ['♠', '♥', '♦', '♣'];
         final rank = ranks[rng.nextInt(ranks.length)];
         final suit = suits[rng.nextInt(suits.length)];
         return '$rank $suit';
+
+      // ✅ from main
+      case GeneratorType.colorReflex:
+        final correct = rng.nextInt(30);
+        final total = correct + rng.nextInt(15);
+        final pct = total > 0 ? (correct / total * 100) : 0.0;
+        return '$correct/$total (${pct.toStringAsFixed(1)}%)';
     }
   }
 }
@@ -243,6 +253,8 @@ class _StatsSection extends StatelessWidget {
         return _CustomListStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.card:
         return _CardStats(entries: entries, l10n: l10n, accent: accent);
+      case GeneratorType.colorReflex:
+        return _ColorReflexStats(entries: entries, l10n: l10n, accent: accent);
     }
   }
 }
@@ -759,9 +771,7 @@ class _CustomListStats extends StatelessWidget {
       ],
     );
   }
-}
-
-// ─── Card ────────────────────────────────────────────────────────────────────
+}// ─── Card ────────────────────────────────────────────────────────────────────
 
 class _CardStats extends StatelessWidget {
   final List<HistoryEntry> entries;
@@ -809,6 +819,7 @@ class _CardStats extends StatelessWidget {
     final suitMax = suitFreq.values.isNotEmpty
         ? suitFreq.values.reduce((a, b) => a > b ? a : b)
         : 1;
+
     final rankSorted = rankFreq.entries.toList()
       ..sort((a, b) => b.value.compareTo(a.value));
     final rankMax = rankSorted.isNotEmpty ? rankSorted.first.value : 1;
@@ -838,6 +849,95 @@ class _CardStats extends StatelessWidget {
             ),
             const SizedBox(height: 6),
           ],
+        ],
+      ],
+    );
+  }
+}
+
+// ─── ColorReflex ─────────────────────────────────────────────────────────────
+
+class _ColorReflexStats extends StatelessWidget {
+  final List<HistoryEntry> entries;
+  final AppLocalizations l10n;
+  final Color accent;
+
+  const _ColorReflexStats({
+    required this.entries,
+    required this.l10n,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final accuracies = <double>[];
+    final correctCounts = <int>[];
+    final reactionMs = <int>[];
+
+    for (final e in entries) {
+      final meta = e.metadata;
+      if (meta == null) continue;
+
+      if (meta['accuracy'] != null) {
+        accuracies.add((meta['accuracy'] as num).toDouble());
+      }
+      if (meta['totalCorrect'] != null) {
+        correctCounts.add((meta['totalCorrect'] as num).toInt());
+      }
+      if (meta['avgReactionMs'] != null) {
+        final ms = (meta['avgReactionMs'] as num).toInt();
+        if (ms > 0) reactionMs.add(ms);
+      }
+    }
+
+    if (accuracies.isEmpty) {
+      return _StatCard(
+        label: l10n.analyticsTotal,
+        value: '${entries.length}',
+        accent: accent,
+      );
+    }
+
+    final bestAccuracy = accuracies.reduce(max);
+    final avgAccuracy = accuracies.reduce((a, b) => a + b) / accuracies.length;
+    final bestScore = correctCounts.isNotEmpty ? correctCounts.reduce(max) : 0;
+    final avgReaction =
+        reactionMs.isNotEmpty ? reactionMs.reduce((a, b) => a + b) ~/ reactionMs.length : 0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _StatsGrid(
+          children: [
+            _StatCard(
+              label: l10n.analyticsHighScore,
+              value: '$bestScore',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsBestAccuracy,
+              value: '${bestAccuracy.toStringAsFixed(1)}%',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsAvgAccuracy,
+              value: '${avgAccuracy.toStringAsFixed(1)}%',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '${entries.length}',
+              accent: accent,
+            ),
+          ],
+        ),
+        if (avgReaction > 0) ...[
+          const SizedBox(height: 10),
+          _StatCard(
+            label: l10n.analyticsAvgTime,
+            value: '$avgReaction ms',
+            accent: accent,
+          ),
         ],
       ],
     );

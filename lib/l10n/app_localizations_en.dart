@@ -174,6 +174,87 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLangItalian => 'Italiano';
 
   @override
+  String get settingsRateApp => 'Rate App';
+
+  @override
+  String get settingsShareApp => 'Share App';
+
+  @override
+  String get settingsShareAppSubtitle => 'Invite friends to try Picksy';
+
+  @override
+  String get settingsCompareFreePro => 'Compare Free vs Pro';
+
+  @override
+  String get compareTitle => 'Free vs Pro';
+
+  @override
+  String get compareFeatureLabel => 'Feature';
+
+  @override
+  String get compareFreeColumn => 'Free';
+
+  @override
+  String get compareProColumn => 'Pro';
+
+  @override
+  String get compareFeatureHistory => 'History';
+
+  @override
+  String get compareFreeHistory => '3 results';
+
+  @override
+  String get compareProHistory => '1000 results';
+
+  @override
+  String get compareFeatureFavorites => 'Favorites';
+
+  @override
+  String get compareFreeFavorites => 'Up to 2';
+
+  @override
+  String get compareProFavorites => 'Up to 999';
+
+  @override
+  String get compareFeatureCoinLabels => 'Coin Labels';
+
+  @override
+  String get compareFeatureColorModes => 'Color Features';
+
+  @override
+  String get compareFeatureCustomRange => 'Number Features';
+
+  @override
+  String get compareFeatureCustomListExtras => 'Custom List';
+
+  @override
+  String get compareFeatureTimeRange => 'Timer Range';
+
+  @override
+  String get compareFeatureLetterFilters => 'Letter Filters';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Bottle Spin Controls';
+
+  @override
+  String get compareFeatureAnalytics => 'Analytics';
+
+  @override
+  String get proPromoCode => 'Promo Code';
+
+  @override
+  String get proPromoCodeHint => 'Enter promo code';
+
+  @override
+  String get proPromoCodeApply => 'Apply';
+
+  @override
+  String get proPromoCodeSuccess => 'Promo code applied! Pro is now active.';
+
+  @override
+  String get proPromoCodeInvalid => 'Invalid promo code. Please try again.';
+
+  @override
   String get homeSmartRandomDecisions => 'Smart random decisions';
 
   @override
@@ -253,7 +334,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proWhatYouGet => 'What you get with Pro';
 
   @override
-  String get proFeatureHistory => 'History: 50 results (Free: 3)';
+  String get proFeatureHistory => 'History: 1000 results (Free: 3)';
 
   @override
   String get proFeatureFavorites => 'Unlimited favorites (Free: 2)';
@@ -826,4 +907,62 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get analyticsFrequency => 'Frequency';
+
+  @override
+  String get analyticsBestAccuracy => 'Best accuracy';
+
+  @override
+  String get analyticsAvgAccuracy => 'Avg accuracy';
+
+  @override
+  String get generatorColorReflex => 'Color Reflex';
+
+  @override
+  String get colorReflexInstructions =>
+      'Tap the color of the TEXT, not the word!';
+
+  @override
+  String get colorReflexDescription =>
+      'Uses the Stroop Effect to test your reflexes.';
+
+  @override
+  String get colorReflexDurationLabel => 'Duration';
+
+  @override
+  String get colorReflexGetReady => 'Get ready!';
+
+  @override
+  String get colorReflexTapPrompt => 'Tap the COLOR of the text above';
+
+  @override
+  String get colorReflexTimeUp => 'Time\'s up!';
+
+  @override
+  String get colorReflexCorrectLabel => 'Correct';
+
+  @override
+  String get colorReflexWrongLabel => 'Wrong';
+
+  @override
+  String get colorReflexAccuracyLabel => 'Accuracy';
+
+  @override
+  String get colorReflexAvgReactionLabel => 'Avg reaction';
+
+  @override
+  String get colorReflexPlayAgain => 'Play Again';
+
+  @override
+  String get colorReflexBackToMenu => 'Back to menu';
+
+  @override
+  String get colorReflexDurationProTitle => 'Custom duration is Pro';
+
+  @override
+  String get colorReflexDurationProMessage =>
+      'Go Pro to choose between 15s, 30s, and 60s durations.';
+
+  @override
+  String get colorReflexFreeProHint =>
+      'Free: 30 seconds fixed.\nPro: choose 15s, 30s, or 60s.';
 }
