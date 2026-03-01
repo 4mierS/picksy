@@ -14,6 +14,7 @@
   "generatorTime": "Temps",
   "generatorReactionTest": "Test de réaction",
   "generatorHangman": "Pendu",
+  "generatorMemoryFlash": "Memory Flash",
   "commonGenerate": "Générer",
   "commonCopy": "Copier",
   "commonCopied": "Copié",
@@ -339,5 +340,44 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "memoryFlashTitle": "Memory Flash",
+  "memoryFlashStart": "Démarrer",
+  "memoryFlashPlayAgain": "Rejouer",
+  "memoryFlashWatchSequence": "Regardez la séquence…",
+  "memoryFlashYourTurn": "À vous !",
+  "memoryFlashLevel": "Niveau {level}",
+  "@memoryFlashLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "memoryFlashGameOver": "Fin de partie",
+  "memoryFlashResult": "Niveau atteint : {level}",
+  "@memoryFlashResult": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "memoryFlashFlashSpeed": "Vitesse d'affichage",
+  "memoryFlashSpeedSlow": "Lent",
+  "memoryFlashSpeedNormal": "Normal",
+  "memoryFlashSpeedFast": "Rapide",
+  "memoryFlashProEndlessTitle": "Le mode infini est Pro",
+  "memoryFlashProEndlessMessage": "Le mode gratuit est limité à 10 niveaux. Passez Pro pour jouer sans limite.",
+  "memoryFlashProSpeedTitle": "La vitesse réglable est Pro",
+  "memoryFlashProSpeedMessage": "Passez Pro pour régler la vitesse d'affichage.",
+  "memoryFlashFreeProHint": "Gratuit : Jusqu'à 10 niveaux.\nPro : Mode infini + vitesse réglable.",
+  "memoryFlashSequenceLength": "Séquence : {length}",
+  "@memoryFlashSequenceLength": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  }
 }

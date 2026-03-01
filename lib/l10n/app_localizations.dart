@@ -188,6 +188,12 @@ abstract class AppLocalizations {
   /// **'Hangman'**
   String get generatorHangman;
 
+  /// No description provided for @generatorMemoryFlash.
+  ///
+  /// In en, this message translates to:
+  /// **'Memory Flash'**
+  String get generatorMemoryFlash;
+
   /// No description provided for @commonGenerate.
   ///
   /// In en, this message translates to:
@@ -1555,6 +1561,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Frequency'**
   String get analyticsFrequency;
+
+  /// No description provided for @memoryFlashTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Memory Flash'**
+  String get memoryFlashTitle;
+
+  /// No description provided for @memoryFlashStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get memoryFlashStart;
+
+  /// No description provided for @memoryFlashPlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get memoryFlashPlayAgain;
+
+  /// No description provided for @memoryFlashWatchSequence.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch the sequence…'**
+  String get memoryFlashWatchSequence;
+
+  /// No description provided for @memoryFlashYourTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Your turn!'**
+  String get memoryFlashYourTurn;
+
+  /// No description provided for @memoryFlashLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}'**
+  String memoryFlashLevel(int level);
+
+  /// No description provided for @memoryFlashGameOver.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Over'**
+  String get memoryFlashGameOver;
+
+  /// No description provided for @memoryFlashResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Level reached: {level}'**
+  String memoryFlashResult(int level);
+
+  /// No description provided for @memoryFlashFlashSpeed.
+  ///
+  /// In en, this message translates to:
+  /// **'Flash speed'**
+  String get memoryFlashFlashSpeed;
+
+  /// No description provided for @memoryFlashSpeedSlow.
+  ///
+  /// In en, this message translates to:
+  /// **'Slow'**
+  String get memoryFlashSpeedSlow;
+
+  /// No description provided for @memoryFlashSpeedNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get memoryFlashSpeedNormal;
+
+  /// No description provided for @memoryFlashSpeedFast.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast'**
+  String get memoryFlashSpeedFast;
+
+  /// No description provided for @memoryFlashProEndlessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Endless mode is Pro'**
+  String get memoryFlashProEndlessTitle;
+
+  /// No description provided for @memoryFlashProEndlessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Free mode is limited to 10 levels. Go Pro for endless play.'**
+  String get memoryFlashProEndlessMessage;
+
+  /// No description provided for @memoryFlashProSpeedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjustable speed is Pro'**
+  String get memoryFlashProSpeedTitle;
+
+  /// No description provided for @memoryFlashProSpeedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to adjust the flash speed.'**
+  String get memoryFlashProSpeedMessage;
+
+  /// No description provided for @memoryFlashFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: Up to 10 levels.\nPro: Endless mode + adjustable speed.'**
+  String get memoryFlashFreeProHint;
+
+  /// No description provided for @memoryFlashSequenceLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Sequence: {length}'**
+  String memoryFlashSequenceLength(int length);
 }
 
 class _AppLocalizationsDelegate

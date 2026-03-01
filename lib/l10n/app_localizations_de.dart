@@ -51,6 +51,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generatorHangman => 'Galgenmännchen';
 
   @override
+  String get generatorMemoryFlash => 'Memory Flash';
+
+  @override
   String get commonGenerate => 'Generieren';
 
   @override
@@ -787,4 +790,61 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get analyticsFrequency => 'Frequency';
+
+  @override
+  String get memoryFlashTitle => 'Memory Flash';
+
+  @override
+  String get memoryFlashStart => 'Start';
+
+  @override
+  String get memoryFlashPlayAgain => 'Nochmal spielen';
+
+  @override
+  String get memoryFlashWatchSequence => 'Sequenz beobachten…';
+
+  @override
+  String get memoryFlashYourTurn => 'Du bist dran!';
+
+  @override
+  String memoryFlashLevel(int level) => 'Level $level';
+
+  @override
+  String get memoryFlashGameOver => 'Spiel vorbei';
+
+  @override
+  String memoryFlashResult(int level) => 'Erreichtes Level: $level';
+
+  @override
+  String get memoryFlashFlashSpeed => 'Blitzgeschwindigkeit';
+
+  @override
+  String get memoryFlashSpeedSlow => 'Langsam';
+
+  @override
+  String get memoryFlashSpeedNormal => 'Normal';
+
+  @override
+  String get memoryFlashSpeedFast => 'Schnell';
+
+  @override
+  String get memoryFlashProEndlessTitle => 'Endlosmodus ist Pro';
+
+  @override
+  String get memoryFlashProEndlessMessage =>
+      'Im kostenlosen Modus sind maximal 10 Level möglich. Werde Pro für endloses Spielen.';
+
+  @override
+  String get memoryFlashProSpeedTitle => 'Einstellbare Geschwindigkeit ist Pro';
+
+  @override
+  String get memoryFlashProSpeedMessage =>
+      'Werde Pro, um die Blitzgeschwindigkeit anzupassen.';
+
+  @override
+  String get memoryFlashFreeProHint =>
+      'Kostenlos: Bis zu 10 Level.\nPro: Endlosmodus + einstellbare Geschwindigkeit.';
+
+  @override
+  String memoryFlashSequenceLength(int length) => 'Sequenz: $length';
 }

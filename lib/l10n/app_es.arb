@@ -14,6 +14,7 @@
   "generatorTime": "Tiempo",
   "generatorReactionTest": "Test de reacción",
   "generatorHangman": "Ahorcado",
+  "generatorMemoryFlash": "Memory Flash",
   "commonGenerate": "Generar",
   "commonCopy": "Copiar",
   "commonCopied": "Copiado",
@@ -339,5 +340,44 @@
   "analyticsLosses": "Losses",
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
-  "analyticsFrequency": "Frequency"
+  "analyticsFrequency": "Frequency",
+  "memoryFlashTitle": "Memory Flash",
+  "memoryFlashStart": "Iniciar",
+  "memoryFlashPlayAgain": "Jugar de nuevo",
+  "memoryFlashWatchSequence": "Observa la secuencia…",
+  "memoryFlashYourTurn": "¡Tu turno!",
+  "memoryFlashLevel": "Nivel {level}",
+  "@memoryFlashLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "memoryFlashGameOver": "Fin del juego",
+  "memoryFlashResult": "Nivel alcanzado: {level}",
+  "@memoryFlashResult": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "memoryFlashFlashSpeed": "Velocidad de destello",
+  "memoryFlashSpeedSlow": "Lento",
+  "memoryFlashSpeedNormal": "Normal",
+  "memoryFlashSpeedFast": "Rápido",
+  "memoryFlashProEndlessTitle": "El modo sin fin es Pro",
+  "memoryFlashProEndlessMessage": "El modo gratuito está limitado a 10 niveles. Hazte Pro para jugar sin límite.",
+  "memoryFlashProSpeedTitle": "La velocidad ajustable es Pro",
+  "memoryFlashProSpeedMessage": "Hazte Pro para ajustar la velocidad de destello.",
+  "memoryFlashFreeProHint": "Gratis: Hasta 10 niveles.\nPro: Modo sin fin + velocidad ajustable.",
+  "memoryFlashSequenceLength": "Secuencia: {length}",
+  "@memoryFlashSequenceLength": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  }
 }
