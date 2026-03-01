@@ -699,13 +699,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hangmanYouWon => 'Vous avez gagné !';
 
   @override
-  String hangmanYouLost(Object word) => 'Perdu ! Le mot était : $word';
+  String hangmanYouLost(Object word) {
+    return 'Perdu ! Le mot était : $word';
+  }
 
   @override
   String get hangmanGuessWord => 'Devinez le mot';
 
   @override
-  String hangmanAttemptsLeft(int count) => 'Tentatives restantes : $count';
+  String hangmanAttemptsLeft(int count) {
+    return 'Tentatives restantes : $count';
+  }
 
   @override
   String get hangmanWrongLetters => 'Lettres incorrectes :';

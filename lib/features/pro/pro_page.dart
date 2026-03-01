@@ -14,14 +14,10 @@ class ProPage extends StatelessWidget {
     final l10n = context.l10n;
     final premium = context.watch<PremiumStore>();
 
-    final monthly = premium.productById(PremiumStore.monthlyId);
+    //final monthly = premium.productById(PremiumStore.monthlyId);
     final lifetime = premium.productById(PremiumStore.lifetimeId);
 
-    final canBuyMonthly =
-        premium.isAvailable &&
-        !premium.isLoading &&
-        !premium.isPro &&
-        monthly != null;
+    // final canBuyMonthly = premium.isAvailable && !premium.isLoading && !premium.isPro && monthly != null;
 
     final canBuyLifetime =
         premium.isAvailable &&
@@ -29,7 +25,7 @@ class ProPage extends StatelessWidget {
         !premium.isPro &&
         lifetime != null;
 
-    final monthlyPrice = monthly?.price ?? l10n.proMonthlyFallbackPrice;
+    // final monthlyPrice = monthly?.price ?? l10n.proMonthlyFallbackPrice;
     final lifetimePrice = lifetime?.price ?? l10n.proLifetimeFallbackPrice;
 
     return SafeArea(
@@ -114,18 +110,17 @@ class ProPage extends StatelessWidget {
           _SectionTitle(l10n.proChoosePlan),
           const SizedBox(height: 10),
 
-          _PlanTile(
-            title: l10n.proMonthlyTitle,
-            price: monthlyPrice,
-            subtitle: l10n.proMonthlySubtitle,
-            badge: l10n.proPopular,
-            enabled: canBuyMonthly,
-            decoration: AppStyles.gradientCard(AppColors.proPurple),
-            onPressed: canBuyMonthly
-                ? () => context.read<PremiumStore>().buyMonthly()
-                : null,
-          ),
-
+          // _PlanTile(
+          //   title: l10n.proMonthlyTitle,
+          //   price: monthlyPrice,
+          //   subtitle: l10n.proMonthlySubtitle,
+          //   badge: l10n.proPopular,
+          //   enabled: canBuyMonthly,
+          //   decoration: AppStyles.gradientCard(AppColors.proPurple),
+          //   onPressed: canBuyMonthly
+          //       ? () => context.read<PremiumStore>().buyMonthly()
+          //       : null,
+          // ),
           const SizedBox(height: 10),
 
           _PlanTile(

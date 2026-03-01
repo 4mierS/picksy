@@ -10,7 +10,7 @@ class PremiumStore extends ChangeNotifier {
   static const _kLastCheck = 'premiumLastCheck';
 
   // Product IDs
-  static const monthlyId = 'picksy_monthly';
+  // static const monthlyId = 'picksy_monthly';
   static const lifetimeId = 'picksy_lifetime';
 
   final InAppPurchase _iap = InAppPurchase.instance;
@@ -79,14 +79,21 @@ class PremiumStore extends ChangeNotifier {
       }
 
       // Query product details
-      final ids = <String>{monthlyId, lifetimeId};
+      final ids = <String>{lifetimeId};
       final response = await _iap.queryProductDetails(ids);
       _products = response.productDetails;
 
+      if (kDebugMode) {
+        debugPrint('IAP notFoundIDs: ${response.notFoundIDs}');
+        for (final p in _products) {
+          debugPrint(
+            'IAP product: id=${p.id} price=${p.price} title=${p.title}',
+          );
+        }
+      }
+
       _isLoading = false;
       notifyListeners();
-
-      unawaited(_iap.restorePurchases());
     } catch (_) {
       _isLoading = false;
       notifyListeners();
@@ -101,17 +108,17 @@ class PremiumStore extends ChangeNotifier {
     }
   }
 
-  Future<void> buyMonthly() async {
-    final p = productById(monthlyId);
-    if (p == null) return;
+  // Future<void> buyMonthly() async {
+  //   final p = productById(monthlyId);
+  //   if (p == null) return;
 
-    final param = PurchaseParam(productDetails: p);
+  //   final param = PurchaseParam(productDetails: p);
 
-    // NOTE:
-    // Subscriptions can work differently depending on Play Console + plugin version.
-    // This might still work for you, but if monthly causes issues, keep Lifetime only.
-    await _iap.buyNonConsumable(purchaseParam: param);
-  }
+  //   // NOTE:
+  //   // Subscriptions can work differently depending on Play Console + plugin version.
+  //   // This might still work for you, but if monthly causes issues, keep Lifetime only.
+  //   await _iap.buyNonConsumable(purchaseParam: param);
+  // }
 
   Future<void> buyLifetime() async {
     final p = productById(lifetimeId);
@@ -122,7 +129,14 @@ class PremiumStore extends ChangeNotifier {
   }
 
   Future<void> restore() async {
-    await refresh();
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _iap.restorePurchases();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> _onPurchasesUpdated(List<PurchaseDetails> purchases) async {
@@ -137,8 +151,9 @@ class PremiumStore extends ChangeNotifier {
 
       if (purchase.status == PurchaseStatus.purchased ||
           purchase.status == PurchaseStatus.restored) {
-        if (purchase.productID == monthlyId ||
-            purchase.productID == lifetimeId) {
+        if (
+        //purchase.productID == monthlyId ||
+        purchase.productID == lifetimeId) {
           foundOwned = true;
         }
       }
