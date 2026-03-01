@@ -379,7 +379,7 @@
   "cardMultiDrawCount": "Cartes par tirage",
   "cardMultiDrawProTitle": "Le tirage multiple est Pro",
   "cardMultiDrawProMessage": "Passez Pro pour tirer plusieurs cartes à la fois.",
-  "cardFreeProHint": "Gratuit : Une carte.\nPro : Jokers + tirage multiple."
+  "cardFreeProHint": "Gratuit : Une carte.\nPro : Jokers + tirage multiple.",
   "analyticsBestAccuracy": "Meilleure précision",
   "analyticsAvgAccuracy": "Précision moyenne",
   "generatorColorReflex": "Réflexe Couleur",

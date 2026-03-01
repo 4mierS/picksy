@@ -379,7 +379,7 @@
   "cardMultiDrawCount": "Cards per draw",
   "cardMultiDrawProTitle": "Multi-draw is Pro",
   "cardMultiDrawProMessage": "Go Pro to draw multiple cards at once.",
-  "cardFreeProHint": "Free: Single draw.\nPro: Jokers + multi-draw."
+  "cardFreeProHint": "Free: Single draw.\nPro: Jokers + multi-draw.",
   "analyticsBestAccuracy": "Best accuracy",
   "analyticsAvgAccuracy": "Avg accuracy",
   "generatorColorReflex": "Color Reflex",
