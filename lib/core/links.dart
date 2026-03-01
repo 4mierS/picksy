@@ -24,5 +24,11 @@ Future<void> openGithubIssues() =>
 Future<void> openPrivacyPolicy() =>
     openExternalUrl('https://4miers.github.io/picksy/privacy');
 
+Future<void> openImprint() =>
+    openExternalUrl('https://4miers.github.io/picksy/imprint');
+
+Future<void> openTermsOfService() =>
+    openExternalUrl('https://4miers.github.io/picksy/terms-of-service');
+
 Future<void> openRateApp() =>
     openExternalUrl('https://github.com/4mierS/picksy');

@@ -113,6 +113,20 @@ class SettingsPage extends StatelessWidget {
               openPrivacyPolicy();
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_rounded),
+            title: Text(l10n.settingsImprint),
+            onTap: () {
+              openImprint();
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.privacy_tip_rounded),
+            title: Text(l10n.settingsTermsOfService),
+            onTap: () {
+              openTermsOfService();
+            },
+          ),
 
           const SizedBox(height: 16),
 

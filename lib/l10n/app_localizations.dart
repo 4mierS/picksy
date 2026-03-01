@@ -284,6 +284,18 @@ abstract class AppLocalizations {
   /// **'Privacy Policy'**
   String get settingsPrivacyPolicy;
 
+  /// No description provided for @settingsImprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Imprint'**
+  String get settingsImprint;
+
+  /// No description provided for @settingsTermsOfService.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get settingsTermsOfService;
+
   /// No description provided for @settingsRequiresGithub.
   ///
   /// In en, this message translates to:

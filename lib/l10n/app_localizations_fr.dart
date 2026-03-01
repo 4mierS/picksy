@@ -99,6 +99,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsPrivacyPolicy => 'Politique de confidentialité';
 
   @override
+  String get settingsImprint => 'Imprint';
+
+  @override
+  String get settingsTermsOfService => 'Conditions d\'utilisation';
+
+  @override
   String get settingsRequiresGithub => 'Nécessite un compte GitHub';
 
   @override
