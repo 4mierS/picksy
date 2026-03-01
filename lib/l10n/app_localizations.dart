@@ -458,29 +458,29 @@ abstract class AppLocalizations {
   /// **'Number Features'**
   String get compareFeatureCustomRange;
 
-  /// No description provided for @compareFeatureLetterFilters.
-  ///
-  /// In en, this message translates to:
-  /// **'Letter Filters'**
-  String get compareFeatureLetterFilters;
-
   /// No description provided for @compareFeatureCustomListExtras.
   ///
   /// In en, this message translates to:
   /// **'Custom List'**
   String get compareFeatureCustomListExtras;
 
-  /// No description provided for @compareFeatureBottleHaptics.
-  ///
-  /// In en, this message translates to:
-  /// **'Bottle Spin Controls'**
-  String get compareFeatureBottleHaptics;
-
   /// No description provided for @compareFeatureTimeRange.
   ///
   /// In en, this message translates to:
   /// **'Timer Range'**
   String get compareFeatureTimeRange;
+
+  /// No description provided for @compareFeatureLetterFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter Filters'**
+  String get compareFeatureLetterFilters;
+
+  /// No description provided for @compareFeatureBottleHaptics.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottle Spin Controls'**
+  String get compareFeatureBottleHaptics;
 
   /// No description provided for @compareFeatureAnalytics.
   ///
@@ -665,7 +665,7 @@ abstract class AppLocalizations {
   /// No description provided for @proFeatureHistory.
   ///
   /// In en, this message translates to:
-  /// **'History: 50 results (Free: 3)'**
+  /// **'History: 1000 results (Free: 3)'**
   String get proFeatureHistory;
 
   /// No description provided for @proFeatureFavorites.

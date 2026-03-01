@@ -186,16 +186,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get compareFeatureCustomRange => 'Number Features';
 
   @override
-  String get compareFeatureLetterFilters => 'Letter Filters';
-
-  @override
   String get compareFeatureCustomListExtras => 'Custom List';
 
   @override
-  String get compareFeatureBottleHaptics => 'Bottle Spin Controls';
+  String get compareFeatureTimeRange => 'Timer Range';
 
   @override
-  String get compareFeatureTimeRange => 'Timer Range';
+  String get compareFeatureLetterFilters => 'Letter Filters';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Bottle Spin Controls';
 
   @override
   String get compareFeatureAnalytics => 'Analytics';

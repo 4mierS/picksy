@@ -171,10 +171,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get compareFeatureFavorites => 'Favoris';
 
   @override
-  String get compareFreeFavorites => "Jusqu'à 2";
+  String get compareFreeFavorites => 'Jusqu\'à 2';
 
   @override
-  String get compareProFavorites => "Jusqu'à 999";
+  String get compareProFavorites => 'Jusqu\'à 999';
 
   @override
   String get compareFeatureCoinLabels => 'Libellés pièce';
@@ -186,16 +186,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get compareFeatureCustomRange => 'Fonctions nombre';
 
   @override
-  String get compareFeatureLetterFilters => 'Filtres de lettres';
-
-  @override
   String get compareFeatureCustomListExtras => 'Liste personnalisée';
 
   @override
-  String get compareFeatureBottleHaptics => 'Contrôles bouteille';
+  String get compareFeatureTimeRange => 'Plage de temps';
 
   @override
-  String get compareFeatureTimeRange => 'Plage de temps';
+  String get compareFeatureLetterFilters => 'Filtres de lettres';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Contrôles bouteille';
 
   @override
   String get compareFeatureAnalytics => 'Analytique';

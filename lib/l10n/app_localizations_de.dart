@@ -186,16 +186,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get compareFeatureCustomRange => 'Zahlenfunktionen';
 
   @override
-  String get compareFeatureLetterFilters => 'Buchstabenfilter';
-
-  @override
   String get compareFeatureCustomListExtras => 'Eigene Liste';
 
   @override
-  String get compareFeatureBottleHaptics => 'Flaschendrehen-Steuerung';
+  String get compareFeatureTimeRange => 'Zeitbereich';
 
   @override
-  String get compareFeatureTimeRange => 'Zeitbereich';
+  String get compareFeatureLetterFilters => 'Buchstabenfilter';
+
+  @override
+  String get compareFeatureBottleHaptics => 'Flaschendrehen-Steuerung';
 
   @override
   String get compareFeatureAnalytics => 'Analytik';
