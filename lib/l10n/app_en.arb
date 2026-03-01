@@ -4,6 +4,7 @@
   "navHome": "Home",
   "navPro": "Pro",
   "navSettings": "Settings",
+  "navAnalytics": "Analytics",
   "generatorColor": "Color",
   "generatorNumber": "Number",
   "generatorCoin": "Coin",
@@ -313,5 +314,30 @@
   "hangmanWrongLetters": "Wrong letters:",
   "hangmanSettings": "Settings",
   "hangmanMinLength": "Min word length",
-  "hangmanMaxLength": "Max word length"
+  "hangmanMaxLength": "Max word length",
+  "analyticsTitle": "Analytics",
+  "analyticsProOnly": "Analytics is a Pro feature",
+  "analyticsProMessage": "Unlock advanced analytics, trends and auto-run with Picksy Pro.",
+  "analyticsEmpty": "No data yet. Generate some results first.",
+  "analyticsViewAll": "View All",
+  "analyticsGeneratorTitle": "{generator} Analytics",
+  "@analyticsGeneratorTitle": {
+    "placeholders": {
+      "generator": {}
+    }
+  },
+  "analyticsAutoRun": "Auto-Run",
+  "analyticsAutoRunCount": "Count",
+  "analyticsAutoRunStart": "Start",
+  "analyticsAutoRunRunning": "Running…",
+  "analyticsAutoRunResults": "Results",
+  "analyticsAutoRunDistribution": "Distribution",
+  "analyticsBestTime": "Best time",
+  "analyticsAvgTime": "Avg time",
+  "analyticsTotal": "Total",
+  "analyticsWins": "Wins",
+  "analyticsLosses": "Losses",
+  "analyticsWinRate": "Win rate",
+  "analyticsHighScore": "High score",
+  "analyticsFrequency": "Frequency"
 }
