@@ -519,7 +519,7 @@ class _TapChallengePageState extends State<TapChallengePage> {
         width: double.infinity,
         child: OutlinedButton(
           onPressed: _reset,
-          child: const Text('Reset'),
+          child: Text(l10n.timeReset),
         ),
       );
     }
