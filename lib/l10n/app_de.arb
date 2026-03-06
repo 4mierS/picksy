@@ -14,6 +14,7 @@
   "generatorTime": "Zeit",
   "generatorReactionTest": "Reaktionstest",
   "generatorHangman": "Galgenmännchen",
+  "generatorMemoryFlash": "Memory Flash",
   "generatorTapChallenge": "Tipp-Challenge",
   "generatorMathChallenge": "Mathe-Challenge",
   "commonGenerate": "Generieren",
@@ -369,6 +370,46 @@
   "analyticsWinRate": "Win rate",
   "analyticsHighScore": "High score",
   "analyticsFrequency": "Frequency",
+  "analyticsAvgLevel": "Durchschn. Level",
+  "analyticsLevelDistribution": "Level-Verteilung",
+  "memoryFlashStart": "Start",
+  "memoryFlashPlayAgain": "Nochmal spielen",
+  "memoryFlashWatchSequence": "Sequenz beobachten…",
+  "memoryFlashYourTurn": "Du bist dran!",
+  "memoryFlashLevel": "Level {level}",
+  "@memoryFlashLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "memoryFlashGameOver": "Spiel vorbei",
+  "memoryFlashResult": "Erreichtes Level: {level}",
+  "@memoryFlashResult": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "memoryFlashFlashSpeed": "Blitzgeschwindigkeit",
+  "memoryFlashSpeedSlow": "Langsam",
+  "memoryFlashSpeedNormal": "Normal",
+  "memoryFlashSpeedFast": "Schnell",
+  "memoryFlashProEndlessTitle": "Endlosmodus ist Pro",
+  "memoryFlashProEndlessMessage": "Im kostenlosen Modus sind maximal 10 Level möglich. Werde Pro für endloses Spielen.",
+  "memoryFlashProSpeedTitle": "Einstellbare Geschwindigkeit ist Pro",
+  "memoryFlashProSpeedMessage": "Werde Pro, um die Blitzgeschwindigkeit anzupassen.",
+  "memoryFlashFreeProHint": "Kostenlos: Bis zu 10 Level.\nPro: Endlosmodus + einstellbare Geschwindigkeit.",
+  "memoryFlashSequenceLength": "Sequenz: {length}",
+  "@memoryFlashSequenceLength": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
   "generatorCard": "Karte ziehen",
   "cardTitle": "Karte ziehen",
   "cardTapDraw": "\"Ziehen\" tippen, um eine Karte zu ziehen",
