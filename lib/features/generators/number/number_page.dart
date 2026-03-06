@@ -273,7 +273,7 @@ class _RangeRow extends StatelessWidget {
           child: _NumberField(
             label: l10n.numberMin,
             initial: min,
-            onSubmitted: (v) => onChanged(v, max),
+            onChanged: (v) => onChanged(v, max),
           ),
         ),
         const SizedBox(width: 12),
@@ -281,7 +281,7 @@ class _RangeRow extends StatelessWidget {
           child: _NumberField(
             label: l10n.numberMax,
             initial: max,
-            onSubmitted: (v) => onChanged(min, v),
+            onChanged: (v) => onChanged(min, v),
           ),
         ),
       ],
@@ -306,12 +306,12 @@ class _LockedField extends StatelessWidget {
 class _NumberField extends StatefulWidget {
   final String label;
   final double initial;
-  final ValueChanged<double> onSubmitted;
+  final ValueChanged<double> onChanged;
 
   const _NumberField({
     required this.label,
     required this.initial,
-    required this.onSubmitted,
+    required this.onChanged,
   });
 
   @override
@@ -320,11 +320,18 @@ class _NumberField extends StatefulWidget {
 
 class _NumberFieldState extends State<_NumberField> {
   late final TextEditingController _ctrl;
+  late final FocusNode _focusNode;
 
   @override
   void initState() {
     super.initState();
     _ctrl = TextEditingController(text: widget.initial.toStringAsFixed(0));
+    _focusNode = FocusNode()
+      ..addListener(() {
+        if (!_focusNode.hasFocus) {
+          _commit();
+        }
+      });
   }
 
   @override
@@ -337,23 +344,33 @@ class _NumberFieldState extends State<_NumberField> {
 
   @override
   void dispose() {
+    _focusNode.dispose();
     _ctrl.dispose();
     super.dispose();
+  }
+
+  void _commit() {
+    final v = double.tryParse(_ctrl.text.replaceAll(',', '.'));
+    if (v == null) return;
+    widget.onChanged(v);
   }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: _ctrl,
+      focusNode: _focusNode,
       keyboardType: const TextInputType.numberWithOptions(
         decimal: true,
         signed: true,
       ),
+      textInputAction: TextInputAction.done,
       decoration: InputDecoration(labelText: widget.label),
-      onSubmitted: (txt) {
-        final v = double.tryParse(txt.replaceAll(',', '.'));
-        if (v == null) return;
-        widget.onSubmitted(v);
+      onSubmitted: (_) => _commit(),
+      onEditingComplete: _commit,
+      onTapOutside: (_) {
+        _commit();
+        FocusManager.instance.primaryFocus?.unfocus();
       },
     );
   }
