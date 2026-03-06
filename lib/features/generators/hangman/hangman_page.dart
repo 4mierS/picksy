@@ -37,26 +37,106 @@ class _HangmanPageState extends State<HangmanPage> {
   static const int _historyMaxEntries = 100;
 
   static const List<String> _wordList = [
-    'apple', 'banana', 'cherry', 'dragon', 'eagle',
-    'forest', 'guitar', 'harbor', 'island', 'jungle',
-    'kettle', 'lemon', 'mango', 'nature', 'orange',
-    'panda', 'queen', 'river', 'sunset', 'tiger',
-    'umbrella', 'violet', 'walrus', 'xenon', 'yellow',
-    'zebra', 'anchor', 'bridge', 'candle', 'desert',
-    'engine', 'flower', 'garden', 'hammer', 'igloo',
-    'jacket', 'kitten', 'lantern', 'mirror', 'needle',
-    'otter', 'pepper', 'quartz', 'rocket', 'saddle',
-    'turtle', 'upward', 'vendor', 'winter', 'xylem',
-    'yogurt', 'zipper', 'almond', 'button', 'cactus',
-    'dagger', 'elbow', 'falcon', 'goblin', 'hunter',
-    'insect', 'jigsaw', 'kernel', 'locket', 'marble',
-    'napkin', 'oyster', 'pirate', 'rabbit', 'salmon',
-    'switch', 'teapot', 'unfold', 'valley', 'walnut',
-    'branch', 'castle', 'donkey', 'empire', 'feather',
-    'goblet', 'helmet', 'invent', 'jewel', 'knight',
-    'ladder', 'magnet', 'nimble', 'onion', 'puzzle',
-    'quiver', 'riddle', 'shield', 'throne', 'utopia',
-    'vessel', 'wander', 'parrot', 'basket', 'canopy',
+    'apple',
+    'banana',
+    'cherry',
+    'dragon',
+    'eagle',
+    'forest',
+    'guitar',
+    'harbor',
+    'island',
+    'jungle',
+    'kettle',
+    'lemon',
+    'mango',
+    'nature',
+    'orange',
+    'panda',
+    'queen',
+    'river',
+    'sunset',
+    'tiger',
+    'umbrella',
+    'violet',
+    'walrus',
+    'xenon',
+    'yellow',
+    'zebra',
+    'anchor',
+    'bridge',
+    'candle',
+    'desert',
+    'engine',
+    'flower',
+    'garden',
+    'hammer',
+    'igloo',
+    'jacket',
+    'kitten',
+    'lantern',
+    'mirror',
+    'needle',
+    'otter',
+    'pepper',
+    'quartz',
+    'rocket',
+    'saddle',
+    'turtle',
+    'upward',
+    'vendor',
+    'winter',
+    'xylem',
+    'yogurt',
+    'zipper',
+    'almond',
+    'button',
+    'cactus',
+    'dagger',
+    'elbow',
+    'falcon',
+    'goblin',
+    'hunter',
+    'insect',
+    'jigsaw',
+    'kernel',
+    'locket',
+    'marble',
+    'napkin',
+    'oyster',
+    'pirate',
+    'rabbit',
+    'salmon',
+    'switch',
+    'teapot',
+    'unfold',
+    'valley',
+    'walnut',
+    'branch',
+    'castle',
+    'donkey',
+    'empire',
+    'feather',
+    'goblet',
+    'helmet',
+    'invent',
+    'jewel',
+    'knight',
+    'ladder',
+    'magnet',
+    'nimble',
+    'onion',
+    'puzzle',
+    'quiver',
+    'riddle',
+    'shield',
+    'throne',
+    'utopia',
+    'vessel',
+    'wander',
+    'parrot',
+    'basket',
+    'canopy',
   ];
 
   void _startGame() {
@@ -107,10 +187,7 @@ class _HangmanPageState extends State<HangmanPage> {
       type: GeneratorType.hangman,
       value: value,
       maxEntries: _historyMaxEntries,
-      metadata: {
-        'won': won,
-        'wordLength': _word.length,
-      },
+      metadata: {'won': won, 'wordLength': _word.length},
     );
   }
 
@@ -209,10 +286,9 @@ class _HangmanPageState extends State<HangmanPage> {
                 if (_wrongLetters.isNotEmpty) ...[
                   Text(
                     '${l10n.hangmanWrongLetters} ${_wrongLetters.join(' ')}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(color: Colors.redAccent),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.redAccent),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
@@ -267,66 +343,7 @@ class _HangmanPageState extends State<HangmanPage> {
                 const SizedBox(height: 16),
               ],
 
-              // Settings card
-              Card(
-                child: ExpansionTile(
-                  title: Text(l10n.hangmanSettings),
-                  leading: const Icon(Icons.tune),
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${l10n.hangmanMinLength}: $_minLength',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          Slider(
-                            value: _minLength.toDouble(),
-                            min: 3,
-                            max: 10,
-                            divisions: 7,
-                            label: '$_minLength',
-                            activeColor: accent,
-                            onChanged: _phase == _HangmanPhase.idle
-                                ? (v) => setState(() {
-                                      _minLength = v.round();
-                                      if (_minLength > _maxLength) {
-                                        _maxLength = _minLength;
-                                      }
-                                    })
-                                : null,
-                          ),
-                          Text(
-                            '${l10n.hangmanMaxLength}: $_maxLength',
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                          Slider(
-                            value: _maxLength.toDouble(),
-                            min: 3,
-                            max: 12,
-                            divisions: 9,
-                            label: '$_maxLength',
-                            activeColor: accent,
-                            onChanged: _phase == _HangmanPhase.idle
-                                ? (v) => setState(() {
-                                      _maxLength = v.round();
-                                      if (_maxLength < _minLength) {
-                                        _minLength = _maxLength;
-                                      }
-                                    })
-                                : null,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const SizedBox(height: 6),
             ],
           ),
         ),
@@ -364,11 +381,7 @@ class _WordDisplay extends StatelessWidget {
                 color: accent,
               ),
             ),
-            Container(
-              width: 22,
-              height: 2,
-              color: accent.withOpacity(0.6),
-            ),
+            Container(width: 22, height: 2, color: accent.withOpacity(0.6)),
           ],
         );
       }).toList(),
@@ -420,17 +433,17 @@ class _LetterKeyboard extends StatelessWidget {
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.zero,
-                      backgroundColor:
-                          isGuessed ? bgColor : accent.withOpacity(0.12),
-                      foregroundColor:
-                          isGuessed ? fgColor : accent,
+                      backgroundColor: isGuessed
+                          ? bgColor
+                          : accent.withOpacity(0.12),
+                      foregroundColor: isGuessed ? fgColor : accent,
                       disabledForegroundColor: fgColor,
                       disabledBackgroundColor: bgColor,
                       side: BorderSide(
                         color: isGuessed
                             ? (isCorrect
-                                ? Colors.green.withOpacity(0.5)
-                                : Colors.redAccent.withOpacity(0.3))
+                                  ? Colors.green.withOpacity(0.5)
+                                  : Colors.redAccent.withOpacity(0.3))
                             : accent.withOpacity(0.3),
                       ),
                       shape: RoundedRectangleBorder(
@@ -457,10 +470,7 @@ class _LetterKeyboard extends StatelessWidget {
 }
 
 class _HangmanPainter extends CustomPainter {
-  const _HangmanPainter({
-    required this.wrongGuesses,
-    required this.accent,
-  });
+  const _HangmanPainter({required this.wrongGuesses, required this.accent});
 
   final int wrongGuesses;
   final Color accent;
@@ -484,13 +494,29 @@ class _HangmanPainter extends CustomPainter {
 
     // Gallows: base, pole, beam, rope
     // Base
-    canvas.drawLine(Offset(w * 0.1, h * 0.9), Offset(w * 0.5, h * 0.9), scaffold);
+    canvas.drawLine(
+      Offset(w * 0.1, h * 0.9),
+      Offset(w * 0.5, h * 0.9),
+      scaffold,
+    );
     // Pole
-    canvas.drawLine(Offset(w * 0.25, h * 0.9), Offset(w * 0.25, h * 0.1), scaffold);
+    canvas.drawLine(
+      Offset(w * 0.25, h * 0.9),
+      Offset(w * 0.25, h * 0.1),
+      scaffold,
+    );
     // Beam
-    canvas.drawLine(Offset(w * 0.25, h * 0.1), Offset(w * 0.65, h * 0.1), scaffold);
+    canvas.drawLine(
+      Offset(w * 0.25, h * 0.1),
+      Offset(w * 0.65, h * 0.1),
+      scaffold,
+    );
     // Rope
-    canvas.drawLine(Offset(w * 0.65, h * 0.1), Offset(w * 0.65, h * 0.22), scaffold);
+    canvas.drawLine(
+      Offset(w * 0.65, h * 0.1),
+      Offset(w * 0.65, h * 0.22),
+      scaffold,
+    );
 
     if (wrongGuesses == 0) return;
 
@@ -499,23 +525,43 @@ class _HangmanPainter extends CustomPainter {
     if (wrongGuesses == 1) return;
 
     // Body
-    canvas.drawLine(Offset(w * 0.65, h * 0.38), Offset(w * 0.65, h * 0.62), body);
+    canvas.drawLine(
+      Offset(w * 0.65, h * 0.38),
+      Offset(w * 0.65, h * 0.62),
+      body,
+    );
     if (wrongGuesses == 2) return;
 
     // Left arm
-    canvas.drawLine(Offset(w * 0.65, h * 0.44), Offset(w * 0.50, h * 0.55), body);
+    canvas.drawLine(
+      Offset(w * 0.65, h * 0.44),
+      Offset(w * 0.50, h * 0.55),
+      body,
+    );
     if (wrongGuesses == 3) return;
 
     // Right arm
-    canvas.drawLine(Offset(w * 0.65, h * 0.44), Offset(w * 0.80, h * 0.55), body);
+    canvas.drawLine(
+      Offset(w * 0.65, h * 0.44),
+      Offset(w * 0.80, h * 0.55),
+      body,
+    );
     if (wrongGuesses == 4) return;
 
     // Left leg
-    canvas.drawLine(Offset(w * 0.65, h * 0.62), Offset(w * 0.50, h * 0.78), body);
+    canvas.drawLine(
+      Offset(w * 0.65, h * 0.62),
+      Offset(w * 0.50, h * 0.78),
+      body,
+    );
     if (wrongGuesses == 5) return;
 
     // Right leg
-    canvas.drawLine(Offset(w * 0.65, h * 0.62), Offset(w * 0.80, h * 0.78), body);
+    canvas.drawLine(
+      Offset(w * 0.65, h * 0.62),
+      Offset(w * 0.80, h * 0.78),
+      body,
+    );
   }
 
   @override

@@ -23,12 +23,10 @@ class _LetterPageState extends State<LetterPage> {
 
   String? _last;
 
-  // Pro-only filters
-  bool _upper = true;
-  bool _lower = false;
-  bool _includeUmlauts = false;
-  bool _onlyVowels = false;
   final Set<String> _excluded = {};
+  bool _noRepeatCycle = false;
+  final List<String> _remainingCycle = [];
+  final List<String> _usedInCycle = [];
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +34,7 @@ class _LetterPageState extends State<LetterPage> {
     final gate = context.gate;
     final history = context.read<HistoryStore>();
 
-    final isProFilters = gate.canUse(ProFeature.letterFilters);
+    final isProNoRepeat = gate.canUse(ProFeature.letterFilters);
 
     return Scaffold(
       appBar: AppBar(
@@ -97,72 +95,11 @@ class _LetterPageState extends State<LetterPage> {
           _SectionTitle(l10n.letterSectionFilters),
           const SizedBox(height: 8),
 
-          // Upper/lower toggles (Pro)
-          _ProSwitch(
-            title: l10n.letterUppercase,
-            subtitle: l10n.letterUppercaseSubtitle,
-            value: _upper,
-            enabled: isProFilters,
-            onChanged: (v) async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              setState(() => _upper = v);
-            },
-          ),
-
-          _ProSwitch(
-            title: l10n.letterLowercase,
-            subtitle: l10n.letterLowercaseSubtitle,
-            value: _lower,
-            enabled: isProFilters,
-            onChanged: (v) async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              setState(() => _lower = v);
-            },
-          ),
-
-          const SizedBox(height: 8),
-
-          _ProSwitch(
-            title: l10n.letterIncludeUmlauts,
-            subtitle: l10n.letterIncludeUmlautsSubtitle,
-            value: _includeUmlauts,
-            enabled: isProFilters,
-            onChanged: (v) async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              setState(() => _includeUmlauts = v);
-            },
-          ),
-
-          _ProSwitch(
-            title: l10n.letterOnlyVowels,
-            subtitle: l10n.letterOnlyVowelsSubtitle,
-            value: _onlyVowels,
-            enabled: isProFilters,
-            onChanged: (v) async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              setState(() => _onlyVowels = v);
-            },
-          ),
-
-          const SizedBox(height: 16),
-
           // Exclude letters (Pro)
           ListTile(
             title: Text(l10n.letterExcludeLetters),
             subtitle: Text(
-              isProFilters
+              gate.isPro
                   ? (_excluded.isEmpty
                         ? l10n.letterExcludeNone
                         : _excluded.join(', '))
@@ -170,13 +107,62 @@ class _LetterPageState extends State<LetterPage> {
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () async {
-              if (!isProFilters) {
+              if (!gate.isPro) {
                 await _showProFiltersDialog(context);
                 return;
               }
               await _openExcludeDialog(context);
             },
           ),
+
+          const SizedBox(height: 8),
+
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            activeColor: GeneratorType.letter.accentColor,
+            title: const Text('No Repeat Until Cycle Complete'),
+            subtitle: Text(
+              isProNoRepeat
+                  ? 'Each letter appears once before reset.'
+                  : l10n.commonProFeature,
+            ),
+            value: _noRepeatCycle,
+            onChanged: (v) async {
+              if (!isProNoRepeat) {
+                await _showProFiltersDialog(context);
+                return;
+              }
+              setState(() {
+                _noRepeatCycle = v;
+                _remainingCycle.clear();
+                _usedInCycle.clear();
+              });
+            },
+          ),
+
+          if (_noRepeatCycle && _usedInCycle.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Used letters',
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final c in _usedInCycle)
+                  Chip(
+                    label: Text(c),
+                    backgroundColor: GeneratorType.letter.accentColor
+                        .withOpacity(0.15),
+                  ),
+              ],
+            ),
+          ],
 
           const SizedBox(height: 24),
 
@@ -195,7 +181,7 @@ class _LetterPageState extends State<LetterPage> {
             icon: const Icon(Icons.casino),
             label: Text(l10n.commonGenerate),
             onPressed: () async {
-              final letter = _generateLetter(isProFilters: isProFilters);
+              final letter = _generateLetter();
               setState(() => _last = letter);
 
               await history.add(
@@ -211,49 +197,28 @@ class _LetterPageState extends State<LetterPage> {
     );
   }
 
-  String _generateLetter({required bool isProFilters}) {
-    // Free mode: A-Z uppercase
-    if (!isProFilters) {
-      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      return letters[_rng.nextInt(letters.length)];
+  String _generateLetter() {
+    final basePool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    final pool = basePool.where((c) => !_excluded.contains(c)).toList();
+    final effectivePool = pool.isEmpty ? basePool : pool;
+
+    if (!_noRepeatCycle) {
+      return effectivePool[_rng.nextInt(effectivePool.length)];
     }
 
-    // Pro mode: build allowed set
-    final List<String> pool = [];
-
-    // Base alphabets
-    const upperAZ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const loweraz = 'abcdefghijklmnopqrstuvwxyz';
-
-    // Vowels sets
-    const upperVowels = 'AEIOU';
-    const lowerVowels = 'aeiou';
-
-    if (_upper) {
-      pool.addAll((_onlyVowels ? upperVowels : upperAZ).split(''));
-      if (_includeUmlauts) {
-        pool.addAll(['Ä', 'Ö', 'Ü']);
-      }
+    if (_remainingCycle.isEmpty) {
+      _remainingCycle
+        ..clear()
+        ..addAll(effectivePool);
+      _remainingCycle.shuffle(_rng);
+      _usedInCycle.clear();
     }
 
-    if (_lower) {
-      pool.addAll((_onlyVowels ? lowerVowels : loweraz).split(''));
-      if (_includeUmlauts) {
-        pool.addAll(['ä', 'ö', 'ü']);
-      }
+    final next = _remainingCycle.removeLast();
+    if (!_usedInCycle.contains(next)) {
+      _usedInCycle.add(next);
     }
-
-    // If user disables both upper and lower, fallback to uppercase
-    if (pool.isEmpty) {
-      pool.addAll((_onlyVowels ? upperVowels : upperAZ).split(''));
-      if (_includeUmlauts) pool.addAll(['Ä', 'Ö', 'Ü']);
-    }
-
-    // Apply exclusions
-    final filtered = pool.where((c) => !_excluded.contains(c)).toList();
-    final finalPool = filtered.isNotEmpty ? filtered : pool;
-
-    return finalPool[_rng.nextInt(finalPool.length)];
+    return next;
   }
 
   Future<void> _showProFiltersDialog(BuildContext context) async {
@@ -264,30 +229,15 @@ class _LetterPageState extends State<LetterPage> {
       message: l10n.letterFiltersProMessage,
       generatorType: GeneratorType.letter,
       featureDefinitions: [
-        l10n.letterUppercaseSubtitle,
-        l10n.letterLowercaseSubtitle,
-        l10n.letterIncludeUmlautsSubtitle,
-        l10n.letterOnlyVowelsSubtitle,
+        l10n.letterExcludeLetters,
+        'No Repeat Until Cycle Complete',
         l10n.letterFiltersProMessage,
       ],
     );
   }
 
   Future<void> _openExcludeDialog(BuildContext context) async {
-    // Provide candidates based on current casing settings
-    final candidates = <String>{};
-
-    if (_upper) candidates.addAll('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
-    if (_lower) candidates.addAll('abcdefghijklmnopqrstuvwxyz'.split(''));
-    if (_includeUmlauts) {
-      if (_upper) candidates.addAll(['Ä', 'Ö', 'Ü']);
-      if (_lower) candidates.addAll(['ä', 'ö', 'ü']);
-    }
-
-    // Fallback candidates if empty
-    if (candidates.isEmpty) {
-      candidates.addAll('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
-    }
+    final candidates = <String>{...('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''))};
 
     final sorted = candidates.toList()..sort((a, b) => a.compareTo(b));
 
@@ -309,6 +259,8 @@ class _LetterPageState extends State<LetterPage> {
                     for (final c in sorted)
                       FilterChip(
                         label: Text(c),
+                        selectedColor: GeneratorType.letter.accentColor
+                            .withOpacity(0.2),
                         selected: temp.contains(c),
                         onSelected: (selected) {
                           setLocal(() {

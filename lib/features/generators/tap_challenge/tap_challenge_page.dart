@@ -36,10 +36,6 @@ class _TapChallengePageState extends State<TapChallengePage> {
   Timer? _tickTimer;
   DateTime? _runStart;
 
-  // Settings
-  bool _vibrateOnGo = true;
-  bool _vibrateOnEnd = true;
-
   // Result
   int? _lastTaps;
   double? _lastTPS;
@@ -104,10 +100,8 @@ class _TapChallengePageState extends State<TapChallengePage> {
       _runStart = DateTime.now();
     });
 
-    if (_vibrateOnGo) {
-      final hasV = await Vibration.hasVibrator() ?? false;
-      if (hasV) Vibration.vibrate(duration: 100);
-    }
+    final hasV = await Vibration.hasVibrator();
+    if (hasV) Vibration.vibrate(duration: 100);
 
     // Tick every 100ms for smooth countdown display
     _tickTimer = Timer.periodic(const Duration(milliseconds: 100), (t) {
@@ -117,7 +111,9 @@ class _TapChallengePageState extends State<TapChallengePage> {
       }
       final elapsed = DateTime.now().difference(_runStart!).inMilliseconds;
       final remaining = (_durationSeconds * 1000) - elapsed;
-      setState(() => _remainingMs = remaining.clamp(0, _durationSeconds * 1000));
+      setState(
+        () => _remainingMs = remaining.clamp(0, _durationSeconds * 1000),
+      );
     });
 
     _runTimer = Timer(Duration(seconds: _durationSeconds), () {
@@ -162,10 +158,8 @@ class _TapChallengePageState extends State<TapChallengePage> {
       );
     }
 
-    if (_vibrateOnEnd) {
-      final hasV = await Vibration.hasVibrator() ?? false;
-      if (hasV) Vibration.vibrate(duration: 300);
-    }
+    final hasV = await Vibration.hasVibrator();
+    if (hasV) Vibration.vibrate(duration: 300);
   }
 
   void _onTap() {
@@ -306,10 +300,7 @@ class _TapChallengePageState extends State<TapChallengePage> {
           children: [
             Text(
               '$_tapsCount',
-              style: const TextStyle(
-                fontSize: 80,
-                fontWeight: FontWeight.w900,
-              ),
+              style: const TextStyle(fontSize: 80, fontWeight: FontWeight.w900),
               textAlign: TextAlign.center,
             ),
             Text(
@@ -453,26 +444,6 @@ class _TapChallengePageState extends State<TapChallengePage> {
 
         const SizedBox(height: 8),
 
-        // Haptics controls
-        Card(
-          child: Column(
-            children: [
-              SwitchListTile(
-                dense: true,
-                title: Text(l10n.tapChallengeVibrateOnGo),
-                value: _vibrateOnGo,
-                onChanged: (v) => setState(() => _vibrateOnGo = v),
-              ),
-              SwitchListTile(
-                dense: true,
-                title: Text(l10n.tapChallengeVibrateOnEnd),
-                value: _vibrateOnEnd,
-                onChanged: (v) => setState(() => _vibrateOnEnd = v),
-              ),
-            ],
-          ),
-        ),
-
         if (!gate.isPro) ...[
           const SizedBox(height: 8),
           Container(
@@ -517,10 +488,7 @@ class _TapChallengePageState extends State<TapChallengePage> {
     if (_phase == _Phase.countdown || _phase == _Phase.running) {
       return SizedBox(
         width: double.infinity,
-        child: OutlinedButton(
-          onPressed: _reset,
-          child: Text(l10n.timeReset),
-        ),
+        child: OutlinedButton(onPressed: _reset, child: Text(l10n.timeReset)),
       );
     }
 

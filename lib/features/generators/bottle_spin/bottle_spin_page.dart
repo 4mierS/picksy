@@ -32,8 +32,6 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   bool _spinning = false;
   String? _lastResult;
 
-  double _spinStrength = 0.6;
-
   @override
   void initState() {
     super.initState();
@@ -85,10 +83,6 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
-    final proDefinitions = [
-      l10n.bottleSpinStrengthSubtitle,
-      l10n.bottleSpinHapticSubtitle,
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -161,79 +155,6 @@ class _BottleSpinPageState extends State<BottleSpinPage>
           ),
 
           const SizedBox(height: 16),
-
-          // Pro-only controls
-          _SectionTitle(l10n.bottleSpinSectionControls),
-          const SizedBox(height: 8),
-
-          ListTile(
-            title: Text(l10n.bottleSpinStrength),
-            subtitle: Text(
-              gate.canUse(ProFeature.bottleSpinStrength)
-                  ? l10n.bottleSpinStrengthSubtitle
-                  : l10n.commonProFeature,
-            ),
-            trailing: SizedBox(
-              width: 160,
-              child: Slider(
-                value: _spinStrength,
-                onChanged: (v) async {
-                  if (!gate.canUse(ProFeature.bottleSpinStrength)) {
-                    await showProDialog(
-                      context,
-                      title: l10n.bottleSpinStrengthProTitle,
-                      message: l10n.bottleSpinStrengthProMessage,
-                      generatorType: GeneratorType.bottleSpin,
-                      featureDefinitions: proDefinitions,
-                    );
-                    return;
-                  }
-                  setState(() => _spinStrength = v);
-                },
-              ),
-            ),
-          ),
-
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.bottleSpinHaptic),
-            subtitle: Text(
-              gate.canUse(ProFeature.bottleSpinHaptics)
-                  ? l10n.bottleSpinHapticSubtitle
-                  : l10n.commonProFeature,
-            ),
-            value: gate.canUse(ProFeature.bottleSpinHaptics) ? true : false,
-            onChanged: (v) async {
-              if (!gate.canUse(ProFeature.bottleSpinHaptics)) {
-                await showProDialog(
-                  context,
-                  title: l10n.bottleSpinHapticProTitle,
-                  message: l10n.bottleSpinHapticProMessage,
-                  generatorType: GeneratorType.bottleSpin,
-                  featureDefinitions: proDefinitions,
-                );
-                return;
-              }
-              // MVP: we just trigger vibration on stop; no stored setting yet
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.bottleSpinHapticEnabled)),
-              );
-            },
-          ),
-
-          const SizedBox(height: 16),
-
-          if (!gate.isPro)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: AppStyles.proCard(),
-              child: Text(
-                l10n.bottleSpinFreeProHint,
-                style: AppStyles.resultStyle,
-              ),
-            ),
-
           const SizedBox(height: 14),
 
           FilledButton.icon(
@@ -263,13 +184,7 @@ class _BottleSpinPageState extends State<BottleSpinPage>
     // random target in degrees
     final randomDeg = _rng.nextInt(360).toDouble();
 
-    // number of full rotations:
-    // Free: fixed range
-    // Pro: based on strength slider
-    final baseTurns = gate.canUse(ProFeature.bottleSpinStrength)
-        ? (2 + (_spinStrength * 8))
-              .round() // 2..10 turns
-        : 5; // fixed
+    final baseTurns = 3 + _rng.nextInt(8); // 3..10 random turns
 
     final extraDeg = baseTurns * 360.0;
     final totalDeg = extraDeg + randomDeg;
@@ -281,18 +196,12 @@ class _BottleSpinPageState extends State<BottleSpinPage>
     // Randomise duration each spin for variety
     _controller.duration = Duration(milliseconds: 3000 + _rng.nextInt(2000));
 
-    // Pro haptics on start is optional; keep minimal
-    if (gate.canUse(ProFeature.bottleSpinHaptics)) {
-      HapticFeedback.selectionClick();
-    }
+    HapticFeedback.selectionClick();
 
     _controller.reset();
     await _controller.forward();
 
-    // Haptics on stop (only if Pro)
-    if (gate.canUse(ProFeature.bottleSpinHaptics)) {
-      HapticFeedback.mediumImpact();
-    }
+    HapticFeedback.mediumImpact();
   }
 
   double _lerp(double a, double b, double t) => a + (b - a) * t;

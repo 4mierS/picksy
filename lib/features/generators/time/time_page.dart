@@ -12,6 +12,7 @@ import '../../../l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/storage/premium_store.dart';
+import 'package:picksy/storage/boxes.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 
 class TimePage extends StatefulWidget {
@@ -25,10 +26,11 @@ class _TimePageState extends State<TimePage> {
   final _rng = Random();
   static const int _freeMinSec = 3;
   static const int _freeMaxSec = 12;
+  static const _kMinKey = 'time.minSec';
+  static const _kMaxKey = 'time.maxSec';
 
   // Settings
   bool _hideTime = false;
-  bool _vibrateOnFinish = true;
 
   // Pro Range settings (seconds)
   int _minSec = 3;
@@ -43,6 +45,23 @@ class _TimePageState extends State<TimePage> {
   int? _targetMs; // the picked random time to count down from
   Stopwatch? _sw;
   Timer? _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    final box = Boxes.box(Boxes.settings);
+    _minSec = (box.get(_kMinKey, defaultValue: 3) as num).toInt();
+    _maxSec = (box.get(_kMaxKey, defaultValue: 8) as num).toInt();
+    if (_maxSec < _minSec) {
+      _maxSec = _minSec;
+    }
+  }
+
+  Future<void> _persistRange() async {
+    final box = Boxes.box(Boxes.settings);
+    await box.put(_kMinKey, _minSec);
+    await box.put(_kMaxKey, _maxSec);
+  }
 
   @override
   void dispose() {
@@ -95,7 +114,7 @@ class _TimePageState extends State<TimePage> {
     }
 
     if (vibrateOnFinish) {
-      final hasVibrator = await Vibration.hasVibrator() ?? false;
+      final hasVibrator = await Vibration.hasVibrator();
       if (hasVibrator) Vibration.vibrate(duration: 500);
     }
   }
@@ -146,7 +165,7 @@ class _TimePageState extends State<TimePage> {
     final premium = context.watch<PremiumStore>();
     final isPro = premium.isPro;
     final hideTime = _hideTime;
-    final vibrateOnFinish = _vibrateOnFinish;
+    const vibrateOnFinish = true;
     final minSec = _minSec;
     final maxSec = _maxSec;
 
@@ -232,16 +251,16 @@ class _TimePageState extends State<TimePage> {
               freeMinSec: _freeMinSec,
               freeMaxSec: _freeMaxSec,
               hideTime: hideTime,
-              vibrateOnFinish: vibrateOnFinish,
               minSec: minSec,
               maxSec: maxSec,
               onToggleHide: (value) => setState(() => _hideTime = value),
-              onToggleVibrate: (value) =>
-                  setState(() => _vibrateOnFinish = value),
-              onRangeChanged: (min, max) => setState(() {
-                _minSec = min;
-                _maxSec = max;
-              }),
+              onRangeChanged: (min, max) async {
+                setState(() {
+                  _minSec = min;
+                  _maxSec = max;
+                });
+                await _persistRange();
+              },
             ),
 
             const SizedBox(height: 12),
@@ -300,11 +319,9 @@ class _ControlsCard extends StatelessWidget {
     required this.freeMinSec,
     required this.freeMaxSec,
     required this.hideTime,
-    required this.vibrateOnFinish,
     required this.minSec,
     required this.maxSec,
     required this.onToggleHide,
-    required this.onToggleVibrate,
     required this.onRangeChanged,
   });
 
@@ -314,13 +331,11 @@ class _ControlsCard extends StatelessWidget {
   final int freeMaxSec;
 
   final bool hideTime;
-  final bool vibrateOnFinish;
 
   final int minSec;
   final int maxSec;
 
   final ValueChanged<bool> onToggleHide;
-  final ValueChanged<bool> onToggleVibrate;
   final void Function(int min, int max) onRangeChanged;
 
   @override
@@ -338,11 +353,6 @@ class _ControlsCard extends StatelessWidget {
               onChanged: disabled ? null : onToggleHide,
               title: Text(l10n.timeHideTime),
               subtitle: Text(l10n.timeHideTimeSubtitle),
-            ),
-            SwitchListTile(
-              value: vibrateOnFinish,
-              onChanged: disabled ? null : onToggleVibrate,
-              title: Text(l10n.timeVibrateOnFinish),
             ),
             const Divider(),
 

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
@@ -23,7 +22,6 @@ class _CoinPageState extends State<CoinPage>
     with SingleTickerProviderStateMixin {
   final _rng = Random();
 
-  String? _last;
   bool _flipping = false;
   double _totalFlipAngle = 0.0;
   String _pendingResult = '';
@@ -54,7 +52,6 @@ class _CoinPageState extends State<CoinPage>
       if (status == AnimationStatus.completed) {
         setState(() {
           _flipping = false;
-          _last = _pendingResult;
         });
 
         if (!mounted) return;
@@ -139,137 +136,104 @@ class _CoinPageState extends State<CoinPage>
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Coin animation area
-          SizedBox(
-            height: 160,
-            child: Center(
-              child: AnimatedBuilder(
-                animation: _flipAnimation,
-                builder: (context, _) {
-                  final angle = _flipAnimation.value * _totalFlipAngle;
-                  final cosVal = cos(angle);
-                  final scaleX = cosVal.abs();
-                  final showA = cosVal >= 0;
-                  return Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.identity()..scale(scaleX, 1.0),
-                    child: _CoinFace(
-                      label: showA ? currentA : currentB,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Result card
-          Container(
-            constraints: const BoxConstraints(minHeight: 120),
-            padding: const EdgeInsets.all(20),
-            decoration: AppStyles.generatorResultCard(
-              GeneratorType.coin.accentColor,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _last ?? l10n.coinTapFlip,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                    ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: AnimatedBuilder(
+                    animation: _flipAnimation,
+                    builder: (context, _) {
+                      final angle = _flipAnimation.value * _totalFlipAngle;
+                      final cosVal = cos(angle);
+                      final scaleX = cosVal.abs();
+                      final showA = cosVal >= 0;
+                      return Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.identity()..scale(scaleX, 1.0),
+                        child: _CoinFace(label: showA ? currentA : currentB),
+                      );
+                    },
                   ),
                 ),
-                IconButton(
-                  tooltip: l10n.commonCopy,
-                  onPressed: _last == null
-                      ? null
-                      : () {
-                          Clipboard.setData(ClipboardData(text: _last!));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(l10n.commonCopied)),
-                          );
-                        },
-                  icon: const Icon(Icons.copy),
+              ),
+              _SectionTitle(l10n.coinSectionLabels),
+              const SizedBox(height: 8),
+
+              // Pro-only label inputs
+              TextField(
+                controller: _labelA,
+                enabled: canCustomLabels,
+                decoration: InputDecoration(
+                  labelText: l10n.coinOptionA,
+                  hintText: l10n.coinHintA,
+                  suffixIcon: canCustomLabels ? null : const Icon(Icons.lock),
                 ),
-              ],
-            ),
+                onTap: () async {
+                  if (!canCustomLabels) {
+                    await showProDialog(
+                      context,
+                      title: l10n.coinCustomLabelsProTitle,
+                      message: l10n.coinCustomLabelsProMessage,
+                      generatorType: GeneratorType.coin,
+                      featureDefinitions: proDefinitions,
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _labelB,
+                enabled: canCustomLabels,
+                decoration: InputDecoration(
+                  labelText: l10n.coinOptionB,
+                  hintText: l10n.coinHintB,
+                  suffixIcon: canCustomLabels ? null : const Icon(Icons.lock),
+                ),
+                onTap: () async {
+                  if (!canCustomLabels) {
+                    await showProDialog(
+                      context,
+                      title: l10n.coinCustomLabelsProTitle,
+                      message: l10n.coinCustomLabelsProMessage,
+                      generatorType: GeneratorType.coin,
+                      featureDefinitions: proDefinitions,
+                    );
+                  }
+                },
+              ),
+
+              const SizedBox(height: 16),
+
+              if (!gate.isPro)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(22),
+                  decoration: AppStyles.proCard(),
+                  child: Text(
+                    l10n.coinFreeProHint,
+                    style: AppStyles.resultStyle,
+                  ),
+                ),
+
+              const SizedBox(height: 16),
+
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  style: AppStyles.generatorButton(
+                    GeneratorType.coin.accentColor,
+                  ),
+                  icon: const Icon(Icons.casino),
+                  label: Text(l10n.coinFlip),
+                  onPressed: _flipping ? null : () => _flip(currentA, currentB),
+                ),
+              ),
+            ],
           ),
-
-          const SizedBox(height: 24),
-
-          _SectionTitle(l10n.coinSectionLabels),
-          const SizedBox(height: 8),
-
-          // Pro-only label inputs
-          TextField(
-            controller: _labelA,
-            enabled: canCustomLabels,
-            decoration: InputDecoration(
-              labelText: l10n.coinOptionA,
-              hintText: l10n.coinHintA,
-              suffixIcon: canCustomLabels ? null : const Icon(Icons.lock),
-            ),
-            onTap: () async {
-              if (!canCustomLabels) {
-                await showProDialog(
-                  context,
-                  title: l10n.coinCustomLabelsProTitle,
-                  message: l10n.coinCustomLabelsProMessage,
-                  generatorType: GeneratorType.coin,
-                  featureDefinitions: proDefinitions,
-                );
-              }
-            },
-          ),
-          const SizedBox(height: 10),
-          TextField(
-            controller: _labelB,
-            enabled: canCustomLabels,
-            decoration: InputDecoration(
-              labelText: l10n.coinOptionB,
-              hintText: l10n.coinHintB,
-              suffixIcon: canCustomLabels ? null : const Icon(Icons.lock),
-            ),
-            onTap: () async {
-              if (!canCustomLabels) {
-                await showProDialog(
-                  context,
-                  title: l10n.coinCustomLabelsProTitle,
-                  message: l10n.coinCustomLabelsProMessage,
-                  generatorType: GeneratorType.coin,
-                  featureDefinitions: proDefinitions,
-                );
-              }
-            },
-          ),
-
-          const SizedBox(height: 16),
-
-          if (!gate.isPro)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: AppStyles.proCard(),
-              child: Text(l10n.coinFreeProHint, style: AppStyles.resultStyle),
-            ),
-
-          const SizedBox(height: 16),
-
-          FilledButton.icon(
-            style: AppStyles.generatorButton(GeneratorType.coin.accentColor),
-            icon: const Icon(Icons.casino),
-            label: Text(l10n.coinFlip),
-            onPressed: _flipping
-                ? null
-                : () => _flip(currentA, currentB),
-          ),
-        ],
+        ),
       ),
     );
   }

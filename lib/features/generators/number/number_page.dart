@@ -9,6 +9,7 @@ import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
+import 'package:picksy/storage/boxes.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 
 enum NumberParity { any }
@@ -22,6 +23,8 @@ class NumberPage extends StatefulWidget {
 
 class _NumberPageState extends State<NumberPage> {
   final _rng = Random();
+  static const _kMinKey = 'number.min';
+  static const _kMaxKey = 'number.max';
 
   // Free defaults:
   double _min = 0;
@@ -33,6 +36,20 @@ class _NumberPageState extends State<NumberPage> {
 
   // helpers
   bool get _isValidRange => _max >= _min;
+
+  @override
+  void initState() {
+    super.initState();
+    final box = Boxes.box(Boxes.settings);
+    _min = (box.get(_kMinKey, defaultValue: 0) as num).toDouble();
+    _max = (box.get(_kMaxKey, defaultValue: 100) as num).toDouble();
+  }
+
+  Future<void> _persistRange() async {
+    final box = Boxes.box(Boxes.settings);
+    await box.put(_kMinKey, _min);
+    await box.put(_kMaxKey, _max);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +149,7 @@ class _NumberPageState extends State<NumberPage> {
                 _min = newMin;
                 _max = newMax;
               });
+              await _persistRange();
             },
           ),
 

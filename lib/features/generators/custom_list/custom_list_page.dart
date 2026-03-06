@@ -55,10 +55,7 @@ class _CustomListPageState extends State<CustomListPage> {
       type: GeneratorType.customList,
       value: value,
       maxEntries: gate.historyMax,
-      metadata: {
-        'listId': selected.id,
-        'value': value,
-      },
+      metadata: {'listId': selected.id, 'value': value},
     );
 
     setState(() {
@@ -186,40 +183,53 @@ class _CustomListPageState extends State<CustomListPage> {
         padding: const EdgeInsets.all(16),
         children: [
           // List selector
-          Row(
-            children: [
-              Expanded(
-                child: DropdownButtonFormField<String>(
-                  initialValue: store.selectedListId,
-                  items: [
-                    for (final l in lists)
-                      DropdownMenuItem(value: l.id, child: Text(l.name)),
-                  ],
-                  onChanged: (id) => id == null ? null : store.selectList(id),
-                  decoration: InputDecoration(
-                    labelText: l10n.customListSelectList,
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      initialValue: store.selectedListId,
+                      items: [
+                        for (final l in lists)
+                          DropdownMenuItem(value: l.id, child: Text(l.name)),
+                      ],
+                      onChanged: (id) =>
+                          id == null ? null : store.selectList(id),
+                      decoration: InputDecoration(
+                        labelText: l10n.customListSelectList,
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  IconButton(
+                    tooltip: l10n.customListDeleteList,
+                    onPressed: (lists.length <= 1 || selected == null)
+                        ? null
+                        : () => store.deleteList(selected.id),
+                    icon: const Icon(Icons.delete_outline),
+                  ),
+                ],
               ),
-              const SizedBox(width: 12),
-              IconButton(
-                tooltip: l10n.customListDeleteList,
-                onPressed: (lists.length <= 1 || selected == null)
-                    ? null
-                    : () => store.deleteList(selected.id),
-                icon: const Icon(Icons.delete_outline),
-              ),
-            ],
+            ),
           ),
 
           const SizedBox(height: 12),
 
           // Rename
           if (selected != null)
-            TextFormField(
-              initialValue: selected.name,
-              decoration: InputDecoration(labelText: l10n.customListListName),
-              onChanged: (v) => store.renameSelected(v),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: TextFormField(
+                  initialValue: selected.name,
+                  decoration: InputDecoration(
+                    labelText: l10n.customListListName,
+                  ),
+                  onChanged: (v) => store.renameSelected(v),
+                ),
+              ),
             ),
 
           const SizedBox(height: 16),
@@ -350,40 +360,45 @@ class _CustomListPageState extends State<CustomListPage> {
           const SizedBox(height: 16),
 
           // Add item
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _itemCtrl,
-                  decoration: InputDecoration(
-                    labelText: l10n.customListAddItem,
-                    hintText: l10n.customListAddItemHint,
-                  ),
-                  onSubmitted: (v) async {
-                    await store.addItemToSelected(v);
-                    if (!mounted) return;
-                    _itemCtrl.clear();
-                  },
-                ),
-              ),
-              const SizedBox(width: 12),
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                ),
-                onPressed: selected == null
-                    ? null
-                    : () async {
-                        await store.addItemToSelected(_itemCtrl.text);
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _itemCtrl,
+                      decoration: InputDecoration(
+                        labelText: l10n.customListAddItem,
+                        hintText: l10n.customListAddItemHint,
+                      ),
+                      onSubmitted: (v) async {
+                        await store.addItemToSelected(v);
                         if (!mounted) return;
                         _itemCtrl.clear();
                       },
-                child: Text(l10n.commonAdd),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                    onPressed: selected == null
+                        ? null
+                        : () async {
+                            await store.addItemToSelected(_itemCtrl.text);
+                            if (!mounted) return;
+                            _itemCtrl.clear();
+                          },
+                    child: Text(l10n.commonAdd),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
 
           const SizedBox(height: 12),
@@ -399,14 +414,29 @@ class _CustomListPageState extends State<CustomListPage> {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: selected.items.length,
-              separatorBuilder: (_, _) => const Divider(height: 1),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (context, i) {
                 final item = selected.items[i];
-                return ListTile(
-                  title: Text(item),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => store.removeItemFromSelected(i),
+                return Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: Theme.of(context).dividerColor.withOpacity(0.35),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(item)),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline),
+                        onPressed: () => store.removeItemFromSelected(i),
+                      ),
+                    ],
                   ),
                 );
               },
