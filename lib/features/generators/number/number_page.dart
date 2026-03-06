@@ -11,7 +11,7 @@ import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 
-enum NumberParity { any, even, odd }
+enum NumberParity { any }
 
 class NumberPage extends StatefulWidget {
   const NumberPage({super.key});
@@ -27,8 +27,7 @@ class _NumberPageState extends State<NumberPage> {
   double _min = 0;
   double _max = 100;
 
-  bool _useFloat = false;
-  NumberParity _parity = NumberParity.any;
+  final NumberParity _parity = NumberParity.any;
 
   String? _last;
 
@@ -42,7 +41,6 @@ class _NumberPageState extends State<NumberPage> {
     final history = context.read<HistoryStore>();
     final proDefinitions = [
       l10n.numberCustomRangeProMessage,
-      l10n.numberFloatProMessage,
       l10n.numberParityProMessage,
     ];
 
@@ -145,63 +143,6 @@ class _NumberPageState extends State<NumberPage> {
             ),
           ],
 
-          const SizedBox(height: 18),
-
-          // Float toggle
-          _SectionTitle(l10n.numberSectionType),
-          const SizedBox(height: 8),
-
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.numberFloat),
-            subtitle: Text(
-              gate.canUse(ProFeature.numberFloat)
-                  ? l10n.numberFloatSubtitle
-                  : l10n.commonProFeature,
-            ),
-            value: _useFloat,
-            onChanged: (v) async {
-              if (!gate.canUse(ProFeature.numberFloat)) {
-                await showProDialog(
-                  context,
-                  title: l10n.numberFloatProTitle,
-                  message: l10n.numberFloatProMessage,
-                  generatorType: GeneratorType.number,
-                  featureDefinitions: proDefinitions,
-                );
-                return;
-              }
-              setState(() => _useFloat = v);
-            },
-          ),
-
-          if (!_useFloat) ...[
-            const SizedBox(height: 8),
-
-            // Parity filter
-            _SectionTitle(l10n.numberSectionFilter),
-            const SizedBox(height: 8),
-
-            _ParitySelector(
-              value: _parity,
-              enabled: gate.canUse(ProFeature.numberEvenOdd),
-              proDefinitions: proDefinitions,
-              onChanged: (p) async {
-                if (!gate.canUse(ProFeature.numberEvenOdd)) {
-                  await showProDialog(
-                    context,
-                    title: l10n.numberParityProTitle,
-                    message: l10n.numberParityProMessage,
-                    generatorType: GeneratorType.number,
-                    featureDefinitions: proDefinitions,
-                  );
-                  return;
-                }
-                setState(() => _parity = p);
-              },
-            ),
-          ],
-
           const SizedBox(height: 24),
 
           // Free hint
@@ -224,7 +165,6 @@ class _NumberPageState extends State<NumberPage> {
                     final value = _generateNumber(
                       min: gate.isPro ? _min : 0,
                       max: gate.isPro ? _max : 100,
-                      useFloat: gate.isPro && _useFloat,
                       parity: gate.isPro ? _parity : NumberParity.any,
                     );
 
@@ -251,14 +191,8 @@ class _NumberPageState extends State<NumberPage> {
   String _generateNumber({
     required double min,
     required double max,
-    required bool useFloat,
     required NumberParity parity,
   }) {
-    if (useFloat) {
-      final x = min + _rng.nextDouble() * (max - min);
-      return x.toStringAsFixed(2);
-    }
-
     final minInt = min.floor();
     final maxInt = max.floor();
 
@@ -273,23 +207,10 @@ class _NumberPageState extends State<NumberPage> {
 
     if (parity == NumberParity.any) return n.toString();
 
-    // try a few times; if range too small, fallback
     for (int i = 0; i < 50; i++) {
-      if (parity == NumberParity.even && n.isEven) return n.toString();
-      if (parity == NumberParity.odd && n.isOdd) return n.toString();
       n = candidate();
     }
 
-    // fallback: adjust to nearest if possible
-    if (parity == NumberParity.even) {
-      if (n.isOdd) n += 1;
-      if (n > maxInt) n -= 2;
-    } else {
-      if (n.isEven) n += 1;
-      if (n > maxInt) n -= 2;
-    }
-
-    // still might be outside; clamp
     n = n.clamp(minInt, maxInt);
     return n.toString();
   }
@@ -326,16 +247,23 @@ class _RangeRow extends StatelessWidget {
     final l10n = context.l10n;
     // For Free, show locked range.
     if (!isPro) {
-      return Row(
-        children: [
-          Expanded(
-            child: _LockedField(label: l10n.numberMin, value: '0'),
+      return InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () async => onChanged(0, 100),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            children: [
+              Expanded(
+                child: _LockedField(label: l10n.numberMin, value: '0'),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _LockedField(label: l10n.numberMax, value: '100'),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: _LockedField(label: l10n.numberMax, value: '100'),
-          ),
-        ],
+        ),
       );
     }
 
@@ -427,53 +355,6 @@ class _NumberFieldState extends State<_NumberField> {
         if (v == null) return;
         widget.onSubmitted(v);
       },
-    );
-  }
-}
-
-class _ParitySelector extends StatelessWidget {
-  final NumberParity value;
-  final bool enabled;
-  final List<String> proDefinitions;
-  final ValueChanged<NumberParity> onChanged;
-
-  const _ParitySelector({
-    required this.value,
-    required this.enabled,
-    required this.proDefinitions,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return SegmentedButton<NumberParity>(
-      segments: [
-        ButtonSegment(
-          value: NumberParity.any,
-          label: Text(l10n.numberParityAny),
-        ),
-        ButtonSegment(
-          value: NumberParity.even,
-          label: Text(l10n.numberParityEven),
-        ),
-        ButtonSegment(
-          value: NumberParity.odd,
-          label: Text(l10n.numberParityOdd),
-        ),
-      ],
-      selected: {value},
-      onSelectionChanged: enabled
-          ? (s) => onChanged(s.first)
-          : (_) async {
-              await showProDialog(
-                context,
-                title: l10n.numberParityProTitle,
-                message: l10n.numberParityProMessage,
-                generatorType: GeneratorType.number,
-                featureDefinitions: proDefinitions,
-              );
-            },
     );
   }
 }
