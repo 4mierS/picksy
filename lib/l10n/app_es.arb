@@ -372,6 +372,7 @@
   "analyticsFrequency": "Frequency",
   "analyticsAvgLevel": "Nivel promedio",
   "analyticsLevelDistribution": "Distribución de niveles",
+  "memoryFlashTitle": "Memory Flash",
   "memoryFlashStart": "Iniciar",
   "memoryFlashPlayAgain": "Jugar de nuevo",
   "memoryFlashWatchSequence": "Observa la secuencia…",

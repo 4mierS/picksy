@@ -52,6 +52,8 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get generatorMemoryFlash => 'Memory Flash';
+
+  @override
   String get generatorTapChallenge => 'Desafío de Toque';
 
   @override
@@ -945,6 +947,7 @@ class AppLocalizationsEs extends AppLocalizations {
     return 'Secuencia: $length';
   }
 
+  @override
   String get generatorCard => 'Sacar carta';
 
   @override
