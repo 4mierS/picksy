@@ -454,8 +454,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get colorModeDark => 'Dark';
 
   @override
-  String get colorFreeProHint =>
-      'Free: Random HEX color.\nPro: Color modes, palette, contrast detection.';
+  String get colorFreeProHint => 'Free: Zufällige HEX-Farbe.\nPro: Analyse.';
 
   @override
   String get letterTitle => 'Letter';

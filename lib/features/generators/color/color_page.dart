@@ -24,8 +24,6 @@ class _ColorPageState extends State<ColorPage> {
   final _rng = Random();
 
   Color _current = Colors.blue;
-  List<Color> _palette = [];
-  ColorMode _mode = ColorMode.normal;
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +31,6 @@ class _ColorPageState extends State<ColorPage> {
     final gate = context.gate;
     final history = context.read<HistoryStore>();
     final currentHex = _toHex(_current);
-    final proDefinitions = [
-      l10n.colorModesProMessage,
-      l10n.colorPaletteProMessage,
-      l10n.colorModesUpgradeMessage,
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -68,129 +61,69 @@ class _ColorPageState extends State<ColorPage> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _ColorPreview(
-            color: _current,
-            showContrast: gate.canUse(ProFeature.colorContrast),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: _ColorPreview(
+                    color: _current,
+                    showContrast: gate.canUse(ProFeature.colorContrast),
+                  ),
+                ),
+              ),
+              if (!gate.isPro)
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: AppStyles.proCard(),
+                  child: Text(
+                    l10n.colorFreeProHint,
+                    style: AppStyles.resultStyle,
+                  ),
+                ),
+              if (!gate.isPro) const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: currentHex));
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(l10n.commonCopied)));
+                  },
+                  icon: const Icon(Icons.copy),
+                  label: Text(l10n.commonCopy),
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  style: AppStyles.generatorButton(
+                    GeneratorType.color.accentColor,
+                  ),
+                  icon: const Icon(Icons.casino),
+                  label: Text(l10n.commonGenerate),
+                  onPressed: () async {
+                    const mode = ColorMode.normal;
+                    final color = _generateColor(mode: mode);
+                    setState(() => _current = color);
+
+                    await history.add(
+                      type: GeneratorType.color,
+                      value: _toHex(color),
+                      maxEntries: context.gateRead.historyMax,
+                      metadata: {'mode': mode.name},
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-
-          const SizedBox(height: 16),
-
-          _SectionTitle(l10n.colorSectionMode),
-
-          const SizedBox(height: 8),
-
-          _ModeSelector(
-            mode: _mode,
-            enabled: gate.canUse(ProFeature.colorModes),
-            proDefinitions: proDefinitions,
-            onChanged: (m) async {
-              if (!gate.canUse(ProFeature.colorModes)) {
-                await showProDialog(
-                  context,
-                  title: l10n.colorModesProTitle,
-                  message: l10n.colorModesProMessage,
-                  generatorType: GeneratorType.color,
-                  featureDefinitions: proDefinitions,
-                );
-                return;
-              }
-              setState(() => _mode = m);
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          _SectionTitle(l10n.colorSectionPalette),
-
-          const SizedBox(height: 8),
-
-          FilledButton(
-            style: AppStyles.generatorButton(GeneratorType.color.accentColor),
-            onPressed: () async {
-              if (!gate.canUse(ProFeature.colorPalette)) {
-                await showProDialog(
-                  context,
-                  title: l10n.colorPaletteProTitle,
-                  message: l10n.colorPaletteProMessage,
-                  generatorType: GeneratorType.color,
-                  featureDefinitions: proDefinitions,
-                );
-                return;
-              }
-
-              setState(() {
-                _palette = List.generate(5, (_) => _generateColor(mode: _mode));
-              });
-            },
-            child: Text(l10n.colorGeneratePalette),
-          ),
-
-          const SizedBox(height: 12),
-
-          if (_palette.isNotEmpty)
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: _palette
-                  .map(
-                    (c) => GestureDetector(
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(text: _toHex(c)));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.colorCopiedHex)),
-                        );
-                      },
-                      child: _ColorBox(c),
-                    ),
-                  )
-                  .toList(),
-            ),
-
-          const SizedBox(height: 24),
-
-          if (!gate.isPro)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: AppStyles.proCard(),
-              child: Text(l10n.colorFreeProHint, style: AppStyles.resultStyle),
-            ),
-
-          const SizedBox(height: 12),
-
-          OutlinedButton.icon(
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: currentHex));
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(l10n.commonCopied)));
-            },
-            icon: const Icon(Icons.copy),
-            label: Text(l10n.commonCopy),
-          ),
-
-          const SizedBox(height: 12),
-
-          FilledButton.icon(
-            style: AppStyles.generatorButton(GeneratorType.color.accentColor),
-            icon: const Icon(Icons.casino),
-            label: Text(l10n.commonGenerate),
-            onPressed: () async {
-              final color = _generateColor(mode: _mode);
-              setState(() => _current = color);
-
-              await history.add(
-                type: GeneratorType.color,
-                value: _toHex(color),
-                maxEntries: context.gateRead.historyMax,
-                metadata: {'mode': _mode.name},
-              );
-            },
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -247,19 +180,24 @@ class _ColorPreview extends StatelessWidget {
 
     final contrast = _isLight(color) ? Colors.black : Colors.white;
 
-    return Container(
-      height: 160,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        hex,
-        style: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: showContrast ? contrast : Colors.white,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 340),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Container(
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            hex,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: showContrast ? contrast : Colors.white,
+            ),
+          ),
         ),
       ),
     );

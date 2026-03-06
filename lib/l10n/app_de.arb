@@ -154,7 +154,7 @@
   "colorModePastel": "Pastel",
   "colorModeNeon": "Neon",
   "colorModeDark": "Dark",
-  "colorFreeProHint": "Free: Random HEX color.\nPro: Color modes, palette, contrast detection.",
+  "colorFreeProHint": "Free: Zufällige HEX-Farbe.\nPro: Analyse.",
   "letterTitle": "Letter",
   "letterTapGenerate": "Tap \"Generate\" to get a letter",
   "letterSectionFilters": "Filters",

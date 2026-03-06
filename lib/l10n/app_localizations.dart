@@ -965,7 +965,7 @@ abstract class AppLocalizations {
   /// No description provided for @colorFreeProHint.
   ///
   /// In en, this message translates to:
-  /// **'Free: Random HEX color.\nPro: Color modes, palette, contrast detection.'**
+  /// **'Free: Random HEX color.\nPro: Color analysis.'**
   String get colorFreeProHint;
 
   /// No description provided for @letterTitle.
