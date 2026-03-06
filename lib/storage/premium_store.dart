@@ -139,6 +139,26 @@ class PremiumStore extends ChangeNotifier {
     }
   }
 
+  static const _kPromoUsed = 'promoCodeUsed';
+
+  // NOTE: These are demo/promotional codes for testing purposes.
+  // In a production environment, promo code validation should be done
+  // server-side to prevent unauthorized access via code inspection.
+  static const _promoCodes = {'PICKSY2026', 'GETPRO', 'PICKSYFREE'};
+
+  /// Returns true if the code is valid and Pro was granted, false otherwise.
+  Future<bool> redeemPromoCode(String code) async {
+    if (_promoCodes.contains(code.trim().toUpperCase())) {
+      await _setCachedPro(true);
+      await Boxes.box(Boxes.settings).put(_kPromoUsed, true);
+      return true;
+    }
+    return false;
+  }
+
+  bool get isPromoRedeemed =>
+      Boxes.box(Boxes.settings).get(_kPromoUsed, defaultValue: false) as bool;
+
   /// Debug-only: toggles Pro status without a real purchase.
   Future<void> toggleDebugPro() async {
     assert(() {

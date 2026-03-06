@@ -19,20 +19,78 @@ class CoinPage extends StatefulWidget {
   State<CoinPage> createState() => _CoinPageState();
 }
 
-class _CoinPageState extends State<CoinPage> {
+class _CoinPageState extends State<CoinPage>
+    with SingleTickerProviderStateMixin {
   final _rng = Random();
 
   String? _last;
+  bool _flipping = false;
+  double _totalFlipAngle = 0.0;
+  String _pendingResult = '';
+  bool _pendingIsHeads = true;
+
+  late final AnimationController _flipController;
+  late final Animation<double> _flipAnimation;
 
   // Pro-only
   final _labelA = TextEditingController();
   final _labelB = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+
+    _flipController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    );
+
+    _flipAnimation = CurvedAnimation(
+      parent: _flipController,
+      curve: Curves.easeInOut,
+    );
+
+    _flipController.addStatusListener((status) async {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          _flipping = false;
+          _last = _pendingResult;
+        });
+
+        if (!mounted) return;
+        final history = context.read<HistoryStore>();
+        await history.add(
+          type: GeneratorType.coin,
+          value: _pendingResult,
+          maxEntries: context.gateRead.historyMax,
+          metadata: {'side': _pendingIsHeads ? 'heads' : 'tails'},
+        );
+      }
+    });
+  }
+
+  @override
   void dispose() {
+    _flipController.dispose();
     _labelA.dispose();
     _labelB.dispose();
     super.dispose();
+  }
+
+  Future<void> _flip(String labelA, String labelB) async {
+    if (_flipping) return;
+
+    _pendingIsHeads = _rng.nextBool();
+    _pendingResult = _pendingIsHeads ? labelA : labelB;
+
+    // 6 half-rotations (3 full) land on A side (cos(6π)=1≥0),
+    // 7 half-rotations land on B side (cos(7π)=−1<0).
+    final halfFlips = 6 + (_pendingIsHeads ? 0 : 1);
+    _totalFlipAngle = halfFlips * pi;
+
+    setState(() => _flipping = true);
+    _flipController.reset();
+    await _flipController.forward();
   }
 
   @override
@@ -41,7 +99,6 @@ class _CoinPageState extends State<CoinPage> {
     if (_labelA.text.isEmpty) _labelA.text = l10n.coinDefaultHeads;
     if (_labelB.text.isEmpty) _labelB.text = l10n.coinDefaultTails;
     final gate = context.gate;
-    final history = context.read<HistoryStore>();
     final proDefinitions = [l10n.coinCustomLabelsProMessage];
 
     final canCustomLabels = gate.canUse(ProFeature.coinCustomLabels);
@@ -85,6 +142,31 @@ class _CoinPageState extends State<CoinPage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          // Coin animation area
+          SizedBox(
+            height: 160,
+            child: Center(
+              child: AnimatedBuilder(
+                animation: _flipAnimation,
+                builder: (context, _) {
+                  final angle = _flipAnimation.value * _totalFlipAngle;
+                  final cosVal = cos(angle);
+                  final scaleX = cosVal.abs();
+                  final showA = cosVal >= 0;
+                  return Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()..scale(scaleX, 1.0),
+                    child: _CoinFace(
+                      label: showA ? currentA : currentB,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
           // Result card
           Container(
             constraints: const BoxConstraints(minHeight: 120),
@@ -183,21 +265,46 @@ class _CoinPageState extends State<CoinPage> {
             style: AppStyles.generatorButton(GeneratorType.coin.accentColor),
             icon: const Icon(Icons.casino),
             label: Text(l10n.coinFlip),
-            onPressed: () async {
-              final result = (_rng.nextBool() ? currentA : currentB);
-              setState(() => _last = result);
-
-              await history.add(
-                type: GeneratorType.coin,
-                value: result,
-                maxEntries: context.gateRead.historyMax,
-                metadata: {
-                  'side': result == currentA ? 'heads' : 'tails',
-                },
-              );
-            },
+            onPressed: _flipping
+                ? null
+                : () => _flip(currentA, currentB),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CoinFace extends StatelessWidget {
+  final String label;
+  const _CoinFace({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = GeneratorType.coin.accentColor;
+    return Container(
+      width: 130,
+      height: 130,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color.withOpacity(0.15),
+        border: Border.all(color: color, width: 4),
+      ),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.w800,
+              color: color,
+            ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ),
     );
   }

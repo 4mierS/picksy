@@ -27,6 +27,7 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   late Animation<double> _animation;
 
   double _currentAngle = 0.0;
+  double _startAngle = 0.0;
   double _targetAngle = 0.0;
   bool _spinning = false;
   String? _lastResult;
@@ -48,10 +49,9 @@ class _BottleSpinPageState extends State<BottleSpinPage>
     );
 
     _controller.addListener(() {
-      // interpolate angle using curved progress 0..1
+      // interpolate angle using curved progress 0..1 from fixed _startAngle
       final t = _animation.value;
-      final angle = _lerp(_currentAngle, _targetAngle, t);
-      setState(() => _currentAngle = angle);
+      setState(() => _currentAngle = _lerp(_startAngle, _targetAngle, t));
     });
 
     _controller.addStatusListener((status) async {
@@ -274,8 +274,12 @@ class _BottleSpinPageState extends State<BottleSpinPage>
     final extraDeg = baseTurns * 360.0;
     final totalDeg = extraDeg + randomDeg;
 
-    _currentAngle = _currentAngle % (2 * pi);
-    _targetAngle = _currentAngle + (totalDeg * pi / 180.0);
+    _startAngle = _currentAngle % (2 * pi);
+    _currentAngle = _startAngle;
+    _targetAngle = _startAngle + (totalDeg * pi / 180.0);
+
+    // Randomise duration each spin for variety
+    _controller.duration = Duration(milliseconds: 3000 + _rng.nextInt(2000));
 
     // Pro haptics on start is optional; keep minimal
     if (gate.canUse(ProFeature.bottleSpinHaptics)) {

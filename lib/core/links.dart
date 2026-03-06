@@ -1,3 +1,4 @@
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> openExternalUrl(String url) async {
@@ -32,3 +33,8 @@ Future<void> openTermsOfService() =>
 
 Future<void> openRateApp() =>
     openExternalUrl('https://github.com/4mierS/picksy');
+
+Future<void> shareApp() => Share.share(
+  'Try Picksy — the smart random decision app!\nhttps://github.com/4mierS/picksy',
+  subject: 'Check out Picksy!',
+);

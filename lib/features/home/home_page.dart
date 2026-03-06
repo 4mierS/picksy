@@ -24,6 +24,10 @@ class HomePage extends StatelessWidget {
     GeneratorType.reactionTest,
     GeneratorType.hangman,
     GeneratorType.memoryFlash,
+    GeneratorType.tapChallenge,
+    GeneratorType.card,
+    GeneratorType.colorReflex,
+    GeneratorType.mathChallenge,
   ];
 
   @override

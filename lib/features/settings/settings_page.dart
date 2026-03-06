@@ -6,6 +6,7 @@ import '../../l10n/app_localizations.dart';
 import '../../storage/settings_store.dart';
 import '../../storage/premium_store.dart';
 import '../../core/links.dart';
+import '../pro/compare_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -100,13 +101,25 @@ class SettingsPage extends StatelessWidget {
 
           const Divider(height: 32),
 
-          // ListTile(
-          //   leading: const Icon(Icons.star_rate_rounded),
-          //   title: const Text('Rate App'),
-          //   onTap: () {
-          //     openRateApp();
-          //   },
-          // ),
+          ListTile(
+            leading: const Icon(Icons.star_rate_rounded),
+            title: Text(l10n.settingsRateApp),
+            onTap: openRateApp,
+          ),
+          ListTile(
+            leading: const Icon(Icons.share_rounded),
+            title: Text(l10n.settingsShareApp),
+            subtitle: Text(l10n.settingsShareAppSubtitle),
+            onTap: shareApp,
+          ),
+          ListTile(
+            leading: const Icon(Icons.compare_arrows_rounded),
+            title: Text(l10n.settingsCompareFreePro),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const CompareFreePro()),
+            ),
+          ),
           ListTile(
             leading: const Icon(Icons.privacy_tip_rounded),
             title: Text(l10n.settingsPrivacyPolicy),
