@@ -11,8 +11,6 @@ import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 
-enum ColorMode { normal, pastel, neon, dark }
-
 class ColorPage extends StatefulWidget {
   const ColorPage({super.key});
 
@@ -108,15 +106,14 @@ class _ColorPageState extends State<ColorPage> {
                   icon: const Icon(Icons.casino),
                   label: Text(l10n.commonGenerate),
                   onPressed: () async {
-                    const mode = ColorMode.normal;
-                    final color = _generateColor(mode: mode);
+                    final color = _generateColor();
                     setState(() => _current = color);
 
                     await history.add(
                       type: GeneratorType.color,
                       value: _toHex(color),
                       maxEntries: context.gateRead.historyMax,
-                      metadata: {'mode': mode.name},
+                      metadata: {},
                     );
                   },
                 ),
@@ -128,30 +125,10 @@ class _ColorPageState extends State<ColorPage> {
     );
   }
 
-  Color _generateColor({required ColorMode mode}) {
+  Color _generateColor() {
     int r = _rng.nextInt(256);
     int g = _rng.nextInt(256);
     int b = _rng.nextInt(256);
-
-    switch (mode) {
-      case ColorMode.pastel:
-        r = (r + 255) ~/ 2;
-        g = (g + 255) ~/ 2;
-        b = (b + 255) ~/ 2;
-        break;
-      case ColorMode.neon:
-        r = (r + 100).clamp(0, 255);
-        g = (g + 100).clamp(0, 255);
-        b = (b + 100).clamp(0, 255);
-        break;
-      case ColorMode.dark:
-        r = r ~/ 2;
-        g = g ~/ 2;
-        b = b ~/ 2;
-        break;
-      case ColorMode.normal:
-        break;
-    }
 
     return Color.fromARGB(255, r, g, b);
   }
@@ -206,80 +183,5 @@ class _ColorPreview extends StatelessWidget {
   bool _isLight(Color c) {
     final brightness = (0.299 * c.red + 0.587 * c.green + 0.114 * c.blue) / 255;
     return brightness > 0.5;
-  }
-}
-
-class _ColorBox extends StatelessWidget {
-  final Color color;
-  const _ColorBox(this.color);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(12),
-      ),
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  final String text;
-  const _SectionTitle(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    );
-  }
-}
-
-class _ModeSelector extends StatelessWidget {
-  final ColorMode mode;
-  final bool enabled;
-  final List<String> proDefinitions;
-  final ValueChanged<ColorMode> onChanged;
-
-  const _ModeSelector({
-    required this.mode,
-    required this.enabled,
-    required this.proDefinitions,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return SegmentedButton<ColorMode>(
-      segments: [
-        ButtonSegment(
-          value: ColorMode.normal,
-          label: Text(l10n.colorModeNormal),
-        ),
-        ButtonSegment(
-          value: ColorMode.pastel,
-          label: Text(l10n.colorModePastel),
-        ),
-        ButtonSegment(value: ColorMode.neon, label: Text(l10n.colorModeNeon)),
-        ButtonSegment(value: ColorMode.dark, label: Text(l10n.colorModeDark)),
-      ],
-      selected: {mode},
-      onSelectionChanged: enabled
-          ? (s) => onChanged(s.first)
-          : (_) async {
-              await showProDialog(
-                context,
-                title: l10n.colorModesProTitle,
-                message: l10n.colorModesUpgradeMessage,
-                generatorType: GeneratorType.color,
-                featureDefinitions: proDefinitions,
-              );
-            },
-    );
   }
 }
