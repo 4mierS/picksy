@@ -29,6 +29,8 @@ enum ProFeature {
   timeCustomRange,
   analyticsAccess,
   autoRun,
+  memoryFlashEndless,
+  memoryFlashSpeed,
   mathChallengeProDifficulty,
   mathChallengeProDuration,
   cardJokers,
@@ -75,6 +77,8 @@ class FeatureGate {
       case ProFeature.timeCustomRange:
       case ProFeature.analyticsAccess:
       case ProFeature.autoRun:
+      case ProFeature.memoryFlashEndless:
+      case ProFeature.memoryFlashSpeed:
       case ProFeature.mathChallengeProDifficulty:
       case ProFeature.mathChallengeProDuration:
       case ProFeature.cardJokers:

@@ -8,6 +8,7 @@ enum GeneratorType {
   time,
   reactionTest,
   hangman,
+  memoryFlash,
   mathChallenge,
   tapChallenge,
   card,

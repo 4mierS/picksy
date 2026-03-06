@@ -13,6 +13,7 @@ import '../../features/generators/time/time_page.dart';
 import '../../features/generators/reaction_test/reaction_test_page.dart';
 import '../../features/generators/card/card_page.dart';
 import '../../features/generators/hangman/hangman_page.dart';
+import '../../features/generators/memory_flash/memory_flash_page.dart';
 import '../../features/generators/tap_challenge/tap_challenge_page.dart';
 import '../../features/generators/color_reflex/color_reflex_page.dart';
 import '../../features/generators/math_challenge/math_challenge_page.dart';
@@ -28,6 +29,7 @@ void openGenerator(BuildContext context, GeneratorType type) {
     GeneratorType.time => const TimePage(),
     GeneratorType.reactionTest => const ReactionTestPage(),
     GeneratorType.hangman => const HangmanPage(),
+    GeneratorType.memoryFlash => const MemoryFlashPage(),
     GeneratorType.tapChallenge => const TapChallengePage(),
     GeneratorType.card => const CardPage(),
     GeneratorType.colorReflex => const ColorReflexPage(),

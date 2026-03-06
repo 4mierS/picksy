@@ -34,6 +34,7 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         actions: [
           if (generatorType != GeneratorType.reactionTest &&
               generatorType != GeneratorType.hangman &&
+              generatorType != GeneratorType.memoryFlash &&
               generatorType != GeneratorType.mathChallenge &&
               generatorType != GeneratorType.colorReflex &&
               generatorType != GeneratorType.tapChallenge)
@@ -203,6 +204,9 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         return rng.nextBool() ? 'Won' : 'Lost';
       case GeneratorType.customList:
         return 'Item ${rng.nextInt(10) + 1}';
+      case GeneratorType.memoryFlash:
+        final level = 1 + rng.nextInt(10);
+        return 'Level $level – ${level - 1} sequences';
       case GeneratorType.card:
         const ranks = [
           'A',
@@ -271,6 +275,8 @@ class _StatsSection extends StatelessWidget {
         return _HangmanStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.customList:
         return _CustomListStats(entries: entries, l10n: l10n, accent: accent);
+      case GeneratorType.memoryFlash:
+        return _MemoryFlashStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.card:
         return _CardStats(entries: entries, l10n: l10n, accent: accent);
       case GeneratorType.colorReflex:
@@ -1237,6 +1243,115 @@ class _MathChallengeStats extends StatelessWidget {
           label: l10n.mathWrong,
           fraction: overallTotal > 0 ? totalWrong / overallTotal : 0.0,
           accent: Colors.redAccent,
+        ),
+      ],
+    );
+  }
+}
+
+// ─── MemoryFlash ─────────────────────────────────────────────────────────────
+
+class _MemoryFlashStats extends StatelessWidget {
+  final List<HistoryEntry> entries;
+  final AppLocalizations l10n;
+  final Color accent;
+
+  const _MemoryFlashStats({
+    required this.entries,
+    required this.l10n,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final levels = entries
+        .map((e) {
+          final meta = e.metadata;
+          if (meta != null && meta['maxLevel'] != null) {
+            return (meta['maxLevel'] as num).toInt();
+          }
+          // Parse "Level X – Y sequences" format
+          final match = RegExp(r'Level\s+(\d+)').firstMatch(e.value);
+          return match != null ? int.tryParse(match.group(1)!) : null;
+        })
+        .whereType<int>()
+        .toList();
+
+    if (levels.isEmpty) {
+      return _StatCard(
+        label: l10n.analyticsTotal,
+        value: '${entries.length}',
+        accent: accent,
+      );
+    }
+
+    final highScore = levels.reduce(max);
+    final avg = levels.reduce((a, b) => a + b) / levels.length;
+
+    // Distribution: buckets 1-3, 4-6, 7-9, 10+
+    final buckets = [0, 0, 0, 0];
+    for (final l in levels) {
+      if (l <= 3)
+        buckets[0]++;
+      else if (l <= 6)
+        buckets[1]++;
+      else if (l <= 9)
+        buckets[2]++;
+      else
+        buckets[3]++;
+    }
+    final maxBucket = buckets.reduce(max);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _StatsGrid(
+          children: [
+            _StatCard(
+              label: l10n.analyticsHighScore,
+              value: 'Level $highScore',
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsAvgLevel,
+              value: avg.toStringAsFixed(1),
+              accent: accent,
+            ),
+            _StatCard(
+              label: l10n.analyticsTotal,
+              value: '${levels.length}',
+              accent: accent,
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        _SectionTitle(l10n.analyticsLevelDistribution),
+        _BarRow(
+          label: '1–3',
+          fraction: maxBucket > 0 ? buckets[0] / maxBucket : 0,
+          accent: accent,
+          trailing: '${buckets[0]}',
+        ),
+        const SizedBox(height: 6),
+        _BarRow(
+          label: '4–6',
+          fraction: maxBucket > 0 ? buckets[1] / maxBucket : 0,
+          accent: accent,
+          trailing: '${buckets[1]}',
+        ),
+        const SizedBox(height: 6),
+        _BarRow(
+          label: '7–9',
+          fraction: maxBucket > 0 ? buckets[2] / maxBucket : 0,
+          accent: accent,
+          trailing: '${buckets[2]}',
+        ),
+        const SizedBox(height: 6),
+        _BarRow(
+          label: '10+',
+          fraction: maxBucket > 0 ? buckets[3] / maxBucket : 0,
+          accent: accent,
+          trailing: '${buckets[3]}',
         ),
       ],
     );
