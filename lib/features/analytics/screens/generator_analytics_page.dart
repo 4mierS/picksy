@@ -37,7 +37,9 @@ class GeneratorAnalyticsPage extends StatelessWidget {
               generatorType != GeneratorType.memoryFlash &&
               generatorType != GeneratorType.mathChallenge &&
               generatorType != GeneratorType.colorReflex &&
-              generatorType != GeneratorType.tapChallenge)
+              generatorType != GeneratorType.tapChallenge &&
+              generatorType != GeneratorType.ticTacToe &&
+              generatorType != GeneratorType.connectFour)
             if (gate.canUse(ProFeature.autoRun))
               IconButton(
                 icon: const Icon(Icons.play_circle_outline),
@@ -240,6 +242,12 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         final total = correct + wrong;
         final accuracy = total > 0 ? (correct / total * 100).round() : 0;
         return '$correct correct, $wrong wrong (${accuracy}%)';
+      case GeneratorType.ticTacToe:
+        final winner = rng.nextBool() ? 'PLAYER' : 'BOT';
+        return '$winner wins';
+      case GeneratorType.connectFour:
+        final c4Winner = rng.nextBool() ? 'PLAYER' : 'BOT';
+        return '$c4Winner wins';
     }
   }
 }
@@ -289,11 +297,122 @@ class _StatsSection extends StatelessWidget {
           l10n: l10n,
           accent: accent,
         );
+      case GeneratorType.ticTacToe:
+      case GeneratorType.connectFour:
+        return _GameStats(entries: entries, l10n: l10n, accent: accent);
     }
   }
 }
 
 // ─── Stat Widgets ───────────────────────────────────────────────────────────
+
+/// Simple game analytics: wins by player from history metadata.
+class _GameStats extends StatelessWidget {
+  final List<HistoryEntry> entries;
+  final AppLocalizations l10n;
+  final Color accent;
+
+  const _GameStats({
+    required this.entries,
+    required this.l10n,
+    required this.accent,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (entries.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Text(
+            l10n.analyticsEmpty,
+            style: TextStyle(color: Colors.grey.shade500),
+          ),
+        ),
+      );
+    }
+
+    // Count wins from metadata
+    final winCounts = <String, int>{};
+    int draws = 0;
+
+    for (final entry in entries) {
+      final meta = entry.metadata;
+      if (meta == null) continue;
+      final draw = meta['draw'] as bool? ?? false;
+      if (draw) {
+        draws++;
+      } else {
+        final winner = meta['winner'] as String?;
+        if (winner != null && winner.isNotEmpty) {
+          winCounts[winner] = (winCounts[winner] ?? 0) + 1;
+        }
+      }
+    }
+
+    final sorted = winCounts.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              _StatCard(
+                label: l10n.analyticsTotal,
+                value: entries.length.toString(),
+                accent: accent,
+              ),
+              _StatCard(
+                label: l10n.gameStatsDraws,
+                value: draws.toString(),
+                accent: accent,
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          if (sorted.isNotEmpty) ...[
+            Text(
+              l10n.gameTopPlayers,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 15,
+                color: accent,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ...sorted.map(
+              (e) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        e.key,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Text(
+                      l10n.gameStatsWins(e.value),
+                      style: TextStyle(
+                        color: accent,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
 
 class _StatCard extends StatelessWidget {
   final String label;

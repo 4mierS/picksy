@@ -2299,6 +2299,123 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Avg Accuracy'**
   String get mathAvgAccuracy;
+
+  /// No description provided for @generatorTicTacToe.
+  String get generatorTicTacToe;
+
+  /// No description provided for @generatorConnectFour.
+  String get generatorConnectFour;
+
+  /// No description provided for @gameSetupTitle.
+  String get gameSetupTitle;
+
+  /// No description provided for @gameModeLabel.
+  String get gameModeLabel;
+
+  /// No description provided for @gameModeBot.
+  String get gameModeBot;
+
+  /// No description provided for @gameModeLocal.
+  String get gameModeLocal;
+
+  /// No description provided for @gameModePro.
+  String get gameModePro;
+
+  /// No description provided for @gameDifficultyLabel.
+  String get gameDifficultyLabel;
+
+  /// No description provided for @gameDifficultyEasy.
+  String get gameDifficultyEasy;
+
+  /// No description provided for @gameDifficultyMedium.
+  String get gameDifficultyMedium;
+
+  /// No description provided for @gameDifficultyHard.
+  String get gameDifficultyHard;
+
+  /// No description provided for @gameDifficultyProTitle.
+  String get gameDifficultyProTitle;
+
+  /// No description provided for @gameDifficultyProMessage.
+  String get gameDifficultyProMessage;
+
+  /// No description provided for @gameLocalMultiplayerProTitle.
+  String get gameLocalMultiplayerProTitle;
+
+  /// No description provided for @gameLocalMultiplayerProMessage.
+  String get gameLocalMultiplayerProMessage;
+
+  /// No description provided for @gameCustomNamesProTitle.
+  String get gameCustomNamesProTitle;
+
+  /// No description provided for @gameCustomNamesProMessage.
+  String get gameCustomNamesProMessage;
+
+  /// No description provided for @gamePlayerOneName.
+  String get gamePlayerOneName;
+
+  /// No description provided for @gamePlayerTwoName.
+  String get gamePlayerTwoName;
+
+  /// No description provided for @gamePlayerNameHint.
+  String get gamePlayerNameHint;
+
+  /// No description provided for @gameStartGame.
+  String get gameStartGame;
+
+  /// No description provided for @gamePlayerTurn.
+  String gamePlayerTurn(String name);
+
+  /// No description provided for @gameBotThinking.
+  String get gameBotThinking;
+
+  /// No description provided for @gameYouWin.
+  String gameYouWin(String name);
+
+  /// No description provided for @gameDraw.
+  String get gameDraw;
+
+  /// No description provided for @gamePlayAgain.
+  String get gamePlayAgain;
+
+  /// No description provided for @gameBackToSetup.
+  String get gameBackToSetup;
+
+  /// No description provided for @gameStatsTitle.
+  String get gameStatsTitle;
+
+  /// No description provided for @gameStatsProTitle.
+  String get gameStatsProTitle;
+
+  /// No description provided for @gameStatsProMessage.
+  String get gameStatsProMessage;
+
+  /// No description provided for @gameStatsWins.
+  String gameStatsWins(int wins);
+
+  /// No description provided for @gameStatsClear.
+  String get gameStatsClear;
+
+  /// No description provided for @gameStatsClearConfirm.
+  String get gameStatsClearConfirm;
+
+  /// No description provided for @gameStatsNoData.
+  String get gameStatsNoData;
+
+  /// No description provided for @gameStatsDraws.
+  String get gameStatsDraws;
+
+  /// No description provided for @gameTopPlayers.
+  String get gameTopPlayers;
+
+  /// No description provided for @gameFreeProHint.
+  String get gameFreeProHint;
+
+  /// No description provided for @gameStatsBot.
+  String get gameStatsBot;
+
+  /// No description provided for @gameStatsPlayer.
+  String get gameStatsPlayer;
 }
 
 class _AppLocalizationsDelegate

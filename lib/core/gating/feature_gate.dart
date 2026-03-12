@@ -37,6 +37,14 @@ enum ProFeature {
   cardMultiDraw,
   colorReflexDuration,
   tapChallengeDuration,
+  ticTacToeLocalMultiplayer,
+  ticTacToeDifficulty,
+  ticTacToeCustomNames,
+  ticTacToeStats,
+  connectFourLocalMultiplayer,
+  connectFourDifficulty,
+  connectFourCustomNames,
+  connectFourStats,
 }
 
 class FeatureGate {
@@ -85,6 +93,14 @@ class FeatureGate {
       case ProFeature.cardMultiDraw:
       case ProFeature.colorReflexDuration:
       case ProFeature.tapChallengeDuration:
+      case ProFeature.ticTacToeLocalMultiplayer:
+      case ProFeature.ticTacToeDifficulty:
+      case ProFeature.ticTacToeCustomNames:
+      case ProFeature.ticTacToeStats:
+      case ProFeature.connectFourLocalMultiplayer:
+      case ProFeature.connectFourDifficulty:
+      case ProFeature.connectFourCustomNames:
+      case ProFeature.connectFourStats:
         return false;
     }
   }

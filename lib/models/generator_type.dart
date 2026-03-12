@@ -13,4 +13,6 @@ enum GeneratorType {
   tapChallenge,
   card,
   colorReflex,
+  ticTacToe,
+  connectFour,
 }

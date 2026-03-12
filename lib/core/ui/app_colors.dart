@@ -37,6 +37,10 @@ extension GeneratorTypeColorX on GeneratorType {
         return Colors.purpleAccent;
       case GeneratorType.mathChallenge:
         return Colors.deepOrangeAccent;
+      case GeneratorType.ticTacToe:
+        return Colors.lightBlue;
+      case GeneratorType.connectFour:
+        return Colors.yellow.shade700;
     }
   }
 }
@@ -72,6 +76,10 @@ extension GeneratorTypeIconX on GeneratorType {
         return Icons.psychology_outlined;
       case GeneratorType.mathChallenge:
         return Icons.calculate_outlined;
+      case GeneratorType.ticTacToe:
+        return Icons.grid_3x3;
+      case GeneratorType.connectFour:
+        return Icons.apps_outlined;
     }
   }
 }

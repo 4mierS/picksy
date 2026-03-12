@@ -17,6 +17,8 @@ import '../../features/generators/memory_flash/memory_flash_page.dart';
 import '../../features/generators/tap_challenge/tap_challenge_page.dart';
 import '../../features/generators/color_reflex/color_reflex_page.dart';
 import '../../features/generators/math_challenge/math_challenge_page.dart';
+import '../../features/generators/tic_tac_toe/tic_tac_toe_page.dart';
+import '../../features/generators/connect_four/connect_four_page.dart';
 
 void openGenerator(BuildContext context, GeneratorType type) {
   final Widget page = switch (type) {
@@ -34,6 +36,8 @@ void openGenerator(BuildContext context, GeneratorType type) {
     GeneratorType.card => const CardPage(),
     GeneratorType.colorReflex => const ColorReflexPage(),
     GeneratorType.mathChallenge => const MathChallengePage(),
+    GeneratorType.ticTacToe => const TicTacToePage(),
+    GeneratorType.connectFour => const ConnectFourPage(),
   };
 
   Navigator.of(context).push(MaterialPageRoute(builder: (_) => page));

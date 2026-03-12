@@ -1186,4 +1186,128 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mathAvgAccuracy => 'Précision moyenne';
+
+  @override
+  String get generatorTicTacToe => 'Morpion';
+
+  @override
+  String get generatorConnectFour => 'Puissance 4';
+
+  @override
+  String get gameSetupTitle => 'Configuration';
+
+  @override
+  String get gameModeLabel => 'Mode de Jeu';
+
+  @override
+  String get gameModeBot => 'Jouer contre Bot';
+
+  @override
+  String get gameModeLocal => 'Multijoueur Local';
+
+  @override
+  String get gameModePro => 'Pro';
+
+  @override
+  String get gameDifficultyLabel => 'Difficulté';
+
+  @override
+  String get gameDifficultyEasy => 'Facile';
+
+  @override
+  String get gameDifficultyMedium => 'Moyen';
+
+  @override
+  String get gameDifficultyHard => 'Difficile';
+
+  @override
+  String get gameDifficultyProTitle => 'Sélection de difficulté est Pro';
+
+  @override
+  String get gameDifficultyProMessage =>
+      'Passez Pro pour choisir entre Facile, Moyen et Difficile.';
+
+  @override
+  String get gameLocalMultiplayerProTitle => 'Multijoueur local est Pro';
+
+  @override
+  String get gameLocalMultiplayerProMessage =>
+      'Passez Pro pour jouer avec un ami sur le même appareil, utiliser des noms personnalisés et suivre les statistiques.';
+
+  @override
+  String get gameCustomNamesProTitle => 'Noms personnalisés est Pro';
+
+  @override
+  String get gameCustomNamesProMessage =>
+      'Passez Pro pour saisir des noms de joueurs personnalisés.';
+
+  @override
+  String get gamePlayerOneName => 'Nom Joueur 1';
+
+  @override
+  String get gamePlayerTwoName => 'Nom Joueur 2';
+
+  @override
+  String get gamePlayerNameHint => 'Entrez un nom';
+
+  @override
+  String get gameStartGame => 'Démarrer le jeu';
+
+  @override
+  String gamePlayerTurn(String name) => 'Tour de $name';
+
+  @override
+  String get gameBotThinking => 'BOT RÉFLÉCHIT...';
+
+  @override
+  String gameYouWin(String name) => '$name Gagne !';
+
+  @override
+  String get gameDraw => 'Match nul !';
+
+  @override
+  String get gamePlayAgain => 'Rejouer';
+
+  @override
+  String get gameBackToSetup => 'Retour à la configuration';
+
+  @override
+  String get gameStatsTitle => 'Statistiques';
+
+  @override
+  String get gameStatsProTitle => 'Les statistiques sont Pro';
+
+  @override
+  String get gameStatsProMessage =>
+      'Passez Pro pour suivre les victoires par joueur entre les sessions.';
+
+  @override
+  String gameStatsWins(int wins) => '$wins victoires';
+
+  @override
+  String get gameStatsClear => 'Effacer les stats';
+
+  @override
+  String get gameStatsClearConfirm =>
+      'Effacer toutes les statistiques de ce jeu ?';
+
+  @override
+  String get gameStatsNoData =>
+      'Pas encore de statistiques. Jouez une partie pour commencer à suivre les victoires !';
+
+  @override
+  String get gameStatsDraws => 'Matchs nuls';
+
+  @override
+  String get gameTopPlayers => 'Meilleurs Joueurs';
+
+  @override
+  String get gameFreeProHint =>
+      'Free : jouer contre Bot.\nPro : multijoueur local, noms personnalisés, sélection de difficulté et statistiques.';
+
+  @override
+  String get gameStatsBot => 'BOT';
+
+  @override
+  String get gameStatsPlayer => 'JOUEUR';
 }
