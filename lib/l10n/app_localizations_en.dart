@@ -1250,16 +1250,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get gameStartGame => 'Start Game';
 
   @override
-  String gamePlayerTurn(String name) => "$name's Turn";
+  String gamePlayerTurn(String name) {
+    return '$name\'s Turn';
+  }
 
   @override
   String get gameBotThinking => 'BOT THINKING...';
 
   @override
-  String gameYouWin(String name) => '$name Wins!';
+  String gameYouWin(String name) {
+    return '$name Wins!';
+  }
 
   @override
-  String get gameDraw => "It's a Draw!";
+  String get gameDraw => 'It\'s a Draw!';
 
   @override
   String get gamePlayAgain => 'Play Again';
@@ -1278,14 +1282,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Go Pro to track wins per player across sessions.';
 
   @override
-  String gameStatsWins(int wins) => '$wins wins';
+  String gameStatsWins(int wins) {
+    return '$wins wins';
+  }
 
   @override
   String get gameStatsClear => 'Clear Stats';
 
   @override
-  String get gameStatsClearConfirm =>
-      'Clear all statistics for this game?';
+  String get gameStatsClearConfirm => 'Clear all statistics for this game?';
 
   @override
   String get gameStatsNoData =>

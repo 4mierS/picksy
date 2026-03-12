@@ -1254,13 +1254,17 @@ class AppLocalizationsIt extends AppLocalizations {
   String get gameStartGame => 'Inizia Gioco';
 
   @override
-  String gamePlayerTurn(String name) => 'Turno di $name';
+  String gamePlayerTurn(String name) {
+    return 'Turno di $name';
+  }
 
   @override
   String get gameBotThinking => 'BOT STA PENSANDO...';
 
   @override
-  String gameYouWin(String name) => '$name Vince!';
+  String gameYouWin(String name) {
+    return '$name Vince!';
+  }
 
   @override
   String get gameDraw => 'Pareggio!';
@@ -1282,7 +1286,9 @@ class AppLocalizationsIt extends AppLocalizations {
       'Vai Pro per tenere traccia delle vittorie per giocatore tra le sessioni.';
 
   @override
-  String gameStatsWins(int wins) => '$wins vittorie';
+  String gameStatsWins(int wins) {
+    return '$wins vittorie';
+  }
 
   @override
   String get gameStatsClear => 'Cancella statistiche';

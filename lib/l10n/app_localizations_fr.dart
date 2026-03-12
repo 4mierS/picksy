@@ -1254,13 +1254,17 @@ class AppLocalizationsFr extends AppLocalizations {
   String get gameStartGame => 'Démarrer le jeu';
 
   @override
-  String gamePlayerTurn(String name) => 'Tour de $name';
+  String gamePlayerTurn(String name) {
+    return 'Tour de $name';
+  }
 
   @override
   String get gameBotThinking => 'BOT RÉFLÉCHIT...';
 
   @override
-  String gameYouWin(String name) => '$name Gagne !';
+  String gameYouWin(String name) {
+    return '$name Gagne !';
+  }
 
   @override
   String get gameDraw => 'Match nul !';
@@ -1282,7 +1286,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'Passez Pro pour suivre les victoires par joueur entre les sessions.';
 
   @override
-  String gameStatsWins(int wins) => '$wins victoires';
+  String gameStatsWins(int wins) {
+    return '$wins victoires';
+  }
 
   @override
   String get gameStatsClear => 'Effacer les stats';
