@@ -39,6 +39,10 @@ extension GeneratorTypeL10n on GeneratorType {
         return l10n.generatorCard;
       case GeneratorType.colorReflex:
         return l10n.generatorColorReflex;
+      case GeneratorType.ticTacToe:
+        return l10n.generatorTicTacToe;
+      case GeneratorType.connectFour:
+        return l10n.generatorConnectFour;
     }
   }
 }

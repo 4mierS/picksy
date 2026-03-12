@@ -2299,6 +2299,240 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Avg Accuracy'**
   String get mathAvgAccuracy;
+
+  /// No description provided for @generatorTicTacToe.
+  ///
+  /// In en, this message translates to:
+  /// **'Tic Tac Toe'**
+  String get generatorTicTacToe;
+
+  /// No description provided for @generatorConnectFour.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect Four'**
+  String get generatorConnectFour;
+
+  /// No description provided for @gameSetupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Setup'**
+  String get gameSetupTitle;
+
+  /// No description provided for @gameModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Mode'**
+  String get gameModeLabel;
+
+  /// No description provided for @gameModeBot.
+  ///
+  /// In en, this message translates to:
+  /// **'Play vs Bot'**
+  String get gameModeBot;
+
+  /// No description provided for @gameModeLocal.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Multiplayer'**
+  String get gameModeLocal;
+
+  /// No description provided for @gameModePro.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get gameModePro;
+
+  /// No description provided for @gameDifficultyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty'**
+  String get gameDifficultyLabel;
+
+  /// No description provided for @gameDifficultyEasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Easy'**
+  String get gameDifficultyEasy;
+
+  /// No description provided for @gameDifficultyMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get gameDifficultyMedium;
+
+  /// No description provided for @gameDifficultyHard.
+  ///
+  /// In en, this message translates to:
+  /// **'Hard'**
+  String get gameDifficultyHard;
+
+  /// No description provided for @gameDifficultyProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty Selection is Pro'**
+  String get gameDifficultyProTitle;
+
+  /// No description provided for @gameDifficultyProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to choose between Easy, Medium, and Hard difficulty levels.'**
+  String get gameDifficultyProMessage;
+
+  /// No description provided for @gameLocalMultiplayerProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Local Multiplayer is Pro'**
+  String get gameLocalMultiplayerProTitle;
+
+  /// No description provided for @gameLocalMultiplayerProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to play with a friend on the same device, use custom names, and track statistics.'**
+  String get gameLocalMultiplayerProMessage;
+
+  /// No description provided for @gameCustomNamesProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Names is Pro'**
+  String get gameCustomNamesProTitle;
+
+  /// No description provided for @gameCustomNamesProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to enter custom player names.'**
+  String get gameCustomNamesProMessage;
+
+  /// No description provided for @gamePlayerOneName.
+  ///
+  /// In en, this message translates to:
+  /// **'Player 1 Name'**
+  String get gamePlayerOneName;
+
+  /// No description provided for @gamePlayerTwoName.
+  ///
+  /// In en, this message translates to:
+  /// **'Player 2 Name'**
+  String get gamePlayerTwoName;
+
+  /// No description provided for @gamePlayerNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter name'**
+  String get gamePlayerNameHint;
+
+  /// No description provided for @gameStartGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Game'**
+  String get gameStartGame;
+
+  /// No description provided for @gamePlayerTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}\'s Turn'**
+  String gamePlayerTurn(String name);
+
+  /// No description provided for @gameBotThinking.
+  ///
+  /// In en, this message translates to:
+  /// **'BOT THINKING...'**
+  String get gameBotThinking;
+
+  /// No description provided for @gameYouWin.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} Wins!'**
+  String gameYouWin(String name);
+
+  /// No description provided for @gameDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'It\'s a Draw!'**
+  String get gameDraw;
+
+  /// No description provided for @gamePlayAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Play Again'**
+  String get gamePlayAgain;
+
+  /// No description provided for @gameBackToSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Setup'**
+  String get gameBackToSetup;
+
+  /// No description provided for @gameStatsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics'**
+  String get gameStatsTitle;
+
+  /// No description provided for @gameStatsProTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Statistics is Pro'**
+  String get gameStatsProTitle;
+
+  /// No description provided for @gameStatsProMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Pro to track wins per player across sessions.'**
+  String get gameStatsProMessage;
+
+  /// No description provided for @gameStatsWins.
+  ///
+  /// In en, this message translates to:
+  /// **'{wins} wins'**
+  String gameStatsWins(int wins);
+
+  /// No description provided for @gameStatsClear.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Stats'**
+  String get gameStatsClear;
+
+  /// No description provided for @gameStatsClearConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all statistics for this game?'**
+  String get gameStatsClearConfirm;
+
+  /// No description provided for @gameStatsNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'No statistics yet. Play a game to start tracking wins!'**
+  String get gameStatsNoData;
+
+  /// No description provided for @gameStatsDraws.
+  ///
+  /// In en, this message translates to:
+  /// **'Draws'**
+  String get gameStatsDraws;
+
+  /// No description provided for @gameTopPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Players'**
+  String get gameTopPlayers;
+
+  /// No description provided for @gameFreeProHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Free: play vs Bot.\nPro: local multiplayer, custom names, difficulty selection & statistics.'**
+  String get gameFreeProHint;
+
+  /// No description provided for @gameStatsBot.
+  ///
+  /// In en, this message translates to:
+  /// **'BOT'**
+  String get gameStatsBot;
+
+  /// No description provided for @gameStatsPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'PLAYER'**
+  String get gameStatsPlayer;
 }
 
 class _AppLocalizationsDelegate
