@@ -2375,7 +2375,7 @@ abstract class AppLocalizations {
   /// No description provided for @gameDifficultyProMessage.
   ///
   /// In en, this message translates to:
-  /// **'Go Pro to choose between Easy, Medium, and Hard difficulty levels.'**
+  /// **'Go Pro to choose between Medium and Hard difficulty levels.'**
   String get gameDifficultyProMessage;
 
   /// No description provided for @gameLocalMultiplayerProTitle.
