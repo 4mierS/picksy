@@ -3,14 +3,13 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:picksy/core/ui/app_colors.dart';
-import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 class BottleSpinPage extends StatefulWidget {
   const BottleSpinPage({super.key});
@@ -33,6 +32,7 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   String? _lastResult;
 
   double _spinStrength = 0.6;
+  bool _hapticEnabled = true;
 
   @override
   void initState() {
@@ -49,7 +49,6 @@ class _BottleSpinPageState extends State<BottleSpinPage>
     );
 
     _controller.addListener(() {
-      // interpolate angle using curved progress 0..1 from fixed _startAngle
       final t = _animation.value;
       setState(() => _currentAngle = _lerp(_startAngle, _targetAngle, t));
     });
@@ -85,10 +84,18 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
-    final proDefinitions = [
-      l10n.bottleSpinStrengthSubtitle,
-      l10n.bottleSpinHapticSubtitle,
-    ];
+    final accent = GeneratorType.bottleSpin.accentColor;
+
+    void openProDialog() => showProDialog(
+      context,
+      title: l10n.bottleSpinStrengthProTitle,
+      message: l10n.bottleSpinStrengthProMessage,
+      generatorType: GeneratorType.bottleSpin,
+      featureDefinitions: [
+        l10n.bottleSpinStrengthSubtitle,
+        l10n.bottleSpinHapticSubtitle,
+      ],
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -122,10 +129,10 @@ class _BottleSpinPageState extends State<BottleSpinPage>
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(l10n.bottleSpinInstructions, style: TextStyle(fontSize: 14)),
+          Text(l10n.bottleSpinInstructions, style: const TextStyle(fontSize: 14)),
           const SizedBox(height: 16),
 
-          // Bottle area
+          // Bottle animation
           AspectRatio(
             aspectRatio: 1,
             child: Container(
@@ -146,109 +153,45 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 
           const SizedBox(height: 14),
 
-          Container(
-            width: double.infinity,
-            constraints: const BoxConstraints(minHeight: 110),
-            padding: const EdgeInsets.all(20),
-            decoration: AppStyles.generatorResultCard(
-              GeneratorType.bottleSpin.accentColor,
-            ),
-            child: Text(
-              _lastResult ?? l10n.bottleSpinSpin,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
-              textAlign: TextAlign.center,
-            ),
+          // Result area (tap to spin)
+          ResultDisplayArea(
+            accentColor: accent,
+            hint: l10n.bottleSpinSpin,
+            result: _lastResult,
+            fontSize: 24,
+            textAlign: TextAlign.center,
+            onTap: _spinning ? null : () => _spin(gate),
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
 
-          // Pro-only controls
-          _SectionTitle(l10n.bottleSpinSectionControls),
-          const SizedBox(height: 8),
-
-          ListTile(
-            title: Text(l10n.bottleSpinStrength),
-            subtitle: Text(
-              gate.canUse(ProFeature.bottleSpinStrength)
-                  ? l10n.bottleSpinStrengthSubtitle
-                  : l10n.commonProFeature,
-            ),
-            trailing: SizedBox(
-              width: 160,
-              child: Slider(
-                value: _spinStrength,
-                onChanged: (v) async {
-                  if (!gate.canUse(ProFeature.bottleSpinStrength)) {
-                    await showProDialog(
-                      context,
-                      title: l10n.bottleSpinStrengthProTitle,
-                      message: l10n.bottleSpinStrengthProMessage,
-                      generatorType: GeneratorType.bottleSpin,
-                      featureDefinitions: proDefinitions,
-                    );
-                    return;
-                  }
-                  setState(() => _spinStrength = v);
-                },
+          // Pro features
+          PremiumSection(
+            isPro: gate.isPro,
+            onProRequired: openProDialog,
+            title: l10n.bottleSpinSectionControls,
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.bottleSpinStrength),
+                subtitle: Text(l10n.bottleSpinStrengthSubtitle),
+                trailing: SizedBox(
+                  width: 160,
+                  child: Slider(
+                    value: _spinStrength,
+                    activeColor: accent,
+                    onChanged: (v) => setState(() => _spinStrength = v),
+                  ),
+                ),
               ),
-            ),
-          ),
-
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.bottleSpinHaptic),
-            subtitle: Text(
-              gate.canUse(ProFeature.bottleSpinHaptics)
-                  ? l10n.bottleSpinHapticSubtitle
-                  : l10n.commonProFeature,
-            ),
-            value: gate.canUse(ProFeature.bottleSpinHaptics) ? true : false,
-            onChanged: (v) async {
-              if (!gate.canUse(ProFeature.bottleSpinHaptics)) {
-                await showProDialog(
-                  context,
-                  title: l10n.bottleSpinHapticProTitle,
-                  message: l10n.bottleSpinHapticProMessage,
-                  generatorType: GeneratorType.bottleSpin,
-                  featureDefinitions: proDefinitions,
-                );
-                return;
-              }
-              // MVP: we just trigger vibration on stop; no stored setting yet
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.bottleSpinHapticEnabled)),
-              );
-            },
-          ),
-
-          const SizedBox(height: 16),
-
-          if (!gate.isPro)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: AppStyles.proCard(),
-              child: Text(
-                l10n.bottleSpinFreeProHint,
-                style: AppStyles.resultStyle,
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.bottleSpinHaptic),
+                subtitle: Text(l10n.bottleSpinHapticSubtitle),
+                value: _hapticEnabled,
+                onChanged: (v) => setState(() => _hapticEnabled = v),
               ),
-            ),
-
-          const SizedBox(height: 14),
-
-          FilledButton.icon(
-            style: AppStyles.generatorButton(
-              GeneratorType.bottleSpin.accentColor,
-            ),
-            onPressed: _spinning
-                ? null
-                : () async {
-                    await _spin(gate);
-                  },
-            icon: const Icon(Icons.casino),
-            label: Text(
-              _spinning ? l10n.bottleSpinSpinning : l10n.bottleSpinSpin,
-            ),
+            ],
           ),
         ],
       ),
@@ -260,16 +203,11 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 
     setState(() => _spinning = true);
 
-    // random target in degrees
     final randomDeg = _rng.nextInt(360).toDouble();
 
-    // number of full rotations:
-    // Free: fixed range
-    // Pro: based on strength slider
     final baseTurns = gate.canUse(ProFeature.bottleSpinStrength)
-        ? (2 + (_spinStrength * 8))
-              .round() // 2..10 turns
-        : 5; // fixed
+        ? (2 + (_spinStrength * 8)).round()
+        : 5;
 
     final extraDeg = baseTurns * 360.0;
     final totalDeg = extraDeg + randomDeg;
@@ -278,19 +216,16 @@ class _BottleSpinPageState extends State<BottleSpinPage>
     _currentAngle = _startAngle;
     _targetAngle = _startAngle + (totalDeg * pi / 180.0);
 
-    // Randomise duration each spin for variety
     _controller.duration = Duration(milliseconds: 3000 + _rng.nextInt(2000));
 
-    // Pro haptics on start is optional; keep minimal
-    if (gate.canUse(ProFeature.bottleSpinHaptics)) {
+    if (gate.canUse(ProFeature.bottleSpinHaptics) && _hapticEnabled) {
       HapticFeedback.selectionClick();
     }
 
     _controller.reset();
     await _controller.forward();
 
-    // Haptics on stop (only if Pro)
-    if (gate.canUse(ProFeature.bottleSpinHaptics)) {
+    if (gate.canUse(ProFeature.bottleSpinHaptics) && _hapticEnabled) {
       HapticFeedback.mediumImpact();
     }
   }
@@ -301,14 +236,12 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 class _BottleShape extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Very simple “bottle”: a rounded rectangle body + triangle tip
     return SizedBox(
       width: 220,
       height: 60,
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
-          // Body
           Positioned.fill(
             left: 30,
             child: Container(
@@ -316,14 +249,11 @@ class _BottleShape extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
                 border: Border.all(
-                  color: Theme.of(
-                    context,
-                  ).colorScheme.primary.withOpacity(0.35),
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
                 ),
               ),
             ),
           ),
-          // Neck / Tip
           Positioned(
             left: 0,
             child: CustomPaint(
@@ -333,7 +263,6 @@ class _BottleShape extends StatelessWidget {
               ),
             ),
           ),
-          // Center mark
           Positioned(
             left: 120,
             child: Container(
@@ -371,17 +300,4 @@ class _TipPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _TipPainter oldDelegate) =>
       oldDelegate.color != color;
-}
-
-class _SectionTitle extends StatelessWidget {
-  final String text;
-  const _SectionTitle(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    );
-  }
 }

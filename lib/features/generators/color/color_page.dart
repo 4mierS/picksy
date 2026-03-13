@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 
@@ -10,6 +9,7 @@ import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 enum ColorMode { normal, pastel, neon, dark }
 
@@ -27,17 +27,74 @@ class _ColorPageState extends State<ColorPage> {
   List<Color> _palette = [];
   ColorMode _mode = ColorMode.normal;
 
+  String _toHex(Color c) {
+    return "#${c.red.toRadixString(16).padLeft(2, '0')}"
+            "${c.green.toRadixString(16).padLeft(2, '0')}"
+            "${c.blue.toRadixString(16).padLeft(2, '0')}"
+        .toUpperCase();
+  }
+
+  Color _generateColor({required ColorMode mode}) {
+    int r = _rng.nextInt(256);
+    int g = _rng.nextInt(256);
+    int b = _rng.nextInt(256);
+
+    switch (mode) {
+      case ColorMode.pastel:
+        r = (r + 255) ~/ 2;
+        g = (g + 255) ~/ 2;
+        b = (b + 255) ~/ 2;
+        break;
+      case ColorMode.neon:
+        r = (r + 100).clamp(0, 255);
+        g = (g + 100).clamp(0, 255);
+        b = (b + 100).clamp(0, 255);
+        break;
+      case ColorMode.dark:
+        r = r ~/ 2;
+        g = g ~/ 2;
+        b = b ~/ 2;
+        break;
+      case ColorMode.normal:
+        break;
+    }
+
+    return Color.fromARGB(255, r, g, b);
+  }
+
+  Future<void> _generate({required ColorMode mode}) async {
+    final color = _generateColor(mode: mode);
+    setState(() => _current = color);
+
+    final history = context.read<HistoryStore>();
+    await history.add(
+      type: GeneratorType.color,
+      value: _toHex(color),
+      maxEntries: context.gateRead.historyMax,
+      metadata: {'mode': mode.name},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
-    final history = context.read<HistoryStore>();
     final currentHex = _toHex(_current);
-    final proDefinitions = [
-      l10n.colorModesProMessage,
-      l10n.colorPaletteProMessage,
-      l10n.colorModesUpgradeMessage,
-    ];
+    final accent = GeneratorType.color.accentColor;
+
+    final effectiveMode = gate.canUse(ProFeature.colorModes) ? _mode : ColorMode.normal;
+
+    void openProDialog() => showProDialog(
+      context,
+      title: l10n.colorModesProTitle,
+      message: l10n.colorModesProMessage,
+      generatorType: GeneratorType.color,
+      featureDefinitions: [
+        l10n.colorModesProMessage,
+        l10n.colorPaletteProMessage,
+        l10n.colorModesUpgradeMessage,
+      ],
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -71,96 +128,20 @@ class _ColorPageState extends State<ColorPage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _ColorPreview(
-            color: _current,
-            showContrast: gate.canUse(ProFeature.colorContrast),
-          ),
-
-          const SizedBox(height: 16),
-
-          _SectionTitle(l10n.colorSectionMode),
-
-          const SizedBox(height: 8),
-
-          _ModeSelector(
-            mode: _mode,
-            enabled: gate.canUse(ProFeature.colorModes),
-            proDefinitions: proDefinitions,
-            onChanged: (m) async {
-              if (!gate.canUse(ProFeature.colorModes)) {
-                await showProDialog(
-                  context,
-                  title: l10n.colorModesProTitle,
-                  message: l10n.colorModesProMessage,
-                  generatorType: GeneratorType.color,
-                  featureDefinitions: proDefinitions,
-                );
-                return;
-              }
-              setState(() => _mode = m);
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          _SectionTitle(l10n.colorSectionPalette),
-
-          const SizedBox(height: 8),
-
-          FilledButton(
-            style: AppStyles.generatorButton(GeneratorType.color.accentColor),
-            onPressed: () async {
-              if (!gate.canUse(ProFeature.colorPalette)) {
-                await showProDialog(
-                  context,
-                  title: l10n.colorPaletteProTitle,
-                  message: l10n.colorPaletteProMessage,
-                  generatorType: GeneratorType.color,
-                  featureDefinitions: proDefinitions,
-                );
-                return;
-              }
-
-              setState(() {
-                _palette = List.generate(5, (_) => _generateColor(mode: _mode));
-              });
-            },
-            child: Text(l10n.colorGeneratePalette),
+          // ── Result area (tap to generate) ────────────────────────────────
+          ResultDisplayArea(
+            accentColor: accent,
+            hint: l10n.colorTitle,
+            onTap: () => _generate(mode: effectiveMode),
+            child: _ColorPreview(
+              color: _current,
+              showContrast: gate.canUse(ProFeature.colorContrast),
+            ),
           ),
 
           const SizedBox(height: 12),
 
-          if (_palette.isNotEmpty)
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: _palette
-                  .map(
-                    (c) => GestureDetector(
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(text: _toHex(c)));
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(l10n.colorCopiedHex)),
-                        );
-                      },
-                      child: _ColorBox(c),
-                    ),
-                  )
-                  .toList(),
-            ),
-
-          const SizedBox(height: 24),
-
-          if (!gate.isPro)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: AppStyles.proCard(),
-              child: Text(l10n.colorFreeProHint, style: AppStyles.resultStyle),
-            ),
-
-          const SizedBox(height: 12),
-
+          // ── Copy button (free) ────────────────────────────────────────────
           OutlinedButton.icon(
             onPressed: () {
               Clipboard.setData(ClipboardData(text: currentHex));
@@ -172,62 +153,59 @@ class _ColorPageState extends State<ColorPage> {
             label: Text(l10n.commonCopy),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 24),
 
-          FilledButton.icon(
-            style: AppStyles.generatorButton(GeneratorType.color.accentColor),
-            icon: const Icon(Icons.casino),
-            label: Text(l10n.commonGenerate),
-            onPressed: () async {
-              final color = _generateColor(mode: _mode);
-              setState(() => _current = color);
+          // ── Pro features ─────────────────────────────────────────────────
+          PremiumSection(
+            isPro: gate.isPro,
+            onProRequired: openProDialog,
+            title: l10n.colorSectionMode,
+            children: [
+              _ModeSelector(
+                mode: _mode,
+                onChanged: (m) => setState(() => _mode = m),
+              ),
 
-              await history.add(
-                type: GeneratorType.color,
-                value: _toHex(color),
-                maxEntries: context.gateRead.historyMax,
-                metadata: {'mode': _mode.name},
-              );
-            },
+              const SizedBox(height: 20),
+
+              GeneratorSectionTitle(l10n.colorSectionPalette),
+              const SizedBox(height: 8),
+
+              FilledButton(
+                style: AppStyles.generatorButton(accent),
+                onPressed: () {
+                  setState(() {
+                    _palette = List.generate(5, (_) => _generateColor(mode: _mode));
+                  });
+                },
+                child: Text(l10n.colorGeneratePalette),
+              ),
+
+              if (_palette.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: _palette
+                      .map(
+                        (c) => GestureDetector(
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: _toHex(c)));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(l10n.colorCopiedHex)),
+                            );
+                          },
+                          child: _ColorBox(c),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ],
+            ],
           ),
         ],
       ),
     );
-  }
-
-  Color _generateColor({required ColorMode mode}) {
-    int r = _rng.nextInt(256);
-    int g = _rng.nextInt(256);
-    int b = _rng.nextInt(256);
-
-    switch (mode) {
-      case ColorMode.pastel:
-        r = (r + 255) ~/ 2;
-        g = (g + 255) ~/ 2;
-        b = (b + 255) ~/ 2;
-        break;
-      case ColorMode.neon:
-        r = (r + 100).clamp(0, 255);
-        g = (g + 100).clamp(0, 255);
-        b = (b + 100).clamp(0, 255);
-        break;
-      case ColorMode.dark:
-        r = r ~/ 2;
-        g = g ~/ 2;
-        b = b ~/ 2;
-        break;
-      case ColorMode.normal:
-        break;
-    }
-
-    return Color.fromARGB(255, r, g, b);
-  }
-
-  String _toHex(Color c) {
-    return "#${c.red.toRadixString(16).padLeft(2, '0')}"
-            "${c.green.toRadixString(16).padLeft(2, '0')}"
-            "${c.blue.toRadixString(16).padLeft(2, '0')}"
-        .toUpperCase();
   }
 }
 
@@ -248,10 +226,10 @@ class _ColorPreview extends StatelessWidget {
     final contrast = _isLight(color) ? Colors.black : Colors.white;
 
     return Container(
-      height: 160,
+      height: 140,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
       ),
       alignment: Alignment.center,
       child: Text(
@@ -288,31 +266,11 @@ class _ColorBox extends StatelessWidget {
   }
 }
 
-class _SectionTitle extends StatelessWidget {
-  final String text;
-  const _SectionTitle(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    );
-  }
-}
-
 class _ModeSelector extends StatelessWidget {
   final ColorMode mode;
-  final bool enabled;
-  final List<String> proDefinitions;
   final ValueChanged<ColorMode> onChanged;
 
-  const _ModeSelector({
-    required this.mode,
-    required this.enabled,
-    required this.proDefinitions,
-    required this.onChanged,
-  });
+  const _ModeSelector({required this.mode, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -331,17 +289,7 @@ class _ModeSelector extends StatelessWidget {
         ButtonSegment(value: ColorMode.dark, label: Text(l10n.colorModeDark)),
       ],
       selected: {mode},
-      onSelectionChanged: enabled
-          ? (s) => onChanged(s.first)
-          : (_) async {
-              await showProDialog(
-                context,
-                title: l10n.colorModesProTitle,
-                message: l10n.colorModesUpgradeMessage,
-                generatorType: GeneratorType.color,
-                featureDefinitions: proDefinitions,
-              );
-            },
+      onSelectionChanged: (s) => onChanged(s.first),
     );
   }
 }

@@ -5,6 +5,7 @@ import '../ui/app_colors.dart';
 import '../../models/generator_type.dart';
 
 import '../../storage/premium_store.dart';
+import '../../features/pro/pro_page.dart';
 
 /// Define all Pro-gated capabilities in one place.
 enum ProFeature {
@@ -224,11 +225,9 @@ Future<void> showProDialog(
           ),
           onPressed: () {
             Navigator.of(context).pop();
-            // Navigate to Pro tab (index 1 in your AppShell)
-            // For MVP: we just show a snack. Later, wire actual navigation.
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(l10n.gateOpenProTab)));
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const ProPage()),
+            );
           },
           child: Text(l10n.gateGoPro),
         ),
