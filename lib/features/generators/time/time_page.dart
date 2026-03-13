@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
+import 'package:picksy/core/ui/app_colors.dart';
 import '../../../core/gating/feature_gate.dart';
 import '../../../l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
