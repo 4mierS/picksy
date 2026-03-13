@@ -499,10 +499,8 @@
   "mathBackToMenu": "Back to Menu",
   "mathFreeProHint": "Free: addition & subtraction, 30 seconds.\nPro: all operations, custom duration.",
   "mathAvgAccuracy": "Avg Accuracy",
-
   "generatorTicTacToe": "Tic Tac Toe",
   "generatorConnectFour": "Connect Four",
-
   "gameSetupTitle": "Game Setup",
   "gameModeLabel": "Game Mode",
   "gameModeBot": "Play vs Bot",
@@ -513,7 +511,7 @@
   "gameDifficultyMedium": "Medium",
   "gameDifficultyHard": "Hard",
   "gameDifficultyProTitle": "Difficulty Selection is Pro",
-  "gameDifficultyProMessage": "Go Pro to choose between Easy, Medium, and Hard difficulty levels.",
+  "gameDifficultyProMessage": "Go Pro to choose between Medium and Hard difficulty levels.",
   "gameLocalMultiplayerProTitle": "Local Multiplayer is Pro",
   "gameLocalMultiplayerProMessage": "Go Pro to play with a friend on the same device, use custom names, and track statistics.",
   "gameCustomNamesProTitle": "Custom Names is Pro",

@@ -499,10 +499,8 @@
   "mathBackToMenu": "Torna al menu",
   "mathFreeProHint": "Gratis: addizione e sottrazione, 30 secondi.\nPro: tutte le operazioni, durata personalizzata.",
   "mathAvgAccuracy": "Accuratezza media",
-
   "generatorTicTacToe": "Tris",
   "generatorConnectFour": "Forza 4",
-
   "gameSetupTitle": "Impostazioni Gioco",
   "gameModeLabel": "Modalità di Gioco",
   "gameModeBot": "Gioca contro Bot",
@@ -513,7 +511,7 @@
   "gameDifficultyMedium": "Medio",
   "gameDifficultyHard": "Difficile",
   "gameDifficultyProTitle": "Selezione difficoltà è Pro",
-  "gameDifficultyProMessage": "Vai Pro per scegliere tra Facile, Medio e Difficile.",
+  "gameDifficultyProMessage": "Vai Pro per scegliere tra Medio e Difficile.",
   "gameLocalMultiplayerProTitle": "Multigiocatore locale è Pro",
   "gameLocalMultiplayerProMessage": "Vai Pro per giocare con un amico sullo stesso dispositivo, usare nomi personalizzati e tenere traccia delle statistiche.",
   "gameCustomNamesProTitle": "Nomi personalizzati è Pro",

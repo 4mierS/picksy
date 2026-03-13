@@ -499,10 +499,8 @@
   "mathBackToMenu": "Retour au menu",
   "mathFreeProHint": "Free : addition & soustraction, 30 secondes.\nPro : toutes les opérations, durée personnalisée.",
   "mathAvgAccuracy": "Précision moyenne",
-
   "generatorTicTacToe": "Morpion",
   "generatorConnectFour": "Puissance 4",
-
   "gameSetupTitle": "Configuration",
   "gameModeLabel": "Mode de Jeu",
   "gameModeBot": "Jouer contre Bot",
@@ -513,7 +511,7 @@
   "gameDifficultyMedium": "Moyen",
   "gameDifficultyHard": "Difficile",
   "gameDifficultyProTitle": "Sélection de difficulté est Pro",
-  "gameDifficultyProMessage": "Passez Pro pour choisir entre Facile, Moyen et Difficile.",
+  "gameDifficultyProMessage": "Passez Pro pour choisir entre Moyen et Difficile.",
   "gameLocalMultiplayerProTitle": "Multijoueur local est Pro",
   "gameLocalMultiplayerProMessage": "Passez Pro pour jouer avec un ami sur le même appareil, utiliser des noms personnalisés et suivre les statistiques.",
   "gameCustomNamesProTitle": "Noms personnalisés est Pro",

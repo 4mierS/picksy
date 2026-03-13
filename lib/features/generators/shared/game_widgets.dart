@@ -14,7 +14,7 @@ import 'package:picksy/storage/game_stats_store.dart';
 
 enum GameMode { bot, local }
 
-enum Difficulty { easy, medium, hard }
+enum Difficulty { medium, hard }
 
 // ---------------------------------------------------------------------------
 // Mode selector row
@@ -110,8 +110,7 @@ class GameModeButton extends StatelessWidget {
             if (badge != null) ...[
               const SizedBox(height: 2),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                 decoration: BoxDecoration(
                   color: AppColors.proPurple.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(8),
@@ -158,7 +157,6 @@ class DifficultySelector extends StatelessWidget {
       children: Difficulty.values.map((d) {
         final isSelected = selected == d;
         final label = switch (d) {
-          Difficulty.easy => l10n.gameDifficultyEasy,
           Difficulty.medium => l10n.gameDifficultyMedium,
           Difficulty.hard => l10n.gameDifficultyHard,
         };
@@ -268,7 +266,9 @@ class GameStatsCard extends StatelessWidget {
                 Text(
                   l10n.gameStatsTitle,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 15),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
                 ),
                 TextButton(
                   style: TextButton.styleFrom(
@@ -328,7 +328,10 @@ class GameStatsCard extends StatelessWidget {
     return entries;
   }
 
-  Future<void> _confirmClear(BuildContext context, AppLocalizations l10n) async {
+  Future<void> _confirmClear(
+    BuildContext context,
+    AppLocalizations l10n,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(

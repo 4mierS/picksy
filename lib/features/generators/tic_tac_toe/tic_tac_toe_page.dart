@@ -32,15 +32,11 @@ const _kGameKey = 'tic_tac_toe';
 // ---------------------------------------------------------------------------
 
 class _TicTacToeAI {
-  final Random _rng = Random();
-
   int bestMove(List<_Cell> board, _Cell botMark, Difficulty difficulty) {
     final empty = _emptyIndices(board);
     if (empty.isEmpty) return -1;
 
     switch (difficulty) {
-      case Difficulty.easy:
-        return _randomMove(empty);
       case Difficulty.medium:
         return _mediumMove(board, botMark, empty);
       case Difficulty.hard:
@@ -48,28 +44,58 @@ class _TicTacToeAI {
     }
   }
 
-  int _randomMove(List<int> empty) => empty[_rng.nextInt(empty.length)];
-
   int _mediumMove(List<_Cell> board, _Cell botMark, List<int> empty) {
     final humanMark = botMark == _Cell.x ? _Cell.o : _Cell.x;
+    // 1. Win if possible
     for (final idx in empty) {
       final b = List<_Cell>.from(board)..[idx] = botMark;
       if (_checkWinner(b) == botMark) return idx;
     }
+    // 2. Block opponent win
     for (final idx in empty) {
       final b = List<_Cell>.from(board)..[idx] = humanMark;
       if (_checkWinner(b) == humanMark) return idx;
     }
-    if (_rng.nextDouble() < 0.3) return _randomMove(empty);
-    return _preferredMove(empty);
+    // 3. Create a fork (two simultaneous winning threats)
+    for (final idx in empty) {
+      final b = List<_Cell>.from(board)..[idx] = botMark;
+      if (_countThreats(b, botMark) >= 2) return idx;
+    }
+    // 4. Block opponent fork
+    for (final idx in empty) {
+      final b = List<_Cell>.from(board)..[idx] = humanMark;
+      if (_countThreats(b, humanMark) >= 2) return idx;
+    }
+    // 5. Center
+    if (empty.contains(4)) return 4;
+    // 6. Any empty corner
+    for (final corner in const [0, 2, 6, 8]) {
+      if (empty.contains(corner)) return corner;
+    }
+    // 7. Any remaining edge
+    return empty.first;
   }
 
-  int _preferredMove(List<int> empty) {
-    const preferred = [4, 0, 2, 6, 8, 1, 3, 5, 7];
-    for (final p in preferred) {
-      if (empty.contains(p)) return p;
+  int _countThreats(List<_Cell> board, _Cell mark) {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
+    ];
+    int threats = 0;
+    for (final line in lines) {
+      final cells = line.map((i) => board[i]).toList();
+      if (cells.where((c) => c == mark).length == 2 &&
+          cells.contains(_Cell.empty)) {
+        threats++;
+      }
     }
-    return empty.first;
+    return threats;
   }
 
   int _minimaxBestMove(List<_Cell> board, _Cell botMark) {
@@ -118,14 +144,21 @@ class _TicTacToeAI {
     }
   }
 
-  List<int> _emptyIndices(List<_Cell> board) =>
-      [for (int i = 0; i < board.length; i++) if (board[i] == _Cell.empty) i];
+  List<int> _emptyIndices(List<_Cell> board) => [
+    for (int i = 0; i < board.length; i++)
+      if (board[i] == _Cell.empty) i,
+  ];
 
   _Cell? _checkWinner(List<_Cell> board) {
     const lines = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6],
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
     ];
     for (final line in lines) {
       final a = board[line[0]];
@@ -150,7 +183,7 @@ class TicTacToePage extends StatefulWidget {
 
 class _TicTacToePageState extends State<TicTacToePage> {
   GameMode _mode = GameMode.bot;
-  Difficulty _difficulty = Difficulty.easy;
+  Difficulty _difficulty = Difficulty.medium;
   String _player1Name = _kDefaultPlayerName;
   String _player2Name = _kBotName;
   final _p1Controller = TextEditingController(text: _kDefaultPlayerName);
@@ -189,13 +222,14 @@ class _TicTacToePageState extends State<TicTacToePage> {
   // ---------------------------------------------------------------------------
 
   void _startGame() {
-    final p1 = _normalize(_p1Controller.text.isNotEmpty
-        ? _p1Controller.text
-        : _kDefaultPlayerName);
+    final p1 = _normalize(
+      _p1Controller.text.isNotEmpty ? _p1Controller.text : _kDefaultPlayerName,
+    );
     final p2 = _mode == GameMode.bot
         ? _kBotName
         : _normalize(
-            _p2Controller.text.isNotEmpty ? _p2Controller.text : 'PLAYER 2');
+            _p2Controller.text.isNotEmpty ? _p2Controller.text : 'PLAYER 2',
+          );
 
     setState(() {
       _player1Name = p1;
@@ -224,9 +258,9 @@ class _TicTacToePageState extends State<TicTacToePage> {
 
     final winner = _checkWinner();
     if (winner != null) {
-      _endGame(winner == _Cell.x
-          ? _normalize(_player1Name)
-          : _normalize(_player2Name));
+      _endGame(
+        winner == _Cell.x ? _normalize(_player1Name) : _normalize(_player2Name),
+      );
       return;
     }
     if (_board.every((c) => c != _Cell.empty)) {
@@ -251,9 +285,14 @@ class _TicTacToePageState extends State<TicTacToePage> {
 
   _Cell? _checkWinner() {
     const lines = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8],
-      [0, 3, 6], [1, 4, 7], [2, 5, 8],
-      [0, 4, 8], [2, 4, 6],
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+      [0, 4, 8],
+      [2, 4, 6],
     ];
     for (final line in lines) {
       final a = _board[line[0]];
@@ -333,10 +372,13 @@ class _TicTacToePageState extends State<TicTacToePage> {
             onPressed: () {
               final gate = context.gateRead;
               if (gate.canUse(ProFeature.analyticsAccess)) {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const GeneratorAnalyticsPage(
-                      generatorType: GeneratorType.ticTacToe),
-                ));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const GeneratorAnalyticsPage(
+                      generatorType: GeneratorType.ticTacToe,
+                    ),
+                  ),
+                );
               } else {
                 showProDialog(
                   context,
@@ -367,15 +409,19 @@ class _TicTacToePageState extends State<TicTacToePage> {
           padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
           child: Column(
             children: [
-              Icon(GeneratorType.ticTacToe.homeIcon,
-                  size: 56, color: Colors.white),
+              Icon(
+                GeneratorType.ticTacToe.homeIcon,
+                size: 56,
+                color: Colors.white,
+              ),
               const SizedBox(height: 8),
               Text(
                 l10n.generatorTicTacToe,
                 style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w800),
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
             ],
           ),
@@ -389,22 +435,24 @@ class _TicTacToePageState extends State<TicTacToePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(l10n.gameModeLabel,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 15)),
+                Text(
+                  l10n.gameModeLabel,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
+                ),
                 const SizedBox(height: 10),
                 GameModeSelector(
                   selected: _mode,
                   accentColor: _accent,
                   onChanged: (m) async {
                     if (m == GameMode.local &&
-                        !gate.canUse(
-                            ProFeature.ticTacToeLocalMultiplayer)) {
+                        !gate.canUse(ProFeature.ticTacToeLocalMultiplayer)) {
                       await showProDialog(
                         context,
                         title: l10n.gameLocalMultiplayerProTitle,
-                        message:
-                            l10n.gameLocalMultiplayerProMessage,
+                        message: l10n.gameLocalMultiplayerProMessage,
                         generatorType: GeneratorType.ticTacToe,
                         featureDefinitions: [
                           l10n.gameModeLocal,
@@ -416,8 +464,9 @@ class _TicTacToePageState extends State<TicTacToePage> {
                     }
                     setState(() {
                       _mode = m;
-                      _p2Controller.text =
-                          m == GameMode.bot ? _kBotName : 'PLAYER 2';
+                      _p2Controller.text = m == GameMode.bot
+                          ? _kBotName
+                          : 'PLAYER 2';
                     });
                   },
                 ),
@@ -451,8 +500,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
                   _NameField(
                     label: l10n.gamePlayerTwoName,
                     controller: _p2Controller,
-                    enabled:
-                        gate.canUse(ProFeature.ticTacToeCustomNames),
+                    enabled: gate.canUse(ProFeature.ticTacToeCustomNames),
                     onLockedTap: () => showProDialog(
                       context,
                       title: l10n.gameCustomNamesProTitle,
@@ -484,17 +532,14 @@ class _TicTacToePageState extends State<TicTacToePage> {
                   const SizedBox(height: 10),
                   DifficultySelector(
                     selected: _difficulty,
-                    enabled:
-                        gate.canUse(ProFeature.ticTacToeDifficulty),
+                    enabled: gate.canUse(ProFeature.ticTacToeDifficulty),
                     accentColor: _accent,
                     onChanged: (d) async {
-                      if (!gate.canUse(
-                          ProFeature.ticTacToeDifficulty)) {
+                      if (!gate.canUse(ProFeature.ticTacToeDifficulty)) {
                         await showProDialog(
                           context,
                           title: l10n.gameDifficultyProTitle,
-                          message:
-                              l10n.gameDifficultyProMessage,
+                          message: l10n.gameDifficultyProMessage,
                           generatorType: GeneratorType.ticTacToe,
                         );
                         return;
@@ -545,23 +590,20 @@ class _TicTacToePageState extends State<TicTacToePage> {
       children: [
         Container(
           width: double.infinity,
-          padding:
-              const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           decoration: AppStyles.generatorResultCard(_accent),
           child: Text(
             isFinished
-                ? (_isDraw
-                    ? l10n.gameDraw
-                    : l10n.gameYouWin(_winnerName!))
+                ? (_isDraw ? l10n.gameDraw : l10n.gameYouWin(_winnerName!))
                 : (_botThinking
-                    ? l10n.gameBotThinking
-                    : l10n.gamePlayerTurn(_currentPlayerName)
-                       ),
+                      ? l10n.gameBotThinking
+                      : l10n.gamePlayerTurn(_currentPlayerName)),
             textAlign: TextAlign.center,
             style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w800),
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -620,9 +662,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
             decoration: BoxDecoration(
               color: isWinCell
                   ? _accent.withOpacity(0.3)
-                  : Theme.of(context)
-                      .colorScheme
-                      .surfaceContainerHighest,
+                  : Theme.of(context).colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: isWinCell ? _accent : Colors.transparent,
@@ -675,8 +715,7 @@ class _NameField extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(label,
-                style: const TextStyle(fontWeight: FontWeight.w600)),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
             if (!enabled) ...[
               const SizedBox(width: 6),
               const Icon(Icons.lock, size: 14, color: AppColors.proPurple),
@@ -715,9 +754,10 @@ class _DifficultyHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Text(label,
-            style: const TextStyle(
-                fontWeight: FontWeight.w700, fontSize: 15)),
+        Text(
+          label,
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+        ),
         if (locked) ...[
           const SizedBox(width: 6),
           const Icon(Icons.lock, size: 14, color: AppColors.proPurple),
@@ -725,9 +765,10 @@ class _DifficultyHeader extends StatelessWidget {
           Text(
             proLabel,
             style: const TextStyle(
-                fontSize: 11,
-                color: AppColors.proPurple,
-                fontWeight: FontWeight.w600),
+              fontSize: 11,
+              color: AppColors.proPurple,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ],

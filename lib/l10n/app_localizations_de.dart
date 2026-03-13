@@ -1225,7 +1225,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get gameDifficultyProMessage =>
-      'Werde Pro, um zwischen Leicht, Mittel und Schwer zu wählen.';
+      'Werde Pro, um zwischen Mittel und Schwer zu wählen.';
 
   @override
   String get gameLocalMultiplayerProTitle => 'Lokaler Mehrspieler ist Pro';

@@ -41,8 +41,6 @@ class _ConnectFourAI {
     if (validCols.isEmpty) return -1;
 
     switch (difficulty) {
-      case Difficulty.easy:
-        return _randomMove(validCols);
       case Difficulty.medium:
         return _mediumMove(board, botMark, validCols);
       case Difficulty.hard:
@@ -140,14 +138,24 @@ class _ConnectFourAI {
     // Horizontal windows
     for (int r = 0; r < _kRows; r++) {
       for (int c = 0; c <= _kCols - 4; c++) {
-        final window = [board[r][c], board[r][c + 1], board[r][c + 2], board[r][c + 3]];
+        final window = [
+          board[r][c],
+          board[r][c + 1],
+          board[r][c + 2],
+          board[r][c + 3],
+        ];
         score += _scoreWindow(window, botMark, humanMark);
       }
     }
     // Vertical windows
     for (int c = 0; c < _kCols; c++) {
       for (int r = 0; r <= _kRows - 4; r++) {
-        final window = [board[r][c], board[r + 1][c], board[r + 2][c], board[r + 3][c]];
+        final window = [
+          board[r][c],
+          board[r + 1][c],
+          board[r + 2][c],
+          board[r + 3][c],
+        ];
         score += _scoreWindow(window, botMark, humanMark);
       }
     }
@@ -173,7 +181,10 @@ class _ConnectFourAI {
   }
 
   List<int> _validColumns(List<List<_Cell>> board) {
-    return [for (int c = 0; c < _kCols; c++) if (board[0][c] == _Cell.empty) c];
+    return [
+      for (int c = 0; c < _kCols; c++)
+        if (board[0][c] == _Cell.empty) c,
+    ];
   }
 
   int _dropRow(List<List<_Cell>> board, int col) {
@@ -199,7 +210,8 @@ class _ConnectFourAI {
         if (m != _Cell.empty &&
             board[r][c + 1] == m &&
             board[r][c + 2] == m &&
-            board[r][c + 3] == m) return m;
+            board[r][c + 3] == m)
+          return m;
       }
     }
     // Vertical
@@ -209,7 +221,8 @@ class _ConnectFourAI {
         if (m != _Cell.empty &&
             board[r + 1][c] == m &&
             board[r + 2][c] == m &&
-            board[r + 3][c] == m) return m;
+            board[r + 3][c] == m)
+          return m;
       }
     }
     // Diagonal /
@@ -219,7 +232,8 @@ class _ConnectFourAI {
         if (m != _Cell.empty &&
             board[r - 1][c + 1] == m &&
             board[r - 2][c + 2] == m &&
-            board[r - 3][c + 3] == m) return m;
+            board[r - 3][c + 3] == m)
+          return m;
       }
     }
     // Diagonal \
@@ -229,7 +243,8 @@ class _ConnectFourAI {
         if (m != _Cell.empty &&
             board[r + 1][c + 1] == m &&
             board[r + 2][c + 2] == m &&
-            board[r + 3][c + 3] == m) return m;
+            board[r + 3][c + 3] == m)
+          return m;
       }
     }
     return null;
@@ -250,7 +265,7 @@ class ConnectFourPage extends StatefulWidget {
 class _ConnectFourPageState extends State<ConnectFourPage> {
   // Setup
   GameMode _mode = GameMode.bot;
-  Difficulty _difficulty = Difficulty.easy;
+  Difficulty _difficulty = Difficulty.medium;
   String _player1Name = _kDefaultPlayerName;
   String _player2Name = _kBotName;
   final _p1Controller = TextEditingController(text: _kDefaultPlayerName);
@@ -311,10 +326,13 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
 
   void _startGame() {
     final p1 = _normalize(
-        _p1Controller.text.isNotEmpty ? _p1Controller.text : _kDefaultPlayerName);
+      _p1Controller.text.isNotEmpty ? _p1Controller.text : _kDefaultPlayerName,
+    );
     final p2 = _mode == GameMode.bot
         ? _kBotName
-        : _normalize(_p2Controller.text.isNotEmpty ? _p2Controller.text : 'PLAYER 2');
+        : _normalize(
+            _p2Controller.text.isNotEmpty ? _p2Controller.text : 'PLAYER 2',
+          );
 
     setState(() {
       _player1Name = p1;
@@ -389,8 +407,10 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
             _board[r][c + 2] == mark &&
             _board[r][c + 3] == mark) {
           return {
-            _WinCoord(r, c), _WinCoord(r, c + 1),
-            _WinCoord(r, c + 2), _WinCoord(r, c + 3),
+            _WinCoord(r, c),
+            _WinCoord(r, c + 1),
+            _WinCoord(r, c + 2),
+            _WinCoord(r, c + 3),
           };
         }
       }
@@ -403,8 +423,10 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
             _board[r + 2][c] == mark &&
             _board[r + 3][c] == mark) {
           return {
-            _WinCoord(r, c), _WinCoord(r + 1, c),
-            _WinCoord(r + 2, c), _WinCoord(r + 3, c),
+            _WinCoord(r, c),
+            _WinCoord(r + 1, c),
+            _WinCoord(r + 2, c),
+            _WinCoord(r + 3, c),
           };
         }
       }
@@ -417,8 +439,10 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
             _board[r - 2][c + 2] == mark &&
             _board[r - 3][c + 3] == mark) {
           return {
-            _WinCoord(r, c), _WinCoord(r - 1, c + 1),
-            _WinCoord(r - 2, c + 2), _WinCoord(r - 3, c + 3),
+            _WinCoord(r, c),
+            _WinCoord(r - 1, c + 1),
+            _WinCoord(r - 2, c + 2),
+            _WinCoord(r - 3, c + 3),
           };
         }
       }
@@ -431,8 +455,10 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
             _board[r + 2][c + 2] == mark &&
             _board[r + 3][c + 3] == mark) {
           return {
-            _WinCoord(r, c), _WinCoord(r + 1, c + 1),
-            _WinCoord(r + 2, c + 2), _WinCoord(r + 3, c + 3),
+            _WinCoord(r, c),
+            _WinCoord(r + 1, c + 1),
+            _WinCoord(r + 2, c + 2),
+            _WinCoord(r + 3, c + 3),
           };
         }
       }
@@ -551,7 +577,11 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
           padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
           child: Column(
             children: [
-              Icon(GeneratorType.connectFour.homeIcon, size: 56, color: Colors.white),
+              Icon(
+                GeneratorType.connectFour.homeIcon,
+                size: 56,
+                color: Colors.white,
+              ),
               const SizedBox(height: 8),
               Text(
                 l10n.generatorConnectFour,
@@ -575,7 +605,10 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
               children: [
                 Text(
                   l10n.gameModeLabel,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 GameModeSelector(
@@ -599,8 +632,9 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                     }
                     setState(() {
                       _mode = m;
-                      _p2Controller.text =
-                          m == GameMode.bot ? _kBotName : 'PLAYER 2';
+                      _p2Controller.text = m == GameMode.bot
+                          ? _kBotName
+                          : 'PLAYER 2';
                     });
                   },
                 ),
@@ -625,7 +659,11 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                     ),
                     if (!gate.canUse(ProFeature.connectFourCustomNames)) ...[
                       const SizedBox(width: 6),
-                      const Icon(Icons.lock, size: 14, color: AppColors.proPurple),
+                      const Icon(
+                        Icons.lock,
+                        size: 14,
+                        color: AppColors.proPurple,
+                      ),
                     ],
                   ],
                 ),
@@ -641,11 +679,11 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                   ),
                   onTap: !gate.canUse(ProFeature.connectFourCustomNames)
                       ? () => showProDialog(
-                            context,
-                            title: l10n.gameCustomNamesProTitle,
-                            message: l10n.gameCustomNamesProMessage,
-                            generatorType: GeneratorType.connectFour,
-                          )
+                          context,
+                          title: l10n.gameCustomNamesProTitle,
+                          message: l10n.gameCustomNamesProMessage,
+                          generatorType: GeneratorType.connectFour,
+                        )
                       : null,
                 ),
                 if (_mode == GameMode.local) ...[
@@ -658,7 +696,11 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                       ),
                       if (!gate.canUse(ProFeature.connectFourCustomNames)) ...[
                         const SizedBox(width: 6),
-                        const Icon(Icons.lock, size: 14, color: AppColors.proPurple),
+                        const Icon(
+                          Icons.lock,
+                          size: 14,
+                          color: AppColors.proPurple,
+                        ),
                       ],
                     ],
                   ),
@@ -674,11 +716,11 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                     ),
                     onTap: !gate.canUse(ProFeature.connectFourCustomNames)
                         ? () => showProDialog(
-                              context,
-                              title: l10n.gameCustomNamesProTitle,
-                              message: l10n.gameCustomNamesProMessage,
-                              generatorType: GeneratorType.connectFour,
-                            )
+                            context,
+                            title: l10n.gameCustomNamesProTitle,
+                            message: l10n.gameCustomNamesProMessage,
+                            generatorType: GeneratorType.connectFour,
+                          )
                         : null,
                   ),
                 ],
@@ -700,11 +742,18 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                     children: [
                       Text(
                         l10n.gameDifficultyLabel,
-                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
                       ),
                       if (!gate.canUse(ProFeature.connectFourDifficulty)) ...[
                         const SizedBox(width: 6),
-                        const Icon(Icons.lock, size: 14, color: AppColors.proPurple),
+                        const Icon(
+                          Icons.lock,
+                          size: 14,
+                          color: AppColors.proPurple,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           l10n.gameModePro,
@@ -790,8 +839,8 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
             isFinished
                 ? (_isDraw ? l10n.gameDraw : l10n.gameYouWin(_winnerName!))
                 : (_botThinking
-                    ? l10n.gameBotThinking
-                    : l10n.gamePlayerTurn(_currentPlayerName)),
+                      ? l10n.gameBotThinking
+                      : l10n.gamePlayerTurn(_currentPlayerName)),
             textAlign: TextAlign.center,
             style: const TextStyle(
               color: Colors.white,
@@ -808,10 +857,7 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _Legend(
-                color: Colors.red,
-                name: _normalize(_player1Name),
-              ),
+              _Legend(color: Colors.red, name: _normalize(_player1Name)),
               const SizedBox(width: 20),
               _Legend(
                 color: Colors.yellow.shade700,
@@ -877,7 +923,8 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                     color: Colors.transparent,
                     child: Icon(
                       Icons.arrow_drop_down,
-                      color: (_phase == _Phase.playing &&
+                      color:
+                          (_phase == _Phase.playing &&
                               !_botThinking &&
                               _board[0][col] == _Cell.empty)
                           ? Colors.white70
@@ -911,7 +958,12 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                                 ? Border.all(color: Colors.white, width: 2.5)
                                 : null,
                             boxShadow: isWin
-                                ? [BoxShadow(color: Colors.white.withOpacity(0.5), blurRadius: 6)]
+                                ? [
+                                    BoxShadow(
+                                      color: Colors.white.withOpacity(0.5),
+                                      blurRadius: 6,
+                                    ),
+                                  ]
                                 : null,
                           ),
                         ),
@@ -965,7 +1017,10 @@ class _Legend extends StatelessWidget {
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
-        Text(name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+        Text(
+          name,
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+        ),
       ],
     );
   }
