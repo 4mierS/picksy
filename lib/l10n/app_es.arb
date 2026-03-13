@@ -498,5 +498,65 @@
   "mathPlayAgain": "Jugar de nuevo",
   "mathBackToMenu": "Volver al menú",
   "mathFreeProHint": "Free: suma y resta, 30 segundos.\nPro: todas las operaciones, duración personalizada.",
-  "mathAvgAccuracy": "Precisión media"
+  "mathAvgAccuracy": "Precisión media",
+  "generatorTicTacToe": "Tres en Raya",
+  "generatorConnectFour": "Conecta Cuatro",
+  "gameSetupTitle": "Configuración",
+  "gameModeLabel": "Modo de Juego",
+  "gameModeBot": "Jugar contra Bot",
+  "gameModeLocal": "Multijugador Local",
+  "gameModePro": "Pro",
+  "gameDifficultyLabel": "Dificultad",
+  "gameDifficultyEasy": "Fácil",
+  "gameDifficultyMedium": "Medio",
+  "gameDifficultyHard": "Difícil",
+  "gameDifficultyProTitle": "La selección de dificultad es Pro",
+  "gameDifficultyProMessage": "Hazte Pro para elegir entre Medio y Difícil.",
+  "gameLocalMultiplayerProTitle": "Multijugador local es Pro",
+  "gameLocalMultiplayerProMessage": "Hazte Pro para jugar con un amigo en el mismo dispositivo, usar nombres personalizados y rastrear estadísticas.",
+  "gameCustomNamesProTitle": "Nombres personalizados es Pro",
+  "gameCustomNamesProMessage": "Hazte Pro para introducir nombres de jugadores personalizados.",
+  "gamePlayerOneName": "Nombre Jugador 1",
+  "gamePlayerTwoName": "Nombre Jugador 2",
+  "gamePlayerNameHint": "Introduce nombre",
+  "gameStartGame": "Iniciar Juego",
+  "gamePlayerTurn": "Turno de {name}",
+  "@gamePlayerTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameBotThinking": "BOT PENSANDO...",
+  "gameYouWin": "¡{name} Gana!",
+  "@gameYouWin": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "gameDraw": "¡Empate!",
+  "gamePlayAgain": "Jugar de nuevo",
+  "gameBackToSetup": "Volver a configuración",
+  "gameStatsTitle": "Estadísticas",
+  "gameStatsProTitle": "Las estadísticas son Pro",
+  "gameStatsProMessage": "Hazte Pro para rastrear victorias por jugador entre sesiones.",
+  "gameStatsWins": "{wins} victorias",
+  "@gameStatsWins": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      }
+    }
+  },
+  "gameStatsClear": "Borrar estadísticas",
+  "gameStatsClearConfirm": "¿Borrar todas las estadísticas de este juego?",
+  "gameStatsNoData": "Sin estadísticas aún. ¡Juega una partida para empezar a rastrear victorias!",
+  "gameStatsDraws": "Empates",
+  "gameTopPlayers": "Mejores Jugadores",
+  "gameFreeProHint": "Free: jugar contra Bot.\nPro: multijugador local, nombres personalizados, selección de dificultad y estadísticas.",
+  "gameStatsBot": "BOT",
+  "gameStatsPlayer": "JUGADOR"
 }

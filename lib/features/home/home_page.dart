@@ -28,6 +28,8 @@ class HomePage extends StatelessWidget {
     GeneratorType.card,
     GeneratorType.colorReflex,
     GeneratorType.mathChallenge,
+    GeneratorType.ticTacToe,
+    GeneratorType.connectFour,
   ];
 
   @override

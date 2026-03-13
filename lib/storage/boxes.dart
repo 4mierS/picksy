@@ -5,12 +5,14 @@ class Boxes {
   static const favorites = 'favorites';
   static const history = 'history';
   static const customLists = 'customLists';
+  static const gameStats = 'gameStats';
 
   static Future<void> init() async {
     await Hive.openBox(settings);
     await Hive.openBox(favorites);
     await Hive.openBox(history);
     await Hive.openBox(customLists);
+    await Hive.openBox(gameStats);
   }
 
   static Box box(String name) => Hive.box(name);

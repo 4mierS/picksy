@@ -11,6 +11,7 @@ import 'storage/favorites_store.dart';
 import 'storage/custom_lists_store.dart';
 import 'storage/premium_store.dart';
 import 'storage/history_store.dart';
+import 'storage/game_stats_store.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +27,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => CustomListsStore()),
         ChangeNotifierProvider(create: (_) => PremiumStore()),
         ChangeNotifierProvider(create: (_) => HistoryStore()),
+        ChangeNotifierProvider(create: (_) => GameStatsStore()),
       ],
       child: const RandomBuilderApp(),
     ),
