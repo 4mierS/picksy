@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:picksy/core/ui/app_colors.dart';
-import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 
+import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 class LetterPage extends StatefulWidget {
   const LetterPage({super.key});
@@ -30,13 +30,39 @@ class _LetterPageState extends State<LetterPage> {
   bool _onlyVowels = false;
   final Set<String> _excluded = {};
 
+  Future<void> _generate() async {
+    final gate = context.gateRead;
+    final isProFilters = gate.canUse(ProFeature.letterFilters);
+    final letter = _generateLetter(isProFilters: isProFilters);
+    setState(() => _last = letter);
+
+    await context.read<HistoryStore>().add(
+      type: GeneratorType.letter,
+      value: letter,
+      maxEntries: gate.historyMax,
+      metadata: {'letter': letter},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
-    final history = context.read<HistoryStore>();
+    final accent = GeneratorType.letter.accentColor;
 
-    final isProFilters = gate.canUse(ProFeature.letterFilters);
+    void openProDialog() => showProDialog(
+      context,
+      title: l10n.letterFiltersProTitle,
+      message: l10n.letterFiltersProMessage,
+      generatorType: GeneratorType.letter,
+      featureDefinitions: [
+        l10n.letterUppercaseSubtitle,
+        l10n.letterLowercaseSubtitle,
+        l10n.letterIncludeUmlautsSubtitle,
+        l10n.letterOnlyVowelsSubtitle,
+        l10n.letterFiltersProMessage,
+      ],
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -70,141 +96,70 @@ class _LetterPageState extends State<LetterPage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Result
-          Container(
-            constraints: const BoxConstraints(minHeight: 120),
-            padding: const EdgeInsets.all(20),
-            decoration: AppStyles.generatorResultCard(
-              GeneratorType.letter.accentColor,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _last ?? l10n.letterTapGenerate,
-                    style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
+          // ── Result area (tap to generate) ────────────────────────────────
+          ResultDisplayArea(
+            accentColor: accent,
+            hint: l10n.letterTapGenerate,
+            result: _last,
+            fontSize: 36,
+            textAlign: TextAlign.center,
+            onTap: _generate,
+          ),
+
+          const SizedBox(height: 24),
+
+          // ── Pro features ─────────────────────────────────────────────────
+          PremiumSection(
+            isPro: gate.isPro,
+            onProRequired: openProDialog,
+            title: l10n.letterSectionFilters,
+            children: [
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.letterUppercase),
+                subtitle: Text(l10n.letterUppercaseSubtitle),
+                value: _upper,
+                onChanged: (v) => setState(() => _upper = v),
+              ),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.letterLowercase),
+                subtitle: Text(l10n.letterLowercaseSubtitle),
+                value: _lower,
+                onChanged: (v) => setState(() => _lower = v),
+              ),
+              const SizedBox(height: 4),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.letterIncludeUmlauts),
+                subtitle: Text(l10n.letterIncludeUmlautsSubtitle),
+                value: _includeUmlauts,
+                onChanged: (v) => setState(() => _includeUmlauts = v),
+              ),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.letterOnlyVowels),
+                subtitle: Text(l10n.letterOnlyVowelsSubtitle),
+                value: _onlyVowels,
+                onChanged: (v) => setState(() => _onlyVowels = v),
+              ),
+
+              const SizedBox(height: 8),
+
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(l10n.letterExcludeLetters),
+                subtitle: Text(
+                  _excluded.isEmpty
+                      ? l10n.letterExcludeNone
+                      : _excluded.join(', '),
                 ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          _SectionTitle(l10n.letterSectionFilters),
-          const SizedBox(height: 8),
-
-          // Upper/lower toggles (Pro)
-          _ProSwitch(
-            title: l10n.letterUppercase,
-            subtitle: l10n.letterUppercaseSubtitle,
-            value: _upper,
-            enabled: isProFilters,
-            onChanged: (v) async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              setState(() => _upper = v);
-            },
-          ),
-
-          _ProSwitch(
-            title: l10n.letterLowercase,
-            subtitle: l10n.letterLowercaseSubtitle,
-            value: _lower,
-            enabled: isProFilters,
-            onChanged: (v) async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              setState(() => _lower = v);
-            },
-          ),
-
-          const SizedBox(height: 8),
-
-          _ProSwitch(
-            title: l10n.letterIncludeUmlauts,
-            subtitle: l10n.letterIncludeUmlautsSubtitle,
-            value: _includeUmlauts,
-            enabled: isProFilters,
-            onChanged: (v) async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              setState(() => _includeUmlauts = v);
-            },
-          ),
-
-          _ProSwitch(
-            title: l10n.letterOnlyVowels,
-            subtitle: l10n.letterOnlyVowelsSubtitle,
-            value: _onlyVowels,
-            enabled: isProFilters,
-            onChanged: (v) async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              setState(() => _onlyVowels = v);
-            },
-          ),
-
-          const SizedBox(height: 16),
-
-          // Exclude letters (Pro)
-          ListTile(
-            title: Text(l10n.letterExcludeLetters),
-            subtitle: Text(
-              isProFilters
-                  ? (_excluded.isEmpty
-                        ? l10n.letterExcludeNone
-                        : _excluded.join(', '))
-                  : l10n.commonProFeature,
-            ),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () async {
-              if (!isProFilters) {
-                await _showProFiltersDialog(context);
-                return;
-              }
-              await _openExcludeDialog(context);
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          if (!gate.isPro)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: AppStyles.proCard(),
-              child: Text(l10n.letterFreeProHint, style: AppStyles.resultStyle),
-            ),
-
-          const SizedBox(height: 16),
-
-          FilledButton.icon(
-            style: AppStyles.generatorButton(GeneratorType.letter.accentColor),
-            icon: const Icon(Icons.casino),
-            label: Text(l10n.commonGenerate),
-            onPressed: () async {
-              final letter = _generateLetter(isProFilters: isProFilters);
-              setState(() => _last = letter);
-
-              await history.add(
-                type: GeneratorType.letter,
-                value: letter,
-                maxEntries: context.gateRead.historyMax,
-                metadata: {'letter': letter},
-              );
-            },
+                trailing: const Icon(Icons.chevron_right),
+                onTap: gate.isPro
+                    ? () => _openExcludeDialog(context)
+                    : null,
+              ),
+            ],
           ),
         ],
       ),
@@ -212,79 +167,43 @@ class _LetterPageState extends State<LetterPage> {
   }
 
   String _generateLetter({required bool isProFilters}) {
-    // Free mode: A-Z uppercase
     if (!isProFilters) {
       const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       return letters[_rng.nextInt(letters.length)];
     }
 
-    // Pro mode: build allowed set
     final List<String> pool = [];
-
-    // Base alphabets
     const upperAZ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const loweraz = 'abcdefghijklmnopqrstuvwxyz';
-
-    // Vowels sets
     const upperVowels = 'AEIOU';
     const lowerVowels = 'aeiou';
 
     if (_upper) {
       pool.addAll((_onlyVowels ? upperVowels : upperAZ).split(''));
-      if (_includeUmlauts) {
-        pool.addAll(['Ä', 'Ö', 'Ü']);
-      }
+      if (_includeUmlauts) pool.addAll(['Ä', 'Ö', 'Ü']);
     }
-
     if (_lower) {
       pool.addAll((_onlyVowels ? lowerVowels : loweraz).split(''));
-      if (_includeUmlauts) {
-        pool.addAll(['ä', 'ö', 'ü']);
-      }
+      if (_includeUmlauts) pool.addAll(['ä', 'ö', 'ü']);
     }
-
-    // If user disables both upper and lower, fallback to uppercase
     if (pool.isEmpty) {
       pool.addAll((_onlyVowels ? upperVowels : upperAZ).split(''));
       if (_includeUmlauts) pool.addAll(['Ä', 'Ö', 'Ü']);
     }
 
-    // Apply exclusions
     final filtered = pool.where((c) => !_excluded.contains(c)).toList();
     final finalPool = filtered.isNotEmpty ? filtered : pool;
-
     return finalPool[_rng.nextInt(finalPool.length)];
   }
 
-  Future<void> _showProFiltersDialog(BuildContext context) async {
-    final l10n = context.l10n;
-    await showProDialog(
-      context,
-      title: l10n.letterFiltersProTitle,
-      message: l10n.letterFiltersProMessage,
-      generatorType: GeneratorType.letter,
-      featureDefinitions: [
-        l10n.letterUppercaseSubtitle,
-        l10n.letterLowercaseSubtitle,
-        l10n.letterIncludeUmlautsSubtitle,
-        l10n.letterOnlyVowelsSubtitle,
-        l10n.letterFiltersProMessage,
-      ],
-    );
-  }
-
   Future<void> _openExcludeDialog(BuildContext context) async {
-    // Provide candidates based on current casing settings
     final candidates = <String>{};
-
     if (_upper) candidates.addAll('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
     if (_lower) candidates.addAll('abcdefghijklmnopqrstuvwxyz'.split(''));
     if (_includeUmlauts) {
       if (_upper) candidates.addAll(['Ä', 'Ö', 'Ü']);
       if (_lower) candidates.addAll(['ä', 'ö', 'ü']);
     }
-
-    // Fallback candidates if empty
     if (candidates.isEmpty) {
       candidates.addAll('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
     }
@@ -295,107 +214,56 @@ class _LetterPageState extends State<LetterPage> {
       context: context,
       builder: (_) {
         final temp = Set<String>.from(_excluded);
-
         return StatefulBuilder(
-          builder: (context, setLocal) {
-            return AlertDialog(
-              title: Text(context.l10n.letterExcludeLetters),
-              content: SizedBox(
-                width: double.maxFinite,
-                child: Wrap(
-                  spacing: 6,
-                  runSpacing: 6,
-                  children: [
-                    for (final c in sorted)
-                      FilterChip(
-                        label: Text(c),
-                        selected: temp.contains(c),
-                        onSelected: (selected) {
-                          setLocal(() {
-                            if (selected) {
-                              temp.add(c);
-                            } else {
-                              temp.remove(c);
-                            }
-                          });
-                        },
-                      ),
-                  ],
-                ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.commonCancel),
-                ),
-                TextButton(
-                  onPressed: () {
-                    setLocal(() => temp.clear());
-                  },
-                  child: Text(context.l10n.commonClear),
-                ),
-                FilledButton(
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
+          builder: (context, setLocal) => AlertDialog(
+            title: Text(context.l10n.letterExcludeLetters),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  for (final c in sorted)
+                    FilterChip(
+                      label: Text(c),
+                      selected: temp.contains(c),
+                      onSelected: (sel) => setLocal(() {
+                        sel ? temp.add(c) : temp.remove(c);
+                      }),
                     ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(context.l10n.commonCancel),
+              ),
+              TextButton(
+                onPressed: () => setLocal(() => temp.clear()),
+                child: Text(context.l10n.commonClear),
+              ),
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      _excluded
-                        ..clear()
-                        ..addAll(temp);
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(context.l10n.commonSave),
                 ),
-              ],
-            );
-          },
+                onPressed: () {
+                  setState(() {
+                    _excluded
+                      ..clear()
+                      ..addAll(temp);
+                  });
+                  Navigator.of(context).pop();
+                },
+                child: Text(context.l10n.commonSave),
+              ),
+            ],
+          ),
         );
       },
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  final String text;
-  const _SectionTitle(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    );
-  }
-}
-
-class _ProSwitch extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final bool value;
-  final bool enabled;
-  final ValueChanged<bool> onChanged;
-
-  const _ProSwitch({
-    required this.title,
-    required this.subtitle,
-    required this.value,
-    required this.enabled,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SwitchListTile(
-      contentPadding: EdgeInsets.zero,
-      title: Text(title),
-      subtitle: Text(enabled ? subtitle : context.l10n.commonProFeature),
-      value: value,
-      onChanged: (v) => onChanged(v),
     );
   }
 }

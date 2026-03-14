@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:picksy/core/ui/app_colors.dart';
-import 'package:picksy/core/ui/app_styles.dart';
-
 import '../../../core/gating/feature_gate.dart';
 import '../../../l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/storage/premium_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 class TimePage extends StatefulWidget {
   const TimePage({super.key});
@@ -39,8 +38,8 @@ class _TimePageState extends State<TimePage> {
   bool _finished = false;
   bool _revealHiddenAtEnd = false;
 
-  int _elapsedMs = 0; // for progress display, not critical to be exact
-  int? _targetMs; // the picked random time to count down from
+  int _elapsedMs = 0;
+  int? _targetMs;
   Stopwatch? _sw;
   Timer? _tick;
 
@@ -145,16 +144,9 @@ class _TimePageState extends State<TimePage> {
     final l10n = context.l10n;
     final premium = context.watch<PremiumStore>();
     final isPro = premium.isPro;
-    final hideTime = _hideTime;
-    final vibrateOnFinish = _vibrateOnFinish;
-    final minSec = _minSec;
-    final maxSec = _maxSec;
+    final accent = GeneratorType.time.accentColor;
 
-    final bg = _finished
-        ? Colors.red.shade700
-        : Theme.of(context).scaffoldBackgroundColor;
-
-    final showTimeNow = !hideTime || _revealHiddenAtEnd;
+    final showTimeNow = !_hideTime || _revealHiddenAtEnd;
 
     String formatMs(int ms) {
       final seconds = ms ~/ 1000;
@@ -162,10 +154,45 @@ class _TimePageState extends State<TimePage> {
       return l10n.timeFormatted(seconds, milli.toString().padLeft(3, '0'));
     }
 
-    final timeText = formatMs(_elapsedMs);
+    void openProDialog() => showProDialog(
+      context,
+      title: l10n.timeRangeSeconds,
+      message: l10n.timeProCustomRangeHint,
+      generatorType: GeneratorType.time,
+    );
+
+    // Build the time display widget used inside ResultDisplayArea
+    Widget timeDisplay;
+    if (!showTimeNow) {
+      timeDisplay = _HiddenPulse(running: _running);
+    } else {
+      final displayText = _targetMs == null ? l10n.timeReady : formatMs(_elapsedMs);
+      timeDisplay = Text(
+        displayText,
+        style: const TextStyle(fontSize: 56, fontWeight: FontWeight.w800),
+      );
+    }
+
+    // Tap behaviour: start if not running/finished, reset if finished
+    VoidCallback? onTap;
+    if (_running) {
+      onTap = null;
+    } else if (_finished) {
+      onTap = _reset;
+    } else {
+      onTap = () => _start(
+        isPro: isPro,
+        minSec: _minSec,
+        maxSec: _maxSec,
+        hideTime: _hideTime,
+        vibrateOnFinish: _vibrateOnFinish,
+      );
+    }
 
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: _finished
+          ? Colors.red.shade700
+          : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(l10n.timeTitle),
         actions: [
@@ -194,208 +221,71 @@ class _TimePageState extends State<TimePage> {
           ),
         ],
       ),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const SizedBox(height: 8),
+        children: [
+          // ── Result area (tap to start / tap again to reset) ───────────────
+          ResultDisplayArea(
+            accentColor: accent,
+            hint: l10n.timeReady,
+            minHeight: 160,
+            onTap: onTap,
+            child: Center(child: timeDisplay),
+          ),
 
-            Expanded(
-              child: Center(
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 28,
-                    vertical: 22,
-                  ),
-                  decoration: AppStyles.generatorResultCard(
-                    GeneratorType.time.accentColor,
-                  ),
-                  child: showTimeNow
-                      ? Text(
-                          _targetMs == null ? l10n.timeReady : timeText,
-                          style: const TextStyle(
-                            fontSize: 56,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        )
-                      : _HiddenPulse(running: _running),
-                ),
-              ),
+          const SizedBox(height: 12),
+
+          // Reset button (always visible once started)
+          if (_targetMs != null || _finished)
+            OutlinedButton(
+              onPressed: _running ? null : _reset,
+              child: Text(l10n.timeReset),
             ),
 
-            const SizedBox(height: 12),
+          const SizedBox(height: 24),
 
-            _ControlsCard(
-              isPro: isPro,
-              running: _running,
-              freeMinSec: _freeMinSec,
-              freeMaxSec: _freeMaxSec,
-              hideTime: hideTime,
-              vibrateOnFinish: vibrateOnFinish,
-              minSec: minSec,
-              maxSec: maxSec,
-              onToggleHide: (value) => setState(() => _hideTime = value),
-              onToggleVibrate: (value) =>
-                  setState(() => _vibrateOnFinish = value),
-              onRangeChanged: (min, max) => setState(() {
-                _minSec = min;
-                _maxSec = max;
-              }),
-            ),
+          // ── Free controls ─────────────────────────────────────────────────
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n.timeHideTime),
+            subtitle: Text(l10n.timeHideTimeSubtitle),
+            value: _hideTime,
+            onChanged: _running ? null : (v) => setState(() => _hideTime = v),
+          ),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(l10n.timeVibrateOnFinish),
+            value: _vibrateOnFinish,
+            onChanged:
+                _running ? null : (v) => setState(() => _vibrateOnFinish = v),
+          ),
 
-            const SizedBox(height: 12),
+          const SizedBox(height: 24),
 
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: _running
-                        ? _reset
-                        : (_targetMs == null && !_finished ? null : _reset),
-                    child: Text(l10n.timeReset),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    style: AppStyles.generatorButton(
-                      GeneratorType.time.accentColor,
-                    ),
-                    onPressed: _running
-                        ? null
-                        : () => _start(
-                            isPro: isPro,
-                            minSec: minSec,
-                            maxSec: maxSec,
-                            hideTime: hideTime,
-                            vibrateOnFinish: vibrateOnFinish,
-                          ),
-                    child: Text(_finished ? l10n.timeAgain : l10n.timeStart),
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 10),
-
-            Text(
-              isPro
-                  ? l10n.timeProCustomRangeHint
-                  : l10n.timeFreeCustomRangeHint(_freeMinSec, _freeMaxSec),
-              style: Theme.of(context).textTheme.bodySmall,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ControlsCard extends StatelessWidget {
-  const _ControlsCard({
-    required this.isPro,
-    required this.running,
-    required this.freeMinSec,
-    required this.freeMaxSec,
-    required this.hideTime,
-    required this.vibrateOnFinish,
-    required this.minSec,
-    required this.maxSec,
-    required this.onToggleHide,
-    required this.onToggleVibrate,
-    required this.onRangeChanged,
-  });
-
-  final bool isPro;
-  final bool running;
-  final int freeMinSec;
-  final int freeMaxSec;
-
-  final bool hideTime;
-  final bool vibrateOnFinish;
-
-  final int minSec;
-  final int maxSec;
-
-  final ValueChanged<bool> onToggleHide;
-  final ValueChanged<bool> onToggleVibrate;
-  final void Function(int min, int max) onRangeChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final disabled = running;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            SwitchListTile(
-              value: hideTime,
-              onChanged: disabled ? null : onToggleHide,
-              title: Text(l10n.timeHideTime),
-              subtitle: Text(l10n.timeHideTimeSubtitle),
-            ),
-            SwitchListTile(
-              value: vibrateOnFinish,
-              onChanged: disabled ? null : onToggleVibrate,
-              title: Text(l10n.timeVibrateOnFinish),
-            ),
-            const Divider(),
-
-            // Range
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    l10n.timeRangeSeconds,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                ),
-                if (!isPro)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.proPurple.withOpacity(0.14),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text(
-                      l10n.proBadge,
-                      style: const TextStyle(color: AppColors.proPurple),
-                    ),
-                  ),
-              ],
-            ),
-
-            const SizedBox(height: 10),
-
-            if (!isPro)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(l10n.timeFreeFixedRange(freeMinSec, freeMaxSec)),
-              ),
-
-            if (isPro) ...[
+          // ── Pro features ─────────────────────────────────────────────────
+          PremiumSection(
+            isPro: isPro,
+            onProRequired: openProDialog,
+            title: l10n.timeRangeSeconds,
+            children: [
               Row(
                 children: [
                   Expanded(
                     child: _NumberStepper(
                       label: l10n.numberMin,
-                      value: minSec,
+                      value: _minSec,
                       min: 1,
                       max: 3600,
-                      onChanged: disabled
+                      onChanged: _running
                           ? null
                           : (v) {
                               final newMin = v;
-                              final newMax = maxSec < newMin ? newMin : maxSec;
-                              onRangeChanged(newMin, newMax);
+                              final newMax =
+                                  _maxSec < newMin ? newMin : _maxSec;
+                              setState(() {
+                                _minSec = newMin;
+                                _maxSec = newMax;
+                              });
                             },
                     ),
                   ),
@@ -403,31 +293,27 @@ class _ControlsCard extends StatelessWidget {
                   Expanded(
                     child: _NumberStepper(
                       label: l10n.numberMax,
-                      value: maxSec,
+                      value: _maxSec,
                       min: 1,
                       max: 3600,
-                      onChanged: disabled
+                      onChanged: _running
                           ? null
                           : (v) {
                               final newMax = v;
-                              final newMin = minSec > newMax ? newMax : minSec;
-                              onRangeChanged(newMin, newMax);
+                              final newMin =
+                                  _minSec > newMax ? newMax : _minSec;
+                              setState(() {
+                                _minSec = newMin;
+                                _maxSec = newMax;
+                              });
                             },
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 6),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  l10n.timeCurrentRange(minSec, maxSec),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-              ),
             ],
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -510,9 +396,10 @@ class _HiddenPulse extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             running ? l10n.timeRunning : l10n.timeHidden,
-            style: Theme.of(
-              context,
-            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.w700),
           ),
         ],
       ),
