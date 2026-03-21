@@ -45,7 +45,13 @@ app.*.map.json
 /android/app/release
 
 # Android Gradle build output
-android/build/
+android/
+ios/
+linux/
+macos/
+windows/
+web/
+*/Android/Sdk
 
 # Any nested build folders
 **/build/
