@@ -27,6 +27,7 @@ const _kBotName = 'BOT';
 const _kDefaultPlayerName = 'PLAYER';
 const _kGameKey = 'tic_tac_toe';
 const _kMaxMarks = 3;
+const _kFadingOpacity = 0.4;
 
 // ---------------------------------------------------------------------------
 // AI – Tic Tac Toe
@@ -358,8 +359,8 @@ class _TicTacToePageState extends State<TicTacToePage> {
         _Cell.o,
         _difficulty,
         infinityMode: _infinityMode,
-        botQueue: List<int>.from(_oQueue),
-        humanQueue: List<int>.from(_xQueue),
+        botQueue: _oQueue,
+        humanQueue: _xQueue,
       );
       setState(() => _botThinking = false);
       if (move >= 0) _makeMove(move);
@@ -833,7 +834,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
   Widget _buildCellContent(_Cell cell, {bool fading = false}) {
     if (cell == _Cell.empty) return const SizedBox();
     return Opacity(
-      opacity: fading ? 0.4 : 1.0,
+      opacity: fading ? _kFadingOpacity : 1.0,
       child: Text(
         cell == _Cell.x ? 'X' : 'O',
         style: TextStyle(
