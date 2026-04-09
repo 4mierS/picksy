@@ -26,13 +26,24 @@ enum _Phase { setup, playing, finished }
 const _kBotName = 'BOT';
 const _kDefaultPlayerName = 'PLAYER';
 const _kGameKey = 'tic_tac_toe';
+const _kMaxMarks = 3;
 
 // ---------------------------------------------------------------------------
 // AI – Tic Tac Toe
 // ---------------------------------------------------------------------------
 
 class _TicTacToeAI {
-  int bestMove(List<_Cell> board, _Cell botMark, Difficulty difficulty) {
+  int bestMove(
+    List<_Cell> board,
+    _Cell botMark,
+    Difficulty difficulty, {
+    bool infinityMode = false,
+    List<int>? botQueue,
+    List<int>? humanQueue,
+  }) {
+    if (infinityMode && botQueue != null && humanQueue != null) {
+      return _infinityMove(board, botMark, botQueue, humanQueue);
+    }
     final empty = _emptyIndices(board);
     if (empty.isEmpty) return -1;
 
@@ -42,6 +53,56 @@ class _TicTacToeAI {
       case Difficulty.hard:
         return _minimaxBestMove(board, botMark);
     }
+  }
+
+  /// Applies an infinity-mode move to a copy of the board and returns the result.
+  /// If the player's queue already has [_kMaxMarks] marks, the oldest is removed first.
+  (List<_Cell>, List<int>) _applyInfinityMove(
+    List<_Cell> board,
+    List<int> queue,
+    _Cell mark,
+    int idx,
+  ) {
+    final newBoard = List<_Cell>.from(board);
+    final newQueue = List<int>.from(queue);
+    if (newQueue.length >= _kMaxMarks) {
+      newBoard[newQueue[0]] = _Cell.empty;
+      newQueue.removeAt(0);
+    }
+    newBoard[idx] = mark;
+    newQueue.add(idx);
+    return (newBoard, newQueue);
+  }
+
+  int _infinityMove(
+    List<_Cell> board,
+    _Cell botMark,
+    List<int> botQueue,
+    List<int> humanQueue,
+  ) {
+    final humanMark = botMark == _Cell.x ? _Cell.o : _Cell.x;
+    final empty = _emptyIndices(board);
+    if (empty.isEmpty) return -1;
+
+    // 1. Win immediately
+    for (final idx in empty) {
+      final (newBoard, _) = _applyInfinityMove(board, botQueue, botMark, idx);
+      if (_checkWinner(newBoard) == botMark) return idx;
+    }
+    // 2. Block human from winning on their next move
+    for (final idx in empty) {
+      final (newBoard, _) =
+          _applyInfinityMove(board, humanQueue, humanMark, idx);
+      if (_checkWinner(newBoard) == humanMark) return idx;
+    }
+    // 3. Center
+    if (empty.contains(4)) return 4;
+    // 4. Corner
+    for (final corner in const [0, 2, 6, 8]) {
+      if (empty.contains(corner)) return corner;
+    }
+    // 5. Any remaining empty cell
+    return empty[Random().nextInt(empty.length)];
   }
 
   int _mediumMove(List<_Cell> board, _Cell botMark, List<int> empty) {
@@ -196,6 +257,10 @@ class _TicTacToePageState extends State<TicTacToePage> {
   bool _isDraw = false;
   List<int> _winLine = [];
 
+  bool _infinityMode = false;
+  final List<int> _xQueue = [];
+  final List<int> _oQueue = [];
+
   final _ai = _TicTacToeAI();
   bool _botThinking = false;
   Timer? _botTimer;
@@ -241,6 +306,8 @@ class _TicTacToePageState extends State<TicTacToePage> {
       _winLine = [];
       _phase = _Phase.playing;
       _botThinking = false;
+      _xQueue.clear();
+      _oQueue.clear();
     });
   }
 
@@ -254,7 +321,16 @@ class _TicTacToePageState extends State<TicTacToePage> {
 
   void _makeMove(int index) {
     if (_board[index] != _Cell.empty) return;
-    setState(() => _board[index] = _xTurn ? _Cell.x : _Cell.o);
+    final currentMark = _xTurn ? _Cell.x : _Cell.o;
+    final currentQueue = _xTurn ? _xQueue : _oQueue;
+    setState(() {
+      if (_infinityMode && currentQueue.length >= _kMaxMarks) {
+        _board[currentQueue[0]] = _Cell.empty;
+        currentQueue.removeAt(0);
+      }
+      _board[index] = currentMark;
+      currentQueue.add(index);
+    });
 
     final winner = _checkWinner();
     if (winner != null) {
@@ -263,7 +339,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
       );
       return;
     }
-    if (_board.every((c) => c != _Cell.empty)) {
+    if (!_infinityMode && _board.every((c) => c != _Cell.empty)) {
       _endGame(null);
       return;
     }
@@ -277,7 +353,14 @@ class _TicTacToePageState extends State<TicTacToePage> {
     final delay = 300 + Random().nextInt(500);
     _botTimer = Timer(Duration(milliseconds: delay), () {
       if (!mounted) return;
-      final move = _ai.bestMove(_board, _Cell.o, _difficulty);
+      final move = _ai.bestMove(
+        _board,
+        _Cell.o,
+        _difficulty,
+        infinityMode: _infinityMode,
+        botQueue: List<int>.from(_oQueue),
+        humanQueue: List<int>.from(_xQueue),
+      );
       setState(() => _botThinking = false);
       if (move >= 0) _makeMove(move);
     });
@@ -331,6 +414,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
         'difficulty': _difficulty.name,
         'player1': _normalize(_player1Name),
         'player2': _normalize(_player2Name),
+        'infinityMode': _infinityMode,
       },
     );
   }
@@ -352,6 +436,8 @@ class _TicTacToePageState extends State<TicTacToePage> {
       _isDraw = false;
       _winLine = [];
       _botThinking = false;
+      _xQueue.clear();
+      _oQueue.clear();
     });
   }
 
@@ -553,6 +639,29 @@ class _TicTacToePageState extends State<TicTacToePage> {
           ),
         const SizedBox(height: 12),
 
+        // Infinity Mode toggle
+        Card(
+          child: SwitchListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 4,
+            ),
+            secondary: const Icon(Icons.all_inclusive_rounded),
+            title: Text(
+              l10n.gameInfinityMode,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+            ),
+            subtitle: Text(
+              l10n.gameInfinityModeSubtitle,
+              style: const TextStyle(fontSize: 12),
+            ),
+            value: _infinityMode,
+            activeColor: _accent,
+            onChanged: (value) => setState(() => _infinityMode = value),
+          ),
+        ),
+        const SizedBox(height: 12),
+
         // Stats
         GameStatsCard(
           gameKey: _kGameKey,
@@ -592,18 +701,45 @@ class _TicTacToePageState extends State<TicTacToePage> {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           decoration: AppStyles.generatorResultCard(_accent),
-          child: Text(
-            isFinished
-                ? (_isDraw ? l10n.gameDraw : l10n.gameYouWin(_winnerName!))
-                : (_botThinking
-                      ? l10n.gameBotThinking
-                      : l10n.gamePlayerTurn(_currentPlayerName)),
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-            ),
+          child: Column(
+            children: [
+              if (_infinityMode)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.all_inclusive_rounded,
+                        color: Colors.white70,
+                        size: 14,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        l10n.gameInfinityMode,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              Text(
+                isFinished
+                    ? (_isDraw ? l10n.gameDraw : l10n.gameYouWin(_winnerName!))
+                    : (_botThinking
+                          ? l10n.gameBotThinking
+                          : l10n.gamePlayerTurn(_currentPlayerName)),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
           ),
         ),
         const SizedBox(height: 16),
@@ -643,6 +779,17 @@ class _TicTacToePageState extends State<TicTacToePage> {
   }
 
   Widget _buildBoard() {
+    // Determine which index (if any) will be removed on the NEXT move.
+    // In infinity mode, that is the oldest mark of the current player when
+    // they already hold [_kMaxMarks] marks.
+    int? nextRemovalIndex;
+    if (_infinityMode && _phase == _Phase.playing) {
+      final currentQueue = _xTurn ? _xQueue : _oQueue;
+      if (currentQueue.length >= _kMaxMarks) {
+        nextRemovalIndex = currentQueue.first;
+      }
+    }
+
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -655,6 +802,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
       itemBuilder: (context, index) {
         final cell = _board[index];
         final isWinCell = _winLine.contains(index);
+        final isNextRemoval = index == nextRemovalIndex;
         return GestureDetector(
           onTap: () => _onCellTap(index),
           child: AnimatedContainer(
@@ -665,25 +813,34 @@ class _TicTacToePageState extends State<TicTacToePage> {
                   : Theme.of(context).colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: isWinCell ? _accent : Colors.transparent,
+                color: isWinCell
+                    ? _accent
+                    : isNextRemoval
+                    ? Colors.orange.shade400
+                    : Colors.transparent,
                 width: 2,
               ),
             ),
-            child: Center(child: _buildCellContent(cell)),
+            child: Center(
+              child: _buildCellContent(cell, fading: isNextRemoval),
+            ),
           ),
         );
       },
     );
   }
 
-  Widget _buildCellContent(_Cell cell) {
+  Widget _buildCellContent(_Cell cell, {bool fading = false}) {
     if (cell == _Cell.empty) return const SizedBox();
-    return Text(
-      cell == _Cell.x ? 'X' : 'O',
-      style: TextStyle(
-        fontSize: 42,
-        fontWeight: FontWeight.w900,
-        color: cell == _Cell.x ? _accent : Colors.deepOrange,
+    return Opacity(
+      opacity: fading ? 0.4 : 1.0,
+      child: Text(
+        cell == _Cell.x ? 'X' : 'O',
+        style: TextStyle(
+          fontSize: 42,
+          fontWeight: FontWeight.w900,
+          color: cell == _Cell.x ? _accent : Colors.deepOrange,
+        ),
       ),
     );
   }

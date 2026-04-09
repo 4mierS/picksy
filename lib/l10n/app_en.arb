@@ -558,5 +558,7 @@
   "gameTopPlayers": "Top Players",
   "gameFreeProHint": "Free: play vs Bot.\nPro: local multiplayer, custom names, difficulty selection & statistics.",
   "gameStatsBot": "BOT",
-  "gameStatsPlayer": "PLAYER"
+  "gameStatsPlayer": "PLAYER",
+  "gameInfinityMode": "Infinity Mode",
+  "gameInfinityModeSubtitle": "Each player keeps at most 3 marks – oldest is removed on the 4th move. No draws!"
 }

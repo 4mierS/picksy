@@ -558,5 +558,7 @@
   "gameTopPlayers": "Top-Spieler",
   "gameFreeProHint": "Free: gegen Bot spielen.\nPro: lokaler Mehrspieler, eigene Namen, Schwierigkeitswahl & Statistiken.",
   "gameStatsBot": "BOT",
-  "gameStatsPlayer": "SPIELER"
+  "gameStatsPlayer": "SPIELER",
+  "gameInfinityMode": "Infinity-Modus",
+  "gameInfinityModeSubtitle": "Jeder Spieler behält maximal 3 Steine – beim 4. Zug wird der älteste entfernt. Kein Unentschieden!"
 }

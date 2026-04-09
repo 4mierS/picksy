@@ -1315,4 +1315,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get gameStatsPlayer => 'JUGADOR';
+
+  @override
+  String get gameInfinityMode => 'Modo Infinito';
+
+  @override
+  String get gameInfinityModeSubtitle =>
+      'Cada jugador mantiene máximo 3 marcas – la más antigua se elimina en el 4.º movimiento. ¡Sin empates!';
 }

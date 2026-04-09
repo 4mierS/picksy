@@ -2533,6 +2533,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'PLAYER'**
   String get gameStatsPlayer;
+
+  /// No description provided for @gameInfinityMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Infinity Mode'**
+  String get gameInfinityMode;
+
+  /// No description provided for @gameInfinityModeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player keeps at most 3 marks – oldest is removed on the 4th move. No draws!'**
+  String get gameInfinityModeSubtitle;
 }
 
 class _AppLocalizationsDelegate

@@ -558,5 +558,7 @@
   "gameTopPlayers": "Top Giocatori",
   "gameFreeProHint": "Gratis: gioca contro Bot.\nPro: multigiocatore locale, nomi personalizzati, selezione difficoltà e statistiche.",
   "gameStatsBot": "BOT",
-  "gameStatsPlayer": "GIOCATORE"
+  "gameStatsPlayer": "GIOCATORE",
+  "gameInfinityMode": "Modalità Infinito",
+  "gameInfinityModeSubtitle": "Ogni giocatore mantiene al massimo 3 segni – il più vecchio viene rimosso al 4° turno. Nessun pareggio!"
 }
