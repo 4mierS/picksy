@@ -49,3 +49,4 @@ android/build/
 
 # Any nested build folders
 **/build/
+~/*
