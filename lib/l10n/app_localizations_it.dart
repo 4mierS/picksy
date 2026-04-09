@@ -1316,4 +1316,11 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get gameStatsPlayer => 'GIOCATORE';
+
+  @override
+  String get gameInfinityMode => 'Modalità Infinito';
+
+  @override
+  String get gameInfinityModeSubtitle =>
+      'Ogni giocatore mantiene al massimo 3 segni – il più vecchio viene rimosso al 4° turno. Nessun pareggio!';
 }

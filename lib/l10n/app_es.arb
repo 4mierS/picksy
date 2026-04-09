@@ -558,5 +558,7 @@
   "gameTopPlayers": "Mejores Jugadores",
   "gameFreeProHint": "Free: jugar contra Bot.\nPro: multijugador local, nombres personalizados, selección de dificultad y estadísticas.",
   "gameStatsBot": "BOT",
-  "gameStatsPlayer": "JUGADOR"
+  "gameStatsPlayer": "JUGADOR",
+  "gameInfinityMode": "Modo Infinito",
+  "gameInfinityModeSubtitle": "Cada jugador mantiene máximo 3 marcas – la más antigua se elimina en el 4.º movimiento. ¡Sin empates!"
 }

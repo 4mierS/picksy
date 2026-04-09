@@ -1311,4 +1311,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gameStatsPlayer => 'PLAYER';
+
+  @override
+  String get gameInfinityMode => 'Infinity Mode';
+
+  @override
+  String get gameInfinityModeSubtitle =>
+      'Each player keeps at most 3 marks – oldest is removed on the 4th move. No draws!';
 }

@@ -1316,4 +1316,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get gameStatsPlayer => 'SPIELER';
+
+  @override
+  String get gameInfinityMode => 'Infinity-Modus';
+
+  @override
+  String get gameInfinityModeSubtitle =>
+      'Jeder Spieler behält maximal 3 Steine – beim 4. Zug wird der älteste entfernt. Kein Unentschieden!';
 }

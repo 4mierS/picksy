@@ -1316,4 +1316,11 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get gameStatsPlayer => 'JOUEUR';
+
+  @override
+  String get gameInfinityMode => 'Mode Infini';
+
+  @override
+  String get gameInfinityModeSubtitle =>
+      'Chaque joueur garde au plus 3 pièces – la plus ancienne est retirée au 4ᵉ coup. Pas de match nul !';
 }

@@ -558,5 +558,7 @@
   "gameTopPlayers": "Meilleurs Joueurs",
   "gameFreeProHint": "Free : jouer contre Bot.\nPro : multijoueur local, noms personnalisés, sélection de difficulté et statistiques.",
   "gameStatsBot": "BOT",
-  "gameStatsPlayer": "JOUEUR"
+  "gameStatsPlayer": "JOUEUR",
+  "gameInfinityMode": "Mode Infini",
+  "gameInfinityModeSubtitle": "Chaque joueur garde au plus 3 pièces – la plus ancienne est retirée au 4ᵉ coup. Pas de match nul !"
 }
