@@ -41,6 +41,8 @@ const _kProDurations = [15, 30, 60];
 
 enum _Phase { idle, countdown, playing, result }
 
+enum _AnswerMode { color, word }
+
 // ---------------------------------------------------------------------------
 // Page
 // ---------------------------------------------------------------------------
@@ -59,6 +61,9 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
 
   // Settings
   int _durationSeconds = _kFreeDuration;
+  _AnswerMode _answerMode = _AnswerMode.color;
+  bool _includeYellow = true;
+  bool _includeOrange = true;
 
   // Countdown state
   int _countdownValue = 3;
@@ -72,8 +77,8 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   int _wrong = 0;
 
   // Current challenge
-  late _GameColor _wordColor;   // which word to display
-  late _GameColor _textColor;   // actual text color (the correct answer)
+  late _GameColor _wordColor; // which word to display
+  late _GameColor _textColor; // actual text color (the correct answer)
   late List<_GameColor> _choices; // 4 shuffled buttons
 
   // Reaction-time tracking
@@ -87,6 +92,18 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   // Brief wrong-answer flash
   bool _showWrong = false;
   Timer? _wrongTimer;
+
+  List<_GameColor> get _availableColors {
+    final pool = <_GameColor>[
+      _kGameColors.firstWhere((e) => e.word == 'RED'),
+      _kGameColors.firstWhere((e) => e.word == 'GREEN'),
+      _kGameColors.firstWhere((e) => e.word == 'BLUE'),
+      _kGameColors.firstWhere((e) => e.word == 'PURPLE'),
+      if (_includeYellow) _kGameColors.firstWhere((e) => e.word == 'YELLOW'),
+      if (_includeOrange) _kGameColors.firstWhere((e) => e.word == 'ORANGE'),
+    ];
+    return pool.length >= 4 ? pool : _kGameColors.take(4).toList();
+  }
 
   @override
   void dispose() {
@@ -147,29 +164,30 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   }
 
   void _generateChallenge() {
+    final activeColors = _availableColors;
     int wordIdx;
     int colorIdx;
 
     // Pick a pair that differs and doesn't immediately repeat
     do {
-      wordIdx = _rng.nextInt(_kGameColors.length);
-      colorIdx = _rng.nextInt(_kGameColors.length);
+      wordIdx = _rng.nextInt(activeColors.length);
+      colorIdx = _rng.nextInt(activeColors.length);
     } while (wordIdx == colorIdx ||
         (_lastPair != null &&
             _lastPair!.wordIdx == wordIdx &&
             _lastPair!.colorIdx == colorIdx));
 
     _lastPair = (wordIdx: wordIdx, colorIdx: colorIdx);
-    _wordColor = _kGameColors[wordIdx];
-    _textColor = _kGameColors[colorIdx];
+    _wordColor = activeColors[wordIdx];
+    _textColor = activeColors[colorIdx];
 
     // Build 4 choices: correct + 3 random others (uniform distribution)
-    final others = List.generate(_kGameColors.length, (i) => i)
+    final others = List.generate(activeColors.length, (i) => i)
       ..remove(colorIdx)
       ..shuffle(_rng);
     final choiceIndices = [colorIdx, others[0], others[1], others[2]]
       ..shuffle(_rng);
-    _choices = choiceIndices.map((i) => _kGameColors[i]).toList();
+    _choices = choiceIndices.map((i) => activeColors[i]).toList();
 
     _questionStart = DateTime.now();
   }
@@ -177,10 +195,13 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   void _onChoice(_GameColor choice) {
     if (_phase != _Phase.playing) return;
 
-    final reactionMs =
-        DateTime.now().difference(_questionStart!).inMilliseconds;
+    final reactionMs = DateTime.now()
+        .difference(_questionStart!)
+        .inMilliseconds;
 
-    final isCorrect = choice.color == _textColor.color;
+    final isCorrect = _answerMode == _AnswerMode.color
+        ? choice.color == _textColor.color
+        : choice.word == _wordColor.word;
     if (isCorrect) {
       _correct++;
       _totalReactionMs += reactionMs;
@@ -207,8 +228,9 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
 
     final total = _correct + _wrong;
     final accuracy = total > 0 ? (_correct / total * 100) : 0.0;
-    final avgReactionMs =
-        _reactionCount > 0 ? _totalReactionMs ~/ _reactionCount : 0;
+    final avgReactionMs = _reactionCount > 0
+        ? _totalReactionMs ~/ _reactionCount
+        : 0;
 
     setState(() => _phase = _Phase.result);
 
@@ -216,8 +238,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
     final historyStore = context.read<HistoryStore>();
     await historyStore.add(
       type: GeneratorType.colorReflex,
-      value:
-          '$_correct/${_correct + _wrong} (${accuracy.toStringAsFixed(1)}%)',
+      value: '$_correct/${_correct + _wrong} (${accuracy.toStringAsFixed(1)}%)',
       maxEntries: context.gateRead.historyMax,
       metadata: {
         'totalCorrect': _correct,
@@ -245,7 +266,8 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
 
   void _onDurationTap(int seconds) {
     final gate = context.gateRead;
-    if (seconds != _kFreeDuration && !gate.canUse(ProFeature.colorReflexDuration)) {
+    if (seconds != _kFreeDuration &&
+        !gate.canUse(ProFeature.colorReflexDuration)) {
       final l10n = context.l10n;
       showProDialog(
         context,
@@ -331,15 +353,14 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                GeneratorType.colorReflex.homeIcon,
-                color: accent,
-                size: 40,
-              ),
+              Icon(GeneratorType.colorReflex.homeIcon, color: accent, size: 40),
               const SizedBox(height: 12),
               Text(
                 l10n.colorReflexInstructions,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 6),
@@ -349,6 +370,53 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
                 textAlign: TextAlign.center,
               ),
             ],
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Correct Answer Mode',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 8),
+                SegmentedButton<_AnswerMode>(
+                  segments: const [
+                    ButtonSegment(value: _AnswerMode.word, label: Text('Word')),
+                    ButtonSegment(
+                      value: _AnswerMode.color,
+                      label: Text('Color'),
+                    ),
+                  ],
+                  selected: {_answerMode},
+                  onSelectionChanged: (s) =>
+                      setState(() => _answerMode = s.first),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'Difficult Colors',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Yellow'),
+                  value: _includeYellow,
+                  onChanged: (v) => setState(() => _includeYellow = v),
+                ),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: const Text('Orange'),
+                  value: _includeOrange,
+                  onChanged: (v) => setState(() => _includeOrange = v),
+                ),
+              ],
+            ),
           ),
         ),
 
@@ -363,7 +431,10 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
               children: [
                 Text(
                   l10n.colorReflexDurationLabel,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Row(
@@ -390,8 +461,11 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      Icon(Icons.lock_outline,
-                          size: 14, color: AppColors.proPurple),
+                      Icon(
+                        Icons.lock_outline,
+                        size: 14,
+                        color: AppColors.proPurple,
+                      ),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
@@ -535,10 +609,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             children: _choices.map((c) {
-              return _ColorButton(
-                gameColor: c,
-                onTap: () => _onChoice(c),
-              );
+              return _ColorButton(gameColor: c, onTap: () => _onChoice(c));
             }).toList(),
           ),
 
@@ -579,10 +650,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                '$_correct / $total',
-                style: const TextStyle(fontSize: 16),
-              ),
+              Text('$_correct / $total', style: const TextStyle(fontSize: 16)),
             ],
           ),
         ),
@@ -758,10 +826,7 @@ class _ColorButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: gameColor.color,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.3),
-            width: 2,
-          ),
+          border: Border.all(color: Colors.white.withOpacity(0.3), width: 2),
           boxShadow: [
             BoxShadow(
               color: gameColor.color.withOpacity(0.4),

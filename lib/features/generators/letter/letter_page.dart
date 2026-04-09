@@ -23,46 +23,18 @@ class _LetterPageState extends State<LetterPage> {
 
   String? _last;
 
-  // Pro-only filters
-  bool _upper = true;
-  bool _lower = false;
-  bool _includeUmlauts = false;
-  bool _onlyVowels = false;
   final Set<String> _excluded = {};
-
-  Future<void> _generate() async {
-    final gate = context.gateRead;
-    final isProFilters = gate.canUse(ProFeature.letterFilters);
-    final letter = _generateLetter(isProFilters: isProFilters);
-    setState(() => _last = letter);
-
-    await context.read<HistoryStore>().add(
-      type: GeneratorType.letter,
-      value: letter,
-      maxEntries: gate.historyMax,
-      metadata: {'letter': letter},
-    );
-  }
+  bool _noRepeatCycle = false;
+  final List<String> _remainingCycle = [];
+  final List<String> _usedInCycle = [];
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
-    final accent = GeneratorType.letter.accentColor;
+    final history = context.read<HistoryStore>();
 
-    void openProDialog() => showProDialog(
-      context,
-      title: l10n.letterFiltersProTitle,
-      message: l10n.letterFiltersProMessage,
-      generatorType: GeneratorType.letter,
-      featureDefinitions: [
-        l10n.letterUppercaseSubtitle,
-        l10n.letterLowercaseSubtitle,
-        l10n.letterIncludeUmlautsSubtitle,
-        l10n.letterOnlyVowelsSubtitle,
-        l10n.letterFiltersProMessage,
-      ],
-    );
+    final isProNoRepeat = gate.canUse(ProFeature.letterFilters);
 
     return Scaffold(
       appBar: AppBar(
@@ -108,105 +80,152 @@ class _LetterPageState extends State<LetterPage> {
 
           const SizedBox(height: 24),
 
-          // ── Pro features ─────────────────────────────────────────────────
-          PremiumSection(
-            isPro: gate.isPro,
-            onProRequired: openProDialog,
-            title: l10n.letterSectionFilters,
-            children: [
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.letterUppercase),
-                subtitle: Text(l10n.letterUppercaseSubtitle),
-                value: _upper,
-                onChanged: (v) => setState(() => _upper = v),
-              ),
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.letterLowercase),
-                subtitle: Text(l10n.letterLowercaseSubtitle),
-                value: _lower,
-                onChanged: (v) => setState(() => _lower = v),
-              ),
-              const SizedBox(height: 4),
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.letterIncludeUmlauts),
-                subtitle: Text(l10n.letterIncludeUmlautsSubtitle),
-                value: _includeUmlauts,
-                onChanged: (v) => setState(() => _includeUmlauts = v),
-              ),
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.letterOnlyVowels),
-                subtitle: Text(l10n.letterOnlyVowelsSubtitle),
-                value: _onlyVowels,
-                onChanged: (v) => setState(() => _onlyVowels = v),
-              ),
+          _SectionTitle(l10n.letterSectionFilters),
+          const SizedBox(height: 8),
 
-              const SizedBox(height: 8),
+          // Exclude letters (Pro)
+          ListTile(
+            title: Text(l10n.letterExcludeLetters),
+            subtitle: Text(
+              gate.isPro
+                  ? (_excluded.isEmpty
+                        ? l10n.letterExcludeNone
+                        : _excluded.join(', '))
+                  : l10n.commonProFeature,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              if (!gate.isPro) {
+                await _showProFiltersDialog(context);
+                return;
+              }
+              await _openExcludeDialog(context);
+            },
+          ),
 
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.letterExcludeLetters),
-                subtitle: Text(
-                  _excluded.isEmpty
-                      ? l10n.letterExcludeNone
-                      : _excluded.join(', '),
-                ),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: gate.isPro
-                    ? () => _openExcludeDialog(context)
-                    : null,
+          const SizedBox(height: 8),
+
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            activeColor: GeneratorType.letter.accentColor,
+            title: const Text('No Repeat Until Cycle Complete'),
+            subtitle: Text(
+              isProNoRepeat
+                  ? 'Each letter appears once before reset.'
+                  : l10n.commonProFeature,
+            ),
+            value: _noRepeatCycle,
+            onChanged: (v) async {
+              if (!isProNoRepeat) {
+                await _showProFiltersDialog(context);
+                return;
+              }
+              setState(() {
+                _noRepeatCycle = v;
+                _remainingCycle.clear();
+                _usedInCycle.clear();
+              });
+            },
+          ),
+
+          if (_noRepeatCycle && _usedInCycle.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Used letters',
+                style: const TextStyle(fontWeight: FontWeight.w700),
               ),
-            ],
+            ),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final c in _usedInCycle)
+                  Chip(
+                    label: Text(c),
+                    backgroundColor: GeneratorType.letter.accentColor
+                        .withOpacity(0.15),
+                  ),
+              ],
+            ),
+          ],
+
+          const SizedBox(height: 24),
+
+          if (!gate.isPro)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(22),
+              decoration: AppStyles.proCard(),
+              child: Text(l10n.letterFreeProHint, style: AppStyles.resultStyle),
+            ),
+
+          const SizedBox(height: 16),
+
+          FilledButton.icon(
+            style: AppStyles.generatorButton(GeneratorType.letter.accentColor),
+            icon: const Icon(Icons.casino),
+            label: Text(l10n.commonGenerate),
+            onPressed: () async {
+              final letter = _generateLetter();
+              setState(() => _last = letter);
+
+              await history.add(
+                type: GeneratorType.letter,
+                value: letter,
+                maxEntries: context.gateRead.historyMax,
+                metadata: {'letter': letter},
+              );
+            },
           ),
         ],
       ),
     );
   }
 
-  String _generateLetter({required bool isProFilters}) {
-    if (!isProFilters) {
-      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      return letters[_rng.nextInt(letters.length)];
+  String _generateLetter() {
+    final basePool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    final pool = basePool.where((c) => !_excluded.contains(c)).toList();
+    final effectivePool = pool.isEmpty ? basePool : pool;
+
+    if (!_noRepeatCycle) {
+      return effectivePool[_rng.nextInt(effectivePool.length)];
     }
 
-    final List<String> pool = [];
-    const upperAZ = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const loweraz = 'abcdefghijklmnopqrstuvwxyz';
-    const upperVowels = 'AEIOU';
-    const lowerVowels = 'aeiou';
-
-    if (_upper) {
-      pool.addAll((_onlyVowels ? upperVowels : upperAZ).split(''));
-      if (_includeUmlauts) pool.addAll(['Ä', 'Ö', 'Ü']);
-    }
-    if (_lower) {
-      pool.addAll((_onlyVowels ? lowerVowels : loweraz).split(''));
-      if (_includeUmlauts) pool.addAll(['ä', 'ö', 'ü']);
-    }
-    if (pool.isEmpty) {
-      pool.addAll((_onlyVowels ? upperVowels : upperAZ).split(''));
-      if (_includeUmlauts) pool.addAll(['Ä', 'Ö', 'Ü']);
+    if (_remainingCycle.isEmpty) {
+      _remainingCycle
+        ..clear()
+        ..addAll(effectivePool);
+      _remainingCycle.shuffle(_rng);
+      _usedInCycle.clear();
     }
 
-    final filtered = pool.where((c) => !_excluded.contains(c)).toList();
-    final finalPool = filtered.isNotEmpty ? filtered : pool;
-    return finalPool[_rng.nextInt(finalPool.length)];
+    final next = _remainingCycle.removeLast();
+    if (!_usedInCycle.contains(next)) {
+      _usedInCycle.add(next);
+    }
+    return next;
+  }
+
+  Future<void> _showProFiltersDialog(BuildContext context) async {
+    final l10n = context.l10n;
+    await showProDialog(
+      context,
+      title: l10n.letterFiltersProTitle,
+      message: l10n.letterFiltersProMessage,
+      generatorType: GeneratorType.letter,
+      featureDefinitions: [
+        l10n.letterExcludeLetters,
+        'No Repeat Until Cycle Complete',
+        l10n.letterFiltersProMessage,
+      ],
+    );
   }
 
   Future<void> _openExcludeDialog(BuildContext context) async {
-    final candidates = <String>{};
-    if (_upper) candidates.addAll('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
-    if (_lower) candidates.addAll('abcdefghijklmnopqrstuvwxyz'.split(''));
-    if (_includeUmlauts) {
-      if (_upper) candidates.addAll(['Ä', 'Ö', 'Ü']);
-      if (_lower) candidates.addAll(['ä', 'ö', 'ü']);
-    }
-    if (candidates.isEmpty) {
-      candidates.addAll('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''));
-    }
+    final candidates = <String>{...('ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split(''))};
 
     final sorted = candidates.toList()..sort((a, b) => a.compareTo(b));
 
@@ -215,53 +234,65 @@ class _LetterPageState extends State<LetterPage> {
       builder: (_) {
         final temp = Set<String>.from(_excluded);
         return StatefulBuilder(
-          builder: (context, setLocal) => AlertDialog(
-            title: Text(context.l10n.letterExcludeLetters),
-            content: SizedBox(
-              width: double.maxFinite,
-              child: Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [
-                  for (final c in sorted)
-                    FilterChip(
-                      label: Text(c),
-                      selected: temp.contains(c),
-                      onSelected: (sel) => setLocal(() {
-                        sel ? temp.add(c) : temp.remove(c);
-                      }),
-                    ),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(context.l10n.commonCancel),
-              ),
-              TextButton(
-                onPressed: () => setLocal(() => temp.clear()),
-                child: Text(context.l10n.commonClear),
-              ),
-              FilledButton(
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
-                  ),
+          builder: (context, setLocal) {
+            return AlertDialog(
+              title: Text(context.l10n.letterExcludeLetters),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    for (final c in sorted)
+                      FilterChip(
+                        label: Text(c),
+                        selectedColor: GeneratorType.letter.accentColor
+                            .withOpacity(0.2),
+                        selected: temp.contains(c),
+                        onSelected: (selected) {
+                          setLocal(() {
+                            if (selected) {
+                              temp.add(c);
+                            } else {
+                              temp.remove(c);
+                            }
+                          });
+                        },
+                      ),
+                  ],
                 ),
-                onPressed: () {
-                  setState(() {
-                    _excluded
-                      ..clear()
-                      ..addAll(temp);
-                  });
-                  Navigator.of(context).pop();
-                },
-                child: Text(context.l10n.commonSave),
               ),
-            ],
-          ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.commonCancel),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setLocal(() => temp.clear());
+                  },
+                  child: Text(context.l10n.commonClear),
+                ),
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _excluded
+                        ..clear()
+                        ..addAll(temp);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(context.l10n.commonSave),
+                ),
+              ],
+            );
+          },
         );
       },
     );

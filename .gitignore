@@ -55,3 +55,4 @@ web/
 
 # Any nested build folders
 **/build/
+~/*

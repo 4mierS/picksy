@@ -164,35 +164,22 @@ class _BottleSpinPageState extends State<BottleSpinPage>
             onTap: _spinning ? null : () => _spin(gate),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
+          const SizedBox(height: 14),
 
-          // Pro features
-          PremiumSection(
-            isPro: gate.isPro,
-            onProRequired: openProDialog,
-            title: l10n.bottleSpinSectionControls,
-            children: [
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.bottleSpinStrength),
-                subtitle: Text(l10n.bottleSpinStrengthSubtitle),
-                trailing: SizedBox(
-                  width: 160,
-                  child: Slider(
-                    value: _spinStrength,
-                    activeColor: accent,
-                    onChanged: (v) => setState(() => _spinStrength = v),
-                  ),
-                ),
-              ),
-              SwitchListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(l10n.bottleSpinHaptic),
-                subtitle: Text(l10n.bottleSpinHapticSubtitle),
-                value: _hapticEnabled,
-                onChanged: (v) => setState(() => _hapticEnabled = v),
-              ),
-            ],
+          FilledButton.icon(
+            style: AppStyles.generatorButton(
+              GeneratorType.bottleSpin.accentColor,
+            ),
+            onPressed: _spinning
+                ? null
+                : () async {
+                    await _spin(gate);
+                  },
+            icon: const Icon(Icons.casino),
+            label: Text(
+              _spinning ? l10n.bottleSpinSpinning : l10n.bottleSpinSpin,
+            ),
           ),
         ],
       ),
@@ -206,9 +193,7 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 
     final randomDeg = _rng.nextInt(360).toDouble();
 
-    final baseTurns = gate.canUse(ProFeature.bottleSpinStrength)
-        ? (2 + (_spinStrength * 8)).round()
-        : 5;
+    final baseTurns = 3 + _rng.nextInt(8); // 3..10 random turns
 
     final extraDeg = baseTurns * 360.0;
     final totalDeg = extraDeg + randomDeg;
@@ -219,16 +204,12 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 
     _controller.duration = Duration(milliseconds: 3000 + _rng.nextInt(2000));
 
-    if (gate.canUse(ProFeature.bottleSpinHaptics) && _hapticEnabled) {
-      HapticFeedback.selectionClick();
-    }
+    HapticFeedback.selectionClick();
 
     _controller.reset();
     await _controller.forward();
 
-    if (gate.canUse(ProFeature.bottleSpinHaptics) && _hapticEnabled) {
-      HapticFeedback.mediumImpact();
-    }
+    HapticFeedback.mediumImpact();
   }
 
   double _lerp(double a, double b, double t) => a + (b - a) * t;

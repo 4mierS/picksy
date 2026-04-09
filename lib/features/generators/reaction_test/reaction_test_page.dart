@@ -32,8 +32,6 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
   int? _reactionMs;
   int? _plannedDelayMs;
 
-  bool _vibrateOnResult = true;
-
   static const int _historyMaxEntries = 100;
 
   @override
@@ -89,10 +87,8 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
       );
       setState(() => _phase = _Phase.tooSoon);
 
-      if (_vibrateOnResult) {
-        final hasV = await Vibration.hasVibrator() ?? false;
-        if (hasV) Vibration.vibrate(duration: 200);
-      }
+      final hasV = await Vibration.hasVibrator();
+      if (hasV) Vibration.vibrate(duration: 200);
       return;
     }
     if (_phase == _Phase.ready) {
@@ -111,10 +107,8 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
         metadata: {'ms': ms},
       );
 
-      if (_vibrateOnResult) {
-        final hasV = await Vibration.hasVibrator() ?? false;
-        if (hasV) Vibration.vibrate(duration: 300);
-      }
+      final hasV = await Vibration.hasVibrator();
+      if (hasV) Vibration.vibrate(duration: 300);
       return;
     }
 
@@ -211,49 +205,42 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              const SizedBox(height: 18),
-              Container(
-                width: double.infinity,
-                constraints: const BoxConstraints(minHeight: 150),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 20,
-                ),
-                decoration: AppStyles.generatorResultCard(
-                  GeneratorType.reactionTest.accentColor,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      _headline(),
-                      style: const TextStyle(
-                        fontSize: 34,
-                        fontWeight: FontWeight.w800,
-                      ),
-                      textAlign: TextAlign.center,
+              Expanded(
+                child: Center(
+                  child: Container(
+                    width: double.infinity,
+                    constraints: const BoxConstraints(minHeight: 240),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 24,
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      _subtext(),
-                      style: const TextStyle(fontSize: 18),
-                      textAlign: TextAlign.center,
+                    decoration: AppStyles.generatorResultCard(
+                      GeneratorType.reactionTest.accentColor,
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 18),
-
-              // Toggle
-              Card(
-                child: SwitchListTile(
-                  title: const Text("Vibrate on result"),
-                  value: _vibrateOnResult,
-                  onChanged: (v) => setState(() => _vibrateOnResult = v),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          _headline(),
+                          style: const TextStyle(
+                            fontSize: 44,
+                            fontWeight: FontWeight.w800,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          _subtext(),
+                          style: const TextStyle(fontSize: 22),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
 
-              const Spacer(),
+              const SizedBox(height: 18),
 
               if (showStart)
                 SizedBox(

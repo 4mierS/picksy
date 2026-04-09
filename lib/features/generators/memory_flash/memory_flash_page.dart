@@ -25,23 +25,26 @@ class MemoryFlashPage extends StatefulWidget {
 }
 
 class _MemoryFlashPageState extends State<MemoryFlashPage> {
-  static const double _maxGridWidth = 320.0;
+  static const double _maxGridWidth = 420.0;
   static const int _gridColumns = 2;
   static const double _tileSpacing = 12.0;
   static const int _freeLevelCap = 10;
   static const int _historyMaxEntriesFree = 50;
   static const int _historyMaxEntriesPro = 1000;
 
-  static const List<Color> _tileColors = [
-    Colors.redAccent,
-    Colors.blueAccent,
-    Colors.green,
-    Colors.amber,
+  static const List<Color> _distinctTileColors = [
+    Color(0xFFE53935),
+    Color(0xFF1E88E5),
+    Color(0xFF43A047),
+    Color(0xFF8E24AA),
+    Color(0xFF00ACC1),
+    Color(0xFFD81B60),
   ];
 
   final _rng = Random();
   _Phase _phase = _Phase.idle;
   _Speed _speed = _Speed.normal;
+  int _blockCount = 4;
 
   List<int> _sequence = [];
   int _inputIndex = 0;
@@ -52,6 +55,9 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
   DateTime? _gameStart;
 
   Timer? _flashTimer;
+
+  List<Color> get _activeTileColors =>
+      _distinctTileColors.take(_blockCount).toList();
 
   int get _flashDurationMs {
     switch (_speed) {
@@ -91,7 +97,7 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
     // Add one new element (no immediate full repetition: ensure last != new)
     int next;
     do {
-      next = _rng.nextInt(_tileColors.length);
+      next = _rng.nextInt(_activeTileColors.length);
     } while (_sequence.isNotEmpty && next == _sequence.last);
 
     setState(() {
@@ -170,16 +176,14 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
   void _saveHistory() {
     final history = context.read<HistoryStore>();
     final gate = context.gateRead;
-    final duration =
-        _gameStart != null
-            ? DateTime.now().difference(_gameStart!).inSeconds
-            : 0;
+    final duration = _gameStart != null
+        ? DateTime.now().difference(_gameStart!).inSeconds
+        : 0;
 
     history.add(
       type: GeneratorType.memoryFlash,
       value: 'Level $_level – $_totalSequences sequences',
-      maxEntries:
-          gate.isPro ? _historyMaxEntriesPro : _historyMaxEntriesFree,
+      maxEntries: gate.isPro ? _historyMaxEntriesPro : _historyMaxEntriesFree,
       metadata: {
         'maxLevel': _level,
         'totalSequences': _totalSequences,
@@ -260,11 +264,11 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
                         spacing: 12,
                         runSpacing: 12,
                         alignment: WrapAlignment.center,
-                        children: List.generate(_tileColors.length, (i) {
+                        children: List.generate(_activeTileColors.length, (i) {
                           final isHighlighted = _highlightedTile == i;
                           return _MemoryTile(
                             size: size,
-                            color: _tileColors[i],
+                            color: _activeTileColors[i],
                             isHighlighted: isHighlighted,
                             enabled: _phase == _Phase.input,
                             onTap: () => _onTileTap(i),
@@ -321,52 +325,62 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
                 ),
               ],
 
-              // Settings card
               const SizedBox(height: 8),
-              Card(
-                child: ExpansionTile(
-                  title: Text(l10n.settingsTitle),
-                  leading: const Icon(Icons.tune),
-                  children: [
+              _SpeedSettings(
+                speed: _speed,
+                enabled: _phase == _Phase.idle || _phase == _Phase.gameover,
+                gate: gate,
+                onSpeedChanged: (s) {
+                  if (!gate.canUse(ProFeature.memoryFlashSpeed)) {
+                    showProDialog(
+                      context,
+                      title: l10n.memoryFlashProSpeedTitle,
+                      message: l10n.memoryFlashProSpeedMessage,
+                      generatorType: GeneratorType.memoryFlash,
+                    );
+                    return;
+                  }
+                  setState(() => _speed = s);
+                },
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  const Text(
+                    'Blocks',
+                    style: TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(width: 10),
+                  for (final count in [3, 4, 5, 6]) ...[
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      child: _SpeedSettings(
-                        speed: _speed,
-                        enabled: _phase == _Phase.idle ||
-                            _phase == _Phase.gameover,
-                        gate: gate,
-                        onSpeedChanged: (s) {
-                          if (!gate.canUse(ProFeature.memoryFlashSpeed)) {
-                            showProDialog(
-                              context,
-                              title: l10n.memoryFlashProSpeedTitle,
-                              message: l10n.memoryFlashProSpeedMessage,
-                              generatorType: GeneratorType.memoryFlash,
-                            );
-                            return;
-                          }
-                          setState(() => _speed = s);
-                        },
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        selectedColor: accent.withOpacity(0.2),
+                        label: Text('$count'),
+                        selected: _blockCount == count,
+                        onSelected:
+                            (_phase == _Phase.idle || _phase == _Phase.gameover)
+                            ? (_) => setState(() {
+                                _blockCount = count;
+                                _sequence.clear();
+                              })
+                            : null,
                       ),
                     ),
-                    if (!gate.isPro)
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                        child: Text(
-                          l10n.memoryFlashFreeProHint,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppColors.proPurple,
-                          ),
-                        ),
-                      ),
                   ],
-                ),
+                ],
               ),
-
+              if (!gate.isPro)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    l10n.memoryFlashFreeProHint,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.proPurple,
+                    ),
+                  ),
+                ),
               const SizedBox(height: 8),
             ],
           ),
@@ -529,8 +543,7 @@ class _SpeedSettings extends StatelessWidget {
             if (!gate.canUse(ProFeature.memoryFlashSpeed)) ...[
               const SizedBox(width: 8),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: AppColors.proPurple.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(6),
@@ -562,8 +575,7 @@ class _SpeedSettings extends StatelessWidget {
                       color: selected ? accent : Colors.grey.withOpacity(0.4),
                       width: selected ? 2 : 1,
                     ),
-                    backgroundColor:
-                        selected ? accent.withOpacity(0.1) : null,
+                    backgroundColor: selected ? accent.withOpacity(0.1) : null,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   onPressed: enabled ? () => onSpeedChanged(s) : null,

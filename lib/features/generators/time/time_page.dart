@@ -10,6 +10,7 @@ import '../../../l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/storage/premium_store.dart';
+import 'package:picksy/storage/boxes.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
@@ -24,10 +25,11 @@ class _TimePageState extends State<TimePage> {
   final _rng = Random();
   static const int _freeMinSec = 3;
   static const int _freeMaxSec = 12;
+  static const _kMinKey = 'time.minSec';
+  static const _kMaxKey = 'time.maxSec';
 
   // Settings
   bool _hideTime = false;
-  bool _vibrateOnFinish = true;
 
   // Pro Range settings (seconds)
   int _minSec = 3;
@@ -42,6 +44,23 @@ class _TimePageState extends State<TimePage> {
   int? _targetMs;
   Stopwatch? _sw;
   Timer? _tick;
+
+  @override
+  void initState() {
+    super.initState();
+    final box = Boxes.box(Boxes.settings);
+    _minSec = (box.get(_kMinKey, defaultValue: 3) as num).toInt();
+    _maxSec = (box.get(_kMaxKey, defaultValue: 8) as num).toInt();
+    if (_maxSec < _minSec) {
+      _maxSec = _minSec;
+    }
+  }
+
+  Future<void> _persistRange() async {
+    final box = Boxes.box(Boxes.settings);
+    await box.put(_kMinKey, _minSec);
+    await box.put(_kMaxKey, _maxSec);
+  }
 
   @override
   void dispose() {
@@ -94,7 +113,7 @@ class _TimePageState extends State<TimePage> {
     }
 
     if (vibrateOnFinish) {
-      final hasVibrator = await Vibration.hasVibrator() ?? false;
+      final hasVibrator = await Vibration.hasVibrator();
       if (hasVibrator) Vibration.vibrate(duration: 500);
     }
   }
@@ -144,7 +163,14 @@ class _TimePageState extends State<TimePage> {
     final l10n = context.l10n;
     final premium = context.watch<PremiumStore>();
     final isPro = premium.isPro;
-    final accent = GeneratorType.time.accentColor;
+    final hideTime = _hideTime;
+    const vibrateOnFinish = true;
+    final minSec = _minSec;
+    final maxSec = _maxSec;
+
+    final bg = _finished
+        ? Colors.red.shade700
+        : Theme.of(context).scaffoldBackgroundColor;
 
     final showTimeNow = !_hideTime || _revealHiddenAtEnd;
 
@@ -235,39 +261,153 @@ class _TimePageState extends State<TimePage> {
 
           const SizedBox(height: 12),
 
-          // Reset button (always visible once started)
-          if (_targetMs != null || _finished)
-            OutlinedButton(
-              onPressed: _running ? null : _reset,
-              child: Text(l10n.timeReset),
+            _ControlsCard(
+              isPro: isPro,
+              running: _running,
+              freeMinSec: _freeMinSec,
+              freeMaxSec: _freeMaxSec,
+              hideTime: hideTime,
+              minSec: minSec,
+              maxSec: maxSec,
+              onToggleHide: (value) => setState(() => _hideTime = value),
+              onRangeChanged: (min, max) async {
+                setState(() {
+                  _minSec = min;
+                  _maxSec = max;
+                });
+                await _persistRange();
+              },
             ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 12),
 
-          // ── Free controls ─────────────────────────────────────────────────
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.timeHideTime),
-            subtitle: Text(l10n.timeHideTimeSubtitle),
-            value: _hideTime,
-            onChanged: _running ? null : (v) => setState(() => _hideTime = v),
-          ),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.timeVibrateOnFinish),
-            value: _vibrateOnFinish,
-            onChanged:
-                _running ? null : (v) => setState(() => _vibrateOnFinish = v),
-          ),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: _running
+                        ? _reset
+                        : (_targetMs == null && !_finished ? null : _reset),
+                    child: Text(l10n.timeReset),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: ElevatedButton(
+                    style: AppStyles.generatorButton(
+                      GeneratorType.time.accentColor,
+                    ),
+                    onPressed: _running
+                        ? null
+                        : () => _start(
+                            isPro: isPro,
+                            minSec: minSec,
+                            maxSec: maxSec,
+                            hideTime: hideTime,
+                            vibrateOnFinish: vibrateOnFinish,
+                          ),
+                    child: Text(_finished ? l10n.timeAgain : l10n.timeStart),
+                  ),
+                ),
+              ],
+            ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 10),
 
-          // ── Pro features ─────────────────────────────────────────────────
-          PremiumSection(
-            isPro: isPro,
-            onProRequired: openProDialog,
-            title: l10n.timeRangeSeconds,
-            children: [
+            Text(
+              isPro
+                  ? l10n.timeProCustomRangeHint
+                  : l10n.timeFreeCustomRangeHint(_freeMinSec, _freeMaxSec),
+              style: Theme.of(context).textTheme.bodySmall,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ControlsCard extends StatelessWidget {
+  const _ControlsCard({
+    required this.isPro,
+    required this.running,
+    required this.freeMinSec,
+    required this.freeMaxSec,
+    required this.hideTime,
+    required this.minSec,
+    required this.maxSec,
+    required this.onToggleHide,
+    required this.onRangeChanged,
+  });
+
+  final bool isPro;
+  final bool running;
+  final int freeMinSec;
+  final int freeMaxSec;
+
+  final bool hideTime;
+
+  final int minSec;
+  final int maxSec;
+
+  final ValueChanged<bool> onToggleHide;
+  final void Function(int min, int max) onRangeChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final disabled = running;
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            SwitchListTile(
+              value: hideTime,
+              onChanged: disabled ? null : onToggleHide,
+              title: Text(l10n.timeHideTime),
+              subtitle: Text(l10n.timeHideTimeSubtitle),
+            ),
+            const Divider(),
+
+            // Range
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.timeRangeSeconds,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                if (!isPro)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.proPurple.withOpacity(0.14),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(
+                      l10n.proBadge,
+                      style: const TextStyle(color: AppColors.proPurple),
+                    ),
+                  ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+
+            if (!isPro)
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(l10n.timeFreeFixedRange(freeMinSec, freeMaxSec)),
+              ),
+
+            if (isPro) ...[
               Row(
                 children: [
                   Expanded(
