@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:picksy/l10n/l10n.dart';
 
 import 'package:picksy/core/ui/app_colors.dart';
+import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
@@ -97,6 +98,7 @@ class _CoinPageState extends State<CoinPage>
     final accent = GeneratorType.coin.accentColor;
 
     final canCustomLabels = gate.canUse(ProFeature.coinCustomLabels);
+    final proDefinitions = [l10n.coinCustomLabelsProMessage];
     final currentA = canCustomLabels ? _labelA.text.trim() : l10n.coinDefaultHeads;
     final currentB = canCustomLabels ? _labelB.text.trim() : l10n.coinDefaultTails;
 
@@ -160,7 +162,7 @@ class _CoinPageState extends State<CoinPage>
                   ),
                 ),
               ),
-              _SectionTitle(l10n.coinSectionLabels),
+              GeneratorSectionTitle(l10n.coinSectionLabels),
               const SizedBox(height: 8),
 
               // Pro-only label inputs

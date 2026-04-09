@@ -27,6 +27,7 @@ class _ColorPageState extends State<ColorPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
+    final history = context.read<HistoryStore>();
     final currentHex = _toHex(_current);
 
     return Scaffold(

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:picksy/l10n/l10n.dart';
 
 import 'package:picksy/core/ui/app_colors.dart';
+import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
@@ -117,7 +118,7 @@ class _NumberPageState extends State<NumberPage> {
           const SizedBox(height: 16),
 
           // Range settings
-          _SectionTitle(l10n.numberSectionRange),
+          GeneratorSectionTitle(l10n.numberSectionRange),
 
           const SizedBox(height: 8),
 
@@ -235,11 +236,13 @@ class _NumberPageState extends State<NumberPage> {
 class _RangeRow extends StatelessWidget {
   final double min;
   final double max;
+  final bool isPro;
   final void Function(double newMin, double newMax) onChanged;
 
   const _RangeRow({
     required this.min,
     required this.max,
+    required this.isPro,
     required this.onChanged,
   });
 
@@ -286,6 +289,45 @@ class _RangeRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _LockedField extends StatelessWidget {
+  const _LockedField({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.black.withOpacity(0.04),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              const Icon(Icons.lock, size: 16),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

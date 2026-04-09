@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vibration/vibration.dart';
 import 'package:picksy/core/ui/app_colors.dart';
+import 'package:picksy/core/ui/app_styles.dart';
 import '../../../core/gating/feature_gate.dart';
 import '../../../l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
@@ -30,6 +31,7 @@ class _TimePageState extends State<TimePage> {
 
   // Settings
   bool _hideTime = false;
+  bool _vibrateOnFinish = true;
 
   // Pro Range settings (seconds)
   int _minSec = 3;
@@ -163,8 +165,9 @@ class _TimePageState extends State<TimePage> {
     final l10n = context.l10n;
     final premium = context.watch<PremiumStore>();
     final isPro = premium.isPro;
+    final accent = GeneratorType.time.accentColor;
     final hideTime = _hideTime;
-    const vibrateOnFinish = true;
+    final vibrateOnFinish = _vibrateOnFinish;
     final minSec = _minSec;
     final maxSec = _maxSec;
 
@@ -250,7 +253,7 @@ class _TimePageState extends State<TimePage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // ── Result area (tap to start / tap again to reset) ───────────────
+          // Result area (tap to start / tap again to reset)
           ResultDisplayArea(
             accentColor: accent,
             hint: l10n.timeReady,
@@ -261,68 +264,67 @@ class _TimePageState extends State<TimePage> {
 
           const SizedBox(height: 12),
 
-            _ControlsCard(
-              isPro: isPro,
-              running: _running,
-              freeMinSec: _freeMinSec,
-              freeMaxSec: _freeMaxSec,
-              hideTime: hideTime,
-              minSec: minSec,
-              maxSec: maxSec,
-              onToggleHide: (value) => setState(() => _hideTime = value),
-              onRangeChanged: (min, max) async {
-                setState(() {
-                  _minSec = min;
-                  _maxSec = max;
-                });
-                await _persistRange();
-              },
-            ),
+          _ControlsCard(
+            isPro: isPro,
+            running: _running,
+            freeMinSec: _freeMinSec,
+            freeMaxSec: _freeMaxSec,
+            hideTime: hideTime,
+            minSec: minSec,
+            maxSec: maxSec,
+            onToggleHide: (value) => setState(() => _hideTime = value),
+            onRangeChanged: (min, max) async {
+              setState(() {
+                _minSec = min;
+                _maxSec = max;
+              });
+              await _persistRange();
+            },
+          ),
 
-            const SizedBox(height: 12),
+          const SizedBox(height: 12),
 
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: _running
-                        ? _reset
-                        : (_targetMs == null && !_finished ? null : _reset),
-                    child: Text(l10n.timeReset),
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: _running
+                      ? _reset
+                      : (_targetMs == null && !_finished ? null : _reset),
+                  child: Text(l10n.timeReset),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    style: AppStyles.generatorButton(
-                      GeneratorType.time.accentColor,
-                    ),
-                    onPressed: _running
-                        ? null
-                        : () => _start(
-                            isPro: isPro,
-                            minSec: minSec,
-                            maxSec: maxSec,
-                            hideTime: hideTime,
-                            vibrateOnFinish: vibrateOnFinish,
-                          ),
-                    child: Text(_finished ? l10n.timeAgain : l10n.timeStart),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  style: AppStyles.generatorButton(
+                    GeneratorType.time.accentColor,
                   ),
+                  onPressed: _running
+                      ? null
+                      : () => _start(
+                          isPro: isPro,
+                          minSec: minSec,
+                          maxSec: maxSec,
+                          hideTime: hideTime,
+                          vibrateOnFinish: vibrateOnFinish,
+                        ),
+                  child: Text(_finished ? l10n.timeAgain : l10n.timeStart),
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
 
-            const SizedBox(height: 10),
+          const SizedBox(height: 10),
 
-            Text(
-              isPro
-                  ? l10n.timeProCustomRangeHint
-                  : l10n.timeFreeCustomRangeHint(_freeMinSec, _freeMaxSec),
-              style: Theme.of(context).textTheme.bodySmall,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+          Text(
+            isPro
+                ? l10n.timeProCustomRangeHint
+                : l10n.timeFreeCustomRangeHint(_freeMinSec, _freeMaxSec),
+            style: Theme.of(context).textTheme.bodySmall,
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
@@ -413,19 +415,15 @@ class _ControlsCard extends StatelessWidget {
                   Expanded(
                     child: _NumberStepper(
                       label: l10n.numberMin,
-                      value: _minSec,
+                      value: minSec,
                       min: 1,
                       max: 3600,
-                      onChanged: _running
+                      onChanged: running
                           ? null
                           : (v) {
                               final newMin = v;
-                              final newMax =
-                                  _maxSec < newMin ? newMin : _maxSec;
-                              setState(() {
-                                _minSec = newMin;
-                                _maxSec = newMax;
-                              });
+                              final newMax = maxSec < newMin ? newMin : maxSec;
+                              onRangeChanged(newMin, newMax);
                             },
                     ),
                   ),
@@ -433,27 +431,23 @@ class _ControlsCard extends StatelessWidget {
                   Expanded(
                     child: _NumberStepper(
                       label: l10n.numberMax,
-                      value: _maxSec,
+                      value: maxSec,
                       min: 1,
                       max: 3600,
-                      onChanged: _running
+                      onChanged: running
                           ? null
                           : (v) {
                               final newMax = v;
-                              final newMin =
-                                  _minSec > newMax ? newMax : _minSec;
-                              setState(() {
-                                _minSec = newMin;
-                                _maxSec = newMax;
-                              });
+                              final newMin = minSec > newMax ? newMax : minSec;
+                              onRangeChanged(newMin, newMax);
                             },
                     ),
                   ),
                 ],
               ),
             ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

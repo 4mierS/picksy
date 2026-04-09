@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:picksy/l10n/l10n.dart';
 
 import 'package:picksy/core/ui/app_colors.dart';
+import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
@@ -86,10 +87,13 @@ class _CardPageState extends State<CardPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
+    final history = context.read<HistoryStore>();
     final accent = GeneratorType.card.accentColor;
+    final canJokers = gate.canUse(ProFeature.cardJokers);
+    final canMultiDraw = gate.canUse(ProFeature.cardMultiDraw);
 
-    final effectiveJokers = gate.canUse(ProFeature.cardJokers) && _includeJokers;
-    final effectiveCount = gate.canUse(ProFeature.cardMultiDraw) ? _multiCount : 1;
+    final effectiveJokers = canJokers && _includeJokers;
+    final effectiveCount = canMultiDraw ? _multiCount : 1;
 
     void openProDialog() => showProDialog(
       context,

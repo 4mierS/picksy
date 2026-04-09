@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:picksy/l10n/l10n.dart';
 
 import 'package:picksy/core/ui/app_colors.dart';
+import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
@@ -32,7 +33,7 @@ class _LetterPageState extends State<LetterPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
-    final history = context.read<HistoryStore>();
+    final accent = GeneratorType.letter.accentColor;
 
     final isProNoRepeat = gate.canUse(ProFeature.letterFilters);
 
@@ -80,7 +81,7 @@ class _LetterPageState extends State<LetterPage> {
 
           const SizedBox(height: 24),
 
-          _SectionTitle(l10n.letterSectionFilters),
+          GeneratorSectionTitle(l10n.letterSectionFilters),
           const SizedBox(height: 8),
 
           // Exclude letters (Pro)
@@ -168,20 +169,22 @@ class _LetterPageState extends State<LetterPage> {
             style: AppStyles.generatorButton(GeneratorType.letter.accentColor),
             icon: const Icon(Icons.casino),
             label: Text(l10n.commonGenerate),
-            onPressed: () async {
-              final letter = _generateLetter();
-              setState(() => _last = letter);
-
-              await history.add(
-                type: GeneratorType.letter,
-                value: letter,
-                maxEntries: context.gateRead.historyMax,
-                metadata: {'letter': letter},
-              );
-            },
+            onPressed: _generate,
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _generate() async {
+    final letter = _generateLetter();
+    setState(() => _last = letter);
+
+    await context.read<HistoryStore>().add(
+      type: GeneratorType.letter,
+      value: letter,
+      maxEntries: context.gateRead.historyMax,
+      metadata: {'letter': letter},
     );
   }
 
