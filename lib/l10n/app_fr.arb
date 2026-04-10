@@ -82,33 +82,18 @@
   "historyClearAll": "Tout effacer",
   "historyEmpty": "Pas encore d'historique",
   "historyItemSubtitle": "{generator} • {timestamp}",
-  "@historyItemSubtitle": [
-    [
-      "placeholders",
-      [
-        [
-          "generator",
-          []
-        ],
-        [
-          "timestamp",
-          []
-        ]
-      ]
-    ]
-  ],
+  "@historyItemSubtitle": {
+    "placeholders": {
+      "generator": {},
+      "timestamp": {}
+    }
+  },
   "routerComingNext": "Ensuite : {generator}",
-  "@routerComingNext": [
-    [
-      "placeholders",
-      [
-        [
-          "generator",
-          []
-        ]
-      ]
-    ]
-  ],
+  "@routerComingNext": {
+    "placeholders": {
+      "generator": {}
+    }
+  },
   "gateNotNow": "Not now",
   "gateGoPro": "Go Pro",
   "gateOpenProTab": "Open Pro tab to upgrade",
@@ -145,22 +130,12 @@
   "coinDefaultTails": "Tails",
   "colorTitle": "Color",
   "letterTitle": "Letter",
-  "letterTapGenerate": "Tap \"Generate\" to get a letter",
-  "letterSectionFilters": "Filters",
-  "letterUppercase": "Uppercase",
-  "letterUppercaseSubtitle": "Include A-Z",
-  "letterLowercase": "Lowercase",
-  "letterLowercaseSubtitle": "Include a-z",
-  "letterIncludeUmlauts": "Include umlauts",
-  "letterIncludeUmlautsSubtitle": "Add ä, ö, ü (and Ä, Ö, Ü if uppercase enabled)",
-  "letterOnlyVowels": "Only vowels",
-  "letterOnlyVowelsSubtitle": "Limit selection to vowels (A E I O U + optional umlauts)",
   "letterExcludeLetters": "Exclude letters",
   "letterExcludeNone": "None",
   "letterFiltersProTitle": "Letter filters are Pro",
   "letterFiltersProMessage": "Go Pro to unlock lowercase, umlauts, vowels-only, and exclusions.",
-  "letterFreeProHint": "Free: Random A-Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.",
   "numberTitle": "Number",
+  "numberTapGenerate": "Tap \"Generate\" to get a number",
   "numberSectionRange": "Range",
   "numberSectionType": "Type",
   "numberSectionFilter": "Filter",
@@ -192,75 +167,39 @@
   "customListTeamModeOff": "Pick one random item",
   "customListTeamsLabel": "Teams:",
   "customListPeopleCount": "{count} people",
-  "@customListPeopleCount": [
-    [
-      "placeholders",
-      [
-        [
-          "count",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@customListPeopleCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "customListTeamsCardTitle": "Teams",
   "customListTeamTitle": "Team {index}",
-  "@customListTeamTitle": [
-    [
-      "placeholders",
-      [
-        [
-          "index",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@customListTeamTitle": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      }
+    }
+  },
   "customListTeamHistoryLine": "Team {index}: {members}",
-  "@customListTeamHistoryLine": [
-    [
-      "placeholders",
-      [
-        [
-          "index",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ],
-        [
-          "members",
-          []
-        ]
-      ]
-    ]
-  ],
+  "@customListTeamHistoryLine": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "members": {}
+    }
+  },
   "customListEmptyTeam": "(empty)",
   "customListNoItems": "(no items)",
   "customListPicked": "Picked: {value}",
-  "@customListPicked": [
-    [
-      "placeholders",
-      [
-        [
-          "value",
-          []
-        ]
-      ]
-    ]
-  ],
+  "@customListPicked": {
+    "placeholders": {
+      "value": {}
+    }
+  },
   "customListGenerateTeams": "Generate Teams",
   "customListPickRandom": "Pick Random",
   "customListRestoreRemoved": "Restore removed",
@@ -287,17 +226,11 @@
   "bottleSpinHapticEnabled": "Haptics enabled for this session",
   "bottleSpinFreeProHint": "Free: Spin bottle.\nPro: Adjust spin strength + haptic feedback.",
   "bottleSpinAngleValue": "Angle: {degree}°",
-  "@bottleSpinAngleValue": [
-    [
-      "placeholders",
-      [
-        [
-          "degree",
-          []
-        ]
-      ]
-    ]
-  ],
+  "@bottleSpinAngleValue": {
+    "placeholders": {
+      "degree": {}
+    }
+  },
   "timeTitle": "Temps aléatoire",
   "timeReady": "Prêt ?",
   "timeReset": "Réinitialiser",
@@ -305,144 +238,72 @@
   "timeStart": "Démarrer",
   "timeProCustomRangeHint": "Pro : choisissez une plage personnalisée.",
   "timeFreeCustomRangeHint": "Gratuit : plage fixe de {minSec} à {maxSec} secondes. Passez Pro pour des plages personnalisées.",
-  "@timeFreeCustomRangeHint": [
-    [
-      "placeholders",
-      [
-        [
-          "minSec",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ],
-        [
-          "maxSec",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@timeFreeCustomRangeHint": {
+    "placeholders": {
+      "minSec": {
+        "type": "int"
+      },
+      "maxSec": {
+        "type": "int"
+      }
+    }
+  },
   "timeHideTime": "Masquer le temps",
   "timeHideTimeSubtitle": "Révéler le temps uniquement à la fin (Hot Potato).",
   "timeVibrateOnFinish": "Vibrer à la fin",
   "timeRangeSeconds": "Plage (secondes)",
   "timeFreeFixedRange": "Gratuit : fixe {minSec}–{maxSec}s",
-  "@timeFreeFixedRange": [
-    [
-      "placeholders",
-      [
-        [
-          "minSec",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ],
-        [
-          "maxSec",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@timeFreeFixedRange": {
+    "placeholders": {
+      "minSec": {
+        "type": "int"
+      },
+      "maxSec": {
+        "type": "int"
+      }
+    }
+  },
   "timeCurrentRange": "Actuel : {min} - {max} s",
-  "@timeCurrentRange": [
-    [
-      "placeholders",
-      [
-        [
-          "min",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ],
-        [
-          "max",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@timeCurrentRange": {
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "timeRunning": "En cours…",
   "timeHidden": "Masqué",
   "timeFormatted": "{seconds}s {milliseconds}ms",
-  "@timeFormatted": [
-    [
-      "placeholders",
-      [
-        [
-          "seconds",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ],
-        [
-          "milliseconds",
-          []
-        ]
-      ]
-    ]
-  ],
+  "@timeFormatted": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "milliseconds": {}
+    }
+  },
   "hangmanTitle": "Pendu",
   "hangmanNewGame": "Nouvelle partie",
   "hangmanPlayAgain": "Rejouer",
   "hangmanYouWon": "Vous avez gagné !",
   "hangmanYouLost": "Perdu ! Le mot était : {word}",
-  "@hangmanYouLost": [
-    [
-      "placeholders",
-      [
-        [
-          "word",
-          []
-        ]
-      ]
-    ]
-  ],
+  "@hangmanYouLost": {
+    "placeholders": {
+      "word": {}
+    }
+  },
   "hangmanGuessWord": "Devinez le mot",
   "hangmanAttemptsLeft": "Tentatives restantes : {count}",
-  "@hangmanAttemptsLeft": [
-    [
-      "placeholders",
-      [
-        [
-          "count",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@hangmanAttemptsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "hangmanWrongLetters": "Lettres incorrectes :",
   "hangmanSettings": "Paramètres",
   "hangmanMinLength": "Longueur minimale",
@@ -453,17 +314,11 @@
   "analyticsEmpty": "No data yet. Generate some results first.",
   "analyticsViewAll": "View All",
   "analyticsGeneratorTitle": "{generator} Analytique",
-  "@analyticsGeneratorTitle": [
-    [
-      "placeholders",
-      [
-        [
-          "generator",
-          []
-        ]
-      ]
-    ]
-  ],
+  "@analyticsGeneratorTitle": {
+    "placeholders": {
+      "generator": {}
+    }
+  },
   "analyticsAutoRun": "Auto-Run",
   "analyticsAutoRunCount": "Count",
   "analyticsAutoRunStart": "Start",
@@ -486,40 +341,22 @@
   "memoryFlashWatchSequence": "Regardez la séquence…",
   "memoryFlashYourTurn": "À vous !",
   "memoryFlashLevel": "Niveau {level}",
-  "@memoryFlashLevel": [
-    [
-      "placeholders",
-      [
-        [
-          "level",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@memoryFlashLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
   "memoryFlashGameOver": "Fin de partie",
   "memoryFlashResult": "Niveau atteint : {level}",
-  "@memoryFlashResult": [
-    [
-      "placeholders",
-      [
-        [
-          "level",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@memoryFlashResult": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
   "memoryFlashFlashSpeed": "Vitesse d'affichage",
   "memoryFlashSpeedSlow": "Lent",
   "memoryFlashSpeedNormal": "Normal",
@@ -530,22 +367,13 @@
   "memoryFlashProSpeedMessage": "Passez Pro pour régler la vitesse d'affichage.",
   "memoryFlashFreeProHint": "Gratuit : Jusqu'à 10 niveaux.\nPro : Mode infini + vitesse réglable.",
   "memoryFlashSequenceLength": "Séquence : {length}",
-  "@memoryFlashSequenceLength": [
-    [
-      "placeholders",
-      [
-        [
-          "length",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@memoryFlashSequenceLength": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      }
+    }
+  },
   "generatorCard": "Tirage de carte",
   "cardTitle": "Tirage de carte",
   "cardTapDraw": "Appuyez sur \"Tirer\" pour obtenir une carte",
@@ -586,22 +414,13 @@
   "tapChallengePersonalBest": "Record personnel",
   "tapChallengeDurationLabel": "Durée",
   "tapChallengeDurationSeconds": "{seconds}s",
-  "@tapChallengeDurationSeconds": [
-    [
-      "placeholders",
-      [
-        [
-          "seconds",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@tapChallengeDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "tapChallengeDurationProTitle": "Durée personnalisée est Pro",
   "tapChallengeDurationProMessage": "Devenez Pro pour régler la durée à 5s, 10s, 15s, 30s ou 60s.",
   "tapChallengeVibrateOnGo": "Vibrer au GO",
@@ -622,22 +441,13 @@
   "mathDifficultyProMessage": "Passez Pro pour débloquer la multiplication, la division et les grands nombres.",
   "mathDuration": "Durée",
   "mathDurationSeconds": "{seconds}s",
-  "@mathDurationSeconds": [
-    [
-      "placeholders",
-      [
-        [
-          "seconds",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@mathDurationSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "mathDurationFree": "Fixé : 30 secondes",
   "mathDurationProTitle": "Durée personnalisée est Pro",
   "mathDurationProMessage": "Passez Pro pour choisir une durée de 15 à 60 secondes.",
@@ -674,40 +484,22 @@
   "gamePlayerNameHint": "Entrez un nom",
   "gameStartGame": "Démarrer le jeu",
   "gamePlayerTurn": "Tour de {name}",
-  "@gamePlayerTurn": [
-    [
-      "placeholders",
-      [
-        [
-          "name",
-          [
-            [
-              "type",
-              "String"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@gamePlayerTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "gameBotThinking": "BOT RÉFLÉCHIT...",
   "gameYouWin": "{name} Gagne !",
-  "@gameYouWin": [
-    [
-      "placeholders",
-      [
-        [
-          "name",
-          [
-            [
-              "type",
-              "String"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@gameYouWin": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "gameDraw": "Match nul !",
   "gamePlayAgain": "Rejouer",
   "gameBackToSetup": "Retour à la configuration",
@@ -715,22 +507,13 @@
   "gameStatsProTitle": "Les statistiques sont Pro",
   "gameStatsProMessage": "Passez Pro pour suivre les victoires par joueur entre les sessions.",
   "gameStatsWins": "{wins} victoires",
-  "@gameStatsWins": [
-    [
-      "placeholders",
-      [
-        [
-          "wins",
-          [
-            [
-              "type",
-              "int"
-            ]
-          ]
-        ]
-      ]
-    ]
-  ],
+  "@gameStatsWins": {
+    "placeholders": {
+      "wins": {
+        "type": "int"
+      }
+    }
+  },
   "gameStatsClear": "Effacer les stats",
   "gameStatsClearConfirm": "Effacer toutes les statistiques de ce jeu ?",
   "gameStatsNoData": "Pas encore de statistiques. Jouez une partie pour commencer à suivre les victoires !",

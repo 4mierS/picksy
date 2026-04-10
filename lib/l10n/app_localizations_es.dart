@@ -376,38 +376,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get letterTitle => 'Letter';
 
   @override
-  String get letterTapGenerate => 'Tap \"Generate\" to get a letter';
-
-  @override
-  String get letterSectionFilters => 'Filters';
-
-  @override
-  String get letterUppercase => 'Uppercase';
-
-  @override
-  String get letterUppercaseSubtitle => 'Include A-Z';
-
-  @override
-  String get letterLowercase => 'Lowercase';
-
-  @override
-  String get letterLowercaseSubtitle => 'Include a-z';
-
-  @override
-  String get letterIncludeUmlauts => 'Include umlauts';
-
-  @override
-  String get letterIncludeUmlautsSubtitle =>
-      'Add ä, ö, ü (and Ä, Ö, Ü if uppercase enabled)';
-
-  @override
-  String get letterOnlyVowels => 'Only vowels';
-
-  @override
-  String get letterOnlyVowelsSubtitle =>
-      'Limit selection to vowels (A E I O U + optional umlauts)';
-
-  @override
   String get letterExcludeLetters => 'Exclude letters';
 
   @override
@@ -421,11 +389,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Go Pro to unlock lowercase, umlauts, vowels-only, and exclusions.';
 
   @override
-  String get letterFreeProHint =>
-      'Free: Random A-Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.';
+  String get numberTitle => 'Number';
 
   @override
-  String get numberTitle => 'Number';
+  String get numberTapGenerate => 'Tap \"Generate\" to get a number';
 
   @override
   String get numberSectionRange => 'Range';

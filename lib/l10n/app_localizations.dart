@@ -818,66 +818,6 @@ abstract class AppLocalizations {
   /// **'Letter'**
   String get letterTitle;
 
-  /// No description provided for @letterTapGenerate.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap \"Generate\" to get a letter'**
-  String get letterTapGenerate;
-
-  /// No description provided for @letterSectionFilters.
-  ///
-  /// In en, this message translates to:
-  /// **'Filters'**
-  String get letterSectionFilters;
-
-  /// No description provided for @letterUppercase.
-  ///
-  /// In en, this message translates to:
-  /// **'Uppercase'**
-  String get letterUppercase;
-
-  /// No description provided for @letterUppercaseSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Include A-Z'**
-  String get letterUppercaseSubtitle;
-
-  /// No description provided for @letterLowercase.
-  ///
-  /// In en, this message translates to:
-  /// **'Lowercase'**
-  String get letterLowercase;
-
-  /// No description provided for @letterLowercaseSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Include a-z'**
-  String get letterLowercaseSubtitle;
-
-  /// No description provided for @letterIncludeUmlauts.
-  ///
-  /// In en, this message translates to:
-  /// **'Include umlauts'**
-  String get letterIncludeUmlauts;
-
-  /// No description provided for @letterIncludeUmlautsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Add ä, ö, ü (and Ä, Ö, Ü if uppercase enabled)'**
-  String get letterIncludeUmlautsSubtitle;
-
-  /// No description provided for @letterOnlyVowels.
-  ///
-  /// In en, this message translates to:
-  /// **'Only vowels'**
-  String get letterOnlyVowels;
-
-  /// No description provided for @letterOnlyVowelsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Limit selection to vowels (A E I O U + optional umlauts)'**
-  String get letterOnlyVowelsSubtitle;
-
   /// No description provided for @letterExcludeLetters.
   ///
   /// In en, this message translates to:
@@ -902,17 +842,17 @@ abstract class AppLocalizations {
   /// **'Go Pro to unlock lowercase, umlauts, vowels-only, and exclusions.'**
   String get letterFiltersProMessage;
 
-  /// No description provided for @letterFreeProHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Free: Random A-Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.'**
-  String get letterFreeProHint;
-
   /// No description provided for @numberTitle.
   ///
   /// In en, this message translates to:
   /// **'Number'**
   String get numberTitle;
+
+  /// No description provided for @numberTapGenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap \"Generate\" to get a number'**
+  String get numberTapGenerate;
 
   /// No description provided for @numberSectionRange.
   ///
