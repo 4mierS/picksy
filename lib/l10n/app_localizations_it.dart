@@ -536,50 +536,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get bottleSpinTitle => 'Bottle Spin';
 
   @override
-  String get bottleSpinInstructions =>
-      'Place your phone on the table. Tap Spin. The bottle points to someone in the circle.';
-
-  @override
   String get bottleSpinSpinning => 'Spinning...';
 
   @override
   String get bottleSpinSpin => 'Spin';
-
-  @override
-  String get bottleSpinSectionControls => 'Controls';
-
-  @override
-  String get bottleSpinStrength => 'Spin strength';
-
-  @override
-  String get bottleSpinStrengthSubtitle => 'More strength = more rotations';
-
-  @override
-  String get bottleSpinStrengthProTitle => 'Spin strength is Pro';
-
-  @override
-  String get bottleSpinStrengthProMessage =>
-      'Go Pro to adjust how strong the bottle spins.';
-
-  @override
-  String get bottleSpinHaptic => 'Haptic feedback';
-
-  @override
-  String get bottleSpinHapticSubtitle => 'Vibrate when the bottle stops';
-
-  @override
-  String get bottleSpinHapticProTitle => 'Haptics are Pro';
-
-  @override
-  String get bottleSpinHapticProMessage =>
-      'Go Pro to enable vibration feedback.';
-
-  @override
-  String get bottleSpinHapticEnabled => 'Haptics enabled for this session';
-
-  @override
-  String get bottleSpinFreeProHint =>
-      'Free: Spin bottle.\nPro: Adjust spin strength + haptic feedback.';
 
   @override
   String bottleSpinAngleValue(Object degree) {

@@ -1112,12 +1112,6 @@ abstract class AppLocalizations {
   /// **'Bottle Spin'**
   String get bottleSpinTitle;
 
-  /// No description provided for @bottleSpinInstructions.
-  ///
-  /// In en, this message translates to:
-  /// **'Place your phone on the table. Tap Spin. The bottle points to someone in the circle.'**
-  String get bottleSpinInstructions;
-
   /// No description provided for @bottleSpinSpinning.
   ///
   /// In en, this message translates to:
@@ -1129,72 +1123,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Spin'**
   String get bottleSpinSpin;
-
-  /// No description provided for @bottleSpinSectionControls.
-  ///
-  /// In en, this message translates to:
-  /// **'Controls'**
-  String get bottleSpinSectionControls;
-
-  /// No description provided for @bottleSpinStrength.
-  ///
-  /// In en, this message translates to:
-  /// **'Spin strength'**
-  String get bottleSpinStrength;
-
-  /// No description provided for @bottleSpinStrengthSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'More strength = more rotations'**
-  String get bottleSpinStrengthSubtitle;
-
-  /// No description provided for @bottleSpinStrengthProTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Spin strength is Pro'**
-  String get bottleSpinStrengthProTitle;
-
-  /// No description provided for @bottleSpinStrengthProMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Go Pro to adjust how strong the bottle spins.'**
-  String get bottleSpinStrengthProMessage;
-
-  /// No description provided for @bottleSpinHaptic.
-  ///
-  /// In en, this message translates to:
-  /// **'Haptic feedback'**
-  String get bottleSpinHaptic;
-
-  /// No description provided for @bottleSpinHapticSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Vibrate when the bottle stops'**
-  String get bottleSpinHapticSubtitle;
-
-  /// No description provided for @bottleSpinHapticProTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Haptics are Pro'**
-  String get bottleSpinHapticProTitle;
-
-  /// No description provided for @bottleSpinHapticProMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Go Pro to enable vibration feedback.'**
-  String get bottleSpinHapticProMessage;
-
-  /// No description provided for @bottleSpinHapticEnabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Haptics enabled for this session'**
-  String get bottleSpinHapticEnabled;
-
-  /// No description provided for @bottleSpinFreeProHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Free: Spin bottle.\nPro: Adjust spin strength + haptic feedback.'**
-  String get bottleSpinFreeProHint;
 
   /// No description provided for @bottleSpinAngleValue.
   ///

@@ -31,10 +31,6 @@ class _BottleSpinPageState extends State<BottleSpinPage>
   double _startAngle = 0.0;
   double _targetAngle = 0.0;
   bool _spinning = false;
-  String? _lastResult;
-
-  double _spinStrength = 0.6;
-  bool _hapticEnabled = true;
 
   @override
   void initState() {
@@ -57,16 +53,13 @@ class _BottleSpinPageState extends State<BottleSpinPage>
 
     _controller.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
-        final deg = ((_currentAngle * 180 / pi) % 360);
-        final value = context.l10n.bottleSpinAngleValue(deg.toStringAsFixed(0));
+        final deg = (_currentAngle * 180 / pi) % 360;
+        final value = context.l10n.bottleSpinAngleValue(
+          deg.toStringAsFixed(0),
+        );
+        setState(() => _spinning = false);
 
-        setState(() {
-          _spinning = false;
-          _lastResult = value;
-        });
-
-        final history = context.read<HistoryStore>();
-        await history.add(
+        await context.read<HistoryStore>().add(
           type: GeneratorType.bottleSpin,
           value: value,
           maxEntries: context.gateRead.historyMax,
@@ -82,22 +75,32 @@ class _BottleSpinPageState extends State<BottleSpinPage>
     super.dispose();
   }
 
+  Future<void> _spin() async {
+    if (_spinning) return;
+    setState(() => _spinning = true);
+
+    final randomDeg = _rng.nextInt(360).toDouble();
+    final extraDeg = (3 + _rng.nextInt(8)) * 360.0;
+
+    _startAngle = _currentAngle % (2 * pi);
+    _currentAngle = _startAngle;
+    _targetAngle = _startAngle + (extraDeg + randomDeg) * pi / 180.0;
+
+    _controller.duration = Duration(milliseconds: 3000 + _rng.nextInt(2000));
+
+    HapticFeedback.selectionClick();
+    _controller.reset();
+    await _controller.forward();
+    HapticFeedback.mediumImpact();
+  }
+
+  double _lerp(double a, double b, double t) => a + (b - a) * t;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gate;
     final accent = GeneratorType.bottleSpin.accentColor;
-
-    void openProDialog() => showProDialog(
-      context,
-      title: l10n.bottleSpinStrengthProTitle,
-      message: l10n.bottleSpinStrengthProMessage,
-      generatorType: GeneratorType.bottleSpin,
-      featureDefinitions: [
-        l10n.bottleSpinStrengthSubtitle,
-        l10n.bottleSpinHapticSubtitle,
-      ],
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -128,133 +131,65 @@ class _BottleSpinPageState extends State<BottleSpinPage>
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      body: Column(
         children: [
-          Text(l10n.bottleSpinInstructions, style: const TextStyle(fontSize: 14)),
-          const SizedBox(height: 16),
+          // Bottle centered in expanded area
+          Expanded(
+            child: Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Subtle table circle
+                  Container(
+                    width: 300,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: accent.withOpacity(0.05),
+                      border: Border.all(
+                        color: accent.withOpacity(0.18),
+                        width: 1.5,
+                      ),
+                    ),
+                  ),
+                  // Rotating bottle
+                  Transform.rotate(
+                    angle: _currentAngle,
+                    child: CustomPaint(
+                      size: const Size(280, 78),
+                      painter: _BottlePainter(color: accent),
+                    ),
+                  ),
+                  // Pivot dot
+                  Container(
+                    width: 14,
+                    height: 14,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      border: Border.all(color: accent, width: 2.5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
 
-          // Bottle animation
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Theme.of(context).dividerColor.withOpacity(0.5),
+          // Spin button at bottom
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                FilledButton.icon(
+                  style: AppStyles.generatorButton(accent),
+                  onPressed: _spinning ? null : _spin,
+                  icon: const Icon(Icons.casino),
+                  label: Text(
+                    _spinning ? l10n.bottleSpinSpinning : l10n.bottleSpinSpin,
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Transform.rotate(
-                  angle: _currentAngle,
-                  child: _BottleShape(),
-                ),
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 14),
-
-          // Result area (tap to spin)
-          ResultDisplayArea(
-            accentColor: accent,
-            hint: l10n.bottleSpinSpin,
-            result: _lastResult,
-            fontSize: 24,
-            textAlign: TextAlign.center,
-            onTap: _spinning ? null : () => _spin(gate),
-          ),
-
-          const SizedBox(height: 16),
-          const SizedBox(height: 14),
-
-          FilledButton.icon(
-            style: AppStyles.generatorButton(
-              GeneratorType.bottleSpin.accentColor,
-            ),
-            onPressed: _spinning
-                ? null
-                : () async {
-                    await _spin(gate);
-                  },
-            icon: const Icon(Icons.casino),
-            label: Text(
-              _spinning ? l10n.bottleSpinSpinning : l10n.bottleSpinSpin,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _spin(FeatureGate gate) async {
-    if (_spinning) return;
-
-    setState(() => _spinning = true);
-
-    final randomDeg = _rng.nextInt(360).toDouble();
-
-    final baseTurns = 3 + _rng.nextInt(8); // 3..10 random turns
-
-    final extraDeg = baseTurns * 360.0;
-    final totalDeg = extraDeg + randomDeg;
-
-    _startAngle = _currentAngle % (2 * pi);
-    _currentAngle = _startAngle;
-    _targetAngle = _startAngle + (totalDeg * pi / 180.0);
-
-    _controller.duration = Duration(milliseconds: 3000 + _rng.nextInt(2000));
-
-    HapticFeedback.selectionClick();
-
-    _controller.reset();
-    await _controller.forward();
-
-    HapticFeedback.mediumImpact();
-  }
-
-  double _lerp(double a, double b, double t) => a + (b - a) * t;
-}
-
-class _BottleShape extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 220,
-      height: 60,
-      child: Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          Positioned.fill(
-            left: 30,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.15),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.35),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            left: 0,
-            child: CustomPaint(
-              size: const Size(40, 60),
-              painter: _TipPainter(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-          ),
-          Positioned(
-            left: 120,
-            child: Container(
-              width: 10,
-              height: 10,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
-              ),
+              ],
             ),
           ),
         ],
@@ -263,24 +198,85 @@ class _BottleShape extends StatelessWidget {
   }
 }
 
-class _TipPainter extends CustomPainter {
+class _BottlePainter extends CustomPainter {
   final Color color;
-  _TipPainter({required this.color});
+  const _BottlePainter({required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color.withOpacity(0.85);
+    final w = size.width;
+    final cy = size.height / 2;
+
+    // Shape proportions
+    final neckEndX = w * 0.22;
+    final bodyH = size.height * 0.80;
+    final neckH = size.height * 0.36;
+    const bodyR = 18.0;
 
     final path = Path()
-      ..moveTo(size.width, size.height / 2)
-      ..lineTo(0, 0)
-      ..lineTo(0, size.height)
+      // Tip (sharp point, left)
+      ..moveTo(0, cy)
+      // Upper neck
+      ..lineTo(neckEndX - 8, cy - neckH / 2)
+      // Curve into body top
+      ..quadraticBezierTo(
+        neckEndX + 14,
+        cy - neckH / 2,
+        neckEndX + 24,
+        cy - bodyH / 2,
+      )
+      // Body top
+      ..lineTo(w - bodyR, cy - bodyH / 2)
+      // Top-right arc
+      ..arcToPoint(
+        Offset(w, cy - bodyH / 2 + bodyR),
+        radius: const Radius.circular(bodyR),
+      )
+      // Right side
+      ..lineTo(w, cy + bodyH / 2 - bodyR)
+      // Bottom-right arc
+      ..arcToPoint(
+        Offset(w - bodyR, cy + bodyH / 2),
+        radius: const Radius.circular(bodyR),
+      )
+      // Body bottom
+      ..lineTo(neckEndX + 24, cy + bodyH / 2)
+      // Curve into lower neck
+      ..quadraticBezierTo(
+        neckEndX + 14,
+        cy + neckH / 2,
+        neckEndX - 8,
+        cy + neckH / 2,
+      )
       ..close();
 
-    canvas.drawPath(path, paint);
+    // Main fill
+    canvas.drawPath(path, Paint()..color = color);
+
+    // White highlight stripe (glassy look)
+    final hx = neckEndX + 34;
+    final hw = (w - hx) * 0.32;
+    final hy = cy - bodyH / 2 + 5;
+    final hh = bodyH * 0.42;
+
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(hx, hy, hw, hh),
+        const Radius.circular(8),
+      ),
+      Paint()..color = Colors.white.withOpacity(0.22),
+    );
+
+    // Subtle outline
+    canvas.drawPath(
+      path,
+      Paint()
+        ..color = color.withOpacity(0.45)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 1.5,
+    );
   }
 
   @override
-  bool shouldRepaint(covariant _TipPainter oldDelegate) =>
-      oldDelegate.color != color;
+  bool shouldRepaint(covariant _BottlePainter old) => old.color != color;
 }
