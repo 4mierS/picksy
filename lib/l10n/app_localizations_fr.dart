@@ -63,12 +63,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get commonGenerate => 'Générer';
 
   @override
-  String get commonCopy => 'Copier';
-
-  @override
-  String get commonCopied => 'Copié';
-
-  @override
   String get commonCancel => 'Annuler';
 
   @override
@@ -408,52 +402,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get colorTitle => 'Color';
-
-  @override
-  String get colorSectionMode => 'Mode';
-
-  @override
-  String get colorSectionPalette => 'Palette';
-
-  @override
-  String get colorGeneratePalette => 'Generate Palette (5)';
-
-  @override
-  String get colorCopiedHex => 'Copied HEX';
-
-  @override
-  String get colorModesProTitle => 'Color Modes are Pro';
-
-  @override
-  String get colorModesProMessage =>
-      'Go Pro to unlock Pastel, Neon and Dark modes.';
-
-  @override
-  String get colorModesUpgradeMessage =>
-      'Upgrade to use different color styles.';
-
-  @override
-  String get colorPaletteProTitle => 'Palette is Pro';
-
-  @override
-  String get colorPaletteProMessage =>
-      'Generate harmonious color palettes with Pro.';
-
-  @override
-  String get colorModeNormal => 'Normal';
-
-  @override
-  String get colorModePastel => 'Pastel';
-
-  @override
-  String get colorModeNeon => 'Neon';
-
-  @override
-  String get colorModeDark => 'Dark';
-
-  @override
-  String get colorFreeProHint =>
-      'Free: Random HEX color.\nPro: Color modes, palette, contrast detection.';
 
   @override
   String get letterTitle => 'Letter';

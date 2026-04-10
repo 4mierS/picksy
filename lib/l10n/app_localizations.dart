@@ -212,18 +212,6 @@ abstract class AppLocalizations {
   /// **'Generate'**
   String get commonGenerate;
 
-  /// No description provided for @commonCopy.
-  ///
-  /// In en, this message translates to:
-  /// **'Copy'**
-  String get commonCopy;
-
-  /// No description provided for @commonCopied.
-  ///
-  /// In en, this message translates to:
-  /// **'Copied'**
-  String get commonCopied;
-
   /// No description provided for @commonCancel.
   ///
   /// In en, this message translates to:
@@ -883,90 +871,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Color'**
   String get colorTitle;
-
-  /// No description provided for @colorSectionMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Mode'**
-  String get colorSectionMode;
-
-  /// No description provided for @colorSectionPalette.
-  ///
-  /// In en, this message translates to:
-  /// **'Palette'**
-  String get colorSectionPalette;
-
-  /// No description provided for @colorGeneratePalette.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate Palette (5)'**
-  String get colorGeneratePalette;
-
-  /// No description provided for @colorCopiedHex.
-  ///
-  /// In en, this message translates to:
-  /// **'Copied HEX'**
-  String get colorCopiedHex;
-
-  /// No description provided for @colorModesProTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Color Modes are Pro'**
-  String get colorModesProTitle;
-
-  /// No description provided for @colorModesProMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Go Pro to unlock Pastel, Neon and Dark modes.'**
-  String get colorModesProMessage;
-
-  /// No description provided for @colorModesUpgradeMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Upgrade to use different color styles.'**
-  String get colorModesUpgradeMessage;
-
-  /// No description provided for @colorPaletteProTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Palette is Pro'**
-  String get colorPaletteProTitle;
-
-  /// No description provided for @colorPaletteProMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate harmonious color palettes with Pro.'**
-  String get colorPaletteProMessage;
-
-  /// No description provided for @colorModeNormal.
-  ///
-  /// In en, this message translates to:
-  /// **'Normal'**
-  String get colorModeNormal;
-
-  /// No description provided for @colorModePastel.
-  ///
-  /// In en, this message translates to:
-  /// **'Pastel'**
-  String get colorModePastel;
-
-  /// No description provided for @colorModeNeon.
-  ///
-  /// In en, this message translates to:
-  /// **'Neon'**
-  String get colorModeNeon;
-
-  /// No description provided for @colorModeDark.
-  ///
-  /// In en, this message translates to:
-  /// **'Dark'**
-  String get colorModeDark;
-
-  /// No description provided for @colorFreeProHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Free: Random HEX color.\nPro: Color analysis.'**
-  String get colorFreeProHint;
 
   /// No description provided for @letterTitle.
   ///
