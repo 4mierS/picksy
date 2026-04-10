@@ -10,7 +10,7 @@ import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
-import 'package:picksy/features/generators/shared/generator_widgets.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart' show showProDialog;
 
 class CoinPage extends StatefulWidget {
   const CoinPage({super.key});
@@ -22,42 +22,29 @@ class CoinPage extends StatefulWidget {
 class _CoinPageState extends State<CoinPage>
     with SingleTickerProviderStateMixin {
   final _rng = Random();
+  late final AnimationController _flipController;
 
   bool _flipping = false;
   double _totalFlipAngle = 0.0;
   String _pendingResult = '';
   bool _pendingIsHeads = true;
-
-  late final AnimationController _flipController;
-  late final Animation<double> _flipAnimation;
-
-  // Pro-only
-  final _labelA = TextEditingController();
-  final _labelB = TextEditingController();
+  bool _showA = true;
 
   @override
   void initState() {
     super.initState();
-
     _flipController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
-
-    _flipAnimation = CurvedAnimation(
-      parent: _flipController,
-      curve: Curves.easeInOut,
-    );
-
     _flipController.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         setState(() {
           _flipping = false;
+          _showA = _pendingIsHeads;
         });
-
         if (!mounted) return;
-        final history = context.read<HistoryStore>();
-        await history.add(
+        await context.read<HistoryStore>().add(
           type: GeneratorType.coin,
           value: _pendingResult,
           maxEntries: context.gateRead.historyMax,
@@ -70,20 +57,14 @@ class _CoinPageState extends State<CoinPage>
   @override
   void dispose() {
     _flipController.dispose();
-    _labelA.dispose();
-    _labelB.dispose();
     super.dispose();
   }
 
   Future<void> _flip(String labelA, String labelB) async {
     if (_flipping) return;
-
     _pendingIsHeads = _rng.nextBool();
     _pendingResult = _pendingIsHeads ? labelA : labelB;
-
-    final halfFlips = 6 + (_pendingIsHeads ? 0 : 1);
-    _totalFlipAngle = halfFlips * pi;
-
+    _totalFlipAngle = (24 + (_pendingIsHeads ? 0 : 1)) * pi;
     setState(() => _flipping = true);
     _flipController.reset();
     await _flipController.forward();
@@ -92,23 +73,9 @@ class _CoinPageState extends State<CoinPage>
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    if (_labelA.text.isEmpty) _labelA.text = l10n.coinDefaultHeads;
-    if (_labelB.text.isEmpty) _labelB.text = l10n.coinDefaultTails;
     final gate = context.gate;
-    final accent = GeneratorType.coin.accentColor;
-
-    final canCustomLabels = gate.canUse(ProFeature.coinCustomLabels);
-    final proDefinitions = [l10n.coinCustomLabelsProMessage];
-    final currentA = canCustomLabels ? _labelA.text.trim() : l10n.coinDefaultHeads;
-    final currentB = canCustomLabels ? _labelB.text.trim() : l10n.coinDefaultTails;
-
-    void openProDialog() => showProDialog(
-      context,
-      title: l10n.coinCustomLabelsProTitle,
-      message: l10n.coinCustomLabelsProMessage,
-      generatorType: GeneratorType.coin,
-      featureDefinitions: [l10n.coinCustomLabelsProMessage],
-    );
+    final currentA = l10n.coinDefaultHeads;
+    final currentB = l10n.coinDefaultTails;
 
     return Scaffold(
       appBar: AppBar(
@@ -143,96 +110,42 @@ class _CoinPageState extends State<CoinPage>
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
                 child: Center(
                   child: AnimatedBuilder(
-                    animation: _flipAnimation,
+                    animation: _flipController,
                     builder: (context, _) {
-                      final angle = _flipAnimation.value * _totalFlipAngle;
-                      final cosVal = cos(angle);
-                      final scaleX = cosVal.abs();
+                      final t = _flipController.value;
+                      final cosVal = cos(t * _totalFlipAngle);
                       final showA = cosVal >= 0;
-                      return Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.identity()..scale(scaleX, 1.0),
-                        child: _CoinFace(label: showA ? currentA : currentB),
+
+                      return Transform.translate(
+                        offset: Offset(0, -220.0 * sin(pi * t)),
+                        child: Transform.scale(
+                          scale: 1.0 - 0.6 * sin(pi * t),
+                          child: Transform(
+                            alignment: Alignment.center,
+                            transform: Matrix4.identity()
+                              ..scale(1.0, cosVal.abs()),
+                            child: _CoinFace(
+                              label: _flipping
+                                  ? (showA ? currentA : currentB)
+                                  : (_showA ? currentA : currentB),
+                            ),
+                          ),
+                        ),
                       );
                     },
                   ),
                 ),
               ),
-              GeneratorSectionTitle(l10n.coinSectionLabels),
-              const SizedBox(height: 8),
-
-              // Pro-only label inputs
-              TextField(
-                controller: _labelA,
-                enabled: canCustomLabels,
-                decoration: InputDecoration(
-                  labelText: l10n.coinOptionA,
-                  hintText: l10n.coinHintA,
-                  suffixIcon: canCustomLabels ? null : const Icon(Icons.lock),
-                ),
-                onTap: () async {
-                  if (!canCustomLabels) {
-                    await showProDialog(
-                      context,
-                      title: l10n.coinCustomLabelsProTitle,
-                      message: l10n.coinCustomLabelsProMessage,
-                      generatorType: GeneratorType.coin,
-                      featureDefinitions: proDefinitions,
-                    );
-                  }
-                },
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _labelB,
-                enabled: canCustomLabels,
-                decoration: InputDecoration(
-                  labelText: l10n.coinOptionB,
-                  hintText: l10n.coinHintB,
-                  suffixIcon: canCustomLabels ? null : const Icon(Icons.lock),
-                ),
-                onTap: () async {
-                  if (!canCustomLabels) {
-                    await showProDialog(
-                      context,
-                      title: l10n.coinCustomLabelsProTitle,
-                      message: l10n.coinCustomLabelsProMessage,
-                      generatorType: GeneratorType.coin,
-                      featureDefinitions: proDefinitions,
-                    );
-                  }
-                },
-              ),
-
-              const SizedBox(height: 16),
-
-              if (!gate.isPro)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(22),
-                  decoration: AppStyles.proCard(),
-                  child: Text(
-                    l10n.coinFreeProHint,
-                    style: AppStyles.resultStyle,
-                  ),
-                ),
-
-              const SizedBox(height: 16),
-
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  style: AppStyles.generatorButton(
-                    GeneratorType.coin.accentColor,
-                  ),
-                  icon: const Icon(Icons.casino),
-                  label: Text(l10n.coinFlip),
-                  onPressed: _flipping ? null : () => _flip(currentA, currentB),
-                ),
+              FilledButton.icon(
+                style: AppStyles.generatorButton(GeneratorType.coin.accentColor),
+                icon: const Icon(Icons.casino),
+                label: Text(l10n.coinFlip),
+                onPressed: _flipping ? null : () => _flip(currentA, currentB),
               ),
             ],
           ),
@@ -246,32 +159,51 @@ class _CoinFace extends StatelessWidget {
   final String label;
   const _CoinFace({required this.label});
 
+  static const _gold = Color(0xFFFFD54F);
+  static const _goldDark = Color(0xFFF57F17);
+  static const _goldLight = Color(0xFFFFF9C4);
+  static const _rimDark = Color(0xFFE65100);
+
   @override
   Widget build(BuildContext context) {
-    final color = GeneratorType.coin.accentColor;
     return Container(
-      width: 130,
-      height: 130,
+      width: 140,
+      height: 140,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: color.withOpacity(0.15),
-        border: Border.all(color: color, width: 4),
-      ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.w800,
-              color: color,
-            ),
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+        gradient: const RadialGradient(
+          center: Alignment(-0.35, -0.6),
+          radius: 0.8,
+          colors: [_goldLight, _gold, _goldDark],
+          stops: [0.0, 0.35, 1.0],
         ),
+        border: Border.all(color: _rimDark, width: 2),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Positioned(
+            top: 28,
+            left: 40,
+            child: Container(
+              width: 50,
+              height: 22,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: _goldLight.withOpacity(0.55),
+              ),
+            ),
+          ),
+          Text(
+            label.toUpperCase(),
+            style: const TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.w900,
+              color: _rimDark,
+              letterSpacing: 2.5,
+            ),
+          ),
+        ],
       ),
     );
   }
