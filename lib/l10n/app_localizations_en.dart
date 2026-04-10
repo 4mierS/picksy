@@ -180,9 +180,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get compareProFavorites => 'Up to 999';
 
   @override
-  String get compareFeatureCoinLabels => 'Coin Labels';
-
-  @override
   String get compareFeatureColorModes => 'Color Features';
 
   @override
@@ -364,35 +361,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get coinTitle => 'Coin';
 
   @override
-  String get coinTapFlip => 'Tap \"Flip\" to get a result';
-
-  @override
   String get coinFlip => 'Flip';
-
-  @override
-  String get coinSectionLabels => 'Labels';
-
-  @override
-  String get coinOptionA => 'Option A';
-
-  @override
-  String get coinOptionB => 'Option B';
-
-  @override
-  String get coinHintA => 'Heads / Yes / True...';
-
-  @override
-  String get coinHintB => 'Tails / No / False...';
-
-  @override
-  String get coinCustomLabelsProTitle => 'Custom labels are Pro';
 
   @override
   String get coinCustomLabelsProMessage =>
       'Go Pro to define your own labels (e.g. Yes/No, True/False).';
-
-  @override
-  String get coinFreeProHint => 'Free: Heads/Tails.\nPro: Custom labels.';
 
   @override
   String get coinDefaultHeads => 'Heads';
