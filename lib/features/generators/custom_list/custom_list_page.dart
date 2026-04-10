@@ -7,11 +7,13 @@ import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/core/ui/confirm_dialog.dart';
 import 'package:picksy/core/team/team_splitter.dart';
 
+import 'package:picksy/models/custom_list_model.dart';
 import 'package:picksy/storage/custom_lists_store.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 class CustomListPage extends StatefulWidget {
   const CustomListPage({super.key});
@@ -22,6 +24,7 @@ class CustomListPage extends StatefulWidget {
 
 class _CustomListPageState extends State<CustomListPage> {
   final _itemCtrl = TextEditingController();
+  final _nameCtrl = TextEditingController();
 
   bool _withReplacement = true;
   String? _lastPicked;
@@ -33,6 +36,7 @@ class _CustomListPageState extends State<CustomListPage> {
   @override
   void dispose() {
     _itemCtrl.dispose();
+    _nameCtrl.dispose();
     super.dispose();
   }
 
@@ -44,13 +48,10 @@ class _CustomListPageState extends State<CustomListPage> {
     final history = context.read<HistoryStore>();
     final gate = context.gateRead;
 
-    final picked = await store.drawFromSelected(
-      withReplacement: _withReplacement,
-    );
+    final picked = await store.drawFromSelected(withReplacement: _withReplacement);
     if (!mounted) return;
 
     final value = picked ?? context.l10n.customListNoItems;
-
     await history.add(
       type: GeneratorType.customList,
       value: value,
@@ -60,7 +61,7 @@ class _CustomListPageState extends State<CustomListPage> {
 
     setState(() {
       _lastPicked = value;
-      _lastTeams = null; // optional: team result clear when picking
+      _lastTeams = null;
     });
   }
 
@@ -69,31 +70,25 @@ class _CustomListPageState extends State<CustomListPage> {
     final selected = store.selectedList;
     if (selected == null) return;
 
-    // People = items
     final people = selected.items.where((e) => e.trim().isNotEmpty).toList();
-
     final teams = splitIntoTeams(people: people, teamCount: _teamCount);
 
     setState(() {
       _lastTeams = teams;
-      _lastPicked = null; // optional: pick result clear when generating teams
+      _lastPicked = null;
     });
 
-    // Optional: store in history as a single entry (nice for portfolio)
     final history = context.read<HistoryStore>();
     final gate = context.gateRead;
-
-    final formatted = _formatTeamsForHistory(teams);
     await history.add(
       type: GeneratorType.customList,
-      value: formatted,
+      value: _formatTeamsForHistory(teams),
       maxEntries: gate.historyMax,
     );
   }
 
   String _formatTeamsForHistory(List<List<String>> teams) {
     final l10n = context.l10n;
-    // compact, readable
     final buf = StringBuffer();
     for (var i = 0; i < teams.length; i++) {
       buf.writeln(l10n.customListTeamHistoryLine(i + 1, teams[i].join(', ')));
@@ -101,40 +96,26 @@ class _CustomListPageState extends State<CustomListPage> {
     return buf.toString().trim();
   }
 
-  Widget _teamsView(BuildContext context, List<List<String>> teams) {
+  Future<void> _confirmDelete(
+    BuildContext context,
+    CustomListsStore store,
+    CustomListModel selected,
+  ) async {
     final l10n = context.l10n;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(18),
-      decoration: AppStyles.glassCard(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            l10n.customListTeamsCardTitle,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
-          ),
-          const SizedBox(height: 12),
-          for (var i = 0; i < teams.length; i++) ...[
-            Text(
-              l10n.customListTeamTitle(i + 1),
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800),
-            ),
-            const SizedBox(height: 8),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                for (final name in teams[i]) Chip(label: Text(name)),
-                if (teams[i].isEmpty)
-                  Chip(label: Text(l10n.customListEmptyTeam)),
-              ],
-            ),
-            if (i != teams.length - 1) const SizedBox(height: 14),
-          ],
-        ],
-      ),
+    final confirmed = await showConfirmDialog(
+      context: context,
+      title: l10n.customListDeleteList,
+      message: '"${selected.name}"',
+      confirmText: l10n.customListDeleteList,
+      cancelText: l10n.commonCancel,
     );
+    if (confirmed && mounted) {
+      store.deleteList(selected.id);
+      setState(() {
+        _lastPicked = null;
+        _lastTeams = null;
+      });
+    }
   }
 
   @override
@@ -143,6 +124,13 @@ class _CustomListPageState extends State<CustomListPage> {
     final store = context.watch<CustomListsStore>();
     final lists = store.lists;
     final selected = store.selectedList;
+    final accent = GeneratorType.customList.accentColor;
+
+    // Keep name controller in sync with selected list (without cursor jump while typing)
+    final currentName = selected?.name ?? '';
+    if (_nameCtrl.text != currentName) _nameCtrl.text = currentName;
+
+    final showRestore = !_teamMode && !_withReplacement;
 
     return Scaffold(
       appBar: AppBar(
@@ -172,299 +160,325 @@ class _CustomListPageState extends State<CustomListPage> {
               }
             },
           ),
-          IconButton(
-            tooltip: l10n.customListNewList,
-            icon: const Icon(Icons.add),
-            onPressed: store.createNewList,
-          ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      body: Column(
         children: [
-          // List selector
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      initialValue: store.selectedListId,
-                      items: [
-                        for (final l in lists)
-                          DropdownMenuItem(value: l.id, child: Text(l.name)),
-                      ],
-                      onChanged: (id) =>
-                          id == null ? null : store.selectList(id),
-                      decoration: InputDecoration(
-                        labelText: l10n.customListSelectList,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  IconButton(
-                    tooltip: l10n.customListDeleteList,
-                    onPressed: (lists.length <= 1 || selected == null)
-                        ? null
-                        : () => store.deleteList(selected.id),
-                    icon: const Icon(Icons.delete_outline),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          // Rename
-          if (selected != null)
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: TextFormField(
-                  initialValue: selected.name,
-                  decoration: InputDecoration(
-                    labelText: l10n.customListListName,
-                  ),
-                  onChanged: (v) => store.renameSelected(v),
-                ),
-              ),
-            ),
-
-          const SizedBox(height: 16),
-
-          // Mode toggle (with replacement)
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.customListWithReplacement),
-            subtitle: Text(
-              _withReplacement
-                  ? l10n.customListWithReplacementOn
-                  : l10n.customListWithReplacementOff,
-            ),
-            value: _withReplacement,
-            onChanged: (v) => setState(() => _withReplacement = v),
-          ),
-
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.customListTeamMode),
-            subtitle: Text(
-              _teamMode
-                  ? l10n.customListTeamModeOn
-                  : l10n.customListTeamModeOff,
-            ),
-            value: _teamMode,
-            onChanged: (v) => setState(() {
-              _teamMode = v;
-              _lastTeams = null;
-              _lastPicked = null;
-            }),
-          ),
-
-          if (_teamMode) ...[
-            const SizedBox(height: 6),
-            Row(
+          // ── Selector / name row ───────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+            child: Row(
               children: [
-                Text(l10n.customListTeamsLabel),
-                const SizedBox(width: 12),
-                DropdownButton<int>(
-                  value: _teamCount,
-                  items: [
-                    for (int i = 2; i <= 8; i++)
-                      DropdownMenuItem(value: i, child: Text('$i')),
-                  ],
-                  onChanged: (v) =>
-                      v == null ? null : setState(() => _teamCount = v),
-                ),
-                const Spacer(),
-                Text(
-                  selected == null
-                      ? ''
-                      : l10n.customListPeopleCount(selected.items.length),
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                    fontWeight: FontWeight.w600,
+                Expanded(
+                  child: TextField(
+                    controller: _nameCtrl,
+                    decoration: InputDecoration(
+                      labelText: l10n.customListSelectList,
+                      suffixIcon: lists.length > 1
+                          ? PopupMenuButton<String>(
+                              icon: const Icon(Icons.arrow_drop_down),
+                              tooltip: l10n.customListSelectList,
+                              itemBuilder: (_) => [
+                                for (final lst in lists)
+                                  PopupMenuItem(
+                                    value: lst.id,
+                                    child: Text(lst.name),
+                                  ),
+                              ],
+                              onSelected: store.selectList,
+                            )
+                          : null,
+                    ),
+                    onChanged: store.renameSelected,
                   ),
+                ),
+                const SizedBox(width: 8),
+                IconButton.filled(
+                  style: IconButton.styleFrom(backgroundColor: accent),
+                  tooltip: l10n.customListNewList,
+                  icon: const Icon(Icons.add, color: Colors.white),
+                  onPressed: store.createNewList,
+                ),
+                const SizedBox(width: 4),
+                IconButton(
+                  tooltip: l10n.customListDeleteList,
+                  icon: const Icon(Icons.delete_outline),
+                  onPressed: (lists.length <= 1 || selected == null)
+                      ? null
+                      : () => _confirmDelete(context, store, selected),
                 ),
               ],
             ),
-          ],
+          ),
 
-          const SizedBox(height: 12),
-
-          // Pick result
-          if (_lastPicked != null)
-            Container(
-              width: double.infinity,
-              constraints: const BoxConstraints(minHeight: 120),
-              padding: const EdgeInsets.all(24),
-              decoration: AppStyles.generatorResultCard(
-                GeneratorType.customList.accentColor,
-              ),
-              child: Text(
-                l10n.customListPicked(_lastPicked!),
-                style: AppStyles.resultStyle.copyWith(fontSize: 22),
-              ),
-            ),
-
-          // Team result
-          if (_lastTeams != null) ...[
-            const SizedBox(height: 12),
-            _teamsView(context, _lastTeams!),
-          ],
-
-          const SizedBox(height: 12),
-
-          // Secondary actions (wrap -> no squeeze)
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: [
-              if (!_teamMode)
-                OutlinedButton.icon(
+          // ── Add item row ──────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _itemCtrl,
+                    decoration: InputDecoration(
+                      labelText: l10n.customListAddItem,
+                      hintText: l10n.customListAddItemHint,
+                    ),
+                    onSubmitted: (v) async {
+                      await store.addItemToSelected(v);
+                      if (!mounted) return;
+                      _itemCtrl.clear();
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                FilledButton(
+                  style: AppStyles.generatorButton(accent).copyWith(
+                    padding: const WidgetStatePropertyAll(EdgeInsets.all(16)),
+                  ),
                   onPressed: selected == null
                       ? null
-                      : store.restoreRemovedSelected,
-                  icon: const Icon(Icons.restore),
-                  label: Text(l10n.customListRestoreRemoved),
-                ),
-              OutlinedButton.icon(
-                onPressed: selected == null
-                    ? null
-                    : () async {
-                        final ok = await showConfirmDialog(
-                          context: context,
-                          title: l10n.customListResetAllTitle,
-                          message: l10n.customListResetAllMessage,
-                          confirmText: l10n.customListResetAllConfirm,
-                          cancelText: l10n.commonCancel,
-                        );
-
-                        if (ok) {
-                          context.read<CustomListsStore>().resetAllSelected();
+                      : () async {
+                          await store.addItemToSelected(_itemCtrl.text);
                           if (!mounted) return;
-                          setState(() {
-                            _lastPicked = null;
-                            _lastTeams = null;
-                          });
-                        }
-                      },
-                icon: const Icon(Icons.delete_forever_rounded),
-                label: Text(l10n.customListResetAll),
-              ),
-            ],
+                          _itemCtrl.clear();
+                        },
+                  child: Text(l10n.commonAdd),
+                ),
+              ],
+            ),
           ),
 
-          const SizedBox(height: 16),
-
-          // Add item
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _itemCtrl,
-                      decoration: InputDecoration(
-                        labelText: l10n.customListAddItem,
-                        hintText: l10n.customListAddItemHint,
-                      ),
-                      onSubmitted: (v) async {
-                        await store.addItemToSelected(v);
-                        if (!mounted) return;
-                        _itemCtrl.clear();
-                      },
+          // ── Items + results (scrollable) ──────────────────────────────────
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 10, 16, 8),
+              children: [
+                // Picked result
+                if (_lastPicked != null) ...[
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 14,
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  FilledButton(
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+                    decoration: BoxDecoration(
+                      color: accent.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: accent.withOpacity(0.35)),
+                    ),
+                    child: Text(
+                      _lastPicked!,
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: accent,
                       ),
                     ),
-                    onPressed: selected == null
-                        ? null
-                        : () async {
-                            await store.addItemToSelected(_itemCtrl.text);
-                            if (!mounted) return;
-                            _itemCtrl.clear();
-                          },
-                    child: Text(l10n.commonAdd),
                   ),
+                  const SizedBox(height: 10),
                 ],
-              ),
+
+                // Teams result
+                if (_lastTeams != null) ...[
+                  _teamsView(context, _lastTeams!),
+                  const SizedBox(height: 10),
+                ],
+
+                // List items
+                if (selected == null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32),
+                    child: Center(child: Text(l10n.customListNoListSelected)),
+                  )
+                else if (selected.items.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 32),
+                    child: Center(child: Text(l10n.customListNoItems)),
+                  )
+                else
+                  for (var i = 0; i < selected.items.length; i++) ...[
+                    if (i > 0) const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(
+                          color: Theme.of(
+                            context,
+                          ).dividerColor.withOpacity(0.35),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(child: Text(selected.items[i])),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline),
+                            onPressed: () => store.removeItemFromSelected(i),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+              ],
             ),
           ),
 
-          const SizedBox(height: 12),
-
-          // Items list
-          if (selected == null)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Center(child: Text(l10n.customListNoListSelected)),
-            )
-          else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: selected.items.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 8),
-              itemBuilder: (context, i) {
-                final item = selected.items[i];
-                return Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
+          // ── Bottom controls (sticky) ──────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (!_teamMode)
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    activeColor: accent,
+                    title: Text(l10n.customListWithReplacement),
+                    subtitle: Text(
+                      _withReplacement
+                          ? l10n.customListWithReplacementOn
+                          : l10n.customListWithReplacementOff,
+                    ),
+                    value: _withReplacement,
+                    onChanged: (v) => setState(() => _withReplacement = v),
                   ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(
-                      color: Theme.of(context).dividerColor.withOpacity(0.35),
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  activeColor: accent,
+                  title: Text(l10n.customListTeamMode),
+                  subtitle: Text(
+                    _teamMode
+                        ? l10n.customListTeamModeOn
+                        : l10n.customListTeamModeOff,
+                  ),
+                  value: _teamMode,
+                  onChanged: (v) => setState(() {
+                    _teamMode = v;
+                    _lastTeams = null;
+                    _lastPicked = null;
+                  }),
+                ),
+                if (_teamMode)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Row(
+                      children: [
+                        Text(l10n.customListTeamsLabel),
+                        const SizedBox(width: 12),
+                        DropdownButton<int>(
+                          value: _teamCount,
+                          items: [
+                            for (int i = 2; i <= 8; i++)
+                              DropdownMenuItem(value: i, child: Text('$i')),
+                          ],
+                          onChanged: (v) =>
+                              v == null ? null : setState(() => _teamCount = v),
+                        ),
+                        const Spacer(),
+                        if (selected != null)
+                          Text(
+                            l10n.customListPeopleCount(selected.items.length),
+                            style: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodySmall?.color,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
-                  child: Row(
-                    children: [
-                      Expanded(child: Text(item)),
-                      IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () => store.removeItemFromSelected(i),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    if (showRestore) ...[
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: accent,
+                            side: BorderSide(color: accent.withOpacity(0.5)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                          ),
+                          onPressed: selected == null
+                              ? null
+                              : store.restoreRemovedSelected,
+                          icon: const Icon(Icons.restore),
+                          label: Text(l10n.customListRestoreRemoved),
+                        ),
                       ),
+                      const SizedBox(width: 8),
                     ],
-                  ),
-                );
-              },
-            ),
-
-          const SizedBox(height: 14),
-
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton.icon(
-              style: AppStyles.generatorButton(
-                GeneratorType.customList.accentColor,
-              ),
-              onPressed: selected == null
-                  ? null
-                  : () => _teamMode
-                        ? _generateTeams(context)
-                        : _pickRandom(context),
-              icon: Icon(
-                _teamMode ? Icons.groups_rounded : Icons.casino_rounded,
-              ),
-              label: Text(
-                _teamMode
-                    ? l10n.customListGenerateTeams
-                    : l10n.customListPickRandom,
-              ),
+                    Expanded(
+                      child: FilledButton.icon(
+                        style: AppStyles.generatorButton(accent),
+                        onPressed: selected == null
+                            ? null
+                            : () => _teamMode
+                                  ? _generateTeams(context)
+                                  : _pickRandom(context),
+                        icon: Icon(
+                          _teamMode
+                              ? Icons.groups_rounded
+                              : Icons.casino_rounded,
+                        ),
+                        label: Text(
+                          _teamMode
+                              ? l10n.customListGenerateTeams
+                              : l10n.customListPickRandom,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _teamsView(BuildContext context, List<List<String>> teams) {
+    final l10n = context.l10n;
+    final accent = GeneratorType.customList.accentColor;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: accent.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: accent.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.customListTeamsCardTitle,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
+          ),
+          const SizedBox(height: 10),
+          for (var i = 0; i < teams.length; i++) ...[
+            Text(
+              l10n.customListTeamTitle(i + 1),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 6),
+            Wrap(
+              spacing: 8,
+              runSpacing: 6,
+              children: [
+                for (final name in teams[i]) Chip(label: Text(name)),
+                if (teams[i].isEmpty)
+                  Chip(label: Text(l10n.customListEmptyTeam)),
+              ],
+            ),
+            if (i != teams.length - 1) const SizedBox(height: 10),
+          ],
         ],
       ),
     );

@@ -986,12 +986,6 @@ abstract class AppLocalizations {
   /// **'Delete list'**
   String get customListDeleteList;
 
-  /// No description provided for @customListListName.
-  ///
-  /// In en, this message translates to:
-  /// **'List name'**
-  String get customListListName;
-
   /// No description provided for @customListWithReplacement.
   ///
   /// In en, this message translates to:
@@ -1093,30 +1087,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Restore removed'**
   String get customListRestoreRemoved;
-
-  /// No description provided for @customListResetAll.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset all'**
-  String get customListResetAll;
-
-  /// No description provided for @customListResetAllTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Reset all items?'**
-  String get customListResetAllTitle;
-
-  /// No description provided for @customListResetAllMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'This will remove all items from the list. This cannot be undone.'**
-  String get customListResetAllMessage;
-
-  /// No description provided for @customListResetAllConfirm.
-  ///
-  /// In en, this message translates to:
-  /// **'Yes, reset'**
-  String get customListResetAllConfirm;
 
   /// No description provided for @customListAddItem.
   ///

@@ -464,9 +464,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get customListDeleteList => 'Delete list';
 
   @override
-  String get customListListName => 'List name';
-
-  @override
   String get customListWithReplacement => 'With replacement';
 
   @override
@@ -525,19 +522,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get customListRestoreRemoved => 'Restore removed';
-
-  @override
-  String get customListResetAll => 'Reset all';
-
-  @override
-  String get customListResetAllTitle => 'Reset all items?';
-
-  @override
-  String get customListResetAllMessage =>
-      'This will remove all items from the list. This cannot be undone.';
-
-  @override
-  String get customListResetAllConfirm => 'Yes, reset';
 
   @override
   String get customListAddItem => 'Add item';
