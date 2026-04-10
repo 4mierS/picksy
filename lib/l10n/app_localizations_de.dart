@@ -366,10 +366,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get coinFlip => 'Flip';
 
   @override
-  String get coinCustomLabelsProMessage =>
-      'Go Pro to define your own labels (e.g. Yes/No, True/False).';
-
-  @override
   String get coinDefaultHeads => 'Heads';
 
   @override

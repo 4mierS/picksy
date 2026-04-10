@@ -446,11 +446,6 @@ abstract class AppLocalizations {
   /// **'Up to 999'**
   String get compareProFavorites;
 
-  /// No description provided for @compareFeatureCoinLabels.
-  ///
-  /// In en, this message translates to:
-  /// **'Coin Labels'**
-
   /// No description provided for @compareFeatureColorModes.
   ///
   /// In en, this message translates to:
@@ -793,56 +788,11 @@ abstract class AppLocalizations {
   /// **'Coin'**
   String get coinTitle;
 
-  /// No description provided for @coinTapFlip.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap \"Flip\" to get a result'**
-
   /// No description provided for @coinFlip.
   ///
   /// In en, this message translates to:
   /// **'Flip'**
   String get coinFlip;
-
-  /// No description provided for @coinSectionLabels.
-  ///
-  /// In en, this message translates to:
-  /// **'Labels'**
-
-  /// No description provided for @coinOptionA.
-  ///
-  /// In en, this message translates to:
-  /// **'Option A'**
-
-  /// No description provided for @coinOptionB.
-  ///
-  /// In en, this message translates to:
-  /// **'Option B'**
-
-  /// No description provided for @coinHintA.
-  ///
-  /// In en, this message translates to:
-  /// **'Heads / Yes / True...'**
-
-  /// No description provided for @coinHintB.
-  ///
-  /// In en, this message translates to:
-  /// **'Tails / No / False...'**
-
-  /// No description provided for @coinCustomLabelsProTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Custom labels are Pro'**
-
-  /// No description provided for @coinCustomLabelsProMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Go Pro to define your own labels (e.g. Yes/No, True/False).'**
-
-  /// No description provided for @coinFreeProHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Free: Heads/Tails.\nPro: Custom labels.'**
 
   /// No description provided for @coinDefaultHeads.
   ///
