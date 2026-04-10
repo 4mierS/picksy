@@ -33,7 +33,7 @@ class _NumberPageState extends State<NumberPage> {
 
   final NumberParity _parity = NumberParity.any;
 
-  String? _last;
+  late String _last;
 
   bool get _isValidRange => _max >= _min;
 
@@ -43,6 +43,7 @@ class _NumberPageState extends State<NumberPage> {
     final box = Boxes.box(Boxes.settings);
     _min = (box.get(_kMinKey, defaultValue: 0) as num).toDouble();
     _max = (box.get(_kMaxKey, defaultValue: 100) as num).toDouble();
+    _last = _generateNumber(min: _min, max: _max, parity: NumberParity.any);
   }
 
   Future<void> _persistRange() async {
@@ -90,116 +91,91 @@ class _NumberPageState extends State<NumberPage> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      body: Column(
         children: [
-          // Result card
-          Container(
-            constraints: const BoxConstraints(minHeight: 120),
-            padding: const EdgeInsets.all(20),
-            decoration: AppStyles.generatorResultCard(
-              GeneratorType.number.accentColor,
+          // Result display – centered, large, accent-colored
+          Expanded(
+            child: Center(
+              child: Text(
+                _last,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 80,
+                  fontWeight: FontWeight.w900,
+                  color: GeneratorType.number.accentColor,
+                ),
+              ),
             ),
-            child: Row(
+          ),
+
+          // Range + button anchored at the bottom
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: Text(
-                    _last ?? l10n.numberTapGenerate,
-                    style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                    ),
+                GeneratorSectionTitle(l10n.numberSectionRange),
+                const SizedBox(height: 8),
+                _RangeRow(
+                  min: _min,
+                  max: _max,
+                  isPro: gate.isPro,
+                  onChanged: (newMin, newMax) async {
+                    if (!gate.canUse(ProFeature.numberCustomRange)) {
+                      setState(() {
+                        _min = 0;
+                        _max = 100;
+                      });
+                      await showProDialog(
+                        context,
+                        title: l10n.numberCustomRangeProTitle,
+                        message: l10n.numberCustomRangeProMessage,
+                        generatorType: GeneratorType.number,
+                        featureDefinitions: proDefinitions,
+                      );
+                      return;
+                    }
+                    setState(() {
+                      _min = newMin;
+                      _max = newMax;
+                    });
+                    await _persistRange();
+                  },
+                ),
+                if (!_isValidRange) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.numberInvalidRange,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
+                ],
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  style: AppStyles.generatorButton(GeneratorType.number.accentColor),
+                  onPressed: !_isValidRange
+                      ? null
+                      : () async {
+                          final value = _generateNumber(
+                            min: gate.isPro ? _min : 0,
+                            max: gate.isPro ? _max : 100,
+                            parity: gate.isPro ? _parity : NumberParity.any,
+                          );
+                          setState(() => _last = value);
+                          await history.add(
+                            type: GeneratorType.number,
+                            value: value,
+                            maxEntries: context.gateRead.historyMax,
+                            metadata: {
+                              'min': gate.isPro ? _min : 0,
+                              'max': gate.isPro ? _max : 100,
+                            },
+                          );
+                        },
+                  icon: const Icon(Icons.casino),
+                  label: Text(l10n.commonGenerate),
                 ),
               ],
             ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Range settings
-          GeneratorSectionTitle(l10n.numberSectionRange),
-
-          const SizedBox(height: 8),
-
-          _RangeRow(
-            min: _min,
-            max: _max,
-            isPro: gate.isPro,
-            onChanged: (newMin, newMax) async {
-              // Custom range is Pro-only, but Free has fixed 0..100.
-              if (!gate.canUse(ProFeature.numberCustomRange)) {
-                // reset back to free range
-                setState(() {
-                  _min = 0;
-                  _max = 100;
-                });
-
-                await showProDialog(
-                  context,
-                  title: l10n.numberCustomRangeProTitle,
-                  message: l10n.numberCustomRangeProMessage,
-                  generatorType: GeneratorType.number,
-                  featureDefinitions: proDefinitions,
-                );
-                return;
-              }
-
-              setState(() {
-                _min = newMin;
-                _max = newMax;
-              });
-              await _persistRange();
-            },
-          ),
-
-          if (!_isValidRange) ...[
-            const SizedBox(height: 8),
-            Text(
-              l10n.numberInvalidRange,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-          ],
-
-          const SizedBox(height: 24),
-
-          // Free hint
-          if (!gate.isPro)
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(22),
-              decoration: AppStyles.proCard(),
-              child: Text(l10n.numberFreeProHint, style: AppStyles.resultStyle),
-            ),
-
-          const SizedBox(height: 16),
-
-          // Generate button (bottom)
-          FilledButton.icon(
-            style: AppStyles.generatorButton(GeneratorType.number.accentColor),
-            onPressed: !_isValidRange
-                ? null
-                : () async {
-                    final value = _generateNumber(
-                      min: gate.isPro ? _min : 0,
-                      max: gate.isPro ? _max : 100,
-                      parity: gate.isPro ? _parity : NumberParity.any,
-                    );
-
-                    setState(() => _last = value);
-
-                    await history.add(
-                      type: GeneratorType.number,
-                      value: value,
-                      maxEntries: context.gateRead.historyMax,
-                      metadata: {
-                        'min': gate.isPro ? _min : 0,
-                        'max': gate.isPro ? _max : 100,
-                      },
-                    );
-                  },
-            icon: const Icon(Icons.casino),
-            label: Text(l10n.commonGenerate),
           ),
         ],
       ),
@@ -251,23 +227,22 @@ class _RangeRow extends StatelessWidget {
     final l10n = context.l10n;
     // For Free, show locked range.
     if (!isPro) {
-      return InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () async => onChanged(0, 100),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(
-            children: [
-              Expanded(
-                child: _LockedField(label: l10n.numberMin, value: '0'),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _LockedField(label: l10n.numberMax, value: '100'),
-              ),
-            ],
+      return Row(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () async => onChanged(0, 100),
+              child: _LockedField(label: l10n.numberMin, value: '0'),
+            ),
           ),
-        ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: GestureDetector(
+              onTap: () async => onChanged(0, 100),
+              child: _LockedField(label: l10n.numberMax, value: '100'),
+            ),
+          ),
+        ],
       );
     }
 
@@ -301,30 +276,29 @@ class _LockedField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accent = GeneratorType.number.accentColor;
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.black.withOpacity(0.04),
+        border: Border.all(color: accent.withOpacity(0.4)),
+        color: accent.withOpacity(0.08),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: accent),
+          ),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-              const Icon(Icons.lock, size: 16),
-            ],
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: accent,
+            ),
           ),
         ],
       ),

@@ -1070,12 +1070,6 @@ abstract class AppLocalizations {
   /// **'Number'**
   String get numberTitle;
 
-  /// No description provided for @numberTapGenerate.
-  ///
-  /// In en, this message translates to:
-  /// **'Tap \"Generate\" to get a number'**
-  String get numberTapGenerate;
-
   /// No description provided for @numberSectionRange.
   ///
   /// In en, this message translates to:

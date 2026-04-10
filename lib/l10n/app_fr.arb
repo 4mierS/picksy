@@ -172,7 +172,6 @@
   "letterFiltersProMessage": "Go Pro to unlock lowercase, umlauts, vowels-only, and exclusions.",
   "letterFreeProHint": "Free: Random A-Z uppercase.\nPro: lowercase, umlauts, vowels-only, exclude letters.",
   "numberTitle": "Number",
-  "numberTapGenerate": "Tap \"Generate\" to get a number",
   "numberSectionRange": "Range",
   "numberSectionType": "Type",
   "numberSectionFilter": "Filter",

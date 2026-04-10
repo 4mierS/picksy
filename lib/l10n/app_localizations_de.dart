@@ -512,9 +512,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get numberTitle => 'Number';
 
   @override
-  String get numberTapGenerate => 'Tap \"Generate\" to get a number';
-
-  @override
   String get numberSectionRange => 'Range';
 
   @override
