@@ -4,7 +4,6 @@ import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/l10n/l10n.dart';
 
 import 'package:picksy/core/ui/app_styles.dart';
-import 'package:picksy/core/ui/confirm_dialog.dart';
 import 'package:picksy/core/team/team_splitter.dart';
 
 import 'package:picksy/models/custom_list_model.dart';
@@ -102,14 +101,84 @@ class _CustomListPageState extends State<CustomListPage> {
     CustomListModel selected,
   ) async {
     final l10n = context.l10n;
-    final confirmed = await showConfirmDialog(
+    final confirmed = await showModalBottomSheet<bool>(
       context: context,
-      title: l10n.customListDeleteList,
-      message: '"${selected.name}"',
-      confirmText: l10n.customListDeleteList,
-      cancelText: l10n.commonCancel,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 36),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.outlineVariant,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(Icons.delete_outline, color: Colors.red, size: 32),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.customListDeleteList,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '"${selected.name}"',
+              style: TextStyle(
+                fontSize: 15,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 28),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context, false),
+                    child: Text(l10n.commonCancel),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(context, true),
+                    child: Text(l10n.customListDeleteList),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
-    if (confirmed && mounted) {
+    if ((confirmed ?? false) && mounted) {
       store.deleteList(selected.id);
       setState(() {
         _lastPicked = null;
@@ -185,7 +254,13 @@ class _CustomListPageState extends State<CustomListPage> {
                                     child: Text(lst.name),
                                   ),
                               ],
-                              onSelected: store.selectList,
+                              onSelected: (id) {
+                                store.selectList(id);
+                                setState(() {
+                                  _lastPicked = null;
+                                  _lastTeams = null;
+                                });
+                              },
                             )
                           : null,
                     ),
