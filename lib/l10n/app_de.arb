@@ -85,6 +85,7 @@
   "homeFavorite": "Favorit",
   "homeUnfavorite": "Nicht mehr Favorit",
   "homeTapToOpen": "Tippen zum Öffnen",
+  "homeFavoritesHint": "Tippe auf den Stern einer Karte, um sie hier anzuheften",
   "homeFavoritesLimitReachedTitle": "Favorites limit reached",
   "homeFavoritesLimitReachedMessage": "Free users can pin up to 2 generators. Go Pro for unlimited favorites.",
   "historyTitle": "Verlauf",

@@ -614,6 +614,12 @@ abstract class AppLocalizations {
   /// **'Tap to open'**
   String get homeTapToOpen;
 
+  /// No description provided for @homeFavoritesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the star on any card to pin it here'**
+  String get homeFavoritesHint;
+
   /// No description provided for @homeFavoritesLimitReachedTitle.
   ///
   /// In en, this message translates to:

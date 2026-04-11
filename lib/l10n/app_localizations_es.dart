@@ -265,6 +265,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeTapToOpen => 'Toca para abrir';
 
   @override
+  String get homeFavoritesHint =>
+      'Toca la estrella de una tarjeta para fijarla aquí';
+
+  @override
   String get homeFavoritesLimitReachedTitle => 'Favorites limit reached';
 
   @override

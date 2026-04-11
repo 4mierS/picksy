@@ -85,6 +85,7 @@
   "homeFavorite": "Favorito",
   "homeUnfavorite": "Quitar favorito",
   "homeTapToOpen": "Toca para abrir",
+  "homeFavoritesHint": "Toca la estrella de una tarjeta para fijarla aquí",
   "homeFavoritesLimitReachedTitle": "Favorites limit reached",
   "homeFavoritesLimitReachedMessage": "Free users can pin up to 2 generators. Go Pro for unlimited favorites.",
   "historyTitle": "Historial",

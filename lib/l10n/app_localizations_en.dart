@@ -265,6 +265,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeTapToOpen => 'Tap to open';
 
   @override
+  String get homeFavoritesHint => 'Tap the star on any card to pin it here';
+
+  @override
   String get homeFavoritesLimitReachedTitle => 'Favorites limit reached';
 
   @override

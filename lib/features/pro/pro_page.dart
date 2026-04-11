@@ -168,6 +168,27 @@ class ProPage extends StatelessWidget {
           ),
         ),
 
+        // ── Free vs Pro comparison ────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.compareTitle,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.proPurple,
+                  letterSpacing: 0.3,
+                ),
+              ),
+              const SizedBox(height: 10),
+              _InlineCompareTable(l10n: l10n),
+            ],
+          ),
+        ),
+
         // ── IAP state ─────────────────────────────────────────────────────
         if (!premium.isAvailable)
           Padding(
@@ -238,6 +259,82 @@ class ProPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// ── Inline comparison table ───────────────────────────────────────────────────
+
+class _InlineCompareTable extends StatelessWidget {
+  final dynamic l10n;
+  const _InlineCompareTable({required this.l10n});
+
+  static const _cellPad = EdgeInsets.symmetric(horizontal: 8, vertical: 8);
+
+  @override
+  Widget build(BuildContext context) {
+    final features = [
+      (l10n.compareFeatureHistory, l10n.compareFreeHistory, l10n.compareProHistory),
+      (l10n.compareFeatureFavorites, l10n.compareFreeFavorites, l10n.compareProFavorites),
+      (l10n.compareFeatureColorModes, '✗', '✓'),
+      (l10n.compareFeatureCustomRange, '✗', '✓'),
+      (l10n.compareFeatureLetterFilters, '✗', '✓'),
+      (l10n.compareFeatureAnalytics, '✗', '✓'),
+    ];
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Table(
+        border: TableBorder.all(
+          color: Theme.of(context).dividerColor,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        columnWidths: const {
+          0: FlexColumnWidth(2.2),
+          1: FlexColumnWidth(1),
+          2: FlexColumnWidth(1),
+        },
+        children: [
+          TableRow(
+            decoration: BoxDecoration(
+              color: AppColors.proPurple.withValues(alpha: 0.10),
+            ),
+            children: [
+              _cell(l10n.compareFeatureLabel, bold: true),
+              _cell(l10n.compareFreeColumn, bold: true, center: true),
+              _cell(l10n.compareProColumn,
+                  bold: true, center: true, color: AppColors.proPurple),
+            ],
+          ),
+          for (final (feature, free, pro) in features)
+            TableRow(
+              children: [
+                _cell(feature),
+                _cell(free,
+                    center: true,
+                    color: free == '✗' ? Colors.red.withValues(alpha: 0.7) : null),
+                _cell(pro,
+                    center: true, color: pro == '✓' ? Colors.green : null),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _cell(String text,
+      {bool bold = false, bool center = false, Color? color}) {
+    return Padding(
+      padding: _cellPad,
+      child: Text(
+        text,
+        textAlign: center ? TextAlign.center : TextAlign.start,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: bold ? FontWeight.w700 : FontWeight.normal,
+          color: color,
+        ),
+      ),
     );
   }
 }

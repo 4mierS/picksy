@@ -265,6 +265,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get homeTapToOpen => 'Appuyez pour ouvrir';
 
   @override
+  String get homeFavoritesHint =>
+      'Appuyez sur l\'étoile d\'une carte pour l\'épingler ici';
+
+  @override
   String get homeFavoritesLimitReachedTitle => 'Favorites limit reached';
 
   @override

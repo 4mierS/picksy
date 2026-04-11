@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../l10n/l10n.dart';
 import '../storage/premium_store.dart';
+import '../core/ui/app_colors.dart';
 import '../features/home/home_page.dart';
 import '../features/pro/pro_page.dart';
 import '../features/analytics/analytics_page.dart';
@@ -52,7 +53,28 @@ class _AppShellState extends State<AppShell> {
               label: l10n.navPro,
             ),
             NavigationDestination(
-              icon: const Icon(Icons.bar_chart),
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  const Icon(Icons.bar_chart),
+                  Positioned(
+                    right: -4,
+                    bottom: -2,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: const BoxDecoration(
+                        color: AppColors.proPurple,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.lock_rounded,
+                        size: 7,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               label: l10n.navAnalytics,
             ),
             NavigationDestination(

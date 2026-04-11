@@ -85,6 +85,7 @@
   "homeFavorite": "Favorite",
   "homeUnfavorite": "Unfavorite",
   "homeTapToOpen": "Tap to open",
+  "homeFavoritesHint": "Tap the star on any card to pin it here",
   "homeFavoritesLimitReachedTitle": "Favorites limit reached",
   "homeFavoritesLimitReachedMessage": "Free users can pin up to 2 generators. Go Pro for unlimited favorites.",
   "historyTitle": "History",

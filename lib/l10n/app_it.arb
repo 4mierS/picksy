@@ -83,6 +83,7 @@
   "homeFavorite": "Preferito",
   "homeUnfavorite": "Rimuovi dai preferiti",
   "homeTapToOpen": "Tocca per aprire",
+  "homeFavoritesHint": "Tocca la stella di una scheda per aggiungerla qui",
   "homeFavoritesLimitReachedTitle": "Favorites limit reached",
   "homeFavoritesLimitReachedMessage": "Free users can pin up to 2 generators. Go Pro for unlimited favorites.",
   "historyTitle": "Cronologia",

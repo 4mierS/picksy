@@ -267,6 +267,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get homeTapToOpen => 'Tippen zum Öffnen';
 
   @override
+  String get homeFavoritesHint =>
+      'Tippe auf den Stern einer Karte, um sie hier anzuheften';
+
+  @override
   String get homeFavoritesLimitReachedTitle => 'Favorites limit reached';
 
   @override
