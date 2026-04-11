@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:picksy/l10n/l10n.dart';
 
@@ -24,22 +23,11 @@ class _CardPageState extends State<CardPage> {
   final _rng = Random();
 
   static const _ranks = [
-    'A',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    'J',
-    'Q',
-    'K',
+    'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K',
   ];
   static const _suits = ['♠', '♥', '♦', '♣'];
   static const _suitNames = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+  static const _cardCounts = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   List<String>? _lastDrawn;
   bool _includeJokers = false;
@@ -95,17 +83,6 @@ class _CardPageState extends State<CardPage> {
     final effectiveJokers = canJokers && _includeJokers;
     final effectiveCount = canMultiDraw ? _multiCount : 1;
 
-    void openProDialog() => showProDialog(
-      context,
-      title: l10n.cardIncludeJokersProTitle,
-      message: l10n.cardIncludeJokersProMessage,
-      generatorType: GeneratorType.card,
-      featureDefinitions: [
-        l10n.cardIncludeJokersProMessage,
-        l10n.cardMultiDrawProMessage,
-      ],
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.cardTitle),
@@ -136,179 +113,317 @@ class _CardPageState extends State<CardPage> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Expanded(
-                child: Center(
-                  child: _lastDrawn == null
-                      ? Container(
+        child: Column(
+          children: [
+            // ── Drawn cards area (scrollable, takes all spare space) ──────────
+            Expanded(
+              child: _lastDrawn == null
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: Center(
+                        child: Container(
                           width: double.infinity,
                           constraints: const BoxConstraints(minHeight: 160),
-                          decoration: AppStyles.generatorResultCard(
-                            GeneratorType.card.accentColor,
-                          ),
+                          decoration: AppStyles.generatorResultCard(accent),
                           alignment: Alignment.center,
-                          child: Text(
-                            l10n.cardTapDraw,
-                            style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            textAlign: TextAlign.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                l10n.cardTitle,
+                                style: const TextStyle(
+                                  fontSize: 36,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                l10n.cardTapDraw,
+                                style: const TextStyle(fontSize: 16),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                        )
-                      : Wrap(
-                          spacing: 12,
-                          runSpacing: 12,
-                          alignment: WrapAlignment.center,
-                          children: [
-                            for (final card in _lastDrawn!) _PlayingCard(card),
-                          ],
                         ),
-                ),
-              ),
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                      child: Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          for (final card in _lastDrawn!) _PlayingCard(card),
+                        ],
+                      ),
+                    ),
+            ),
 
-              _SectionTitle(l10n.cardSectionOptions),
-              const SizedBox(height: 8),
-
-              // Include Jokers toggle (Pro)
-              SwitchListTile(
-                activeColor: GeneratorType.card.accentColor,
-                title: Text(l10n.cardIncludeJokers),
-                subtitle: Text(l10n.cardIncludeJokersSubtitle),
-                value: effectiveJokers,
-                secondary: canJokers ? null : const Icon(Icons.lock),
-                onChanged: (v) async {
-                  if (!canJokers) {
-                    await showProDialog(
-                      context,
-                      title: l10n.cardIncludeJokersProTitle,
-                      message: l10n.cardIncludeJokersProMessage,
-                      generatorType: GeneratorType.card,
-                    );
-                    return;
-                  }
-                  setState(() => _includeJokers = v);
-                },
-              ),
-
-              SwitchListTile(
-                activeColor: GeneratorType.card.accentColor,
-                title: const Text('Draw Without Replacement'),
-                subtitle: const Text(
-                  'Drawn cards are removed until deck resets automatically.',
-                ),
-                value: _withoutReplacement,
-                onChanged: (v) => setState(() {
-                  _withoutReplacement = v;
-                  _deck.clear();
-                }),
-              ),
-
-              // Multi-draw (Pro)
-              ListTile(
-                title: Text(l10n.cardMultiDrawCount),
-                subtitle: Text('$effectiveCount'),
-                trailing: canMultiDraw ? null : const Icon(Icons.lock),
-                onTap: canMultiDraw
-                    ? null
-                    : () async {
+            // ── Sticky bottom controls ────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Include Jokers toggle
+                  _ToggleRow(
+                    label: l10n.cardIncludeJokers,
+                    value: effectiveJokers,
+                    accent: accent,
+                    isLocked: !canJokers,
+                    onChanged: (v) async {
+                      if (!canJokers) {
                         await showProDialog(
                           context,
-                          title: l10n.cardMultiDrawProTitle,
-                          message: l10n.cardMultiDrawProMessage,
+                          title: l10n.cardIncludeJokersProTitle,
+                          message: l10n.cardIncludeJokersProMessage,
                           generatorType: GeneratorType.card,
                         );
-                      },
-              ),
-              if (canMultiDraw)
-                Slider(
-                  value: _multiCount.toDouble(),
-                  min: 1,
-                  max: 10,
-                  divisions: 9,
-                  label: '$_multiCount',
-                  activeColor: GeneratorType.card.accentColor,
-                  onChanged: (v) => setState(() => _multiCount = v.round()),
-                ),
-
-              const SizedBox(height: 16),
-
-              if (!gate.isPro)
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(22),
-                  decoration: AppStyles.proCard(),
-                  child: Text(
-                    l10n.cardFreeProHint,
-                    style: AppStyles.resultStyle,
+                        return;
+                      }
+                      setState(() => _includeJokers = v);
+                    },
                   ),
-                ),
 
-              const SizedBox(height: 16),
+                  const SizedBox(height: 10),
 
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton.icon(
-                  style: AppStyles.generatorButton(
-                    GeneratorType.card.accentColor,
+                  // Draw Without Replacement toggle
+                  _ToggleRow(
+                    label: 'Without Replacement',
+                    value: _withoutReplacement,
+                    accent: accent,
+                    onChanged: (v) => setState(() {
+                      _withoutReplacement = v;
+                      _deck.clear();
+                    }),
                   ),
-                  icon: const Icon(Icons.style_outlined),
-                  label: Text(l10n.cardDraw),
-                  onPressed: () async {
-                    final drawn = <String>[
-                      for (int i = 0; i < effectiveCount; i++)
-                        _withoutReplacement
-                            ? _drawFromDeck(withJokers: effectiveJokers)
-                            : _drawCard(withJokers: effectiveJokers),
-                    ];
-                    final result = drawn.join(', ');
-                    setState(() => _lastDrawn = drawn);
 
-                    // Parse rank and suit from first card for metadata
-                    final firstParts = drawn.first.split(' ');
-                    final rank = firstParts.isNotEmpty ? firstParts[0] : '';
-                    final suit = firstParts.length > 1 ? firstParts[1] : '';
-                    final suitIdx = _suits.indexOf(suit);
-                    final suitName = suitIdx >= 0 ? _suitNames[suitIdx] : suit;
+                  const SizedBox(height: 10),
 
-                    await history.add(
-                      type: GeneratorType.card,
-                      value: result,
-                      maxEntries: context.gateRead.historyMax,
-                      metadata: {
-                        'rank': rank,
-                        'suit': suit,
-                        'suitName': suitName,
-                        if (effectiveCount > 1) 'drawnCount': effectiveCount,
-                        'withoutReplacement': _withoutReplacement,
-                      },
-                    );
-                  },
-                ),
+                  // Cards per draw selector
+                  Row(
+                    children: [
+                      GeneratorSectionTitle(l10n.cardMultiDrawCount),
+                      if (!canMultiDraw) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.proPurple.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            'PRO',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.proPurple,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _cardCounts.map((count) {
+                      final selected = effectiveCount == count;
+                      final isLocked = !canMultiDraw && count > 1;
+                      return SizedBox(
+                        width: (MediaQuery.of(context).size.width - 32 - 8 * 4) / 5,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: selected
+                                ? accent
+                                : (isLocked ? AppColors.proPurple : null),
+                            side: BorderSide(
+                              color: selected
+                                  ? accent
+                                  : (isLocked
+                                        ? AppColors.proPurple.withOpacity(0.4)
+                                        : Colors.grey.withOpacity(0.4)),
+                              width: selected ? 2 : 1,
+                            ),
+                            backgroundColor:
+                                selected ? accent.withOpacity(0.1) : null,
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          ),
+                          onPressed: () async {
+                            if (isLocked) {
+                              await showProDialog(
+                                context,
+                                title: l10n.cardMultiDrawProTitle,
+                                message: l10n.cardMultiDrawProMessage,
+                                generatorType: GeneratorType.card,
+                              );
+                              return;
+                            }
+                            setState(() => _multiCount = count);
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (isLocked) ...[
+                                Icon(
+                                  Icons.lock_outline,
+                                  size: 11,
+                                  color: AppColors.proPurple,
+                                ),
+                                const SizedBox(width: 3),
+                              ],
+                              Text('$count', style: const TextStyle(fontSize: 13)),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // Draw button
+                  FilledButton.icon(
+                    style: AppStyles.generatorButton(accent),
+                    icon: const Icon(Icons.style_outlined),
+                    label: Text(l10n.cardDraw),
+                    onPressed: () async {
+                      final drawn = <String>[
+                        for (int i = 0; i < effectiveCount; i++)
+                          _withoutReplacement
+                              ? _drawFromDeck(withJokers: effectiveJokers)
+                              : _drawCard(withJokers: effectiveJokers),
+                      ];
+                      final result = drawn.join(', ');
+                      setState(() => _lastDrawn = drawn);
+
+                      final firstParts = drawn.first.split(' ');
+                      final rank =
+                          firstParts.isNotEmpty ? firstParts[0] : '';
+                      final suit =
+                          firstParts.length > 1 ? firstParts[1] : '';
+                      final suitIdx = _suits.indexOf(suit);
+                      final suitName =
+                          suitIdx >= 0 ? _suitNames[suitIdx] : suit;
+
+                      await history.add(
+                        type: GeneratorType.card,
+                        value: result,
+                        maxEntries: context.gateRead.historyMax,
+                        metadata: {
+                          'rank': rank,
+                          'suit': suit,
+                          'suitName': suitName,
+                          if (effectiveCount > 1) 'drawnCount': effectiveCount,
+                          'withoutReplacement': _withoutReplacement,
+                        },
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  String _cardSemanticLabel(String value) {
-    if (value.contains(',')) return value;
-    final parts = value.split(' ');
-    if (parts.length >= 2) {
-      final rank = parts[0];
-      final suit = parts[1];
-      final suitIdx = _suits.indexOf(suit);
-      final suitName = suitIdx >= 0 ? _suitNames[suitIdx] : suit;
-      return '$rank of $suitName';
-    }
-    return value;
+// ─── Toggle Row ───────────────────────────────────────────────────────────────
+
+class _ToggleRow extends StatelessWidget {
+  final String label;
+  final bool value;
+  final Color accent;
+  final bool isLocked;
+  final void Function(bool) onChanged;
+
+  const _ToggleRow({
+    required this.label,
+    required this.value,
+    required this.accent,
+    required this.onChanged,
+    this.isLocked = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            GeneratorSectionTitle(label),
+            if (isLocked) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.proPurple.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  'PRO',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: AppColors.proPurple,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: !value ? accent : null,
+                  side: BorderSide(
+                    color: !value ? accent : Colors.grey.withOpacity(0.4),
+                    width: !value ? 2 : 1,
+                  ),
+                  backgroundColor: !value ? accent.withOpacity(0.1) : null,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                ),
+                onPressed: () => onChanged(false),
+                child: const Text('Off'),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: value ? accent : null,
+                  side: BorderSide(
+                    color: value ? accent : Colors.grey.withOpacity(0.4),
+                    width: value ? 2 : 1,
+                  ),
+                  backgroundColor: value ? accent.withOpacity(0.1) : null,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                ),
+                onPressed: () => onChanged(true),
+                child: const Text('On'),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
+
+// ─── Playing Card ─────────────────────────────────────────────────────────────
 
 class _PlayingCard extends StatelessWidget {
   final String raw;
@@ -362,19 +477,6 @@ class _PlayingCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _SectionTitle extends StatelessWidget {
-  final String text;
-  const _SectionTitle(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
     );
   }
 }
