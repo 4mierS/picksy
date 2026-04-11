@@ -601,24 +601,12 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get hangmanGuessWord => 'Rate das Wort';
-
-  @override
   String hangmanAttemptsLeft(int count) {
     return 'Versuche übrig: $count';
   }
 
   @override
   String get hangmanWrongLetters => 'Falsche Buchstaben:';
-
-  @override
-  String get hangmanSettings => 'Einstellungen';
-
-  @override
-  String get hangmanMinLength => 'Minimale Wortlänge';
-
-  @override
-  String get hangmanMaxLength => 'Maximale Wortlänge';
 
   @override
   String get analyticsTitle => 'Analytik';

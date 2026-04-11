@@ -1226,11 +1226,6 @@ abstract class AppLocalizations {
   /// **'Game over! The word was: {word}'**
   String hangmanYouLost(Object word);
 
-  /// No description provided for @hangmanGuessWord.
-  ///
-  /// In en, this message translates to:
-  /// **'Guess the word'**
-  String get hangmanGuessWord;
 
   /// No description provided for @hangmanAttemptsLeft.
   ///
@@ -1244,23 +1239,8 @@ abstract class AppLocalizations {
   /// **'Wrong letters:'**
   String get hangmanWrongLetters;
 
-  /// No description provided for @hangmanSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get hangmanSettings;
 
-  /// No description provided for @hangmanMinLength.
-  ///
-  /// In en, this message translates to:
-  /// **'Min word length'**
-  String get hangmanMinLength;
 
-  /// No description provided for @hangmanMaxLength.
-  ///
-  /// In en, this message translates to:
-  /// **'Max word length'**
-  String get hangmanMaxLength;
 
   /// No description provided for @analyticsTitle.
   ///

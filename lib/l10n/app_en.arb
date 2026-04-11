@@ -243,7 +243,6 @@
       "word": {}
     }
   },
-  "hangmanGuessWord": "Guess the word",
   "hangmanAttemptsLeft": "Attempts left: {count}",
   "@hangmanAttemptsLeft": {
     "placeholders": {
@@ -253,9 +252,6 @@
     }
   },
   "hangmanWrongLetters": "Wrong letters:",
-  "hangmanSettings": "Settings",
-  "hangmanMinLength": "Min word length",
-  "hangmanMaxLength": "Max word length",
   "analyticsTitle": "Analytics",
   "analyticsProOnly": "Analytics is a Pro feature",
   "analyticsProMessage": "Unlock advanced analytics, trends and auto-run with Picksy Pro.",

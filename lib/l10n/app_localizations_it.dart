@@ -599,24 +599,12 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get hangmanGuessWord => 'Indovina la parola';
-
-  @override
   String hangmanAttemptsLeft(int count) {
     return 'Tentativi rimasti: $count';
   }
 
   @override
   String get hangmanWrongLetters => 'Lettere errate:';
-
-  @override
-  String get hangmanSettings => 'Impostazioni';
-
-  @override
-  String get hangmanMinLength => 'Lunghezza minima';
-
-  @override
-  String get hangmanMaxLength => 'Lunghezza massima';
 
   @override
   String get analyticsTitle => 'Analisi';
