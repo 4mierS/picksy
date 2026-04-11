@@ -7,11 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
-import 'package:picksy/l10n/app_localizations.dart';
 import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 enum _Phase { idle, flashing, input, correct, gameover }
 
@@ -29,16 +29,15 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
   static const int _gridColumns = 2;
   static const double _tileSpacing = 12.0;
   static const int _freeLevelCap = 10;
-  static const int _historyMaxEntriesFree = 50;
-  static const int _historyMaxEntriesPro = 1000;
 
+  // 6 visually distinct colors: red, blue, green, yellow, orange, purple
   static const List<Color> _distinctTileColors = [
-    Color(0xFFE53935),
-    Color(0xFF1E88E5),
-    Color(0xFF43A047),
-    Color(0xFF8E24AA),
-    Color(0xFF00ACC1),
-    Color(0xFFD81B60),
+    Color(0xFFEF5350), // red
+    Color(0xFF42A5F5), // blue
+    Color(0xFF66BB6A), // green
+    Color(0xFFFFEE58), // yellow
+    Color(0xFFFFA726), // orange
+    Color(0xFFAB47BC), // purple
   ];
 
   final _rng = Random();
@@ -53,7 +52,6 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
   int _totalSequences = 0;
 
   DateTime? _gameStart;
-
   Timer? _flashTimer;
 
   List<Color> get _activeTileColors =>
@@ -94,7 +92,6 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
 
   void _advanceLevel() {
     _flashTimer?.cancel();
-    // Add one new element (no immediate full repetition: ensure last != new)
     int next;
     do {
       next = _rng.nextInt(_activeTileColors.length);
@@ -117,7 +114,6 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
     void doStep() {
       if (!mounted) return;
       if (step >= _sequence.length * 2) {
-        // Done flashing → input phase
         setState(() {
           _highlightedTile = -1;
           _phase = _Phase.input;
@@ -126,10 +122,8 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
       }
 
       if (step.isEven) {
-        // Highlight tile
         setState(() => _highlightedTile = _sequence[step ~/ 2]);
       } else {
-        // Turn off
         setState(() => _highlightedTile = -1);
       }
 
@@ -138,7 +132,6 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
       _flashTimer = Timer(Duration(milliseconds: delay), doStep);
     }
 
-    // Small initial pause before starting
     _flashTimer = Timer(const Duration(milliseconds: 400), doStep);
   }
 
@@ -148,15 +141,11 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
     if (tileIndex == _sequence[_inputIndex]) {
       _inputIndex++;
       if (_inputIndex == _sequence.length) {
-        // Correct full sequence
         _totalSequences++;
         final gate = context.gateRead;
-
-        final isPro = gate.isPro;
-        final atCap = !isPro && _level >= _freeLevelCap;
+        final atCap = !gate.isPro && _level >= _freeLevelCap;
 
         if (atCap) {
-          // Free user reached max level — game over (win)
           _saveHistory();
           setState(() => _phase = _Phase.gameover);
         } else {
@@ -167,23 +156,20 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
         }
       }
     } else {
-      // Wrong tap
       _saveHistory();
       setState(() => _phase = _Phase.gameover);
     }
   }
 
   void _saveHistory() {
-    final history = context.read<HistoryStore>();
     final gate = context.gateRead;
     final duration = _gameStart != null
         ? DateTime.now().difference(_gameStart!).inSeconds
         : 0;
-
-    history.add(
+    context.read<HistoryStore>().add(
       type: GeneratorType.memoryFlash,
       value: 'Level $_level – $_totalSequences sequences',
-      maxEntries: gate.isPro ? _historyMaxEntriesPro : _historyMaxEntriesFree,
+      maxEntries: gate.historyMax,
       metadata: {
         'maxLevel': _level,
         'totalSequences': _totalSequences,
@@ -198,6 +184,8 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
     final l10n = context.l10n;
     final gate = context.gateRead;
     final accent = GeneratorType.memoryFlash.accentColor;
+    final isSettingsEnabled =
+        _phase == _Phase.idle || _phase == _Phase.gameover;
 
     return Scaffold(
       appBar: AppBar(
@@ -228,220 +216,178 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              // Status card
-              Container(
+      body: Column(
+        children: [
+          // ── Status card (hidden in idle) ─────────────────────────────────
+          if (_phase != _Phase.idle)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 18,
-                  vertical: 16,
+                  vertical: 14,
                 ),
                 decoration: AppStyles.generatorResultCard(accent),
-                child: _StatusSection(
-                  phase: _phase,
-                  level: _level,
-                  totalSequences: _totalSequences,
-                  l10n: context.l10n,
-                ),
+                child: _buildStatus(l10n, accent),
               ),
+            ),
 
-              const SizedBox(height: 20),
-
-              // Tile grid
-              Expanded(
-                child: Center(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final size =
-                          (constraints.maxWidth.clamp(0.0, _maxGridWidth)) /
-                              _gridColumns -
-                          _tileSpacing;
-                      return Wrap(
-                        spacing: 12,
-                        runSpacing: 12,
-                        alignment: WrapAlignment.center,
-                        children: List.generate(_activeTileColors.length, (i) {
-                          final isHighlighted = _highlightedTile == i;
-                          return _MemoryTile(
-                            size: size,
-                            color: _activeTileColors[i],
-                            isHighlighted: isHighlighted,
-                            enabled: _phase == _Phase.input,
-                            onTap: () => _onTileTap(i),
-                          );
-                        }),
-                      );
-                    },
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // Progress indicator during input phase
-              if (_phase == _Phase.input && _sequence.isNotEmpty) ...[
-                Text(
-                  l10n.memoryFlashSequenceLength(_sequence.length),
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: accent,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                LinearProgressIndicator(
-                  value: _inputIndex / _sequence.length,
-                  color: accent,
-                  backgroundColor: accent.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-                const SizedBox(height: 12),
-              ],
-
-              // Action buttons
-              if (_phase == _Phase.idle) ...[
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: AppStyles.generatorButton(accent),
-                    onPressed: _startGame,
-                    child: Text(l10n.memoryFlashStart),
-                  ),
-                ),
-              ],
-
-              if (_phase == _Phase.gameover) ...[
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: AppStyles.generatorButton(accent),
-                    onPressed: _startGame,
-                    child: Text(l10n.memoryFlashPlayAgain),
-                  ),
-                ),
-              ],
-
-              const SizedBox(height: 8),
-              _SpeedSettings(
-                speed: _speed,
-                enabled: _phase == _Phase.idle || _phase == _Phase.gameover,
-                gate: gate,
-                onSpeedChanged: (s) {
-                  if (!gate.canUse(ProFeature.memoryFlashSpeed)) {
-                    showProDialog(
-                      context,
-                      title: l10n.memoryFlashProSpeedTitle,
-                      message: l10n.memoryFlashProSpeedMessage,
-                      generatorType: GeneratorType.memoryFlash,
-                    );
-                    return;
-                  }
-                  setState(() => _speed = s);
+          // ── Tile grid (Expanded — never overflows) ───────────────────────
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final rows =
+                      (_activeTileColors.length / _gridColumns).ceil();
+                  final byWidth =
+                      constraints.maxWidth.clamp(0.0, _maxGridWidth) /
+                          _gridColumns -
+                      _tileSpacing;
+                  final byHeight =
+                      (constraints.maxHeight - (rows - 1) * _tileSpacing) /
+                      rows;
+                  final size = min(byWidth, byHeight).clamp(60.0, 200.0);
+                  return Center(
+                    child: Wrap(
+                      spacing: _tileSpacing,
+                      runSpacing: _tileSpacing,
+                      alignment: WrapAlignment.center,
+                      children: List.generate(_activeTileColors.length, (i) {
+                        return _MemoryTile(
+                          size: size,
+                          color: _activeTileColors[i],
+                          isHighlighted: _highlightedTile == i,
+                          enabled: _phase == _Phase.input,
+                          onTap: () => _onTileTap(i),
+                        );
+                      }),
+                    ),
+                  );
                 },
               ),
-              const SizedBox(height: 10),
-              Row(
+            ),
+          ),
+
+          // ── Progress bar during input ────────────────────────────────────
+          if (_phase == _Phase.input && _sequence.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Column(
                 children: [
-                  const Text(
-                    'Blocks',
-                    style: TextStyle(fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(width: 10),
-                  for (final count in [3, 4, 5, 6]) ...[
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: ChoiceChip(
-                        selectedColor: accent.withOpacity(0.2),
-                        label: Text('$count'),
-                        selected: _blockCount == count,
-                        onSelected:
-                            (_phase == _Phase.idle || _phase == _Phase.gameover)
-                            ? (_) => setState(() {
-                                _blockCount = count;
-                                _sequence.clear();
-                              })
-                            : null,
-                      ),
+                  Text(
+                    l10n.memoryFlashSequenceLength(_sequence.length),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: accent,
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
+                  ),
+                  const SizedBox(height: 6),
+                  LinearProgressIndicator(
+                    value: _inputIndex / _sequence.length,
+                    color: accent,
+                    backgroundColor: accent.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ],
               ),
-              if (!gate.isPro)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    l10n.memoryFlashFreeProHint,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.proPurple,
-                    ),
-                  ),
+            ),
+
+          // ── Bottom controls (sticky) ─────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Blocks
+                _BlockSettings(
+                  blockCount: _blockCount,
+                  enabled: isSettingsEnabled,
+                  accent: accent,
+                  onChanged: (count) => setState(() {
+                    _blockCount = count;
+                    _sequence.clear();
+                  }),
                 ),
-              const SizedBox(height: 8),
-            ],
+                const SizedBox(height: 10),
+
+                // Flash speed
+                _SpeedSettings(
+                  speed: _speed,
+                  enabled: isSettingsEnabled,
+                  gate: gate,
+                  onSpeedChanged: (s) {
+                    if (!gate.canUse(ProFeature.memoryFlashSpeed)) {
+                      showProDialog(
+                        context,
+                        title: l10n.memoryFlashProSpeedTitle,
+                        message: l10n.memoryFlashProSpeedMessage,
+                        generatorType: GeneratorType.memoryFlash,
+                      );
+                      return;
+                    }
+                    setState(() => _speed = s);
+                  },
+                ),
+                const SizedBox(height: 12),
+
+                // Start / Play again button
+                if (_phase == _Phase.idle)
+                  FilledButton.icon(
+                    style: AppStyles.generatorButton(accent),
+                    onPressed: _startGame,
+                    icon: const Icon(Icons.casino),
+                    label: Text(l10n.memoryFlashStart),
+                  )
+                else if (_phase == _Phase.gameover)
+                  FilledButton.icon(
+                    style: AppStyles.generatorButton(accent),
+                    onPressed: _startGame,
+                    icon: const Icon(Icons.casino),
+                    label: Text(l10n.memoryFlashPlayAgain),
+                  ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
-}
 
-// ─── Status Section ──────────────────────────────────────────────────────────
-
-class _StatusSection extends StatelessWidget {
-  final _Phase phase;
-  final int level;
-  final int totalSequences;
-  final AppLocalizations l10n;
-
-  const _StatusSection({
-    required this.phase,
-    required this.level,
-    required this.totalSequences,
-    required this.l10n,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildStatus(dynamic l10n, Color accent) {
     final String headline;
     final String? subtext;
 
-    switch (phase) {
+    switch (_phase) {
       case _Phase.idle:
-        headline = l10n.memoryFlashTitle;
+        headline = '';
         subtext = null;
-        break;
       case _Phase.flashing:
-        headline = level > 0 ? l10n.memoryFlashLevel(level) : '';
+        headline = _level > 0 ? l10n.memoryFlashLevel(_level) : '';
         subtext = l10n.memoryFlashWatchSequence;
-        break;
       case _Phase.input:
-        headline = l10n.memoryFlashLevel(level);
+        headline = l10n.memoryFlashLevel(_level);
         subtext = l10n.memoryFlashYourTurn;
-        break;
       case _Phase.correct:
-        headline = l10n.memoryFlashLevel(level);
+        headline = l10n.memoryFlashLevel(_level);
         subtext = '✓';
-        break;
       case _Phase.gameover:
         headline = l10n.memoryFlashGameOver;
-        subtext = l10n.memoryFlashResult(level);
-        break;
+        subtext = l10n.memoryFlashResult(_level);
     }
 
     return Column(
       children: [
-        Text(
-          headline,
-          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800),
-          textAlign: TextAlign.center,
-        ),
+        if (headline.isNotEmpty)
+          Text(
+            headline,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w800),
+            textAlign: TextAlign.center,
+          ),
         if (subtext != null) ...[
-          const SizedBox(height: 6),
+          if (headline.isNotEmpty) const SizedBox(height: 4),
           Text(
             subtext,
             style: const TextStyle(fontSize: 16),
@@ -453,7 +399,143 @@ class _StatusSection extends StatelessWidget {
   }
 }
 
-// ─── Memory Tile ─────────────────────────────────────────────────────────────
+// ─── Block Settings ───────────────────────────────────────────────────────────
+
+class _BlockSettings extends StatelessWidget {
+  final int blockCount;
+  final bool enabled;
+  final Color accent;
+  final void Function(int) onChanged;
+
+  const _BlockSettings({
+    required this.blockCount,
+    required this.enabled,
+    required this.accent,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final counts = [3, 4, 5, 6];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GeneratorSectionTitle(l10n.memoryFlashBlocks),
+        const SizedBox(height: 8),
+        Row(
+          children: List.generate(counts.length, (i) {
+            final count = counts[i];
+            final selected = blockCount == count;
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(right: i < counts.length - 1 ? 8 : 0),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: selected ? accent : null,
+                    side: BorderSide(
+                      color: selected ? accent : Colors.grey.withOpacity(0.4),
+                      width: selected ? 2 : 1,
+                    ),
+                    backgroundColor: selected ? accent.withOpacity(0.1) : null,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                  ),
+                  onPressed: enabled ? () => onChanged(count) : null,
+                  child: Text('$count'),
+                ),
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Speed Settings ───────────────────────────────────────────────────────────
+
+class _SpeedSettings extends StatelessWidget {
+  final _Speed speed;
+  final bool enabled;
+  final FeatureGate gate;
+  final void Function(_Speed) onSpeedChanged;
+
+  const _SpeedSettings({
+    required this.speed,
+    required this.enabled,
+    required this.gate,
+    required this.onSpeedChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final accent = GeneratorType.memoryFlash.accentColor;
+    final speeds = [_Speed.slow, _Speed.normal, _Speed.fast];
+    final labels = [
+      l10n.memoryFlashSpeedSlow,
+      l10n.memoryFlashSpeedNormal,
+      l10n.memoryFlashSpeedFast,
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            GeneratorSectionTitle(l10n.memoryFlashFlashSpeed),
+            if (!gate.canUse(ProFeature.memoryFlashSpeed)) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.proPurple.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  'PRO',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: AppColors.proPurple,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: List.generate(speeds.length, (i) {
+            final s = speeds[i];
+            final selected = speed == s;
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(right: i < speeds.length - 1 ? 8 : 0),
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: selected ? accent : null,
+                    side: BorderSide(
+                      color: selected ? accent : Colors.grey.withOpacity(0.4),
+                      width: selected ? 2 : 1,
+                    ),
+                    backgroundColor: selected ? accent.withOpacity(0.1) : null,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                  ),
+                  onPressed: enabled ? () => onSpeedChanged(s) : null,
+                  child: Text(labels[i], style: const TextStyle(fontSize: 13)),
+                ),
+              ),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Memory Tile ──────────────────────────────────────────────────────────────
 
 class _MemoryTile extends StatelessWidget {
   final double size;
@@ -501,91 +583,6 @@ class _MemoryTile extends StatelessWidget {
           splashColor: color.withOpacity(0.4),
         ),
       ),
-    );
-  }
-}
-
-// ─── Speed Settings ──────────────────────────────────────────────────────────
-
-class _SpeedSettings extends StatelessWidget {
-  final _Speed speed;
-  final bool enabled;
-  final FeatureGate gate;
-  final void Function(_Speed) onSpeedChanged;
-
-  const _SpeedSettings({
-    required this.speed,
-    required this.enabled,
-    required this.gate,
-    required this.onSpeedChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final accent = GeneratorType.memoryFlash.accentColor;
-    final speeds = [_Speed.slow, _Speed.normal, _Speed.fast];
-    final labels = [
-      l10n.memoryFlashSpeedSlow,
-      l10n.memoryFlashSpeedNormal,
-      l10n.memoryFlashSpeedFast,
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              l10n.memoryFlashFlashSpeed,
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),
-            if (!gate.canUse(ProFeature.memoryFlashSpeed)) ...[
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.proPurple.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Text(
-                  'PRO',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: AppColors.proPurple,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: List.generate(speeds.length, (i) {
-            final s = speeds[i];
-            final selected = speed == s;
-            return Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(right: i < speeds.length - 1 ? 8 : 0),
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: selected ? accent : null,
-                    side: BorderSide(
-                      color: selected ? accent : Colors.grey.withOpacity(0.4),
-                      width: selected ? 2 : 1,
-                    ),
-                    backgroundColor: selected ? accent.withOpacity(0.1) : null,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                  ),
-                  onPressed: enabled ? () => onSpeedChanged(s) : null,
-                  child: Text(labels[i], style: const TextStyle(fontSize: 13)),
-                ),
-              ),
-            );
-          }),
-        ),
-      ],
     );
   }
 }

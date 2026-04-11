@@ -301,6 +301,7 @@
       }
     }
   },
+  "memoryFlashBlocks": "Bloques",
   "memoryFlashFlashSpeed": "Velocidad de destello",
   "memoryFlashSpeedSlow": "Lento",
   "memoryFlashSpeedNormal": "Normal",
@@ -309,7 +310,6 @@
   "memoryFlashProEndlessMessage": "El modo gratuito está limitado a 10 niveles. Hazte Pro para jugar sin límite.",
   "memoryFlashProSpeedTitle": "La velocidad ajustable es Pro",
   "memoryFlashProSpeedMessage": "Hazte Pro para ajustar la velocidad de destello.",
-  "memoryFlashFreeProHint": "Gratis: Hasta 10 niveles.\nPro: Modo sin fin + velocidad ajustable.",
   "memoryFlashSequenceLength": "Secuencia: {length}",
   "@memoryFlashSequenceLength": {
     "placeholders": {

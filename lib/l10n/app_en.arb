@@ -301,6 +301,7 @@
       }
     }
   },
+  "memoryFlashBlocks": "Blocks",
   "memoryFlashFlashSpeed": "Flash speed",
   "memoryFlashSpeedSlow": "Slow",
   "memoryFlashSpeedNormal": "Normal",
@@ -309,7 +310,6 @@
   "memoryFlashProEndlessMessage": "Free mode is limited to 10 levels. Go Pro for endless play.",
   "memoryFlashProSpeedTitle": "Adjustable speed is Pro",
   "memoryFlashProSpeedMessage": "Go Pro to adjust the flash speed.",
-  "memoryFlashFreeProHint": "Free: Up to 10 levels.\nPro: Endless mode + adjustable speed.",
   "memoryFlashSequenceLength": "Sequence: {length}",
   "@memoryFlashSequenceLength": {
     "placeholders": {

@@ -1226,7 +1226,6 @@ abstract class AppLocalizations {
   /// **'Game over! The word was: {word}'**
   String hangmanYouLost(Object word);
 
-
   /// No description provided for @hangmanAttemptsLeft.
   ///
   /// In en, this message translates to:
@@ -1238,9 +1237,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Wrong letters:'**
   String get hangmanWrongLetters;
-
-
-
 
   /// No description provided for @analyticsTitle.
   ///
@@ -1422,6 +1418,12 @@ abstract class AppLocalizations {
   /// **'Level reached: {level}'**
   String memoryFlashResult(int level);
 
+  /// No description provided for @memoryFlashBlocks.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocks'**
+  String get memoryFlashBlocks;
+
   /// No description provided for @memoryFlashFlashSpeed.
   ///
   /// In en, this message translates to:
@@ -1469,12 +1471,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Go Pro to adjust the flash speed.'**
   String get memoryFlashProSpeedMessage;
-
-  /// No description provided for @memoryFlashFreeProHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Free: Up to 10 levels.\nPro: Endless mode + adjustable speed.'**
-  String get memoryFlashFreeProHint;
 
   /// No description provided for @memoryFlashSequenceLength.
   ///

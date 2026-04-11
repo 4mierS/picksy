@@ -299,6 +299,7 @@
       }
     }
   },
+  "memoryFlashBlocks": "Blocchi",
   "memoryFlashFlashSpeed": "Velocità di lampeggio",
   "memoryFlashSpeedSlow": "Lento",
   "memoryFlashSpeedNormal": "Normale",
@@ -307,7 +308,6 @@
   "memoryFlashProEndlessMessage": "La modalità gratuita è limitata a 10 livelli. Passa a Pro per giocare senza limiti.",
   "memoryFlashProSpeedTitle": "La velocità regolabile è Pro",
   "memoryFlashProSpeedMessage": "Passa a Pro per regolare la velocità di lampeggio.",
-  "memoryFlashFreeProHint": "Gratuito: Fino a 10 livelli.\nPro: Modalità infinita + velocità regolabile.",
   "memoryFlashSequenceLength": "Sequenza: {length}",
   "@memoryFlashSequenceLength": {
     "placeholders": {

@@ -301,6 +301,7 @@
       }
     }
   },
+  "memoryFlashBlocks": "Blöcke",
   "memoryFlashFlashSpeed": "Blitzgeschwindigkeit",
   "memoryFlashSpeedSlow": "Langsam",
   "memoryFlashSpeedNormal": "Normal",
@@ -309,7 +310,6 @@
   "memoryFlashProEndlessMessage": "Im kostenlosen Modus sind maximal 10 Level möglich. Werde Pro für endloses Spielen.",
   "memoryFlashProSpeedTitle": "Einstellbare Geschwindigkeit ist Pro",
   "memoryFlashProSpeedMessage": "Werde Pro, um die Blitzgeschwindigkeit anzupassen.",
-  "memoryFlashFreeProHint": "Kostenlos: Bis zu 10 Level.\nPro: Endlosmodus + einstellbare Geschwindigkeit.",
   "memoryFlashSequenceLength": "Sequenz: {length}",
   "@memoryFlashSequenceLength": {
     "placeholders": {

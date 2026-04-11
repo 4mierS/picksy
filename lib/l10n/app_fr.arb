@@ -301,6 +301,7 @@
       }
     }
   },
+  "memoryFlashBlocks": "Blocs",
   "memoryFlashFlashSpeed": "Vitesse d'affichage",
   "memoryFlashSpeedSlow": "Lent",
   "memoryFlashSpeedNormal": "Normal",
@@ -309,7 +310,6 @@
   "memoryFlashProEndlessMessage": "Le mode gratuit est limité à 10 niveaux. Passez Pro pour jouer sans limite.",
   "memoryFlashProSpeedTitle": "La vitesse réglable est Pro",
   "memoryFlashProSpeedMessage": "Passez Pro pour régler la vitesse d'affichage.",
-  "memoryFlashFreeProHint": "Gratuit : Jusqu'à 10 niveaux.\nPro : Mode infini + vitesse réglable.",
   "memoryFlashSequenceLength": "Séquence : {length}",
   "@memoryFlashSequenceLength": {
     "placeholders": {

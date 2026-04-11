@@ -704,6 +704,9 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String get memoryFlashBlocks => 'Blocchi';
+
+  @override
   String get memoryFlashFlashSpeed => 'Velocità di lampeggio';
 
   @override
@@ -728,10 +731,6 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get memoryFlashProSpeedMessage =>
       'Passa a Pro per regolare la velocità di lampeggio.';
-
-  @override
-  String get memoryFlashFreeProHint =>
-      'Gratuito: Fino a 10 livelli.\nPro: Modalità infinita + velocità regolabile.';
 
   @override
   String memoryFlashSequenceLength(int length) {
