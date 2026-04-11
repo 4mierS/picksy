@@ -167,93 +167,124 @@ class _HangmanPageState extends State<HangmanPage> {
         children: [
           // ── Central area ─────────────────────────────────────────────────
           Expanded(
-            child: Center(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Hangman drawing
-                    SizedBox(
-                      height: 200,
-                      width: double.infinity,
-                      child: CustomPaint(
-                        painter: _HangmanPainter(
-                          wrongGuesses: _wrongGuesses,
-                          accent: accent,
+            child: _phase == _HangmanPhase.idle
+                // Idle: big title card (like reaction test / tap challenge)
+                ? Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    child: Center(
+                      child: Container(
+                        width: double.infinity,
+                        constraints: const BoxConstraints(minHeight: 200),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 28,
+                        ),
+                        decoration: AppStyles.generatorResultCard(accent),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              l10n.hangmanTitle,
+                              style: const TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.w900,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              l10n.hangmanDescription,
+                              style: const TextStyle(fontSize: 16),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-
-                    if (_phase != _HangmanPhase.idle) ...[
-                      const SizedBox(height: 20),
-
-                      // Word display
-                      _WordDisplay(
-                        word: _word,
-                        guessed: _guessed,
-                        accent: accent,
+                  )
+                // Playing / Won / Lost: hangman drawing + word
+                : Center(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
                       ),
-
-                      const SizedBox(height: 12),
-
-                      // Attempts left
-                      if (_phase == _HangmanPhase.playing)
-                        Text(
-                          l10n.hangmanAttemptsLeft(
-                            _maxWrongGuesses - _wrongGuesses,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            width: double.infinity,
+                            child: CustomPaint(
+                              painter: _HangmanPainter(
+                                wrongGuesses: _wrongGuesses,
+                                accent: accent,
+                              ),
+                            ),
                           ),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          textAlign: TextAlign.center,
-                        ),
 
-                      // Wrong letters
-                      if (_wrongLetters.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          '${l10n.hangmanWrongLetters} ${_wrongLetters.join(' ')}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.redAccent,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
+                          const SizedBox(height: 20),
 
-                      // Won / Lost message
-                      if (_phase == _HangmanPhase.won) ...[
-                        const SizedBox(height: 12),
-                        Text(
-                          l10n.hangmanYouWon,
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                          _WordDisplay(
+                            word: _word,
+                            guessed: _guessed,
+                            accent: accent,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                      if (_phase == _HangmanPhase.lost) ...[
-                        const SizedBox(height: 12),
-                        Text(
-                          l10n.hangmanYouLost(_word),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.redAccent,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ],
-                  ],
-                ),
-              ),
-            ),
+
+                          const SizedBox(height: 12),
+
+                          if (_phase == _HangmanPhase.playing)
+                            Text(
+                              l10n.hangmanAttemptsLeft(
+                                _maxWrongGuesses - _wrongGuesses,
+                              ),
+                              style: Theme.of(context).textTheme.bodyMedium,
+                              textAlign: TextAlign.center,
+                            ),
+
+                          if (_wrongLetters.isNotEmpty) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              '${l10n.hangmanWrongLetters} ${_wrongLetters.join(' ')}',
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(color: Colors.redAccent),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+
+                          if (_phase == _HangmanPhase.won) ...[
+                            const SizedBox(height: 12),
+                            Text(
+                              l10n.hangmanYouWon,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                          if (_phase == _HangmanPhase.lost) ...[
+                            const SizedBox(height: 12),
+                            Text(
+                              l10n.hangmanYouLost(_word),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.redAccent,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
           ),
 
           // ── Bottom controls (sticky) ──────────────────────────────────────
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [

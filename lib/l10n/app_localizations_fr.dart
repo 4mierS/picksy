@@ -585,6 +585,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get hangmanTitle => 'Pendu';
 
   @override
+  String get hangmanDescription => 'Devinez le mot lettre par lettre';
+
+  @override
   String get hangmanNewGame => 'Nouvelle partie';
 
   @override
@@ -677,6 +680,9 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get memoryFlashTitle => 'Memory Flash';
+
+  @override
+  String get memoryFlashDescription => 'Regardez la séquence et répétez-la';
 
   @override
   String get memoryFlashStart => 'Démarrer';

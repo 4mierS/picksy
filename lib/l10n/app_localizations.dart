@@ -1202,6 +1202,12 @@ abstract class AppLocalizations {
   /// **'Hangman'**
   String get hangmanTitle;
 
+  /// No description provided for @hangmanDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Guess the word letter by letter'**
+  String get hangmanDescription;
+
   /// No description provided for @hangmanNewGame.
   ///
   /// In en, this message translates to:
@@ -1375,6 +1381,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Memory Flash'**
   String get memoryFlashTitle;
+
+  /// No description provided for @memoryFlashDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch the sequence, then repeat it'**
+  String get memoryFlashDescription;
 
   /// No description provided for @memoryFlashStart.
   ///

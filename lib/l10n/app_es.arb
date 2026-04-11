@@ -234,6 +234,7 @@
     }
   },
   "hangmanTitle": "Ahorcado",
+  "hangmanDescription": "Adivina la palabra letra por letra",
   "hangmanNewGame": "Nuevo juego",
   "hangmanPlayAgain": "Jugar de nuevo",
   "hangmanYouWon": "¡Ganaste!",
@@ -280,6 +281,7 @@
   "analyticsAvgLevel": "Nivel promedio",
   "analyticsLevelDistribution": "Distribución de niveles",
   "memoryFlashTitle": "Memory Flash",
+  "memoryFlashDescription": "Observa la secuencia y repítela",
   "memoryFlashStart": "Iniciar",
   "memoryFlashPlayAgain": "Jugar de nuevo",
   "memoryFlashWatchSequence": "Observa la secuencia…",

@@ -218,8 +218,45 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
       ),
       body: Column(
         children: [
-          // ── Status card (hidden in idle) ─────────────────────────────────
-          if (_phase != _Phase.idle)
+          if (_phase == _Phase.idle) ...[
+            // ── Idle: big title card (like reaction test / tap challenge) ────
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: Center(
+                  child: Container(
+                    width: double.infinity,
+                    constraints: const BoxConstraints(minHeight: 200),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 28,
+                    ),
+                    decoration: AppStyles.generatorResultCard(accent),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          l10n.memoryFlashTitle,
+                          style: const TextStyle(
+                            fontSize: 36,
+                            fontWeight: FontWeight.w900,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          l10n.memoryFlashDescription,
+                          style: const TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ] else ...[
+            // ── Playing: status card + tile grid ────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: Container(
@@ -233,67 +270,68 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
               ),
             ),
 
-          // ── Tile grid (Expanded — never overflows) ───────────────────────
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final rows =
-                      (_activeTileColors.length / _gridColumns).ceil();
-                  final byWidth =
-                      constraints.maxWidth.clamp(0.0, _maxGridWidth) /
-                          _gridColumns -
-                      _tileSpacing;
-                  final byHeight =
-                      (constraints.maxHeight - (rows - 1) * _tileSpacing) /
-                      rows;
-                  final size = min(byWidth, byHeight).clamp(60.0, 200.0);
-                  return Center(
-                    child: Wrap(
-                      spacing: _tileSpacing,
-                      runSpacing: _tileSpacing,
-                      alignment: WrapAlignment.center,
-                      children: List.generate(_activeTileColors.length, (i) {
-                        return _MemoryTile(
-                          size: size,
-                          color: _activeTileColors[i],
-                          isHighlighted: _highlightedTile == i,
-                          enabled: _phase == _Phase.input,
-                          onTap: () => _onTileTap(i),
-                        );
-                      }),
-                    ),
-                  );
-                },
+            // ── Tile grid (Expanded — never overflows) ───────────────────
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final rows =
+                        (_activeTileColors.length / _gridColumns).ceil();
+                    final byWidth =
+                        constraints.maxWidth.clamp(0.0, _maxGridWidth) /
+                            _gridColumns -
+                        _tileSpacing;
+                    final byHeight =
+                        (constraints.maxHeight - (rows - 1) * _tileSpacing) /
+                        rows;
+                    final size = min(byWidth, byHeight).clamp(60.0, 200.0);
+                    return Center(
+                      child: Wrap(
+                        spacing: _tileSpacing,
+                        runSpacing: _tileSpacing,
+                        alignment: WrapAlignment.center,
+                        children: List.generate(_activeTileColors.length, (i) {
+                          return _MemoryTile(
+                            size: size,
+                            color: _activeTileColors[i],
+                            isHighlighted: _highlightedTile == i,
+                            enabled: _phase == _Phase.input,
+                            onTap: () => _onTileTap(i),
+                          );
+                        }),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
 
-          // ── Progress bar during input ────────────────────────────────────
-          if (_phase == _Phase.input && _sequence.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Column(
-                children: [
-                  Text(
-                    l10n.memoryFlashSequenceLength(_sequence.length),
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: accent,
-                      fontWeight: FontWeight.w600,
+            // ── Progress bar during input ──────────────────────────────────
+            if (_phase == _Phase.input && _sequence.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: Column(
+                  children: [
+                    Text(
+                      l10n.memoryFlashSequenceLength(_sequence.length),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: accent,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  LinearProgressIndicator(
-                    value: _inputIndex / _sequence.length,
-                    color: accent,
-                    backgroundColor: accent.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ],
+                    const SizedBox(height: 6),
+                    LinearProgressIndicator(
+                      value: _inputIndex / _sequence.length,
+                      color: accent,
+                      backgroundColor: accent.withOpacity(0.15),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ],
+                ),
               ),
-            ),
+          ],
 
           // ── Bottom controls (sticky) ─────────────────────────────────────
           Padding(

@@ -234,6 +234,7 @@
     }
   },
   "hangmanTitle": "Galgenmännchen",
+  "hangmanDescription": "Rate das Wort Buchstabe für Buchstabe",
   "hangmanNewGame": "Neues Spiel",
   "hangmanPlayAgain": "Nochmal spielen",
   "hangmanYouWon": "Gewonnen!",
@@ -280,6 +281,7 @@
   "analyticsAvgLevel": "Durchschn. Level",
   "analyticsLevelDistribution": "Level-Verteilung",
   "memoryFlashTitle": "Memory Flash",
+  "memoryFlashDescription": "Schau dir die Reihenfolge an und wiederhole sie",
   "memoryFlashStart": "Start",
   "memoryFlashPlayAgain": "Nochmal spielen",
   "memoryFlashWatchSequence": "Sequenz beobachten…",

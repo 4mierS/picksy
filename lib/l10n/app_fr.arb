@@ -234,6 +234,7 @@
     }
   },
   "hangmanTitle": "Pendu",
+  "hangmanDescription": "Devinez le mot lettre par lettre",
   "hangmanNewGame": "Nouvelle partie",
   "hangmanPlayAgain": "Rejouer",
   "hangmanYouWon": "Vous avez gagné !",
@@ -280,6 +281,7 @@
   "analyticsAvgLevel": "Niveau moyen",
   "analyticsLevelDistribution": "Distribution des niveaux",
   "memoryFlashTitle": "Memory Flash",
+  "memoryFlashDescription": "Regardez la séquence et répétez-la",
   "memoryFlashStart": "Démarrer",
   "memoryFlashPlayAgain": "Rejouer",
   "memoryFlashWatchSequence": "Regardez la séquence…",
