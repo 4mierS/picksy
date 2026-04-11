@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:picksy/core/ui/app_colors.dart';
@@ -8,8 +9,10 @@ import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
+import 'package:picksy/storage/settings_store.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 enum _HangmanPhase { idle, playing, won, lost }
 
@@ -30,118 +33,40 @@ class _HangmanPageState extends State<HangmanPage> {
 
   static const int _maxWrongGuesses = 6;
 
-  // Settings
-  int _minLength = 4;
-  int _maxLength = 8;
+  List<String> _wordList = [];
 
-  static const int _historyMaxEntries = 100;
+  @override
+  void initState() {
+    super.initState();
+    _loadWordList();
+  }
 
-  static const List<String> _wordList = [
-    'apple',
-    'banana',
-    'cherry',
-    'dragon',
-    'eagle',
-    'forest',
-    'guitar',
-    'harbor',
-    'island',
-    'jungle',
-    'kettle',
-    'lemon',
-    'mango',
-    'nature',
-    'orange',
-    'panda',
-    'queen',
-    'river',
-    'sunset',
-    'tiger',
-    'umbrella',
-    'violet',
-    'walrus',
-    'xenon',
-    'yellow',
-    'zebra',
-    'anchor',
-    'bridge',
-    'candle',
-    'desert',
-    'engine',
-    'flower',
-    'garden',
-    'hammer',
-    'igloo',
-    'jacket',
-    'kitten',
-    'lantern',
-    'mirror',
-    'needle',
-    'otter',
-    'pepper',
-    'quartz',
-    'rocket',
-    'saddle',
-    'turtle',
-    'upward',
-    'vendor',
-    'winter',
-    'xylem',
-    'yogurt',
-    'zipper',
-    'almond',
-    'button',
-    'cactus',
-    'dagger',
-    'elbow',
-    'falcon',
-    'goblin',
-    'hunter',
-    'insect',
-    'jigsaw',
-    'kernel',
-    'locket',
-    'marble',
-    'napkin',
-    'oyster',
-    'pirate',
-    'rabbit',
-    'salmon',
-    'switch',
-    'teapot',
-    'unfold',
-    'valley',
-    'walnut',
-    'branch',
-    'castle',
-    'donkey',
-    'empire',
-    'feather',
-    'goblet',
-    'helmet',
-    'invent',
-    'jewel',
-    'knight',
-    'ladder',
-    'magnet',
-    'nimble',
-    'onion',
-    'puzzle',
-    'quiver',
-    'riddle',
-    'shield',
-    'throne',
-    'utopia',
-    'vessel',
-    'wander',
-    'parrot',
-    'basket',
-    'canopy',
-  ];
+  Future<void> _loadWordList() async {
+    final lang = context.read<SettingsStore>().languageCode;
+    final asset = 'assets/words/$lang.txt';
+    try {
+      final raw = await rootBundle.loadString(asset);
+      final words = raw
+          .split('\n')
+          .map((w) => w.trim())
+          .where((w) => w.isNotEmpty)
+          .toList();
+      if (mounted) setState(() => _wordList = words);
+    } catch (_) {
+      // fallback to English if locale file missing
+      final raw = await rootBundle.loadString('assets/words/en.txt');
+      final words = raw
+          .split('\n')
+          .map((w) => w.trim())
+          .where((w) => w.isNotEmpty)
+          .toList();
+      if (mounted) setState(() => _wordList = words);
+    }
+  }
 
   void _startGame() {
     final filtered = _wordList
-        .where((w) => w.length >= _minLength && w.length <= _maxLength)
+        .where((w) => w.length >= 4 && w.length <= 10)
         .toList();
     if (filtered.isEmpty) return;
 
@@ -150,6 +75,15 @@ class _HangmanPageState extends State<HangmanPage> {
       _guessed.clear();
       _wrongGuesses = 0;
       _phase = _HangmanPhase.playing;
+    });
+  }
+
+  void _cancel() {
+    setState(() {
+      _phase = _HangmanPhase.idle;
+      _word = '';
+      _guessed.clear();
+      _wrongGuesses = 0;
     });
   }
 
@@ -186,7 +120,7 @@ class _HangmanPageState extends State<HangmanPage> {
     history.add(
       type: GeneratorType.hangman,
       value: value,
-      maxEntries: _historyMaxEntries,
+      maxEntries: context.gateRead.historyMax,
       metadata: {'won': won, 'wordLength': _word.length},
     );
   }
@@ -229,124 +163,139 @@ class _HangmanPageState extends State<HangmanPage> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Hangman drawing
-              Container(
-                height: 200,
-                decoration: AppStyles.generatorResultCard(accent),
-                child: CustomPaint(
-                  painter: _HangmanPainter(
-                    wrongGuesses: _wrongGuesses,
-                    accent: accent,
-                  ),
+      body: Column(
+        children: [
+          // ── Central area ─────────────────────────────────────────────────
+          Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Hangman drawing
+                    SizedBox(
+                      height: 200,
+                      width: double.infinity,
+                      child: CustomPaint(
+                        painter: _HangmanPainter(
+                          wrongGuesses: _wrongGuesses,
+                          accent: accent,
+                        ),
+                      ),
+                    ),
+
+                    if (_phase != _HangmanPhase.idle) ...[
+                      const SizedBox(height: 20),
+
+                      // Word display
+                      _WordDisplay(
+                        word: _word,
+                        guessed: _guessed,
+                        accent: accent,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Attempts left
+                      if (_phase == _HangmanPhase.playing)
+                        Text(
+                          l10n.hangmanAttemptsLeft(
+                            _maxWrongGuesses - _wrongGuesses,
+                          ),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
+                        ),
+
+                      // Wrong letters
+                      if (_wrongLetters.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          '${l10n.hangmanWrongLetters} ${_wrongLetters.join(' ')}',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.redAccent,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+
+                      // Won / Lost message
+                      if (_phase == _HangmanPhase.won) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          l10n.hangmanYouWon,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                      if (_phase == _HangmanPhase.lost) ...[
+                        const SizedBox(height: 12),
+                        Text(
+                          l10n.hangmanYouLost(_word),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.redAccent,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ],
+                  ],
                 ),
               ),
-              const SizedBox(height: 16),
+            ),
+          ),
 
-              if (_phase == _HangmanPhase.idle) ...[
-                Text(
-                  l10n.hangmanGuessWord,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
+          // ── Bottom controls (sticky) ──────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (_phase == _HangmanPhase.idle) ...[
+                  FilledButton.icon(
                     style: AppStyles.generatorButton(accent),
                     onPressed: _startGame,
-                    child: Text(l10n.hangmanNewGame),
+                    icon: const Icon(Icons.casino),
+                    label: Text(l10n.hangmanNewGame),
                   ),
-                ),
-              ],
-
-              if (_phase == _HangmanPhase.playing ||
-                  _phase == _HangmanPhase.won ||
-                  _phase == _HangmanPhase.lost) ...[
-                // Word display
-                _WordDisplay(word: _word, guessed: _guessed, accent: accent),
-                const SizedBox(height: 12),
-
-                // Attempts left
-                if (_phase == _HangmanPhase.playing) ...[
-                  Text(
-                    l10n.hangmanAttemptsLeft(_maxWrongGuesses - _wrongGuesses),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 4),
-                ],
-
-                // Wrong letters
-                if (_wrongLetters.isNotEmpty) ...[
-                  Text(
-                    '${l10n.hangmanWrongLetters} ${_wrongLetters.join(' ')}',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: Colors.redAccent),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                ],
-
-                // Win / Loss message
-                if (_phase == _HangmanPhase.won) ...[
-                  Text(
-                    l10n.hangmanYouWon,
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                ],
-                if (_phase == _HangmanPhase.lost) ...[
-                  Text(
-                    l10n.hangmanYouLost(_word),
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.redAccent,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                ],
-
-                // Keyboard
-                if (_phase == _HangmanPhase.playing)
+                ] else if (_phase == _HangmanPhase.playing) ...[
                   _LetterKeyboard(
                     guessed: _guessed,
                     word: _word,
                     accent: accent,
                     onGuess: _guessLetter,
                   ),
-
-                if (_phase == _HangmanPhase.won ||
-                    _phase == _HangmanPhase.lost) ...[
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: AppStyles.generatorButton(accent),
-                      onPressed: _startGame,
-                      child: Text(l10n.hangmanPlayAgain),
+                  const SizedBox(height: 8),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      side: const BorderSide(color: Colors.redAccent, width: 1),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
                     ),
+                    onPressed: _cancel,
+                    child: Text(l10n.commonCancel),
+                  ),
+                ] else ...[
+                  FilledButton.icon(
+                    style: AppStyles.generatorButton(accent),
+                    onPressed: _startGame,
+                    icon: const Icon(Icons.casino),
+                    label: Text(l10n.hangmanPlayAgain),
                   ),
                 ],
-                const SizedBox(height: 16),
               ],
-
-              const SizedBox(height: 6),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -368,6 +317,7 @@ class _WordDisplay extends StatelessWidget {
     return Wrap(
       alignment: WrapAlignment.center,
       spacing: 8,
+      runSpacing: 8,
       children: word.split('').map((letter) {
         final revealed = guessed.contains(letter);
         return Column(
@@ -376,12 +326,12 @@ class _WordDisplay extends StatelessWidget {
             Text(
               revealed ? letter : ' ',
               style: TextStyle(
-                fontSize: 26,
+                fontSize: 28,
                 fontWeight: FontWeight.bold,
                 color: accent,
               ),
             ),
-            Container(width: 22, height: 2, color: accent.withOpacity(0.6)),
+            Container(width: 24, height: 2.5, color: accent.withOpacity(0.6)),
           ],
         );
       }).toList(),
@@ -492,7 +442,6 @@ class _HangmanPainter extends CustomPainter {
     final double w = size.width;
     final double h = size.height;
 
-    // Gallows: base, pole, beam, rope
     // Base
     canvas.drawLine(
       Offset(w * 0.1, h * 0.9),
