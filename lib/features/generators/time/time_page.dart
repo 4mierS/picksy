@@ -10,7 +10,6 @@ import '../../../core/gating/feature_gate.dart';
 import '../../../l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
-import 'package:picksy/storage/premium_store.dart';
 import 'package:picksy/storage/boxes.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 import 'package:picksy/features/generators/shared/generator_widgets.dart';
@@ -29,15 +28,11 @@ class _TimePageState extends State<TimePage> {
   static const _kMinKey = 'time.minSec';
   static const _kMaxKey = 'time.maxSec';
 
-  // Settings
   bool _hideTime = false;
-  bool _vibrateOnFinish = true;
 
-  // Pro Range settings (seconds)
   int _minSec = 3;
   int _maxSec = 8;
 
-  // Runtime
   bool _running = false;
   bool _finished = false;
   bool _revealHiddenAtEnd = false;
@@ -53,9 +48,7 @@ class _TimePageState extends State<TimePage> {
     final box = Boxes.box(Boxes.settings);
     _minSec = (box.get(_kMinKey, defaultValue: 3) as num).toInt();
     _maxSec = (box.get(_kMaxKey, defaultValue: 8) as num).toInt();
-    if (_maxSec < _minSec) {
-      _maxSec = _minSec;
-    }
+    if (_maxSec < _minSec) _maxSec = _minSec;
   }
 
   Future<void> _persistRange() async {
@@ -73,7 +66,6 @@ class _TimePageState extends State<TimePage> {
   void _reset() {
     _tick?.cancel();
     _sw?.stop();
-
     setState(() {
       _running = false;
       _finished = false;
@@ -83,56 +75,56 @@ class _TimePageState extends State<TimePage> {
     });
   }
 
-  int _pickRandomMs(int minMs, int maxMs) {
-    if (maxMs < minMs) return minMs;
-    final span = maxMs - minMs + 1;
-    return minMs + _rng.nextInt(span);
-  }
-
-  Future<void> _finish({
-    required bool hideTime,
-    required bool vibrateOnFinish,
-  }) async {
+  Future<void> _stop() async {
     _tick?.cancel();
     _sw?.stop();
-
+    final finalMs = _elapsedMs;
     setState(() {
       _running = false;
       _finished = true;
-      _revealHiddenAtEnd = hideTime;
+      _targetMs = finalMs;
+      _revealHiddenAtEnd = _hideTime;
     });
-
-    if (_targetMs != null) {
-      final sec = _targetMs! ~/ 1000;
-      final milli = (_targetMs! % 1000).toString().padLeft(3, '0');
-      final value = context.l10n.timeFormatted(sec, milli);
-      await context.read<HistoryStore>().add(
-        type: GeneratorType.time,
-        value: value,
-        maxEntries: context.gateRead.historyMax,
-        metadata: {'targetMs': _targetMs},
-      );
-    }
-
-    if (vibrateOnFinish) {
-      final hasVibrator = await Vibration.hasVibrator();
-      if (hasVibrator) Vibration.vibrate(duration: 500);
-    }
+    await _saveHistory(finalMs);
+    await _vibrate();
   }
 
-  void _start({
-    required bool isPro,
-    required int minSec,
-    required int maxSec,
-    required bool hideTime,
-    required bool vibrateOnFinish,
-  }) {
+  Future<void> _finish(int targetMs) async {
+    _tick?.cancel();
+    _sw?.stop();
+    setState(() {
+      _running = false;
+      _finished = true;
+      _elapsedMs = targetMs;
+      _revealHiddenAtEnd = _hideTime;
+    });
+    await _saveHistory(targetMs);
+    await _vibrate();
+  }
+
+  Future<void> _saveHistory(int ms) async {
+    final sec = ms ~/ 1000;
+    final milli = (ms % 1000).toString().padLeft(3, '0');
+    final value = context.l10n.timeFormatted(sec, milli);
+    await context.read<HistoryStore>().add(
+      type: GeneratorType.time,
+      value: value,
+      maxEntries: context.gateRead.historyMax,
+      metadata: {'targetMs': ms},
+    );
+  }
+
+  Future<void> _vibrate() async {
+    final hasVibrator = await Vibration.hasVibrator();
+    if (hasVibrator ?? false) Vibration.vibrate(duration: 500);
+  }
+
+  void _start(bool isPro) {
     _tick?.cancel();
 
-    final min = isPro ? minSec * 1000 : _freeMinSec * 1000;
-    final max = isPro ? maxSec * 1000 : _freeMaxSec * 1000;
-
-    final picked = _pickRandomMs(min, max);
+    final minMs = (isPro ? _minSec : _freeMinSec) * 1000;
+    final maxMs = (isPro ? _maxSec : _freeMaxSec) * 1000;
+    final picked = minMs + _rng.nextInt((maxMs - minMs + 1).clamp(1, maxMs - minMs + 1));
 
     _sw = Stopwatch()..start();
 
@@ -144,18 +136,15 @@ class _TimePageState extends State<TimePage> {
       _elapsedMs = 0;
     });
 
-    _tick = Timer.periodic(const Duration(milliseconds: 16), (t) async {
+    _tick = Timer.periodic(const Duration(milliseconds: 16), (_) async {
       if (!mounted) return;
-
       final elapsed = _sw!.elapsedMilliseconds;
-
-      if (_targetMs != null && elapsed >= _targetMs!) {
+      if (elapsed >= _targetMs!) {
         _sw!.stop();
         setState(() => _elapsedMs = _targetMs!);
-        await _finish(hideTime: hideTime, vibrateOnFinish: vibrateOnFinish);
+        await _finish(_targetMs!);
         return;
       }
-
       setState(() => _elapsedMs = elapsed);
     });
   }
@@ -163,19 +152,9 @@ class _TimePageState extends State<TimePage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final premium = context.watch<PremiumStore>();
-    final isPro = premium.isPro;
+    final gate = context.gate;
+    final isPro = gate.isPro;
     final accent = GeneratorType.time.accentColor;
-    final hideTime = _hideTime;
-    final vibrateOnFinish = _vibrateOnFinish;
-    final minSec = _minSec;
-    final maxSec = _maxSec;
-
-    final bg = _finished
-        ? Colors.red.shade700
-        : Theme.of(context).scaffoldBackgroundColor;
-
-    final showTimeNow = !_hideTime || _revealHiddenAtEnd;
 
     String formatMs(int ms) {
       final seconds = ms ~/ 1000;
@@ -183,53 +162,20 @@ class _TimePageState extends State<TimePage> {
       return l10n.timeFormatted(seconds, milli.toString().padLeft(3, '0'));
     }
 
-    void openProDialog() => showProDialog(
-      context,
-      title: l10n.timeRangeSeconds,
-      message: l10n.timeProCustomRangeHint,
-      generatorType: GeneratorType.time,
-    );
-
-    // Build the time display widget used inside ResultDisplayArea
-    Widget timeDisplay;
-    if (!showTimeNow) {
-      timeDisplay = _HiddenPulse(running: _running);
-    } else {
-      final displayText = _targetMs == null ? l10n.timeReady : formatMs(_elapsedMs);
-      timeDisplay = Text(
-        displayText,
-        style: const TextStyle(fontSize: 56, fontWeight: FontWeight.w800),
-      );
-    }
-
-    // Tap behaviour: start if not running/finished, reset if finished
-    VoidCallback? onTap;
-    if (_running) {
-      onTap = null;
-    } else if (_finished) {
-      onTap = _reset;
-    } else {
-      onTap = () => _start(
-        isPro: isPro,
-        minSec: _minSec,
-        maxSec: _maxSec,
-        hideTime: _hideTime,
-        vibrateOnFinish: _vibrateOnFinish,
-      );
-    }
+    final showTime = !_hideTime || _revealHiddenAtEnd;
 
     return Scaffold(
-      backgroundColor: _finished
-          ? Colors.red.shade700
-          : Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor:
+          _finished ? Colors.red.shade700 : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Text(l10n.timeTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.bar_chart),
             tooltip: l10n.analyticsTitle,
             onPressed: () {
-              if (isPro) {
+              if (gate.canUse(ProFeature.analyticsAccess)) {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -250,79 +196,193 @@ class _TimePageState extends State<TimePage> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      body: Column(
         children: [
-          // Result area (tap to start / tap again to reset)
-          ResultDisplayArea(
-            accentColor: accent,
-            hint: l10n.timeReady,
-            minHeight: 160,
-            onTap: onTap,
-            child: Center(child: timeDisplay),
+          // ── Time display (centered) ──────────────────────────────────────
+          Expanded(
+            child: Center(
+              child: _hideTime && _running && !_revealHiddenAtEnd
+                  ? _HiddenPulse(running: _running)
+                  : Text(
+                      _targetMs == null
+                          ? l10n.timeReady
+                          : formatMs(_elapsedMs),
+                      style: TextStyle(
+                        fontSize: 64,
+                        fontWeight: FontWeight.w900,
+                        color: _finished
+                            ? Colors.white
+                            : (_running ? accent : accent.withOpacity(0.55)),
+                      ),
+                    ),
+            ),
           ),
 
-          const SizedBox(height: 12),
-
-          _ControlsCard(
-            isPro: isPro,
-            running: _running,
-            freeMinSec: _freeMinSec,
-            freeMaxSec: _freeMaxSec,
-            hideTime: hideTime,
-            minSec: minSec,
-            maxSec: maxSec,
-            onToggleHide: (value) => setState(() => _hideTime = value),
-            onRangeChanged: (min, max) async {
-              setState(() {
-                _minSec = min;
-                _maxSec = max;
-              });
-              await _persistRange();
-            },
-          ),
-
-          const SizedBox(height: 12),
-
-          Row(
-            children: [
-              Expanded(
-                child: OutlinedButton(
-                  onPressed: _running
-                      ? _reset
-                      : (_targetMs == null && !_finished ? null : _reset),
-                  child: Text(l10n.timeReset),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: ElevatedButton(
-                  style: AppStyles.generatorButton(
-                    GeneratorType.time.accentColor,
-                  ),
-                  onPressed: _running
-                      ? null
-                      : () => _start(
-                          isPro: isPro,
-                          minSec: minSec,
-                          maxSec: maxSec,
-                          hideTime: hideTime,
-                          vibrateOnFinish: vibrateOnFinish,
+          // ── Bottom controls (sticky) ─────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Range label
+                Row(
+                  children: [
+                    GeneratorSectionTitle(l10n.timeRangeSeconds),
+                    if (!isPro) ...[
+                      const SizedBox(width: 8),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
                         ),
-                  child: Text(_finished ? l10n.timeAgain : l10n.timeStart),
+                        decoration: BoxDecoration(
+                          color: AppColors.proPurple.withOpacity(0.14),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          l10n.proBadge,
+                          style: const TextStyle(
+                            color: AppColors.proPurple,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
-              ),
-            ],
-          ),
+                const SizedBox(height: 8),
 
-          const SizedBox(height: 10),
+                // Range row
+                Row(
+                  children: [
+                    Expanded(
+                      child: isPro
+                          ? _TimeStepper(
+                              label: l10n.numberMin,
+                              value: _minSec,
+                              disabled: _running,
+                              onChanged: (v) {
+                                final newMin = v;
+                                final newMax = _maxSec < newMin ? newMin : _maxSec;
+                                setState(() {
+                                  _minSec = newMin;
+                                  _maxSec = newMax;
+                                });
+                                _persistRange();
+                              },
+                            )
+                          : GestureDetector(
+                              onTap: () => showProDialog(
+                                context,
+                                title: l10n.timeRangeSeconds,
+                                message: l10n.timeRangeSeconds,
+                                generatorType: GeneratorType.time,
+                              ),
+                              child: _TimeLockedField(
+                                label: l10n.numberMin,
+                                value: '$_freeMinSec s',
+                              ),
+                            ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: isPro
+                          ? _TimeStepper(
+                              label: l10n.numberMax,
+                              value: _maxSec,
+                              disabled: _running,
+                              onChanged: (v) {
+                                final newMax = v;
+                                final newMin = _minSec > newMax ? newMax : _minSec;
+                                setState(() {
+                                  _minSec = newMin;
+                                  _maxSec = newMax;
+                                });
+                                _persistRange();
+                              },
+                            )
+                          : GestureDetector(
+                              onTap: () => showProDialog(
+                                context,
+                                title: l10n.timeRangeSeconds,
+                                message: l10n.timeRangeSeconds,
+                                generatorType: GeneratorType.time,
+                              ),
+                              child: _TimeLockedField(
+                                label: l10n.numberMax,
+                                value: '$_freeMaxSec s',
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
 
-          Text(
-            isPro
-                ? l10n.timeProCustomRangeHint
-                : l10n.timeFreeCustomRangeHint(_freeMinSec, _freeMaxSec),
-            style: Theme.of(context).textTheme.bodySmall,
-            textAlign: TextAlign.center,
+                const SizedBox(height: 8),
+
+                // Hide time switch
+                SwitchListTile(
+                  contentPadding: EdgeInsets.zero,
+                  activeColor: accent,
+                  title: Text(l10n.timeHideTime),
+                  value: _hideTime,
+                  onChanged: _running ? null : (v) => setState(() => _hideTime = v),
+                ),
+
+                const SizedBox(height: 8),
+
+                // Action button
+                if (_running)
+                  FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.red.shade600,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                    onPressed: _stop,
+                    icon: const Icon(Icons.stop_rounded),
+                    label: Text(l10n.timeStop),
+                  )
+                else if (_finished)
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: accent,
+                            side: BorderSide(color: accent.withOpacity(0.5)),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                          ),
+                          onPressed: _reset,
+                          icon: const Icon(Icons.refresh),
+                          label: Text(l10n.timeReset),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: FilledButton.icon(
+                          style: AppStyles.generatorButton(accent),
+                          onPressed: () => _start(isPro),
+                          icon: const Icon(Icons.casino),
+                          label: Text(l10n.timeAgain),
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  FilledButton.icon(
+                    style: AppStyles.generatorButton(accent),
+                    onPressed: () => _start(isPro),
+                    icon: const Icon(Icons.casino),
+                    label: Text(l10n.timeStart),
+                  ),
+              ],
+            ),
           ),
         ],
       ),
@@ -330,182 +390,109 @@ class _TimePageState extends State<TimePage> {
   }
 }
 
-class _ControlsCard extends StatelessWidget {
-  const _ControlsCard({
-    required this.isPro,
-    required this.running,
-    required this.freeMinSec,
-    required this.freeMaxSec,
-    required this.hideTime,
-    required this.minSec,
-    required this.maxSec,
-    required this.onToggleHide,
-    required this.onRangeChanged,
-  });
-
-  final bool isPro;
-  final bool running;
-  final int freeMinSec;
-  final int freeMaxSec;
-
-  final bool hideTime;
-
-  final int minSec;
-  final int maxSec;
-
-  final ValueChanged<bool> onToggleHide;
-  final void Function(int min, int max) onRangeChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final disabled = running;
-
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            SwitchListTile(
-              value: hideTime,
-              onChanged: disabled ? null : onToggleHide,
-              title: Text(l10n.timeHideTime),
-              subtitle: Text(l10n.timeHideTimeSubtitle),
-            ),
-            const Divider(),
-
-            // Range
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    l10n.timeRangeSeconds,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                ),
-                if (!isPro)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.proPurple.withOpacity(0.14),
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text(
-                      l10n.proBadge,
-                      style: const TextStyle(color: AppColors.proPurple),
-                    ),
-                  ),
-              ],
-            ),
-
-            const SizedBox(height: 10),
-
-            if (!isPro)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(l10n.timeFreeFixedRange(freeMinSec, freeMaxSec)),
-              ),
-
-            if (isPro) ...[
-              Row(
-                children: [
-                  Expanded(
-                    child: _NumberStepper(
-                      label: l10n.numberMin,
-                      value: minSec,
-                      min: 1,
-                      max: 3600,
-                      onChanged: running
-                          ? null
-                          : (v) {
-                              final newMin = v;
-                              final newMax = maxSec < newMin ? newMin : maxSec;
-                              onRangeChanged(newMin, newMax);
-                            },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _NumberStepper(
-                      label: l10n.numberMax,
-                      value: maxSec,
-                      min: 1,
-                      max: 3600,
-                      onChanged: running
-                          ? null
-                          : (v) {
-                              final newMax = v;
-                              final newMin = minSec > newMax ? newMax : minSec;
-                              onRangeChanged(newMin, newMax);
-                            },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _NumberStepper extends StatelessWidget {
-  const _NumberStepper({
+class _TimeStepper extends StatelessWidget {
+  const _TimeStepper({
     required this.label,
     required this.value,
-    required this.min,
-    required this.max,
+    required this.disabled,
     required this.onChanged,
   });
 
   final String label;
   final int value;
-  final int min;
-  final int max;
-  final ValueChanged<int>? onChanged;
+  final bool disabled;
+  final ValueChanged<int> onChanged;
+
+  static const _min = 1;
+  static const _max = 3600;
 
   @override
   Widget build(BuildContext context) {
+    final accent = GeneratorType.time.accentColor;
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.04),
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: accent.withOpacity(0.4)),
+        color: accent.withOpacity(0.08),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: Theme.of(context).textTheme.bodySmall),
-          const SizedBox(height: 8),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: accent),
+          ),
           Row(
             children: [
               IconButton(
-                onPressed: onChanged == null
+                padding: EdgeInsets.zero,
+                iconSize: 20,
+                color: accent,
+                onPressed: disabled
                     ? null
-                    : () => onChanged!((value - 1).clamp(min, max)),
+                    : () => onChanged((value - 1).clamp(_min, _max)),
                 icon: const Icon(Icons.remove),
               ),
               Expanded(
                 child: Text(
-                  '$value',
+                  '$value s',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
+                    color: accent,
                   ),
                 ),
               ),
               IconButton(
-                onPressed: onChanged == null
+                padding: EdgeInsets.zero,
+                iconSize: 20,
+                color: accent,
+                onPressed: disabled
                     ? null
-                    : () => onChanged!((value + 1).clamp(min, max)),
+                    : () => onChanged((value + 1).clamp(_min, _max)),
                 icon: const Icon(Icons.add),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TimeLockedField extends StatelessWidget {
+  const _TimeLockedField({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = GeneratorType.time.accentColor;
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: accent.withOpacity(0.4)),
+        color: accent.withOpacity(0.08),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: accent),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              color: accent,
+            ),
           ),
         ],
       ),
@@ -530,10 +517,9 @@ class _HiddenPulse extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             running ? l10n.timeRunning : l10n.timeHidden,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
         ],
       ),

@@ -219,44 +219,9 @@
   "timeReset": "Reiniciar",
   "timeAgain": "Otra vez",
   "timeStart": "Iniciar",
-  "timeProCustomRangeHint": "Pro: elige un rango personalizado.",
-  "timeFreeCustomRangeHint": "Gratis: rango fijo de {minSec}–{maxSec} segundos. Mejora para rangos personalizados.",
-  "@timeFreeCustomRangeHint": {
-    "placeholders": {
-      "minSec": {
-        "type": "int"
-      },
-      "maxSec": {
-        "type": "int"
-      }
-    }
-  },
+  "timeStop": "Detener",
   "timeHideTime": "Ocultar tiempo",
-  "timeHideTimeSubtitle": "Mostrar el tiempo solo al final (Hot Potato).",
-  "timeVibrateOnFinish": "Vibrar al terminar",
   "timeRangeSeconds": "Rango (segundos)",
-  "timeFreeFixedRange": "Gratis: fijo {minSec}–{maxSec}s",
-  "@timeFreeFixedRange": {
-    "placeholders": {
-      "minSec": {
-        "type": "int"
-      },
-      "maxSec": {
-        "type": "int"
-      }
-    }
-  },
-  "timeCurrentRange": "Actual: {min} - {max} s",
-  "@timeCurrentRange": {
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
   "timeRunning": "En curso…",
   "timeHidden": "Oculto",
   "timeFormatted": "{seconds}s {milliseconds}ms",

@@ -564,35 +564,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get timeStart => 'Start';
 
   @override
-  String get timeProCustomRangeHint => 'Pro: Wähle einen eigenen Bereich.';
-
-  @override
-  String timeFreeCustomRangeHint(int minSec, int maxSec) {
-    return 'Free: fester Bereich $minSec–$maxSec Sekunden. Upgrade für eigene Bereiche.';
-  }
+  String get timeStop => 'Stopp';
 
   @override
   String get timeHideTime => 'Zeit ausblenden';
 
   @override
-  String get timeHideTimeSubtitle =>
-      'Zeige die Zeit erst am Ende an (Hot Potato).';
-
-  @override
-  String get timeVibrateOnFinish => 'Bei Ende vibrieren';
-
-  @override
   String get timeRangeSeconds => 'Bereich (Sekunden)';
-
-  @override
-  String timeFreeFixedRange(int minSec, int maxSec) {
-    return 'Free: fest $minSec–${maxSec}s';
-  }
-
-  @override
-  String timeCurrentRange(int min, int max) {
-    return 'Aktuell: $min - $max s';
-  }
 
   @override
   String get timeRunning => 'Läuft…';

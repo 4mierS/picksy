@@ -1160,17 +1160,11 @@ abstract class AppLocalizations {
   /// **'Start'**
   String get timeStart;
 
-  /// No description provided for @timeProCustomRangeHint.
+  /// No description provided for @timeStop.
   ///
   /// In en, this message translates to:
-  /// **'Pro: choose a custom range.'**
-  String get timeProCustomRangeHint;
-
-  /// No description provided for @timeFreeCustomRangeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Free: fixed range {minSec}–{maxSec} seconds. Upgrade for custom ranges.'**
-  String timeFreeCustomRangeHint(int minSec, int maxSec);
+  /// **'Stop'**
+  String get timeStop;
 
   /// No description provided for @timeHideTime.
   ///
@@ -1178,35 +1172,11 @@ abstract class AppLocalizations {
   /// **'Hide time'**
   String get timeHideTime;
 
-  /// No description provided for @timeHideTimeSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Reveal the time only when it ends (Hot Potato).'**
-  String get timeHideTimeSubtitle;
-
-  /// No description provided for @timeVibrateOnFinish.
-  ///
-  /// In en, this message translates to:
-  /// **'Vibrate on finish'**
-  String get timeVibrateOnFinish;
-
   /// No description provided for @timeRangeSeconds.
   ///
   /// In en, this message translates to:
   /// **'Range (seconds)'**
   String get timeRangeSeconds;
-
-  /// No description provided for @timeFreeFixedRange.
-  ///
-  /// In en, this message translates to:
-  /// **'Free: fixed {minSec}–{maxSec}s'**
-  String timeFreeFixedRange(int minSec, int maxSec);
-
-  /// No description provided for @timeCurrentRange.
-  ///
-  /// In en, this message translates to:
-  /// **'Current: {min} - {max} s'**
-  String timeCurrentRange(int min, int max);
 
   /// No description provided for @timeRunning.
   ///
