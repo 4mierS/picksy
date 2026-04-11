@@ -8,7 +8,7 @@ import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
-import 'package:picksy/l10n/app_localizations.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
@@ -23,13 +23,14 @@ class _GameColor {
   const _GameColor(this.word, this.color);
 }
 
+// 6 visually distinct, strongly saturated colors (same palette as memory flash)
 const _kGameColors = [
-  _GameColor('RED', Colors.red),
-  _GameColor('GREEN', Colors.green),
-  _GameColor('BLUE', Colors.blue),
+  _GameColor('RED', Color(0xFFE53935)),
+  _GameColor('GREEN', Color(0xFF43A047)),
+  _GameColor('BLUE', Color(0xFF1E88E5)),
   _GameColor('YELLOW', Color(0xFFF9A825)),
-  _GameColor('PURPLE', Colors.purple),
-  _GameColor('ORANGE', Colors.orange),
+  _GameColor('ORANGE', Color(0xFFFF6D00)),
+  _GameColor('PURPLE', Color(0xFF8E24AA)),
 ];
 
 const _kFreeDuration = 30;
@@ -62,8 +63,6 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   // Settings
   int _durationSeconds = _kFreeDuration;
   _AnswerMode _answerMode = _AnswerMode.color;
-  bool _includeYellow = true;
-  bool _includeOrange = true;
 
   // Countdown state
   int _countdownValue = 3;
@@ -78,7 +77,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
 
   // Current challenge
   late _GameColor _wordColor; // which word to display
-  late _GameColor _textColor; // actual text color (the correct answer)
+  late _GameColor _textColor; // actual text color
   late List<_GameColor> _choices; // 4 shuffled buttons
 
   // Reaction-time tracking
@@ -92,18 +91,6 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   // Brief wrong-answer flash
   bool _showWrong = false;
   Timer? _wrongTimer;
-
-  List<_GameColor> get _availableColors {
-    final pool = <_GameColor>[
-      _kGameColors.firstWhere((e) => e.word == 'RED'),
-      _kGameColors.firstWhere((e) => e.word == 'GREEN'),
-      _kGameColors.firstWhere((e) => e.word == 'BLUE'),
-      _kGameColors.firstWhere((e) => e.word == 'PURPLE'),
-      if (_includeYellow) _kGameColors.firstWhere((e) => e.word == 'YELLOW'),
-      if (_includeOrange) _kGameColors.firstWhere((e) => e.word == 'ORANGE'),
-    ];
-    return pool.length >= 4 ? pool : _kGameColors.take(4).toList();
-  }
 
   @override
   void dispose() {
@@ -164,7 +151,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   }
 
   void _generateChallenge() {
-    final activeColors = _availableColors;
+    const activeColors = _kGameColors;
     int wordIdx;
     int colorIdx;
 
@@ -181,11 +168,15 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
     _wordColor = activeColors[wordIdx];
     _textColor = activeColors[colorIdx];
 
-    // Build 4 choices: correct + 3 random others (uniform distribution)
+    // Correct index depends on answer mode:
+    // - color mode: tap button whose color == _textColor → colorIdx
+    // - word mode: tap button whose word == _wordColor.word → wordIdx
+    final correctIdx =
+        _answerMode == _AnswerMode.word ? wordIdx : colorIdx;
     final others = List.generate(activeColors.length, (i) => i)
-      ..remove(colorIdx)
+      ..remove(correctIdx)
       ..shuffle(_rng);
-    final choiceIndices = [colorIdx, others[0], others[1], others[2]]
+    final choiceIndices = [correctIdx, others[0], others[1], others[2]]
       ..shuffle(_rng);
     _choices = choiceIndices.map((i) => activeColors[i]).toList();
 
@@ -195,9 +186,8 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   void _onChoice(_GameColor choice) {
     if (_phase != _Phase.playing) return;
 
-    final reactionMs = DateTime.now()
-        .difference(_questionStart!)
-        .inMilliseconds;
+    final reactionMs =
+        DateTime.now().difference(_questionStart!).inMilliseconds;
 
     final isCorrect = _answerMode == _AnswerMode.color
         ? choice.color == _textColor.color
@@ -228,13 +218,11 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
 
     final total = _correct + _wrong;
     final accuracy = total > 0 ? (_correct / total * 100) : 0.0;
-    final avgReactionMs = _reactionCount > 0
-        ? _totalReactionMs ~/ _reactionCount
-        : 0;
+    final avgReactionMs =
+        _reactionCount > 0 ? _totalReactionMs ~/ _reactionCount : 0;
 
     setState(() => _phase = _Phase.result);
 
-    // Store in history
     final historyStore = context.read<HistoryStore>();
     await historyStore.add(
       type: GeneratorType.colorReflex,
@@ -260,10 +248,6 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
     });
   }
 
-  // -------------------------------------------------------------------------
-  // Duration selector (Pro-gated)
-  // -------------------------------------------------------------------------
-
   void _onDurationTap(int seconds) {
     final gate = context.gateRead;
     if (seconds != _kFreeDuration &&
@@ -274,7 +258,6 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
         title: l10n.colorReflexDurationProTitle,
         message: l10n.colorReflexDurationProMessage,
         generatorType: GeneratorType.colorReflex,
-        featureDefinitions: [l10n.colorReflexFreeProHint],
       );
       return;
     }
@@ -322,10 +305,10 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
       ),
       body: SafeArea(
         child: switch (_phase) {
-          _Phase.idle => _buildIdle(context, l10n, gate, accent),
+          _Phase.idle => _buildIdle(l10n, gate, accent),
           _Phase.countdown => _buildCountdown(accent),
-          _Phase.playing => _buildPlaying(accent),
-          _Phase.result => _buildResult(context, accent),
+          _Phase.playing => _buildPlaying(l10n, accent),
+          _Phase.result => _buildResult(l10n, accent),
         },
       ),
     );
@@ -335,163 +318,159 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   // Idle screen
   // -------------------------------------------------------------------------
 
-  Widget _buildIdle(
-    BuildContext context,
-    AppLocalizations l10n,
-    FeatureGate gate,
-    Color accent,
-  ) {
-    return ListView(
-      padding: const EdgeInsets.all(16),
+  Widget _buildIdle(dynamic l10n, FeatureGate gate, Color accent) {
+    final canChangeDuration = gate.canUse(ProFeature.colorReflexDuration);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Instructions card
-        Container(
-          width: double.infinity,
-          constraints: const BoxConstraints(minHeight: 130),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
-          decoration: AppStyles.generatorResultCard(accent),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(GeneratorType.colorReflex.homeIcon, color: accent, size: 40),
-              const SizedBox(height: 12),
-              Text(
-                l10n.colorReflexInstructions,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 6),
-              Text(
-                l10n.colorReflexDescription,
-                style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(height: 12),
-
-        Card(
+        // ── Big title card ───────────────────────────────────────────────────
+        Expanded(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Correct Answer Mode',
-                  style: TextStyle(fontWeight: FontWeight.w700),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Center(
+              child: Container(
+                width: double.infinity,
+                constraints: const BoxConstraints(minHeight: 200),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 28,
                 ),
-                const SizedBox(height: 8),
-                SegmentedButton<_AnswerMode>(
-                  segments: const [
-                    ButtonSegment(value: _AnswerMode.word, label: Text('Word')),
-                    ButtonSegment(
-                      value: _AnswerMode.color,
-                      label: Text('Color'),
+                decoration: AppStyles.generatorResultCard(accent),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      l10n.generatorColorReflex,
+                      style: const TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w900,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.colorReflexDescription,
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
                     ),
                   ],
-                  selected: {_answerMode},
-                  onSelectionChanged: (s) =>
-                      setState(() => _answerMode = s.first),
                 ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Difficult Colors',
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('Yellow'),
-                  value: _includeYellow,
-                  onChanged: (v) => setState(() => _includeYellow = v),
-                ),
-                SwitchListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: const Text('Orange'),
-                  value: _includeOrange,
-                  onChanged: (v) => setState(() => _includeOrange = v),
-                ),
-              ],
+              ),
             ),
           ),
         ),
 
-        const SizedBox(height: 20),
-
-        // Duration selector
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.colorReflexDurationLabel,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: _kProDurations.map((s) {
-                    final isSelected = _durationSeconds == s;
-                    final isFree = s == _kFreeDuration;
-                    final isLocked =
-                        !isFree && !gate.canUse(ProFeature.colorReflexDuration);
-                    return Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: _DurationChip(
-                          seconds: s,
-                          isSelected: isSelected,
-                          isLocked: isLocked,
-                          accent: accent,
-                          onTap: () => _onDurationTap(s),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                if (!gate.canUse(ProFeature.colorReflexDuration)) ...[
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.lock_outline,
-                        size: 14,
-                        color: AppColors.proPurple,
-                      ),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          l10n.colorReflexFreeProHint,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.proPurple,
-                          ),
-                        ),
-                      ),
-                    ],
+        // ── Bottom controls (sticky) ─────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Answer Mode
+              GeneratorSectionTitle('Answer Mode'),
+              const SizedBox(height: 8),
+              SegmentedButton<_AnswerMode>(
+                segments: const [
+                  ButtonSegment(value: _AnswerMode.word, label: Text('Word')),
+                  ButtonSegment(
+                    value: _AnswerMode.color,
+                    label: Text('Color'),
                   ),
                 ],
-              ],
-            ),
-          ),
-        ),
+                selected: {_answerMode},
+                onSelectionChanged: (s) =>
+                    setState(() => _answerMode = s.first),
+              ),
 
-        const SizedBox(height: 24),
+              const SizedBox(height: 12),
 
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: AppStyles.generatorButton(accent),
-            onPressed: _startCountdown,
-            child: const Text('Start'),
+              // Duration selector
+              Row(
+                children: [
+                  GeneratorSectionTitle(l10n.colorReflexDurationLabel),
+                  if (!canChangeDuration) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.proPurple.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'PRO',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppColors.proPurple,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: _kProDurations.asMap().entries.map((e) {
+                  final i = e.key;
+                  final s = e.value;
+                  final selected = _durationSeconds == s;
+                  final isLocked = s != _kFreeDuration && !canChangeDuration;
+                  return Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: i < _kProDurations.length - 1 ? 8 : 0,
+                      ),
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: selected
+                              ? accent
+                              : (isLocked ? AppColors.proPurple : null),
+                          side: BorderSide(
+                            color: selected
+                                ? accent
+                                : (isLocked
+                                      ? AppColors.proPurple.withOpacity(0.4)
+                                      : Colors.grey.withOpacity(0.4)),
+                            width: selected ? 2 : 1,
+                          ),
+                          backgroundColor:
+                              selected ? accent.withOpacity(0.1) : null,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                        ),
+                        onPressed: () => _onDurationTap(s),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (isLocked) ...[
+                              Icon(
+                                Icons.lock_outline,
+                                size: 12,
+                                color: AppColors.proPurple,
+                              ),
+                              const SizedBox(width: 3),
+                            ],
+                            Text('${s}s', style: const TextStyle(fontSize: 13)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              const SizedBox(height: 16),
+
+              FilledButton.icon(
+                style: AppStyles.generatorButton(accent),
+                onPressed: _startCountdown,
+                icon: const Icon(Icons.play_arrow),
+                label: const Text('Start'),
+              ),
+            ],
           ),
         ),
       ],
@@ -530,8 +509,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   // Playing screen
   // -------------------------------------------------------------------------
 
-  Widget _buildPlaying(Color accent) {
-    final l10n = context.l10n;
+  Widget _buildPlaying(dynamic l10n, Color accent) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -560,7 +538,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
 
           const SizedBox(height: 16),
 
-          // Stroop word card
+          // Stroop word card – no colored background
           Expanded(
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 120),
@@ -568,7 +546,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
               decoration: BoxDecoration(
                 color: _showWrong
                     ? Colors.red.withOpacity(0.12)
-                    : accent.withOpacity(0.08),
+                    : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: _showWrong
@@ -594,7 +572,9 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
           const SizedBox(height: 12),
 
           Text(
-            l10n.colorReflexTapPrompt,
+            _answerMode == _AnswerMode.color
+                ? l10n.colorReflexTapPrompt
+                : 'Tap the WORD shown above',
             style: const TextStyle(fontSize: 13, color: Colors.grey),
           ),
 
@@ -608,12 +588,29 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
             childAspectRatio: 2.4,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            children: _choices.map((c) {
-              return _ColorButton(gameColor: c, onTap: () => _onChoice(c));
-            }).toList(),
+            children: _choices
+                .map((c) => _ColorButton(gameColor: c, onTap: () => _onChoice(c)))
+                .toList(),
           ),
 
           const SizedBox(height: 8),
+
+          // Cancel button
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.redAccent,
+                side: const BorderSide(color: Colors.redAccent, width: 1),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+              ),
+              onPressed: _reset,
+              child: Text(l10n.commonCancel),
+            ),
+          ),
         ],
       ),
     );
@@ -623,89 +620,114 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   // Result screen
   // -------------------------------------------------------------------------
 
-  Widget _buildResult(BuildContext context, Color accent) {
-    final l10n = context.l10n;
+  Widget _buildResult(dynamic l10n, Color accent) {
     final total = _correct + _wrong;
     final accuracy = total > 0 ? (_correct / total * 100) : 0.0;
-    final avgMs = _reactionCount > 0 ? _totalReactionMs ~/ _reactionCount : 0;
+    final avgMs =
+        _reactionCount > 0 ? _totalReactionMs ~/ _reactionCount : 0;
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Main result card
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: AppStyles.generatorResultCard(accent),
-          child: Column(
-            children: [
-              Icon(GeneratorType.colorReflex.homeIcon, color: accent, size: 36),
-              const SizedBox(height: 10),
-              Text(
-                l10n.colorReflexTimeUp,
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: accent,
+        // ── Scrollable stats area ────────────────────────────────────────────
+        Expanded(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Column(
+              children: [
+                // Main result card
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: AppStyles.generatorResultCard(accent),
+                  child: Column(
+                    children: [
+                      Icon(
+                        GeneratorType.colorReflex.homeIcon,
+                        color: accent,
+                        size: 36,
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        l10n.colorReflexTimeUp,
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: accent,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '$_correct / $total',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
+                  ),
                 ),
+
+                const SizedBox(height: 16),
+
+                // Stats grid
+                GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 2.2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    _ResultStatCard(
+                      label: l10n.colorReflexCorrectLabel,
+                      value: '$_correct',
+                      color: Colors.green,
+                    ),
+                    _ResultStatCard(
+                      label: l10n.colorReflexWrongLabel,
+                      value: '$_wrong',
+                      color: Colors.redAccent,
+                    ),
+                    _ResultStatCard(
+                      label: l10n.colorReflexAccuracyLabel,
+                      value: '${accuracy.toStringAsFixed(1)}%',
+                      color: accent,
+                    ),
+                    if (avgMs > 0)
+                      _ResultStatCard(
+                        label: l10n.colorReflexAvgReactionLabel,
+                        value: '$avgMs ms',
+                        color: Colors.orange,
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // ── Sticky bottom buttons ────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              FilledButton.icon(
+                style: AppStyles.generatorButton(accent),
+                onPressed: _startCountdown,
+                icon: const Icon(Icons.replay),
+                label: Text(l10n.colorReflexPlayAgain),
               ),
-              const SizedBox(height: 4),
-              Text('$_correct / $total', style: const TextStyle(fontSize: 16)),
+              const SizedBox(height: 8),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                ),
+                onPressed: _reset,
+                child: Text(l10n.colorReflexBackToMenu),
+              ),
             ],
-          ),
-        ),
-
-        const SizedBox(height: 16),
-
-        // Stats grid
-        GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 2.2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            _ResultStatCard(
-              label: l10n.colorReflexCorrectLabel,
-              value: '$_correct',
-              color: Colors.green,
-            ),
-            _ResultStatCard(
-              label: l10n.colorReflexWrongLabel,
-              value: '$_wrong',
-              color: Colors.redAccent,
-            ),
-            _ResultStatCard(
-              label: l10n.colorReflexAccuracyLabel,
-              value: '${accuracy.toStringAsFixed(1)}%',
-              color: accent,
-            ),
-            if (avgMs > 0)
-              _ResultStatCard(
-                label: l10n.colorReflexAvgReactionLabel,
-                value: '$avgMs ms',
-                color: Colors.orange,
-              ),
-          ],
-        ),
-
-        const SizedBox(height: 24),
-
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: AppStyles.generatorButton(accent),
-            onPressed: _startCountdown,
-            child: Text(l10n.colorReflexPlayAgain),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton(
-            onPressed: _reset,
-            child: Text(l10n.colorReflexBackToMenu),
           ),
         ),
       ],
@@ -716,62 +738,6 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
 // ---------------------------------------------------------------------------
 // Helper widgets
 // ---------------------------------------------------------------------------
-
-class _DurationChip extends StatelessWidget {
-  final int seconds;
-  final bool isSelected;
-  final bool isLocked;
-  final Color accent;
-  final VoidCallback onTap;
-
-  const _DurationChip({
-    required this.seconds,
-    required this.isSelected,
-    required this.isLocked,
-    required this.accent,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? accent.withOpacity(0.9) : accent.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? accent : accent.withOpacity(0.3),
-            width: isSelected ? 2 : 1,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (isLocked) ...[
-              Icon(
-                Icons.lock_outline,
-                size: 13,
-                color: isSelected ? Colors.white : AppColors.proPurple,
-              ),
-              const SizedBox(width: 4),
-            ],
-            Text(
-              '${seconds}s',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: isSelected ? Colors.white : null,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class _InfoChip extends StatelessWidget {
   final IconData icon;

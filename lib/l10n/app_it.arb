@@ -282,6 +282,7 @@
   "memoryFlashDescription": "Guarda la sequenza e ripetila",
   "memoryFlashStart": "Inizia",
   "memoryFlashPlayAgain": "Gioca ancora",
+  "memoryFlashBackToMenu": "Torna al menu",
   "memoryFlashWatchSequence": "Guarda la sequenza…",
   "memoryFlashYourTurn": "Tocca a te!",
   "memoryFlashLevel": "Livello {level}",

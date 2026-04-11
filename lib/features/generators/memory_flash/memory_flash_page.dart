@@ -179,13 +179,78 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
     );
   }
 
+  Widget _buildResultOverview(dynamic l10n, Color accent) {
+    final duration = _gameStart != null
+        ? DateTime.now().difference(_gameStart!).inSeconds
+        : 0;
+    return Column(
+      children: [
+        // Title card
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: AppStyles.generatorResultCard(accent),
+          child: Column(
+            children: [
+              Icon(GeneratorType.memoryFlash.homeIcon, color: accent, size: 36),
+              const SizedBox(height: 10),
+              Text(
+                l10n.memoryFlashGameOver,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: accent,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l10n.memoryFlashResult(_level),
+                style: const TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 16),
+        // Stats grid
+        GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 2.2,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            _StatCard(
+              label: 'Level',
+              value: '$_level',
+              color: accent,
+            ),
+            _StatCard(
+              label: 'Sequences',
+              value: '$_totalSequences',
+              color: Colors.green,
+            ),
+            _StatCard(
+              label: 'Duration',
+              value: '${duration}s',
+              color: Colors.orange,
+            ),
+            _StatCard(
+              label: 'Speed',
+              value: _speed.name[0].toUpperCase() + _speed.name.substring(1),
+              color: Colors.blueAccent,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final gate = context.gateRead;
     final accent = GeneratorType.memoryFlash.accentColor;
-    final isSettingsEnabled =
-        _phase == _Phase.idle || _phase == _Phase.gameover;
 
     return Scaffold(
       appBar: AppBar(
@@ -219,7 +284,7 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
       body: Column(
         children: [
           if (_phase == _Phase.idle) ...[
-            // ── Idle: big title card (like reaction test / tap challenge) ────
+            // ── Idle: big title card ──────────────────────────────────────────
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -255,8 +320,16 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
                 ),
               ),
             ),
+          ] else if (_phase == _Phase.gameover) ...[
+            // ── Game over: result overview ────────────────────────────────────
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                child: _buildResultOverview(l10n, accent),
+              ),
+            ),
           ] else ...[
-            // ── Playing: status card + tile grid ────────────────────────────
+            // ── Playing: status card + tile grid ──────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               child: Container(
@@ -270,7 +343,7 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
               ),
             ),
 
-            // ── Tile grid (Expanded — never overflows) ───────────────────
+            // ── Tile grid (Expanded — never overflows) ─────────────────────
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -307,7 +380,7 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
               ),
             ),
 
-            // ── Progress bar during input ──────────────────────────────────
+            // ── Progress bar during input ────────────────────────────────────
             if (_phase == _Phase.input && _sequence.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -339,53 +412,86 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Blocks
-                _BlockSettings(
-                  blockCount: _blockCount,
-                  enabled: isSettingsEnabled,
-                  accent: accent,
-                  onChanged: (count) => setState(() {
-                    _blockCount = count;
-                    _sequence.clear();
-                  }),
-                ),
-                const SizedBox(height: 10),
+                if (_phase == _Phase.idle) ...[
+                  // Blocks
+                  _BlockSettings(
+                    blockCount: _blockCount,
+                    enabled: true,
+                    accent: accent,
+                    onChanged: (count) => setState(() {
+                      _blockCount = count;
+                      _sequence.clear();
+                    }),
+                  ),
+                  const SizedBox(height: 10),
 
-                // Flash speed
-                _SpeedSettings(
-                  speed: _speed,
-                  enabled: isSettingsEnabled,
-                  gate: gate,
-                  onSpeedChanged: (s) {
-                    if (!gate.canUse(ProFeature.memoryFlashSpeed)) {
-                      showProDialog(
-                        context,
-                        title: l10n.memoryFlashProSpeedTitle,
-                        message: l10n.memoryFlashProSpeedMessage,
-                        generatorType: GeneratorType.memoryFlash,
-                      );
-                      return;
-                    }
-                    setState(() => _speed = s);
-                  },
-                ),
-                const SizedBox(height: 12),
+                  // Flash speed
+                  _SpeedSettings(
+                    speed: _speed,
+                    enabled: true,
+                    gate: gate,
+                    onSpeedChanged: (s) {
+                      if (!gate.canUse(ProFeature.memoryFlashSpeed)) {
+                        showProDialog(
+                          context,
+                          title: l10n.memoryFlashProSpeedTitle,
+                          message: l10n.memoryFlashProSpeedMessage,
+                          generatorType: GeneratorType.memoryFlash,
+                        );
+                        return;
+                      }
+                      setState(() => _speed = s);
+                    },
+                  ),
+                  const SizedBox(height: 12),
 
-                // Start / Play again button
-                if (_phase == _Phase.idle)
                   FilledButton.icon(
                     style: AppStyles.generatorButton(accent),
                     onPressed: _startGame,
                     icon: const Icon(Icons.casino),
                     label: Text(l10n.memoryFlashStart),
-                  )
-                else if (_phase == _Phase.gameover)
+                  ),
+                ] else if (_phase == _Phase.gameover) ...[
                   FilledButton.icon(
                     style: AppStyles.generatorButton(accent),
                     onPressed: _startGame,
-                    icon: const Icon(Icons.casino),
+                    icon: const Icon(Icons.replay),
                     label: Text(l10n.memoryFlashPlayAgain),
                   ),
+                  const SizedBox(height: 8),
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                    onPressed: () => setState(() {
+                      _flashTimer?.cancel();
+                      _phase = _Phase.idle;
+                    }),
+                    child: Text(l10n.memoryFlashBackToMenu),
+                  ),
+                ] else ...[
+                  // Cancel during playing
+                  OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      side: const BorderSide(color: Colors.redAccent, width: 1),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                    ),
+                    onPressed: () => setState(() {
+                      _flashTimer?.cancel();
+                      _phase = _Phase.idle;
+                      _sequence.clear();
+                      _highlightedTile = -1;
+                    }),
+                    child: Text(l10n.commonCancel),
+                  ),
+                ],
               ],
             ),
           ),
@@ -620,6 +726,51 @@ class _MemoryTile extends StatelessWidget {
           onTap: enabled ? onTap : null,
           splashColor: color.withOpacity(0.4),
         ),
+      ),
+    );
+  }
+}
+
+// ─── Result Stat Card ─────────────────────────────────────────────────────────
+
+class _StatCard extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color color;
+
+  const _StatCard({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: color.withOpacity(0.1),
+        border: Border.all(color: color.withOpacity(0.25)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: color,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

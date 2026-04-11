@@ -284,6 +284,7 @@
   "memoryFlashDescription": "Regardez la séquence et répétez-la",
   "memoryFlashStart": "Démarrer",
   "memoryFlashPlayAgain": "Rejouer",
+  "memoryFlashBackToMenu": "Retour au menu",
   "memoryFlashWatchSequence": "Regardez la séquence…",
   "memoryFlashYourTurn": "À vous !",
   "memoryFlashLevel": "Niveau {level}",

@@ -1400,6 +1400,12 @@ abstract class AppLocalizations {
   /// **'Play Again'**
   String get memoryFlashPlayAgain;
 
+  /// No description provided for @memoryFlashBackToMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Menu'**
+  String get memoryFlashBackToMenu;
+
   /// No description provided for @memoryFlashWatchSequence.
   ///
   /// In en, this message translates to:

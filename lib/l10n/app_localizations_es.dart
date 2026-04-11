@@ -691,6 +691,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get memoryFlashPlayAgain => 'Jugar de nuevo';
 
   @override
+  String get memoryFlashBackToMenu => 'Volver al menú';
+
+  @override
   String get memoryFlashWatchSequence => 'Observa la secuencia…';
 
   @override
