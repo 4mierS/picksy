@@ -167,7 +167,20 @@ class _CardPageState extends State<CardPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Include Jokers toggle
+                  // Draw Without Replacement toggle (free feature – shown first)
+                  _ToggleRow(
+                    label: 'Without Replacement',
+                    value: _withoutReplacement,
+                    accent: accent,
+                    onChanged: (v) => setState(() {
+                      _withoutReplacement = v;
+                      _deck.clear();
+                    }),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  // Include Jokers toggle (PRO)
                   _ToggleRow(
                     label: l10n.cardIncludeJokers,
                     value: effectiveJokers,
@@ -185,19 +198,6 @@ class _CardPageState extends State<CardPage> {
                       }
                       setState(() => _includeJokers = v);
                     },
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Draw Without Replacement toggle
-                  _ToggleRow(
-                    label: 'Without Replacement',
-                    value: _withoutReplacement,
-                    accent: accent,
-                    onChanged: (v) => setState(() {
-                      _withoutReplacement = v;
-                      _deck.clear();
-                    }),
                   ),
 
                   const SizedBox(height: 10),
