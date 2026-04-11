@@ -6,44 +6,8 @@ import '../../storage/premium_store.dart';
 import '../../core/ui/app_styles.dart';
 import '../../core/ui/app_colors.dart';
 
-class ProPage extends StatefulWidget {
+class ProPage extends StatelessWidget {
   const ProPage({super.key});
-
-  @override
-  State<ProPage> createState() => _ProPageState();
-}
-
-class _ProPageState extends State<ProPage> {
-  final _promoController = TextEditingController();
-  bool _promoLoading = false;
-  String? _promoMessage;
-  bool _promoSuccess = false;
-
-  @override
-  void dispose() {
-    _promoController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _applyPromo() async {
-    final l10n = context.l10n;
-    final code = _promoController.text.trim();
-    if (code.isEmpty) return;
-
-    setState(() {
-      _promoLoading = true;
-      _promoMessage = null;
-    });
-
-    final success = await context.read<PremiumStore>().redeemPromoCode(code);
-
-    if (!mounted) return;
-    setState(() {
-      _promoLoading = false;
-      _promoSuccess = success;
-      _promoMessage = success ? l10n.proPromoCodeSuccess : l10n.proPromoCodeInvalid;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -261,32 +225,6 @@ class _ProPageState extends State<ProPage> {
 
         const SizedBox(height: 10),
 
-        // ── Restore ───────────────────────────────────────────────────────
-        Center(
-          child: TextButton(
-            onPressed: premium.isLoading
-                ? null
-                : () => context.read<PremiumStore>().restore(),
-            child: Text(
-              l10n.proRestorePurchases,
-              style: const TextStyle(fontSize: 13),
-            ),
-          ),
-        ),
-
-        // ── Promo code ────────────────────────────────────────────────────
-        if (!premium.isPro)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-            child: _PromoCodeInput(
-              controller: _promoController,
-              loading: _promoLoading,
-              message: _promoMessage,
-              success: _promoSuccess,
-              onApply: _applyPromo,
-            ),
-          ),
-
         // ── Legal ─────────────────────────────────────────────────────────
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
@@ -341,83 +279,3 @@ class _FeatureTile extends StatelessWidget {
   }
 }
 
-// ── Promo code input ──────────────────────────────────────────────────────────
-
-class _PromoCodeInput extends StatelessWidget {
-  final TextEditingController controller;
-  final bool loading;
-  final String? message;
-  final bool success;
-  final VoidCallback onApply;
-
-  const _PromoCodeInput({
-    required this.controller,
-    required this.loading,
-    required this.message,
-    required this.success,
-    required this.onApply,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          l10n.proPromoCode,
-          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 6),
-        Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: controller,
-                textCapitalization: TextCapitalization.characters,
-                decoration: InputDecoration(
-                  hintText: l10n.proPromoCodeHint,
-                  border: const OutlineInputBorder(),
-                  isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                ),
-                onSubmitted: (_) => onApply(),
-              ),
-            ),
-            const SizedBox(width: 10),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.proPurple,
-                foregroundColor: Colors.white,
-              ),
-              onPressed: loading ? null : onApply,
-              child: loading
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text(l10n.proPromoCodeApply),
-            ),
-          ],
-        ),
-        if (message != null) ...[
-          const SizedBox(height: 6),
-          Text(
-            message!,
-            style: TextStyle(
-              color: success ? Colors.green : Colors.red,
-              fontSize: 13,
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-}

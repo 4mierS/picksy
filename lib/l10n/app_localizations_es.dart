@@ -150,6 +150,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsCompareFreePro => 'Comparar Gratis vs Pro';
 
   @override
+  String get settingsAppearance => 'Apariencia';
+
+  @override
+  String get settingsFeedback => 'Comentarios';
+
+  @override
+  String get settingsAppStore => 'App Store';
+
+  @override
+  String get settingsProSection => 'Pro';
+
+  @override
+  String get settingsLegal => 'Legal';
+
+  @override
   String get compareTitle => 'Gratis vs Pro';
 
   @override

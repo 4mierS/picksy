@@ -386,6 +386,36 @@ abstract class AppLocalizations {
   /// **'Compare Free vs Pro'**
   String get settingsCompareFreePro;
 
+  /// No description provided for @settingsAppearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get settingsAppearance;
+
+  /// No description provided for @settingsFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get settingsFeedback;
+
+  /// No description provided for @settingsAppStore.
+  ///
+  /// In en, this message translates to:
+  /// **'App Store'**
+  String get settingsAppStore;
+
+  /// No description provided for @settingsProSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Pro'**
+  String get settingsProSection;
+
+  /// No description provided for @settingsLegal.
+  ///
+  /// In en, this message translates to:
+  /// **'Legal'**
+  String get settingsLegal;
+
   /// No description provided for @compareTitle.
   ///
   /// In en, this message translates to:
