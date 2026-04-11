@@ -80,6 +80,8 @@
   "homeAllGenerators": "All Generators",
   "homeTabGenerators": "Generators",
   "homeTabMiniGames": "Mini Games",
+  "homeDailyLimitTitle": "Round Limit Reached",
+  "homeDailyLimitMessage": "Free users can play 10 rounds per game. Go Pro for unlimited rounds.",
   "homeFavorite": "Favorite",
   "homeUnfavorite": "Unfavorite",
   "homeTapToOpen": "Tap to open",

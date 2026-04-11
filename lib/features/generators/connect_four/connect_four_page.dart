@@ -282,6 +282,7 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
   final _ai = _ConnectFourAI();
   bool _botThinking = false;
   Timer? _botTimer;
+  int _roundsPlayed = 0;
 
   @override
   void initState() {
@@ -324,7 +325,20 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
   // Game logic
   // ---------------------------------------------------------------------------
 
+  bool _checkRoundLimit() {
+    if (context.gateRead.isPro) return true;
+    if (_roundsPlayed >= FeatureGate.freeRoundsMax) {
+      final l10n = context.l10n;
+      showProDialog(context,
+          title: l10n.homeDailyLimitTitle, message: l10n.homeDailyLimitMessage);
+      return false;
+    }
+    _roundsPlayed++;
+    return true;
+  }
+
   void _startGame() {
+    if (!_checkRoundLimit()) return;
     final p1 = _normalize(
       _p1Controller.text.isNotEmpty ? _p1Controller.text : _kDefaultPlayerName,
     );

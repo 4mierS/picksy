@@ -584,6 +584,18 @@ abstract class AppLocalizations {
   /// **'Mini Games'**
   String get homeTabMiniGames;
 
+  /// No description provided for @homeDailyLimitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Round Limit Reached'**
+  String get homeDailyLimitTitle;
+
+  /// No description provided for @homeDailyLimitMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Free users can play 10 rounds per game. Go Pro for unlimited rounds.'**
+  String get homeDailyLimitMessage;
+
   /// No description provided for @homeFavorite.
   ///
   /// In en, this message translates to:

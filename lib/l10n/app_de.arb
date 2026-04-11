@@ -80,6 +80,8 @@
   "homeAllGenerators": "Alle Generatoren",
   "homeTabGenerators": "Generatoren",
   "homeTabMiniGames": "Minispiele",
+  "homeDailyLimitTitle": "Rundenlimit erreicht",
+  "homeDailyLimitMessage": "Kostenlose Nutzer können 10 Runden pro Spiel spielen. Mit Pro unbegrenzt.",
   "homeFavorite": "Favorit",
   "homeUnfavorite": "Nicht mehr Favorit",
   "homeTapToOpen": "Tippen zum Öffnen",

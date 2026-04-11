@@ -78,6 +78,8 @@
   "homeAllGenerators": "Tutti i generatori",
   "homeTabGenerators": "Generatori",
   "homeTabMiniGames": "Mini Giochi",
+  "homeDailyLimitTitle": "Limite di round raggiunto",
+  "homeDailyLimitMessage": "Gli utenti gratuiti possono giocare 10 round per partita. Passa a Pro per round illimitati.",
   "homeFavorite": "Preferito",
   "homeUnfavorite": "Rimuovi dai preferiti",
   "homeTapToOpen": "Tocca per aprire",

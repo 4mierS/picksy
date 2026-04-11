@@ -30,6 +30,7 @@ class _HangmanPageState extends State<HangmanPage> {
   String _word = '';
   final Set<String> _guessed = {};
   int _wrongGuesses = 0;
+  int _roundsPlayed = 0;
 
   static const int _maxWrongGuesses = 6;
 
@@ -64,7 +65,20 @@ class _HangmanPageState extends State<HangmanPage> {
     }
   }
 
+  bool _checkRoundLimit() {
+    if (context.gateRead.isPro) return true;
+    if (_roundsPlayed >= FeatureGate.freeRoundsMax) {
+      final l10n = context.l10n;
+      showProDialog(context,
+          title: l10n.homeDailyLimitTitle, message: l10n.homeDailyLimitMessage);
+      return false;
+    }
+    _roundsPlayed++;
+    return true;
+  }
+
   void _startGame() {
+    if (!_checkRoundLimit()) return;
     final filtered = _wordList
         .where((w) => w.length >= 4 && w.length <= 10)
         .toList();

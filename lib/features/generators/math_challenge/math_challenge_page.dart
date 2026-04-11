@@ -50,6 +50,7 @@ class _MathChallengePageState extends State<MathChallengePage> {
   Timer? _countdownTimer;
   Timer? _gameTimer;
   int _timeLeft = 30;
+  int _roundsPlayed = 0;
 
   _MathProblem? _current;
   int _correct = 0;
@@ -65,7 +66,20 @@ class _MathChallengePageState extends State<MathChallengePage> {
     super.dispose();
   }
 
+  bool _checkRoundLimit() {
+    if (context.gateRead.isPro) return true;
+    if (_roundsPlayed >= FeatureGate.freeRoundsMax) {
+      final l10n = context.l10n;
+      showProDialog(context,
+          title: l10n.homeDailyLimitTitle, message: l10n.homeDailyLimitMessage);
+      return false;
+    }
+    _roundsPlayed++;
+    return true;
+  }
+
   void _startCountdown() {
+    if (!_checkRoundLimit()) return;
     _countdownTimer?.cancel();
     _gameTimer?.cancel();
     setState(() {

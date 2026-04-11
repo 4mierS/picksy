@@ -44,6 +44,7 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
   _Phase _phase = _Phase.idle;
   _Speed _speed = _Speed.normal;
   int _blockCount = 4;
+  int _roundsPlayed = 0;
 
   List<int> _sequence = [];
   int _inputIndex = 0;
@@ -76,7 +77,20 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
     super.dispose();
   }
 
+  bool _checkRoundLimit() {
+    if (context.gateRead.isPro) return true;
+    if (_roundsPlayed >= FeatureGate.freeRoundsMax) {
+      final l10n = context.l10n;
+      showProDialog(context,
+          title: l10n.homeDailyLimitTitle, message: l10n.homeDailyLimitMessage);
+      return false;
+    }
+    _roundsPlayed++;
+    return true;
+  }
+
   void _startGame() {
+    if (!_checkRoundLimit()) return;
     _flashTimer?.cancel();
     setState(() {
       _sequence = [];

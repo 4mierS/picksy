@@ -92,6 +92,8 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   bool _showWrong = false;
   Timer? _wrongTimer;
 
+  int _roundsPlayed = 0;
+
   @override
   void dispose() {
     _countdownTimer?.cancel();
@@ -104,7 +106,20 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
   // Game flow
   // -------------------------------------------------------------------------
 
+  bool _checkRoundLimit() {
+    if (context.gateRead.isPro) return true;
+    if (_roundsPlayed >= FeatureGate.freeRoundsMax) {
+      final l10n = context.l10n;
+      showProDialog(context,
+          title: l10n.homeDailyLimitTitle, message: l10n.homeDailyLimitMessage);
+      return false;
+    }
+    _roundsPlayed++;
+    return true;
+  }
+
   void _startCountdown() {
+    if (!_checkRoundLimit()) return;
     _countdownTimer?.cancel();
     setState(() {
       _phase = _Phase.countdown;

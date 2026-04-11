@@ -249,6 +249,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get homeTabMiniGames => 'Mini Giochi';
 
   @override
+  String get homeDailyLimitTitle => 'Limite di round raggiunto';
+
+  @override
+  String get homeDailyLimitMessage =>
+      'Gli utenti gratuiti possono giocare 10 round per partita. Passa a Pro per round illimitati.';
+
+  @override
   String get homeFavorite => 'Preferito';
 
   @override

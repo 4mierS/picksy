@@ -31,6 +31,7 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
 
   int? _reactionMs;
   int? _plannedDelayMs;
+  int _roundsPlayed = 0;
 
   static const int _historyMaxEntries = 100;
 
@@ -55,7 +56,20 @@ class _ReactionTestPageState extends State<ReactionTestPage> {
     return 1500 + _rng.nextInt(3001);
   }
 
+  bool _checkRoundLimit() {
+    if (context.gateRead.isPro) return true;
+    if (_roundsPlayed >= FeatureGate.freeRoundsMax) {
+      final l10n = context.l10n;
+      showProDialog(context,
+          title: l10n.homeDailyLimitTitle, message: l10n.homeDailyLimitMessage);
+      return false;
+    }
+    _roundsPlayed++;
+    return true;
+  }
+
   void _start() {
+    if (!_checkRoundLimit()) return;
     _waitTimer?.cancel();
     _sw?.stop();
 

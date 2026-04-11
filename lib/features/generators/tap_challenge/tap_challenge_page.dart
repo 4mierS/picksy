@@ -37,6 +37,7 @@ class _TapChallengePageState extends State<TapChallengePage> {
   int? _lastTaps;
   double? _lastTPS;
   int? _personalBest;
+  int _roundsPlayed = 0;
 
   static const List<int> _proDurations = [5, 10, 15, 30, 60];
 
@@ -60,7 +61,20 @@ class _TapChallengePageState extends State<TapChallengePage> {
     });
   }
 
+  bool _checkRoundLimit() {
+    if (context.gateRead.isPro) return true;
+    if (_roundsPlayed >= FeatureGate.freeRoundsMax) {
+      final l10n = context.l10n;
+      showProDialog(context,
+          title: l10n.homeDailyLimitTitle, message: l10n.homeDailyLimitMessage);
+      return false;
+    }
+    _roundsPlayed++;
+    return true;
+  }
+
   Future<void> _startCountdown() async {
+    if (!_checkRoundLimit()) return;
     _countdownTimer?.cancel();
     _runTimer?.cancel();
     _tickTimer?.cancel();

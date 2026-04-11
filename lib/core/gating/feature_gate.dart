@@ -53,6 +53,7 @@ class FeatureGate {
   const FeatureGate({required this.isPro});
 
   /// Limits
+  static const freeRoundsMax = 10;
   int get favoritesMax => isPro ? 999 : 2;
   int get historyMax => isPro ? 1000 : 3;
   int get workflowFieldsMax => isPro ? 999 : 3;
