@@ -408,6 +408,8 @@
   "mathAvgAccuracy": "Avg Accuracy",
   "generatorTicTacToe": "Tic Tac Toe",
   "ticTacToeDescription": "Classic 3×3 game of X's and O's",
+  "connectFourDescription": "Classic 7×6 strategy game – connect 4 to win",
+  "mathChallengeDescription": "Solve math problems as fast as you can",
   "generatorConnectFour": "Connect Four",
   "gameSetupTitle": "Game Setup",
   "gameModeLabel": "Game Mode",

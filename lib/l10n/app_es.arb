@@ -408,6 +408,8 @@
   "mathAvgAccuracy": "Precisión media",
   "generatorTicTacToe": "Tres en Raya",
   "ticTacToeDescription": "El clásico juego 3×3 de X y O",
+  "connectFourDescription": "El clásico juego de estrategia 7×6 – conecta 4 para ganar",
+  "mathChallengeDescription": "Resuelve problemas matemáticos lo más rápido que puedas",
   "generatorConnectFour": "Conecta Cuatro",
   "gameSetupTitle": "Configuración",
   "gameModeLabel": "Modo de Juego",

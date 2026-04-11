@@ -133,105 +133,185 @@ Future<void> showProDialog(
 
   await showDialog(
     context: context,
-    builder: (_) => AlertDialog(
+    builder: (_) => Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-      titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      contentPadding: const EdgeInsets.fromLTRB(20, 14, 20, 10),
-      actionsPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
-      title: Row(
+      clipBehavior: Clip.antiAlias,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 32, vertical: 24),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          if (generatorType != null)
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: generatorType.accentColor.withOpacity(0.16),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                generatorType.homeIcon,
-                color: generatorType.accentColor,
-                size: 20,
+          // ── Gradient header ──────────────────────────────────────────────
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 22),
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Color(0xFF7C3AED), Color(0xFFAB47BC)],
               ),
             ),
-          if (generatorType != null) const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: AppColors.proPurple,
-                fontWeight: FontWeight.w800,
-                fontSize: 20,
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    generatorType?.homeIcon ?? Icons.workspace_premium_rounded,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'PRO',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 3,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ── Content ──────────────────────────────────────────────────────
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 320),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 18, 20, 4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: AppColors.proPurple,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    message,
+                    style: const TextStyle(fontSize: 14, height: 1.4),
+                  ),
+                  if (dedupedDefinitions.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.proPurple.withOpacity(0.06),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'PRO includes:',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 12,
+                              color: AppColors.proPurple,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          for (final d in dedupedDefinitions)
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 6),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Padding(
+                                    padding: EdgeInsets.only(top: 1),
+                                    child: Icon(
+                                      Icons.check_circle_rounded,
+                                      size: 15,
+                                      color: AppColors.proPurple,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      d,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
               ),
+            ),
+          ),
+
+          // ── Actions ──────────────────────────────────────────────────────
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.proPurple,
+                      side: const BorderSide(color: AppColors.proPurple),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text(l10n.gateNotNow),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [Color(0xFF7C3AED), Color(0xFFAB47BC)],
+                      ),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        shadowColor: Colors.transparent,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const ProPage()),
+                        );
+                      },
+                      child: Text(
+                        l10n.gateGoPro,
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
       ),
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(maxHeight: 420),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(message, style: const TextStyle(fontSize: 15, height: 1.3)),
-              if (dedupedDefinitions.isNotEmpty) ...[
-                const SizedBox(height: 14),
-                const Text(
-                  'PRO includes:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.proPurple,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                for (final d in dedupedDefinitions)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 1),
-                          child: Icon(
-                            Icons.check_circle,
-                            size: 16,
-                            color: AppColors.proPurple,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(child: Text(d)),
-                      ],
-                    ),
-                  ),
-              ],
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          style: TextButton.styleFrom(foregroundColor: AppColors.proPurple),
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.gateNotNow),
-        ),
-        FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: AppColors.proPurple,
-            foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const ProPage()),
-            );
-          },
-          child: Text(l10n.gateGoPro),
-        ),
-      ],
     ),
   );
 }

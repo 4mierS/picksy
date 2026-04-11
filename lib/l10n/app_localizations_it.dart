@@ -982,6 +982,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get ticTacToeDescription => 'Il classico gioco 3×3 di X e O';
 
   @override
+  String get connectFourDescription =>
+      'Il classico gioco di strategia 7×6 – collega 4 per vincere';
+
+  @override
+  String get mathChallengeDescription =>
+      'Risolvi problemi matematici il più velocemente possibile';
+
+  @override
   String get generatorConnectFour => 'Forza 4';
 
   @override

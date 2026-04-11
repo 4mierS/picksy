@@ -10,6 +10,7 @@ import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 enum _Difficulty { easy, hard }
 
@@ -249,15 +250,18 @@ class _MathChallengePageState extends State<MathChallengePage> {
         ],
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: switch (_phase) {
-            _Phase.idle => _buildIdle(context, l10n, gate, accent),
-            _Phase.countdown => _buildCountdown(accent),
-            _Phase.playing => _buildPlaying(context, l10n, accent),
-            _Phase.result => _buildResult(context, l10n, accent),
-          },
-        ),
+        child: switch (_phase) {
+          _Phase.idle => _buildIdle(context, l10n, gate, accent),
+          _Phase.countdown => _buildCountdown(accent),
+          _Phase.playing => Padding(
+            padding: const EdgeInsets.all(16),
+            child: _buildPlaying(context, l10n, accent),
+          ),
+          _Phase.result => Padding(
+            padding: const EdgeInsets.all(16),
+            child: _buildResult(context, l10n, accent),
+          ),
+        },
       ),
     );
   }
@@ -268,127 +272,232 @@ class _MathChallengePageState extends State<MathChallengePage> {
     FeatureGate gate,
     Color accent,
   ) {
+    final canHard = gate.canUse(ProFeature.mathChallengeProDifficulty);
+    final canDuration = gate.canUse(ProFeature.mathChallengeProDuration);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Difficulty selector
-        Card(
+        // ── Title card ──────────────────────────────────────────────────────
+        Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.mathDifficulty,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Center(
+              child: Container(
+                width: double.infinity,
+                constraints: const BoxConstraints(minHeight: 160),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 28,
                 ),
-                const SizedBox(height: 10),
-                Row(
+                decoration: AppStyles.generatorResultCard(accent),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: ChoiceChip(
-                        label: Center(child: Text(l10n.mathDifficultyEasy)),
-                        selected: _difficulty == _Difficulty.easy,
-                        onSelected: (_) => setState(() => _difficulty = _Difficulty.easy),
+                    Text(
+                      l10n.generatorMathChallenge,
+                      style: const TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w900,
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: ChoiceChip(
-                        label: Center(child: Text(l10n.mathDifficultyHard)),
-                        selected: _difficulty == _Difficulty.hard,
-                        onSelected: (_) {
-                          if (!gate.canUse(ProFeature.mathChallengeProDifficulty)) {
-                            showProDialog(
-                              context,
-                              title: l10n.mathDifficultyProTitle,
-                              message: l10n.mathDifficultyProMessage,
-                              generatorType: GeneratorType.mathChallenge,
-                            );
-                          } else {
-                            setState(() => _difficulty = _Difficulty.hard);
-                          }
-                        },
-                      ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.mathChallengeDescription,
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
                     ),
                   ],
-                ),
-              ],
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 12),
-
-        // Duration selector
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.mathDuration,
-                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                ),
-                const SizedBox(height: 8),
-                if (gate.canUse(ProFeature.mathChallengeProDuration)) ...[
-                  Text(l10n.mathDurationSeconds(_durationSeconds)),
-                  Slider(
-                    min: 15,
-                    max: 60,
-                    divisions: 9,
-                    value: _durationSeconds.toDouble(),
-                    onChanged: (v) => setState(() => _durationSeconds = v.round()),
-                    activeColor: accent,
-                  ),
-                ] else
-                  Row(
-                    children: [
-                      Text(l10n.mathDurationFree),
-                      const Spacer(),
-                      TextButton.icon(
-                        icon: const Icon(Icons.lock_outline, size: 16),
-                        label: Text(l10n.commonProFeature),
-                        onPressed: () => showProDialog(
-                          context,
-                          title: l10n.mathDurationProTitle,
-                          message: l10n.mathDurationProMessage,
-                          generatorType: GeneratorType.mathChallenge,
-                        ),
-                      ),
-                    ],
-                  ),
-              ],
-            ),
-          ),
-        ),
-
-        const SizedBox(height: 12),
-
-        // Pro hint
-        if (!gate.canUse(ProFeature.mathChallengeProDifficulty))
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Text(
-                l10n.mathFreeProHint,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
                 ),
               ),
             ),
           ),
+        ),
 
-        const Spacer(),
+        // ── Sticky bottom controls ──────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Difficulty
+              GeneratorSectionTitle(l10n.mathDifficulty),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor:
+                            _difficulty == _Difficulty.easy ? accent : null,
+                        side: BorderSide(
+                          color: _difficulty == _Difficulty.easy
+                              ? accent
+                              : Colors.grey.withOpacity(0.4),
+                          width: _difficulty == _Difficulty.easy ? 2 : 1,
+                        ),
+                        backgroundColor: _difficulty == _Difficulty.easy
+                            ? accent.withOpacity(0.1)
+                            : null,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                      ),
+                      onPressed: () =>
+                          setState(() => _difficulty = _Difficulty.easy),
+                      child: Text(l10n.mathDifficultyEasy),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: _difficulty == _Difficulty.hard
+                            ? accent
+                            : (!canHard ? AppColors.proPurple : null),
+                        side: BorderSide(
+                          color: _difficulty == _Difficulty.hard
+                              ? accent
+                              : (!canHard
+                                    ? AppColors.proPurple.withOpacity(0.4)
+                                    : Colors.grey.withOpacity(0.4)),
+                          width: _difficulty == _Difficulty.hard ? 2 : 1,
+                        ),
+                        backgroundColor: _difficulty == _Difficulty.hard
+                            ? accent.withOpacity(0.1)
+                            : null,
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                      ),
+                      onPressed: () {
+                        if (!canHard) {
+                          showProDialog(
+                            context,
+                            title: l10n.mathDifficultyProTitle,
+                            message: l10n.mathDifficultyProMessage,
+                            generatorType: GeneratorType.mathChallenge,
+                          );
+                        } else {
+                          setState(() => _difficulty = _Difficulty.hard);
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (!canHard) ...[
+                            const Icon(
+                              Icons.lock_outline,
+                              size: 13,
+                              color: AppColors.proPurple,
+                            ),
+                            const SizedBox(width: 4),
+                          ],
+                          Text(l10n.mathDifficultyHard),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
 
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: AppStyles.generatorButton(accent),
-            onPressed: _startCountdown,
-            child: Text(l10n.mathStart),
+              const SizedBox(height: 12),
+
+              // Duration
+              Row(
+                children: [
+                  GeneratorSectionTitle(l10n.mathDuration),
+                  if (!canDuration) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.proPurple.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: const Text(
+                        'PRO',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: AppColors.proPurple,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [15, 20, 30, 45, 60].map((sec) {
+                  final isSelected = _durationSeconds == sec;
+                  final isLocked = !canDuration && sec != 30;
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 6),
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: isSelected
+                              ? accent
+                              : (isLocked ? AppColors.proPurple : null),
+                          side: BorderSide(
+                            color: isSelected
+                                ? accent
+                                : (isLocked
+                                      ? AppColors.proPurple.withOpacity(0.4)
+                                      : Colors.grey.withOpacity(0.4)),
+                            width: isSelected ? 2 : 1,
+                          ),
+                          backgroundColor:
+                              isSelected ? accent.withOpacity(0.1) : null,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                        ),
+                        onPressed: () {
+                          if (isLocked) {
+                            showProDialog(
+                              context,
+                              title: l10n.mathDurationProTitle,
+                              message: l10n.mathDurationProMessage,
+                              generatorType: GeneratorType.mathChallenge,
+                            );
+                            return;
+                          }
+                          setState(() => _durationSeconds = sec);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (isLocked) ...[
+                              const Icon(
+                                Icons.lock_outline,
+                                size: 11,
+                                color: AppColors.proPurple,
+                              ),
+                              const SizedBox(width: 2),
+                            ],
+                            Text(
+                              '${sec}s',
+                              style: const TextStyle(fontSize: 13),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+
+              const SizedBox(height: 16),
+
+              FilledButton.icon(
+                style: AppStyles.generatorButton(accent),
+                onPressed: _startCountdown,
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: Text(l10n.mathStart),
+              ),
+            ],
           ),
         ),
       ],
@@ -505,21 +614,22 @@ class _MathChallengePageState extends State<MathChallengePage> {
 
         const Spacer(),
 
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            style: AppStyles.generatorButton(accent),
-            onPressed: _startCountdown,
-            child: Text(l10n.mathPlayAgain),
-          ),
+        FilledButton.icon(
+          style: AppStyles.generatorButton(accent),
+          onPressed: _startCountdown,
+          icon: const Icon(Icons.replay_rounded),
+          label: Text(l10n.mathPlayAgain),
         ),
         const SizedBox(height: 8),
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton(
-            onPressed: () => setState(() => _phase = _Phase.idle),
-            child: Text(l10n.mathBackToMenu),
+        OutlinedButton(
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
           ),
+          onPressed: () => setState(() => _phase = _Phase.idle),
+          child: Text(l10n.mathBackToMenu),
         ),
       ],
     );

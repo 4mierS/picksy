@@ -408,6 +408,8 @@
   "mathAvgAccuracy": "Durchschn. Genauigkeit",
   "generatorTicTacToe": "Tic Tac Toe",
   "ticTacToeDescription": "Klassisches 3×3-Spiel mit X und O",
+  "connectFourDescription": "Klassisches 7×6-Strategiespiel – 4 in Reihe gewinnt",
+  "mathChallengeDescription": "Löse Matheaufgaben so schnell wie möglich",
   "generatorConnectFour": "Vier gewinnt",
   "gameSetupTitle": "Spieleinstellungen",
   "gameModeLabel": "Spielmodus",

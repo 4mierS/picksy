@@ -408,6 +408,8 @@
   "mathAvgAccuracy": "Accuratezza media",
   "generatorTicTacToe": "Tris",
   "ticTacToeDescription": "Il classico gioco 3×3 di X e O",
+  "connectFourDescription": "Il classico gioco di strategia 7×6 – collega 4 per vincere",
+  "mathChallengeDescription": "Risolvi problemi matematici il più velocemente possibile",
   "generatorConnectFour": "Forza 4",
   "gameSetupTitle": "Impostazioni Gioco",
   "gameModeLabel": "Modalità di Gioco",

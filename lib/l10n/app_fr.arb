@@ -408,6 +408,8 @@
   "mathAvgAccuracy": "Précision moyenne",
   "generatorTicTacToe": "Morpion",
   "ticTacToeDescription": "Classique jeu 3×3 de X et O",
+  "connectFourDescription": "Jeu de stratégie 7×6 – aligne 4 jetons pour gagner",
+  "mathChallengeDescription": "Résous des problèmes de maths le plus vite possible",
   "generatorConnectFour": "Puissance 4",
   "gameSetupTitle": "Configuration",
   "gameModeLabel": "Mode de Jeu",

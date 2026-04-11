@@ -1934,6 +1934,18 @@ abstract class AppLocalizations {
   /// **'Classic 3×3 game of X\'s and O\'s'**
   String get ticTacToeDescription;
 
+  /// No description provided for @connectFourDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic 7×6 strategy game – connect 4 to win'**
+  String get connectFourDescription;
+
+  /// No description provided for @mathChallengeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve math problems as fast as you can'**
+  String get mathChallengeDescription;
+
   /// No description provided for @generatorConnectFour.
   ///
   /// In en, this message translates to:

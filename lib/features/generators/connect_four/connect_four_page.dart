@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
-import 'package:picksy/l10n/app_localizations.dart';
 import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/storage/game_stats_store.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
 import 'package:picksy/features/generators/shared/game_widgets.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 // ---------------------------------------------------------------------------
 // Private enums & constants
@@ -566,257 +566,207 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
   // Setup screen
   // ---------------------------------------------------------------------------
 
-  Widget _buildSetup(AppLocalizations l10n) {
+  Widget _buildSetup(dynamic l10n) {
     final gate = context.gate;
+    final canNames = gate.canUse(ProFeature.connectFourCustomNames);
+    final canDifficulty = gate.canUse(ProFeature.connectFourDifficulty);
 
-    return ListView(
-      padding: const EdgeInsets.all(16),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Container(
-          decoration: AppStyles.generatorResultCard(_accent),
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-          child: Column(
-            children: [
-              Icon(
-                GeneratorType.connectFour.homeIcon,
-                size: 56,
-                color: Colors.white,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.generatorConnectFour,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
-
-        // Game Mode
-        Card(
+        // ── Title card ────────────────────────────────────────────────────────
+        Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.gameModeLabel,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                  ),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Center(
+              child: Container(
+                width: double.infinity,
+                constraints: const BoxConstraints(minHeight: 200),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 28,
                 ),
-                const SizedBox(height: 10),
-                GameModeSelector(
-                  selected: _mode,
-                  accentColor: _accent,
-                  onChanged: (m) async {
-                    if (m == GameMode.local &&
-                        !gate.canUse(ProFeature.connectFourLocalMultiplayer)) {
-                      await showProDialog(
-                        context,
-                        title: l10n.gameLocalMultiplayerProTitle,
-                        message: l10n.gameLocalMultiplayerProMessage,
-                        generatorType: GeneratorType.connectFour,
-                        featureDefinitions: [
-                          l10n.gameModeLocal,
-                          l10n.gameCustomNamesProTitle,
-                          l10n.gameStatsTitle,
-                        ],
-                      );
-                      return;
-                    }
-                    setState(() {
-                      _mode = m;
-                      _p2Controller.text = m == GameMode.bot
-                          ? _kBotName
-                          : 'PLAYER 2';
-                    });
-                  },
+                decoration: AppStyles.generatorResultCard(_accent),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      l10n.generatorConnectFour,
+                      style: const TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.w900,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.connectFourDescription,
+                      style: const TextStyle(fontSize: 16),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 12),
 
-        // Player names
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      l10n.gamePlayerOneName,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+        // ── Sticky bottom controls ────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Game Mode
+              GeneratorSectionTitle(l10n.gameModeLabel),
+              const SizedBox(height: 8),
+              GameModeSelector(
+                selected: _mode,
+                accentColor: _accent,
+                onChanged: (m) async {
+                  if (m == GameMode.local &&
+                      !gate.canUse(ProFeature.connectFourLocalMultiplayer)) {
+                    await showProDialog(
+                      context,
+                      title: l10n.gameLocalMultiplayerProTitle,
+                      message: l10n.gameLocalMultiplayerProMessage,
+                      generatorType: GeneratorType.connectFour,
+                      featureDefinitions: [
+                        l10n.gameModeLocal,
+                        l10n.gameCustomNamesProTitle,
+                        l10n.gameStatsTitle,
+                      ],
+                    );
+                    return;
+                  }
+                  setState(() {
+                    _mode = m;
+                    _p2Controller.text =
+                        m == GameMode.bot ? _kBotName : 'PLAYER 2';
+                  });
+                },
+              ),
+
+              const SizedBox(height: 12),
+
+              // ── Player names (always rendered, P2 only shown in local) ─────
+              Row(
+                children: [
+                  GeneratorSectionTitle(l10n.gamePlayerOneName),
+                  if (!canNames) ...[
+                    const SizedBox(width: 6),
+                    const Icon(
+                      Icons.lock,
+                      size: 13,
+                      color: AppColors.proPurple,
                     ),
-                    if (!gate.canUse(ProFeature.connectFourCustomNames)) ...[
-                      const SizedBox(width: 6),
-                      const Icon(
-                        Icons.lock,
-                        size: 14,
-                        color: AppColors.proPurple,
-                      ),
-                    ],
                   ],
-                ),
-                const SizedBox(height: 8),
-                TextField(
-                  controller: _p1Controller,
-                  enabled: gate.canUse(ProFeature.connectFourCustomNames),
-                  textCapitalization: TextCapitalization.characters,
-                  decoration: InputDecoration(
-                    hintText: l10n.gamePlayerNameHint,
-                    border: const OutlineInputBorder(),
-                    isDense: true,
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: _CompactNameField(
+                      controller: _p1Controller,
+                      hint: 'P1',
+                      enabled: canNames,
+                      onLockedTap: () => showProDialog(
+                        context,
+                        title: l10n.gameCustomNamesProTitle,
+                        message: l10n.gameCustomNamesProMessage,
+                        generatorType: GeneratorType.connectFour,
+                      ),
+                    ),
                   ),
-                  onTap: !gate.canUse(ProFeature.connectFourCustomNames)
-                      ? () => showProDialog(
+                  if (_mode == GameMode.local) ...[
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _CompactNameField(
+                        controller: _p2Controller,
+                        hint: 'P2',
+                        enabled: canNames,
+                        onLockedTap: () => showProDialog(
                           context,
                           title: l10n.gameCustomNamesProTitle,
                           message: l10n.gameCustomNamesProMessage,
                           generatorType: GeneratorType.connectFour,
-                        )
-                      : null,
-                ),
-                if (_mode == GameMode.local) ...[
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Text(
-                        l10n.gamePlayerTwoName,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      if (!gate.canUse(ProFeature.connectFourCustomNames)) ...[
-                        const SizedBox(width: 6),
-                        const Icon(
-                          Icons.lock,
-                          size: 14,
-                          color: AppColors.proPurple,
                         ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _p2Controller,
-                    enabled: gate.canUse(ProFeature.connectFourCustomNames),
-                    textCapitalization: TextCapitalization.characters,
-                    decoration: InputDecoration(
-                      hintText: l10n.gamePlayerNameHint,
-                      border: const OutlineInputBorder(),
-                      isDense: true,
+                      ),
                     ),
-                    onTap: !gate.canUse(ProFeature.connectFourCustomNames)
-                        ? () => showProDialog(
-                            context,
-                            title: l10n.gameCustomNamesProTitle,
-                            message: l10n.gameCustomNamesProMessage,
-                            generatorType: GeneratorType.connectFour,
-                          )
-                        : null,
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-
-        // Difficulty
-        if (_mode == GameMode.bot)
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        l10n.gameDifficultyLabel,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
-                      ),
-                      if (!gate.canUse(ProFeature.connectFourDifficulty)) ...[
-                        const SizedBox(width: 6),
-                        const Icon(
-                          Icons.lock,
-                          size: 14,
-                          color: AppColors.proPurple,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          l10n.gameModePro,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: AppColors.proPurple,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  DifficultySelector(
-                    selected: _difficulty,
-                    enabled: gate.canUse(ProFeature.connectFourDifficulty),
-                    onChanged: (d) async {
-                      if (!gate.canUse(ProFeature.connectFourDifficulty)) {
-                        await showProDialog(
-                          context,
-                          title: l10n.gameDifficultyProTitle,
-                          message: l10n.gameDifficultyProMessage,
-                          generatorType: GeneratorType.connectFour,
-                        );
-                        return;
-                      }
-                      setState(() => _difficulty = d);
-                    },
-                    accentColor: _accent,
-                  ),
+                  ],
                 ],
               ),
-            ),
+
+              const SizedBox(height: 12),
+
+              // ── Difficulty (always takes space; hidden in local mode) ───────
+              Visibility(
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                visible: _mode == GameMode.bot,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        GeneratorSectionTitle(l10n.gameDifficultyLabel),
+                        if (!canDifficulty) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.proPurple.withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: const Text(
+                              'PRO',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: AppColors.proPurple,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    DifficultySelector(
+                      selected: _difficulty,
+                      enabled: canDifficulty,
+                      accentColor: _accent,
+                      onChanged: (d) async {
+                        if (!canDifficulty) {
+                          await showProDialog(
+                            context,
+                            title: l10n.gameDifficultyProTitle,
+                            message: l10n.gameDifficultyProMessage,
+                            generatorType: GeneratorType.connectFour,
+                          );
+                          return;
+                        }
+                        setState(() => _difficulty = d);
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+                ),
+              ),
+
+              FilledButton.icon(
+                style: AppStyles.generatorButton(_accent),
+                onPressed: _startGame,
+                icon: const Icon(Icons.play_arrow_rounded),
+                label: Text(l10n.gameStartGame),
+              ),
+            ],
           ),
-        const SizedBox(height: 12),
-
-        // Stats
-        GameStatsCard(
-          gameKey: _kGameKey,
-          accentColor: _accent,
-          proFeature: ProFeature.connectFourStats,
-          generatorType: GeneratorType.connectFour,
         ),
-        const SizedBox(height: 12),
-
-        // Free/Pro hint
-        Container(
-          decoration: AppStyles.proCard(),
-          padding: const EdgeInsets.all(14),
-          child: Text(
-            l10n.gameFreeProHint,
-            style: const TextStyle(fontSize: 13, color: Colors.white70),
-          ),
-        ),
-        const SizedBox(height: 20),
-
-        FilledButton.icon(
-          style: AppStyles.generatorButton(_accent),
-          onPressed: _startGame,
-          icon: const Icon(Icons.play_arrow_rounded),
-          label: Text(l10n.gameStartGame),
-        ),
-        const SizedBox(height: 20),
       ],
     );
   }
@@ -825,7 +775,7 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
   // Game screen
   // ---------------------------------------------------------------------------
 
-  Widget _buildGame(AppLocalizations l10n) {
+  Widget _buildGame(dynamic l10n) {
     final isFinished = _phase == _Phase.finished;
 
     return Column(
@@ -985,6 +935,43 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
       _Cell.red => Colors.red,
       _Cell.yellow => Colors.yellow.shade700,
     };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Small reusable helpers (file-local)
+// ---------------------------------------------------------------------------
+
+class _CompactNameField extends StatelessWidget {
+  final TextEditingController controller;
+  final String hint;
+  final bool enabled;
+  final VoidCallback onLockedTap;
+
+  const _CompactNameField({
+    required this.controller,
+    required this.hint,
+    required this.enabled,
+    required this.onLockedTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      enabled: enabled,
+      textCapitalization: TextCapitalization.characters,
+      decoration: InputDecoration(
+        hintText: hint,
+        border: const OutlineInputBorder(),
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
+      ),
+      onTap: !enabled ? onLockedTap : null,
+    );
   }
 }
 
