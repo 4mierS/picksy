@@ -412,7 +412,7 @@ class _MemoryFlashPageState extends State<MemoryFlashPage> {
                     LinearProgressIndicator(
                       value: _inputIndex / _sequence.length,
                       color: accent,
-                      backgroundColor: accent.withOpacity(0.15),
+                      backgroundColor: accent.withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ],
@@ -593,10 +593,10 @@ class _BlockSettings extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     foregroundColor: selected ? accent : null,
                     side: BorderSide(
-                      color: selected ? accent : Colors.grey.withOpacity(0.4),
+                      color: selected ? accent : Colors.grey.withValues(alpha: 0.4),
                       width: selected ? 2 : 1,
                     ),
-                    backgroundColor: selected ? accent.withOpacity(0.1) : null,
+                    backgroundColor: selected ? accent.withValues(alpha: 0.1) : null,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   onPressed: enabled ? () => onChanged(count) : null,
@@ -648,7 +648,7 @@ class _SpeedSettings extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppColors.proPurple.withOpacity(0.15),
+                  color: AppColors.proPurple.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
@@ -675,10 +675,10 @@ class _SpeedSettings extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                     foregroundColor: selected ? accent : null,
                     side: BorderSide(
-                      color: selected ? accent : Colors.grey.withOpacity(0.4),
+                      color: selected ? accent : Colors.grey.withValues(alpha: 0.4),
                       width: selected ? 2 : 1,
                     ),
-                    backgroundColor: selected ? accent.withOpacity(0.1) : null,
+                    backgroundColor: selected ? accent.withValues(alpha: 0.1) : null,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                   ),
                   onPressed: enabled ? () => onSpeedChanged(s) : null,
@@ -718,15 +718,15 @@ class _MemoryTile extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: isHighlighted ? color : color.withOpacity(0.25),
+        color: isHighlighted ? color : color.withValues(alpha: 0.25),
         border: Border.all(
-          color: isHighlighted ? color : color.withOpacity(0.4),
+          color: isHighlighted ? color : color.withValues(alpha: 0.4),
           width: isHighlighted ? 3 : 1.5,
         ),
         boxShadow: isHighlighted
             ? [
                 BoxShadow(
-                  color: color.withOpacity(0.55),
+                  color: color.withValues(alpha: 0.55),
                   blurRadius: 16,
                   spreadRadius: 2,
                 ),
@@ -738,7 +738,7 @@ class _MemoryTile extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: enabled ? onTap : null,
-          splashColor: color.withOpacity(0.4),
+          splashColor: color.withValues(alpha: 0.4),
         ),
       ),
     );
@@ -764,8 +764,8 @@ class _StatCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: color.withOpacity(0.1),
-        border: Border.all(color: color.withOpacity(0.25)),
+        color: color.withValues(alpha: 0.1),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

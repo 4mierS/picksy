@@ -647,7 +647,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.proPurple.withOpacity(0.15),
+                              color: AppColors.proPurple.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: const Text(
@@ -831,7 +831,7 @@ class _TicTacToePageState extends State<TicTacToePage> {
             duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
               color: isWinCell
-                  ? _accent.withOpacity(0.3)
+                  ? _accent.withValues(alpha: 0.3)
                   : Theme.of(context).colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
@@ -927,10 +927,10 @@ class _OffOnRow extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: !value ? accent : null,
               side: BorderSide(
-                color: !value ? accent : Colors.grey.withOpacity(0.4),
+                color: !value ? accent : Colors.grey.withValues(alpha: 0.4),
                 width: !value ? 2 : 1,
               ),
-              backgroundColor: !value ? accent.withOpacity(0.1) : null,
+              backgroundColor: !value ? accent.withValues(alpha: 0.1) : null,
               padding: const EdgeInsets.symmetric(vertical: 8),
             ),
             onPressed: () => onChanged(false),
@@ -943,10 +943,10 @@ class _OffOnRow extends StatelessWidget {
             style: OutlinedButton.styleFrom(
               foregroundColor: value ? accent : null,
               side: BorderSide(
-                color: value ? accent : Colors.grey.withOpacity(0.4),
+                color: value ? accent : Colors.grey.withValues(alpha: 0.4),
                 width: value ? 2 : 1,
               ),
-              backgroundColor: value ? accent.withOpacity(0.1) : null,
+              backgroundColor: value ? accent.withValues(alpha: 0.1) : null,
               padding: const EdgeInsets.symmetric(vertical: 8),
             ),
             onPressed: () => onChanged(true),

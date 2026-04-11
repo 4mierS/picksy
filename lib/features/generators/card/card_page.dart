@@ -214,7 +214,7 @@ class _CardPageState extends State<CardPage> {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.proPurple.withOpacity(0.15),
+                            color: AppColors.proPurple.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: const Text(
@@ -247,12 +247,12 @@ class _CardPageState extends State<CardPage> {
                               color: selected
                                   ? accent
                                   : (isLocked
-                                        ? AppColors.proPurple.withOpacity(0.4)
-                                        : Colors.grey.withOpacity(0.4)),
+                                        ? AppColors.proPurple.withValues(alpha: 0.4)
+                                        : Colors.grey.withValues(alpha: 0.4)),
                               width: selected ? 2 : 1,
                             ),
                             backgroundColor:
-                                selected ? accent.withOpacity(0.1) : null,
+                                selected ? accent.withValues(alpha: 0.1) : null,
                             padding: const EdgeInsets.symmetric(vertical: 8),
                           ),
                           onPressed: () async {
@@ -367,7 +367,7 @@ class _ToggleRow extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppColors.proPurple.withOpacity(0.15),
+                  color: AppColors.proPurple.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
@@ -390,10 +390,10 @@ class _ToggleRow extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: !value ? accent : null,
                   side: BorderSide(
-                    color: !value ? accent : Colors.grey.withOpacity(0.4),
+                    color: !value ? accent : Colors.grey.withValues(alpha: 0.4),
                     width: !value ? 2 : 1,
                   ),
-                  backgroundColor: !value ? accent.withOpacity(0.1) : null,
+                  backgroundColor: !value ? accent.withValues(alpha: 0.1) : null,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                 ),
                 onPressed: () => onChanged(false),
@@ -406,10 +406,10 @@ class _ToggleRow extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: value ? accent : null,
                   side: BorderSide(
-                    color: value ? accent : Colors.grey.withOpacity(0.4),
+                    color: value ? accent : Colors.grey.withValues(alpha: 0.4),
                     width: value ? 2 : 1,
                   ),
-                  backgroundColor: value ? accent.withOpacity(0.1) : null,
+                  backgroundColor: value ? accent.withValues(alpha: 0.1) : null,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                 ),
                 onPressed: () => onChanged(true),

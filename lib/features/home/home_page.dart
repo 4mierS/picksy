@@ -68,7 +68,7 @@ class HomePage extends StatelessWidget {
                               .textTheme
                               .bodySmall
                               ?.color
-                              ?.withOpacity(0.7),
+                              ?.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -261,7 +261,7 @@ class _GeneratorTile extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [_accent.withOpacity(0.18), _accent.withOpacity(0.06)],
+              colors: [_accent.withValues(alpha: 0.18), _accent.withValues(alpha: 0.06)],
             ),
           ),
           child: Padding(

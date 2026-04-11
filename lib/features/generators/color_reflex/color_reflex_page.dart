@@ -411,7 +411,7 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.proPurple.withOpacity(0.15),
+                        color: AppColors.proPurple.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: const Text(
@@ -447,12 +447,12 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
                             color: selected
                                 ? accent
                                 : (isLocked
-                                      ? AppColors.proPurple.withOpacity(0.4)
-                                      : Colors.grey.withOpacity(0.4)),
+                                      ? AppColors.proPurple.withValues(alpha: 0.4)
+                                      : Colors.grey.withValues(alpha: 0.4)),
                             width: selected ? 2 : 1,
                           ),
                           backgroundColor:
-                              selected ? accent.withOpacity(0.1) : null,
+                              selected ? accent.withValues(alpha: 0.1) : null,
                           padding: const EdgeInsets.symmetric(vertical: 8),
                         ),
                         onPressed: () => _onDurationTap(s),
@@ -560,13 +560,13 @@ class _ColorReflexPageState extends State<ColorReflexPage> {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: _showWrong
-                    ? Colors.red.withOpacity(0.12)
+                    ? Colors.red.withValues(alpha: 0.12)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
                   color: _showWrong
-                      ? Colors.red.withOpacity(0.5)
-                      : accent.withOpacity(0.3),
+                      ? Colors.red.withValues(alpha: 0.5)
+                      : accent.withValues(alpha: 0.3),
                   width: 2,
                 ),
               ),
@@ -770,9 +770,9 @@ class _InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 14),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -807,10 +807,10 @@ class _ColorButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: gameColor.color,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: Colors.white.withOpacity(0.3), width: 2),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 2),
           boxShadow: [
             BoxShadow(
-              color: gameColor.color.withOpacity(0.4),
+              color: gameColor.color.withValues(alpha: 0.4),
               blurRadius: 6,
               offset: const Offset(0, 3),
             ),
@@ -855,8 +855,8 @@ class _ResultStatCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: color.withOpacity(0.1),
-        border: Border.all(color: color.withOpacity(0.25)),
+        color: color.withValues(alpha: 0.1),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

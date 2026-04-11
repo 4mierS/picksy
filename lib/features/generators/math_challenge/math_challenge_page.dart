@@ -210,7 +210,7 @@ class _MathChallengePageState extends State<MathChallengePage> {
 
     context.read<HistoryStore>().add(
       type: GeneratorType.mathChallenge,
-      value: '$_correct correct, $_wrong wrong (${accuracy}%)',
+      value: '$_correct correct, $_wrong wrong ($accuracy%)',
       maxEntries: _historyMaxEntries,
       metadata: {
         'correctCount': _correct,
@@ -348,11 +348,11 @@ class _MathChallengePageState extends State<MathChallengePage> {
                         side: BorderSide(
                           color: _difficulty == _Difficulty.easy
                               ? accent
-                              : Colors.grey.withOpacity(0.4),
+                              : Colors.grey.withValues(alpha: 0.4),
                           width: _difficulty == _Difficulty.easy ? 2 : 1,
                         ),
                         backgroundColor: _difficulty == _Difficulty.easy
-                            ? accent.withOpacity(0.1)
+                            ? accent.withValues(alpha: 0.1)
                             : null,
                         padding: const EdgeInsets.symmetric(vertical: 8),
                       ),
@@ -372,12 +372,12 @@ class _MathChallengePageState extends State<MathChallengePage> {
                           color: _difficulty == _Difficulty.hard
                               ? accent
                               : (!canHard
-                                    ? AppColors.proPurple.withOpacity(0.4)
-                                    : Colors.grey.withOpacity(0.4)),
+                                    ? AppColors.proPurple.withValues(alpha: 0.4)
+                                    : Colors.grey.withValues(alpha: 0.4)),
                           width: _difficulty == _Difficulty.hard ? 2 : 1,
                         ),
                         backgroundColor: _difficulty == _Difficulty.hard
-                            ? accent.withOpacity(0.1)
+                            ? accent.withValues(alpha: 0.1)
                             : null,
                         padding: const EdgeInsets.symmetric(vertical: 8),
                       ),
@@ -427,7 +427,7 @@ class _MathChallengePageState extends State<MathChallengePage> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.proPurple.withOpacity(0.15),
+                        color: AppColors.proPurple.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: const Text(
@@ -459,12 +459,12 @@ class _MathChallengePageState extends State<MathChallengePage> {
                             color: isSelected
                                 ? accent
                                 : (isLocked
-                                      ? AppColors.proPurple.withOpacity(0.4)
-                                      : Colors.grey.withOpacity(0.4)),
+                                      ? AppColors.proPurple.withValues(alpha: 0.4)
+                                      : Colors.grey.withValues(alpha: 0.4)),
                             width: isSelected ? 2 : 1,
                           ),
                           backgroundColor:
-                              isSelected ? accent.withOpacity(0.1) : null,
+                              isSelected ? accent.withValues(alpha: 0.1) : null,
                           padding: const EdgeInsets.symmetric(vertical: 8),
                         ),
                         onPressed: () {
@@ -663,7 +663,7 @@ class _StatChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.12),
+          color: color.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(

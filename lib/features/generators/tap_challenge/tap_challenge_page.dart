@@ -165,7 +165,7 @@ class _TapChallengePageState extends State<TapChallengePage> {
 
   Color _bgColor(BuildContext context) {
     if (_phase == _Phase.running) {
-      return GeneratorType.tapChallenge.accentColor.withOpacity(0.12);
+      return GeneratorType.tapChallenge.accentColor.withValues(alpha: 0.12);
     }
     return Theme.of(context).scaffoldBackgroundColor;
   }
@@ -348,7 +348,7 @@ class _TapChallengePageState extends State<TapChallengePage> {
             LinearProgressIndicator(
               value: _remainingMs / (_durationSeconds * 1000),
               color: accent,
-              backgroundColor: accent.withOpacity(0.2),
+              backgroundColor: accent.withValues(alpha: 0.2),
               minHeight: 8,
               borderRadius: BorderRadius.circular(4),
             ),
@@ -436,7 +436,7 @@ class _DurationSelector extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: AppColors.proPurple.withOpacity(0.15),
+                  color: AppColors.proPurple.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: const Text(
@@ -465,10 +465,10 @@ class _DurationSelector extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: selected ? accent : null,
                       side: BorderSide(
-                        color: selected ? accent : Colors.grey.withOpacity(0.4),
+                        color: selected ? accent : Colors.grey.withValues(alpha: 0.4),
                         width: selected ? 2 : 1,
                       ),
-                      backgroundColor: selected ? accent.withOpacity(0.1) : null,
+                      backgroundColor: selected ? accent.withValues(alpha: 0.1) : null,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                     onPressed: canChange ? () => onChanged(s) : null,

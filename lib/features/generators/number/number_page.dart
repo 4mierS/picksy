@@ -281,8 +281,8 @@ class _LockedField extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: accent.withOpacity(0.4)),
-        color: accent.withOpacity(0.08),
+        border: Border.all(color: accent.withValues(alpha: 0.4)),
+        color: accent.withValues(alpha: 0.08),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -376,7 +376,7 @@ class _WordDisplay extends StatelessWidget {
                 color: accent,
               ),
             ),
-            Container(width: 24, height: 2.5, color: accent.withOpacity(0.6)),
+            Container(width: 24, height: 2.5, color: accent.withValues(alpha: 0.6)),
           ],
         );
       }).toList(),
@@ -415,10 +415,10 @@ class _LetterKeyboard extends StatelessWidget {
               if (isGuessed) {
                 fgColor = isCorrect
                     ? Colors.green
-                    : Colors.redAccent.withOpacity(0.7);
+                    : Colors.redAccent.withValues(alpha: 0.7);
                 bgColor = isCorrect
-                    ? Colors.green.withOpacity(0.12)
-                    : Colors.redAccent.withOpacity(0.08);
+                    ? Colors.green.withValues(alpha: 0.12)
+                    : Colors.redAccent.withValues(alpha: 0.08);
               }
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -430,16 +430,16 @@ class _LetterKeyboard extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       backgroundColor: isGuessed
                           ? bgColor
-                          : accent.withOpacity(0.12),
+                          : accent.withValues(alpha: 0.12),
                       foregroundColor: isGuessed ? fgColor : accent,
                       disabledForegroundColor: fgColor,
                       disabledBackgroundColor: bgColor,
                       side: BorderSide(
                         color: isGuessed
                             ? (isCorrect
-                                  ? Colors.green.withOpacity(0.5)
-                                  : Colors.redAccent.withOpacity(0.3))
-                            : accent.withOpacity(0.3),
+                                  ? Colors.green.withValues(alpha: 0.5)
+                                  : Colors.redAccent.withValues(alpha: 0.3))
+                            : accent.withValues(alpha: 0.3),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -473,7 +473,7 @@ class _HangmanPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint scaffold = Paint()
-      ..color = accent.withOpacity(0.55)
+      ..color = accent.withValues(alpha: 0.55)
       ..strokeWidth = 3
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke;

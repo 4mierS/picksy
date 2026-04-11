@@ -29,8 +29,8 @@ class ProPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(999),
                 gradient: LinearGradient(
                   colors: [
-                    AppColors.proPurple.withOpacity(0.95),
-                    AppColors.proPurple.withOpacity(0.75),
+                    AppColors.proPurple.withValues(alpha: 0.95),
+                    AppColors.proPurple.withValues(alpha: 0.75),
                   ],
                 ),
               ),
@@ -124,7 +124,7 @@ class ProPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.18),
+                  color: Colors.white.withValues(alpha: 0.18),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -255,7 +255,7 @@ class _FeatureTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.proPurple.withOpacity(0.07),
+        color: AppColors.proPurple.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

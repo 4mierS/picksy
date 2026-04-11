@@ -184,7 +184,7 @@ class _LetterPageState extends State<LetterPage> {
                             style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                           selectedColor: GeneratorType.letter.accentColor
-                              .withOpacity(0.2),
+                              .withValues(alpha: 0.2),
                           checkmarkColor: GeneratorType.letter.accentColor,
                           selected: temp.contains(c),
                           onSelected: (selected) {
@@ -261,8 +261,8 @@ class _ExcludeFilter extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: accent.withOpacity(0.4)),
-          color: accent.withOpacity(0.06),
+          border: Border.all(color: accent.withValues(alpha: 0.4)),
+          color: accent.withValues(alpha: 0.06),
         ),
         child: Row(
           children: [
@@ -283,7 +283,7 @@ class _ExcludeFilter extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: accent.withOpacity(0.7)),
+            Icon(Icons.chevron_right, color: accent.withValues(alpha: 0.7)),
           ],
         ),
       ),

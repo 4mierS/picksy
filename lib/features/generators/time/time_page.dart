@@ -210,7 +210,7 @@ class _TimePageState extends State<TimePage> {
                         fontWeight: FontWeight.w900,
                         color: _finished
                             ? Colors.red.shade600
-                            : (_running ? accent : accent.withOpacity(0.55)),
+                            : (_running ? accent : accent.withValues(alpha: 0.55)),
                       ),
                     ),
             ),
@@ -234,7 +234,7 @@ class _TimePageState extends State<TimePage> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.proPurple.withOpacity(0.14),
+                          color: AppColors.proPurple.withValues(alpha: 0.14),
                           borderRadius: BorderRadius.circular(999),
                         ),
                         child: Text(
@@ -350,7 +350,7 @@ class _TimePageState extends State<TimePage> {
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
                             foregroundColor: accent,
-                            side: BorderSide(color: accent.withOpacity(0.5)),
+                            side: BorderSide(color: accent.withValues(alpha: 0.5)),
                             padding: const EdgeInsets.symmetric(vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18),
@@ -411,8 +411,8 @@ class _TimeStepper extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 10, 12, 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: accent.withOpacity(0.4)),
-        color: accent.withOpacity(0.08),
+        border: Border.all(color: accent.withValues(alpha: 0.4)),
+        color: accent.withValues(alpha: 0.08),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -473,8 +473,8 @@ class _TimeLockedField extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: accent.withOpacity(0.4)),
-        color: accent.withOpacity(0.08),
+        border: Border.all(color: accent.withValues(alpha: 0.4)),
+        color: accent.withValues(alpha: 0.08),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

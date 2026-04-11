@@ -210,8 +210,9 @@ class _ConnectFourAI {
         if (m != _Cell.empty &&
             board[r][c + 1] == m &&
             board[r][c + 2] == m &&
-            board[r][c + 3] == m)
+            board[r][c + 3] == m) {
           return m;
+        }
       }
     }
     // Vertical
@@ -221,8 +222,9 @@ class _ConnectFourAI {
         if (m != _Cell.empty &&
             board[r + 1][c] == m &&
             board[r + 2][c] == m &&
-            board[r + 3][c] == m)
+            board[r + 3][c] == m) {
           return m;
+        }
       }
     }
     // Diagonal /
@@ -232,8 +234,9 @@ class _ConnectFourAI {
         if (m != _Cell.empty &&
             board[r - 1][c + 1] == m &&
             board[r - 2][c + 2] == m &&
-            board[r - 3][c + 3] == m)
+            board[r - 3][c + 3] == m) {
           return m;
+        }
       }
     }
     // Diagonal \
@@ -243,8 +246,9 @@ class _ConnectFourAI {
         if (m != _Cell.empty &&
             board[r + 1][c + 1] == m &&
             board[r + 2][c + 2] == m &&
-            board[r + 3][c + 3] == m)
+            board[r + 3][c + 3] == m) {
           return m;
+        }
       }
     }
     return null;
@@ -734,7 +738,7 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: AppColors.proPurple.withOpacity(0.15),
+                              color: AppColors.proPurple.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: const Text(
@@ -924,7 +928,7 @@ class _ConnectFourPageState extends State<ConnectFourPage> {
                             boxShadow: isWin
                                 ? [
                                     BoxShadow(
-                                      color: Colors.white.withOpacity(0.5),
+                                      color: Colors.white.withValues(alpha: 0.5),
                                       blurRadius: 6,
                                     ),
                                   ]

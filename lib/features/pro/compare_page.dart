@@ -41,7 +41,7 @@ class CompareFreePro extends StatelessWidget {
             // Header row
             TableRow(
               decoration: BoxDecoration(
-                color: AppColors.proPurple.withOpacity(0.12),
+                color: AppColors.proPurple.withValues(alpha: 0.12),
               ),
               children: [
                 _cell(l10n.compareFeatureLabel, bold: true),
@@ -63,7 +63,7 @@ class CompareFreePro extends StatelessWidget {
                     free,
                     center: true,
                     color: free == '✗'
-                        ? Colors.red.withOpacity(0.7)
+                        ? Colors.red.withValues(alpha: 0.7)
                         : null,
                   ),
                   _cell(

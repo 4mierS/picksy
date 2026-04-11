@@ -131,8 +131,8 @@ class GeneratorAnalyticsPage extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: accent.withOpacity(0.08),
-                        border: Border.all(color: accent.withOpacity(0.2)),
+                        color: accent.withValues(alpha: 0.08),
+                        border: Border.all(color: accent.withValues(alpha: 0.2)),
                       ),
                       child: Row(
                         children: [
@@ -241,7 +241,7 @@ class GeneratorAnalyticsPage extends StatelessWidget {
         final wrong = rng.nextInt(5);
         final total = correct + wrong;
         final accuracy = total > 0 ? (correct / total * 100).round() : 0;
-        return '$correct correct, $wrong wrong (${accuracy}%)';
+        return '$correct correct, $wrong wrong ($accuracy%)';
       case GeneratorType.ticTacToe:
         final winner = rng.nextBool() ? 'PLAYER' : 'BOT';
         return '$winner wins';
@@ -431,8 +431,8 @@ class _StatCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: accent.withOpacity(0.1),
-        border: Border.all(color: accent.withOpacity(0.25)),
+        color: accent.withValues(alpha: 0.1),
+        border: Border.all(color: accent.withValues(alpha: 0.25)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -685,7 +685,7 @@ class _ColorStats extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: color ?? Colors.grey,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                  border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
                 ),
               ),
             );
@@ -1410,14 +1410,15 @@ class _MemoryFlashStats extends StatelessWidget {
     // Distribution: buckets 1-3, 4-6, 7-9, 10+
     final buckets = [0, 0, 0, 0];
     for (final l in levels) {
-      if (l <= 3)
+      if (l <= 3) {
         buckets[0]++;
-      else if (l <= 6)
+      } else if (l <= 6) {
         buckets[1]++;
-      else if (l <= 9)
+      } else if (l <= 9) {
         buckets[2]++;
-      else
+      } else {
         buckets[3]++;
+      }
     }
     final maxBucket = buckets.reduce(max);
 
@@ -1513,7 +1514,7 @@ class _BarRow extends StatelessWidget {
                   Container(
                     height: 20,
                     decoration: BoxDecoration(
-                      color: accent.withOpacity(0.12),
+                      color: accent.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -1521,7 +1522,7 @@ class _BarRow extends StatelessWidget {
                     height: 20,
                     width: constraints.maxWidth * fraction.clamp(0.0, 1.0),
                     decoration: BoxDecoration(
-                      color: accent.withOpacity(0.7),
+                      color: accent.withValues(alpha: 0.7),
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),

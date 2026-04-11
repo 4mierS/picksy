@@ -115,7 +115,7 @@ class GameModeButton extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                 decoration: BoxDecoration(
-                  color: AppColors.proPurple.withOpacity(0.15),
+                  color: AppColors.proPurple.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

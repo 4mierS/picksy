@@ -11,7 +11,7 @@ class AppStyles {
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [accent.withOpacity(0.20), accent.withOpacity(0.05)],
+        colors: [accent.withValues(alpha: 0.20), accent.withValues(alpha: 0.05)],
       ),
     );
   }
@@ -21,7 +21,7 @@ class AppStyles {
     return BoxDecoration(
       borderRadius: cardRadius,
       gradient: LinearGradient(
-        colors: [primary.withOpacity(0.10), primary.withOpacity(0.03)],
+        colors: [primary.withValues(alpha: 0.10), primary.withValues(alpha: 0.03)],
       ),
     );
   }
@@ -33,8 +33,8 @@ class AppStyles {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          AppColors.proPurple.withOpacity(0.20),
-          AppColors.proPurple.withOpacity(0.06),
+          AppColors.proPurple.withValues(alpha: 0.20),
+          AppColors.proPurple.withValues(alpha: 0.06),
         ],
       ),
     );
@@ -46,19 +46,19 @@ class AppStyles {
       gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        colors: [accent.withOpacity(0.20), accent.withOpacity(0.06)],
+        colors: [accent.withValues(alpha: 0.20), accent.withValues(alpha: 0.06)],
       ),
-      border: Border.all(color: accent.withOpacity(0.28)),
+      border: Border.all(color: accent.withValues(alpha: 0.28)),
     );
   }
 
   static ButtonStyle generatorButton(Color accent) {
     return FilledButton.styleFrom(
-      backgroundColor: accent.withOpacity(0.16),
+      backgroundColor: accent.withValues(alpha: 0.16),
       foregroundColor: accent,
-      disabledBackgroundColor: accent.withOpacity(0.08),
-      disabledForegroundColor: accent.withOpacity(0.45),
-      side: BorderSide(color: accent.withOpacity(0.35)),
+      disabledBackgroundColor: accent.withValues(alpha: 0.08),
+      disabledForegroundColor: accent.withValues(alpha: 0.45),
+      side: BorderSide(color: accent.withValues(alpha: 0.35)),
       padding: const EdgeInsets.symmetric(vertical: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
     );

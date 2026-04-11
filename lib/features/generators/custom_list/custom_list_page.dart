@@ -46,11 +46,12 @@ class _CustomListPageState extends State<CustomListPage> {
 
     final history = context.read<HistoryStore>();
     final gate = context.gateRead;
+    final noItemsLabel = context.l10n.customListNoItems;
 
     final picked = await store.drawFromSelected(withReplacement: _withReplacement);
     if (!mounted) return;
 
-    final value = picked ?? context.l10n.customListNoItems;
+    final value = picked ?? noItemsLabel;
     await history.add(
       type: GeneratorType.customList,
       value: value,
@@ -123,7 +124,7 @@ class _CustomListPageState extends State<CustomListPage> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.red.withOpacity(0.1),
+                color: Colors.red.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.delete_outline, color: Colors.red, size: 32),
@@ -337,9 +338,9 @@ class _CustomListPageState extends State<CustomListPage> {
                       vertical: 14,
                     ),
                     decoration: BoxDecoration(
-                      color: accent.withOpacity(0.12),
+                      color: accent.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: accent.withOpacity(0.35)),
+                      border: Border.all(color: accent.withValues(alpha: 0.35)),
                     ),
                     child: Text(
                       _lastPicked!,
@@ -384,7 +385,7 @@ class _CustomListPageState extends State<CustomListPage> {
                         border: Border.all(
                           color: Theme.of(
                             context,
-                          ).dividerColor.withOpacity(0.35),
+                          ).dividerColor.withValues(alpha: 0.35),
                         ),
                       ),
                       child: Row(
@@ -474,7 +475,7 @@ class _CustomListPageState extends State<CustomListPage> {
                         child: OutlinedButton.icon(
                           style: OutlinedButton.styleFrom(
                             foregroundColor: accent,
-                            side: BorderSide(color: accent.withOpacity(0.5)),
+                            side: BorderSide(color: accent.withValues(alpha: 0.5)),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18),
                             ),
@@ -525,9 +526,9 @@ class _CustomListPageState extends State<CustomListPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: accent.withOpacity(0.08),
+        color: accent.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: accent.withOpacity(0.3)),
+        border: Border.all(color: accent.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

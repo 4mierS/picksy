@@ -190,7 +190,7 @@ class _CoinFace extends StatelessWidget {
               height: 22,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: _goldLight.withOpacity(0.55),
+                color: _goldLight.withValues(alpha: 0.55),
               ),
             ),
           ),

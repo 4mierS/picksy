@@ -145,9 +145,9 @@ class _BottleSpinPageState extends State<BottleSpinPage>
                     height: 300,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: accent.withOpacity(0.05),
+                      color: accent.withValues(alpha: 0.05),
                       border: Border.all(
-                        color: accent.withOpacity(0.18),
+                        color: accent.withValues(alpha: 0.18),
                         width: 1.5,
                       ),
                     ),
@@ -264,14 +264,14 @@ class _BottlePainter extends CustomPainter {
         Rect.fromLTWH(hx, hy, hw, hh),
         const Radius.circular(8),
       ),
-      Paint()..color = Colors.white.withOpacity(0.22),
+      Paint()..color = Colors.white.withValues(alpha: 0.22),
     );
 
     // Subtle outline
     canvas.drawPath(
       path,
       Paint()
-        ..color = color.withOpacity(0.45)
+        ..color = color.withValues(alpha: 0.45)
         ..style = PaintingStyle.stroke
         ..strokeWidth = 1.5,
     );

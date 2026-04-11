@@ -115,7 +115,6 @@ class FeatureGate {
 extension FeatureGateX on BuildContext {
   FeatureGate get gate => FeatureGate(isPro: watch<PremiumStore>().isPro);
   FeatureGate get gateRead => FeatureGate(isPro: read<PremiumStore>().isPro);
-  FeatureGate get gateNoWatch => FeatureGate(isPro: read<PremiumStore>().isPro);
 }
 
 /// Standard Pro dialog (simple MVP paywall prompt)
@@ -157,7 +156,7 @@ Future<void> showProDialog(
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -206,7 +205,7 @@ Future<void> showProDialog(
                     Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: AppColors.proPurple.withOpacity(0.06),
+                        color: AppColors.proPurple.withValues(alpha: 0.06),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(

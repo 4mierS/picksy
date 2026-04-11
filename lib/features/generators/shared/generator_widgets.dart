@@ -172,7 +172,7 @@ class PremiumFeatureWrapper extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             borderRadius: borderRadius,
-            color: AppColors.proPurple.withOpacity(0.09),
+            color: AppColors.proPurple.withValues(alpha: 0.09),
           ),
           child: child,
         ),
@@ -243,8 +243,8 @@ class PremiumSection extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            color: AppColors.proPurple.withOpacity(0.08),
-            border: Border.all(color: AppColors.proPurple.withOpacity(0.18)),
+            color: AppColors.proPurple.withValues(alpha: 0.08),
+            border: Border.all(color: AppColors.proPurple.withValues(alpha: 0.18)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +318,7 @@ class _ProBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(999),
-        color: AppColors.proPurple.withOpacity(0.15),
+        color: AppColors.proPurple.withValues(alpha: 0.15),
       ),
       child: const Text(
         'PRO',

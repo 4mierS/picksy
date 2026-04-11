@@ -99,7 +99,7 @@ class _AutoRunSheetState extends State<_AutoRunSheet> {
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.4),
+                      color: Colors.grey.withValues(alpha: 0.4),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -156,7 +156,7 @@ class _AutoRunSheetState extends State<_AutoRunSheet> {
                   LinearProgressIndicator(
                     value: _processed / total,
                     color: AppColors.proPurple,
-                    backgroundColor: AppColors.proPurple.withOpacity(0.15),
+                    backgroundColor: AppColors.proPurple.withValues(alpha: 0.15),
                   ),
                   const SizedBox(height: 8),
                   Text(
@@ -265,7 +265,7 @@ class _DistributionBar extends StatelessWidget {
                   Container(
                     height: 18,
                     decoration: BoxDecoration(
-                      color: AppColors.proPurple.withOpacity(0.12),
+                      color: AppColors.proPurple.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
@@ -273,7 +273,7 @@ class _DistributionBar extends StatelessWidget {
                     height: 18,
                     width: constraints.maxWidth * barFrac,
                     decoration: BoxDecoration(
-                      color: AppColors.proPurple.withOpacity(0.65),
+                      color: AppColors.proPurple.withValues(alpha: 0.65),
                       borderRadius: BorderRadius.circular(4),
                     ),
                   ),
