@@ -78,6 +78,8 @@
   "homeHistoryTooltip": "Historique",
   "homeFavorites": "Favoris",
   "homeAllGenerators": "Tous les générateurs",
+  "homeTabGenerators": "Générateurs",
+  "homeTabMiniGames": "Mini-jeux",
   "homeFavorite": "Favori",
   "homeUnfavorite": "Retirer des favoris",
   "homeTapToOpen": "Appuyez pour ouvrir",

@@ -572,6 +572,18 @@ abstract class AppLocalizations {
   /// **'All Generators'**
   String get homeAllGenerators;
 
+  /// No description provided for @homeTabGenerators.
+  ///
+  /// In en, this message translates to:
+  /// **'Generators'**
+  String get homeTabGenerators;
+
+  /// No description provided for @homeTabMiniGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Mini Games'**
+  String get homeTabMiniGames;
+
   /// No description provided for @homeFavorite.
   ///
   /// In en, this message translates to:

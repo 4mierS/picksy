@@ -13,7 +13,7 @@ import '../history/history_page.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  static const _all = [
+  static const _generators = [
     GeneratorType.customList,
     GeneratorType.color,
     GeneratorType.number,
@@ -22,6 +22,9 @@ class HomePage extends StatelessWidget {
     GeneratorType.time,
     GeneratorType.coin,
     GeneratorType.bottleSpin,
+  ];
+
+  static const _miniGames = [
     GeneratorType.reactionTest,
     GeneratorType.tapChallenge,
     GeneratorType.memoryFlash,
@@ -35,14 +38,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final favStore = context.watch<FavoritesStore>();
-    final favorites = favStore.favorites;
 
-    return SafeArea(
-      child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
+    return DefaultTabController(
+      length: 2,
+      child: SafeArea(
+        child: Column(
+          children: [
+            // ── Header ─────────────────────────────────────────────────────
+            Padding(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 10),
               child: Row(
                 children: [
@@ -51,7 +54,7 @@ class HomePage extends StatelessWidget {
                     children: [
                       Text(
                         l10n.appTitle,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w800,
                         ),
@@ -61,9 +64,11 @@ class HomePage extends StatelessWidget {
                         l10n.homeSmartRandomDecisions,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Theme.of(
-                            context,
-                          ).textTheme.bodySmall?.color?.withOpacity(0.7),
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.color
+                              ?.withOpacity(0.7),
                         ),
                       ),
                     ],
@@ -81,29 +86,55 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-          ),
 
-          if (favorites.isNotEmpty) ...[
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                child: Text(
-                  l10n.homeFavorites,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+            // ── Tab bar ────────────────────────────────────────────────────
+            TabBar(
+              tabs: [
+                Tab(text: l10n.homeTabGenerators),
+                Tab(text: l10n.homeTabMiniGames),
+              ],
+              indicatorColor: AppColors.proPurple,
+              labelColor: AppColors.proPurple,
+              dividerColor: Colors.transparent,
+            ),
+
+            // ── Tab views ──────────────────────────────────────────────────
+            const Expanded(
+              child: TabBarView(
+                children: [
+                  _TabContent(items: _generators),
+                  _TabContent(items: _miniGames),
+                ],
               ),
             ),
-            _GeneratorGrid(items: favorites),
           ],
+        ),
+      ),
+    );
+  }
+}
 
+// ── Tab content (favorites + grid) ────────────────────────────────────────────
+
+class _TabContent extends StatelessWidget {
+  final List<GeneratorType> items;
+
+  const _TabContent({required this.items});
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final favStore = context.watch<FavoritesStore>();
+    final favorites = favStore.favorites.where((f) => items.contains(f)).toList();
+
+    return CustomScrollView(
+      slivers: [
+        if (favorites.isNotEmpty) ...[
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
               child: Text(
-                l10n.homeAllGenerators,
+                l10n.homeFavorites,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -111,15 +142,31 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-
-          _GeneratorGrid(items: _all),
-
-          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+          _GeneratorGrid(items: favorites),
         ],
-      ),
+
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Text(
+              l10n.homeAllGenerators,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+
+        _GeneratorGrid(items: items),
+
+        const SliverToBoxAdapter(child: SizedBox(height: 24)),
+      ],
     );
   }
 }
+
+// ── Grid ──────────────────────────────────────────────────────────────────────
 
 class _GeneratorGrid extends StatelessWidget {
   final List<GeneratorType> items;
@@ -139,8 +186,8 @@ class _GeneratorGrid extends StatelessWidget {
           final columns = width >= 900
               ? 4
               : width >= 600
-              ? 3
-              : 2;
+                  ? 3
+                  : 2;
 
           return SliverGrid(
             delegate: SliverChildBuilderDelegate((context, i) {
@@ -181,6 +228,8 @@ class _GeneratorGrid extends StatelessWidget {
   }
 }
 
+// ── Tile ──────────────────────────────────────────────────────────────────────
+
 class _GeneratorTile extends StatelessWidget {
   final GeneratorType type;
   final bool isFavorite;
@@ -196,9 +245,7 @@ class _GeneratorTile extends StatelessWidget {
 
   IconData get _icon => type.homeIcon;
 
-  Color get _accent {
-    return type.accentColor;
-  }
+  Color get _accent => type.accentColor;
 
   @override
   Widget build(BuildContext context) {

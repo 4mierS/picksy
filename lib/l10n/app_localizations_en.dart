@@ -243,6 +243,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAllGenerators => 'All Generators';
 
   @override
+  String get homeTabGenerators => 'Generators';
+
+  @override
+  String get homeTabMiniGames => 'Mini Games';
+
+  @override
   String get homeFavorite => 'Favorite';
 
   @override
