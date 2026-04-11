@@ -64,46 +64,38 @@ class _ProPageState extends State<ProPage> {
     // final monthlyPrice = monthly?.price ?? l10n.proMonthlyFallbackPrice;
     final lifetimePrice = lifetime?.price ?? l10n.proLifetimeFallbackPrice;
 
-    return SafeArea(
-      child: ListView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.proGoPro),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(999),
+                gradient: LinearGradient(
+                  colors: [
+                    AppColors.proPurple.withOpacity(0.95),
+                    AppColors.proPurple.withOpacity(0.75),
+                  ],
+                ),
+              ),
+              child: Text(
+                premium.isPro ? l10n.proActiveBadge : l10n.proBadge,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.3,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Row(
-            children: [
-              Text(
-                l10n.proGoPro,
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(999),
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.proPurple.withOpacity(0.95),
-                      AppColors.proPurple.withOpacity(0.75),
-                    ],
-                  ),
-                ),
-                child: Text(
-                  premium.isPro ? l10n.proActiveBadge : l10n.proBadge,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.3,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
 
           Text(
             premium.isPro ? l10n.proThanksActive : l10n.proUnlockDescription,
