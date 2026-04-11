@@ -49,20 +49,9 @@ class _ProPageState extends State<ProPage> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final premium = context.watch<PremiumStore>();
-
-    //final monthly = premium.productById(PremiumStore.monthlyId);
     final lifetime = premium.productById(PremiumStore.lifetimeId);
-
-    // final canBuyMonthly = premium.isAvailable && !premium.isLoading && !premium.isPro && monthly != null;
-
-    final canBuyLifetime =
-        premium.isAvailable &&
-        !premium.isLoading &&
-        !premium.isPro &&
-        lifetime != null;
-
-    // final monthlyPrice = monthly?.price ?? l10n.proMonthlyFallbackPrice;
     final lifetimePrice = lifetime?.price ?? l10n.proLifetimeFallbackPrice;
+    final canBuy = premium.isAvailable && !premium.isLoading && !premium.isPro && lifetime != null;
 
     return Scaffold(
       appBar: AppBar(
@@ -93,282 +82,266 @@ class _ProPageState extends State<ProPage> {
           ),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-
-          Text(
-            premium.isPro ? l10n.proThanksActive : l10n.proUnlockDescription,
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodyMedium?.color,
-            ),
-          ),
-
-          const SizedBox(height: 14),
-
-          if (!premium.isAvailable)
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: AppStyles.glassCard(context),
-              child: Text(l10n.proIapUnavailable),
-            ),
-
-          if (premium.isLoading && !premium.isPro) ...[
-            const SizedBox(height: 12),
-            const Center(child: CircularProgressIndicator()),
-          ],
-
-          const SizedBox(height: 16),
-
-          _FeatureCard(
-            title: l10n.proWhatYouGet,
-            children: [
-              _Bullet(l10n.proFeatureHistory),
-              _Bullet(l10n.proFeatureFavorites),
-              _Bullet(l10n.proFeatureNumber),
-              _Bullet(l10n.proFeatureColor),
-              _Bullet(l10n.proFeatureLetter),
-              _Bullet(l10n.proFeatureCustomList),
-              _Bullet(l10n.proFeatureBottleSpin),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-
-          _SectionTitle(l10n.proChoosePlan),
-          const SizedBox(height: 10),
-
-          // _PlanTile(
-          //   title: l10n.proMonthlyTitle,
-          //   price: monthlyPrice,
-          //   subtitle: l10n.proMonthlySubtitle,
-          //   badge: l10n.proPopular,
-          //   enabled: canBuyMonthly,
-          //   decoration: AppStyles.gradientCard(AppColors.proPurple),
-          //   onPressed: canBuyMonthly
-          //       ? () => context.read<PremiumStore>().buyMonthly()
-          //       : null,
-          // ),
-          const SizedBox(height: 10),
-
-          _PlanTile(
-            title: l10n.proLifetimeTitle,
-            price: lifetimePrice,
-            subtitle: l10n.proLifetimeSubtitle,
-            enabled: canBuyLifetime,
-            decoration: AppStyles.gradientCard(AppColors.proPurple),
-            onPressed: canBuyLifetime
-                ? () => context.read<PremiumStore>().buyLifetime()
-                : null,
-          ),
-
-          const SizedBox(height: 16),
-
-          OutlinedButton.icon(
-            onPressed: premium.isLoading
-                ? null
-                : () => context.read<PremiumStore>().restore(),
-            icon: const Icon(Icons.restore),
-            label: Text(l10n.proRestorePurchases),
-          ),
-
-          if (!premium.isPro) ...[
-            const SizedBox(height: 16),
-            _PromoCodeInput(
-              controller: _promoController,
-              loading: _promoLoading,
-              message: _promoMessage,
-              success: _promoSuccess,
-              onApply: _applyPromo,
-            ),
-          ],
-
-          const SizedBox(height: 18),
-
-          Text(
-            l10n.proPrivacyNote,
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodySmall?.color,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            l10n.proPaymentsNote,
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodySmall?.color,
-            ),
-          ),
-        ],
-      ),
+      body: premium.isPro ? _buildAlreadyPro(l10n) : _buildUpgrade(context, l10n, premium, lifetimePrice, canBuy),
     );
   }
-}
 
-class _SectionTitle extends StatelessWidget {
-  final String text;
-  const _SectionTitle(this.text);
+  // ── Already Pro ────────────────────────────────────────────────────────────
 
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-    );
-  }
-}
-
-class _FeatureCard extends StatelessWidget {
-  final String title;
-  final List<Widget> children;
-
-  const _FeatureCard({required this.title, required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: AppStyles.glassCard(context),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
-          ),
-          const SizedBox(height: 10),
-          ...children,
-        ],
-      ),
-    );
-  }
-}
-
-class _Bullet extends StatelessWidget {
-  final String text;
-  const _Bullet(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('•  '),
-          Expanded(child: Text(text)),
-        ],
-      ),
-    );
-  }
-}
-
-class _PlanTile extends StatelessWidget {
-  final String title;
-  final String price;
-  final String subtitle;
-  final String? badge;
-  final bool enabled;
-  final VoidCallback? onPressed;
-  final BoxDecoration? decoration;
-
-  const _PlanTile({
-    required this.title,
-    required this.price,
-    required this.subtitle,
-    required this.enabled,
-    this.onPressed,
-    this.badge,
-    this.decoration,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Opacity(
-      opacity: enabled ? 1.0 : 0.55,
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: decoration ?? AppStyles.glassCard(context),
-        child: Row(
+  Widget _buildAlreadyPro(dynamic l10n) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      if (badge != null) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 3,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(999),
-                            color: AppColors.proPurple.withOpacity(0.12),
-                          ),
-                          child: Text(
-                            badge!,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.proPurple,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    price,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.bodySmall?.color,
-                    ),
-                  ),
-                ],
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFF7C3AED), Color(0xFFAB47BC)],
+                ),
+              ),
+              child: const Icon(
+                Icons.workspace_premium_rounded,
+                color: Colors.white,
+                size: 42,
               ),
             ),
-            const SizedBox(width: 12),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.proPurple,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 14,
-                  horizontal: 16,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
+            const SizedBox(height: 20),
+            Text(
+              l10n.proActiveBadge,
+              style: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w900,
+                color: AppColors.proPurple,
               ),
-              onPressed: enabled ? onPressed : null,
-              child: Text(
-                enabled ? l10n.proUnlockButton : l10n.proActiveButton,
-              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              l10n.proThanksActive,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 15, height: 1.5),
             ),
           ],
         ),
       ),
     );
   }
+
+  // ── Upgrade screen ─────────────────────────────────────────────────────────
+
+  Widget _buildUpgrade(
+    BuildContext context,
+    dynamic l10n,
+    PremiumStore premium,
+    String price,
+    bool canBuy,
+  ) {
+    return ListView(
+      children: [
+        // ── Hero ──────────────────────────────────────────────────────────
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 20),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Color(0xFF7C3AED), Color(0xFFAB47BC)],
+            ),
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.18),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.workspace_premium_rounded,
+                  color: Colors.white,
+                  size: 36,
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                l10n.proUnlockDescription,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // ── Features grid ─────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+          child: GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+            childAspectRatio: 2.6,
+            children: [
+              _FeatureTile(Icons.history_rounded, l10n.proFeatureHistory),
+              _FeatureTile(Icons.favorite_rounded, l10n.proFeatureFavorites),
+              _FeatureTile(Icons.bar_chart_rounded, l10n.analyticsTitle),
+              _FeatureTile(Icons.people_rounded, l10n.gameModeLocal),
+              _FeatureTile(Icons.tag_rounded, l10n.proFeatureNumber),
+              _FeatureTile(Icons.palette_rounded, l10n.proFeatureGames),
+            ],
+          ),
+        ),
+
+        // ── IAP state ─────────────────────────────────────────────────────
+        if (!premium.isAvailable)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: AppStyles.glassCard(context),
+              child: Text(
+                l10n.proIapUnavailable,
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+          ),
+
+        if (premium.isLoading)
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+
+        // ── Buy button ────────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: canBuy
+                  ? const LinearGradient(
+                      colors: [Color(0xFF7C3AED), Color(0xFFAB47BC)],
+                    )
+                  : null,
+              color: canBuy ? null : Colors.grey.shade300,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.white,
+                shadowColor: Colors.transparent,
+                minimumSize: const Size(double.infinity, 52),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+              ),
+              onPressed: canBuy ? () => context.read<PremiumStore>().buyLifetime() : null,
+              child: Text(
+                '${l10n.proLifetimeTitle} · $price',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 10),
+
+        // ── Restore ───────────────────────────────────────────────────────
+        Center(
+          child: TextButton(
+            onPressed: premium.isLoading
+                ? null
+                : () => context.read<PremiumStore>().restore(),
+            child: Text(
+              l10n.proRestorePurchases,
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
+        ),
+
+        // ── Promo code ────────────────────────────────────────────────────
+        if (!premium.isPro)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+            child: _PromoCodeInput(
+              controller: _promoController,
+              loading: _promoLoading,
+              message: _promoMessage,
+              success: _promoSuccess,
+              onApply: _applyPromo,
+            ),
+          ),
+
+        // ── Legal ─────────────────────────────────────────────────────────
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          child: Text(
+            '${l10n.proPrivacyNote}\n${l10n.proPaymentsNote}',
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodySmall?.color,
+              fontSize: 11,
+              height: 1.5,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
+
+// ── Feature tile ──────────────────────────────────────────────────────────────
+
+class _FeatureTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _FeatureTile(this.icon, this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.proPurple.withOpacity(0.07),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: AppColors.proPurple),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Promo code input ──────────────────────────────────────────────────────────
 
 class _PromoCodeInput extends StatelessWidget {
   final TextEditingController controller;
@@ -393,9 +366,9 @@ class _PromoCodeInput extends StatelessWidget {
       children: [
         Text(
           l10n.proPromoCode,
-          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         Row(
           children: [
             Expanded(
@@ -408,7 +381,7 @@ class _PromoCodeInput extends StatelessWidget {
                   isDense: true,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 12,
-                    vertical: 12,
+                    vertical: 10,
                   ),
                 ),
                 onSubmitted: (_) => onApply(),

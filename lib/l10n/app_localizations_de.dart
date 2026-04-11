@@ -306,7 +306,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get proFeatureNumber => 'Number: custom min/max + float + even/odd';
 
   @override
-  String get proFeatureColor => 'Color: palette + modes + contrast';
+  String get proFeatureGames =>
+      'Unlimited games: play as much as you want (Free: 10/day)';
 
   @override
   String get proFeatureLetter =>

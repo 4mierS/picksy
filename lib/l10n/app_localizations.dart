@@ -680,11 +680,11 @@ abstract class AppLocalizations {
   /// **'Number: custom min/max + float + even/odd'**
   String get proFeatureNumber;
 
-  /// No description provided for @proFeatureColor.
+  /// No description provided for @proFeatureGames.
   ///
   /// In en, this message translates to:
-  /// **'Color: palette + modes + contrast'**
-  String get proFeatureColor;
+  /// **'Unlimited games: play as much as you want (Free: 10/day)'**
+  String get proFeatureGames;
 
   /// No description provided for @proFeatureLetter.
   ///
