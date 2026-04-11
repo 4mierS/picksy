@@ -165,8 +165,6 @@ class _TimePageState extends State<TimePage> {
     final showTime = !_hideTime || _revealHiddenAtEnd;
 
     return Scaffold(
-      backgroundColor:
-          _finished ? Colors.red.shade700 : Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(l10n.timeTitle),
@@ -211,7 +209,7 @@ class _TimePageState extends State<TimePage> {
                         fontSize: 64,
                         fontWeight: FontWeight.w900,
                         color: _finished
-                            ? Colors.white
+                            ? Colors.red.shade600
                             : (_running ? accent : accent.withOpacity(0.55)),
                       ),
                     ),
