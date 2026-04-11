@@ -14,22 +14,22 @@ class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   static const _all = [
+    GeneratorType.customList,
     GeneratorType.color,
     GeneratorType.number,
-    GeneratorType.coin,
     GeneratorType.letter,
-    GeneratorType.customList,
-    GeneratorType.bottleSpin,
-    GeneratorType.time,
-    GeneratorType.reactionTest,
-    GeneratorType.hangman,
-    GeneratorType.memoryFlash,
-    GeneratorType.tapChallenge,
     GeneratorType.card,
+    GeneratorType.time,
+    GeneratorType.coin,
+    GeneratorType.bottleSpin,
+    GeneratorType.reactionTest,
+    GeneratorType.tapChallenge,
+    GeneratorType.memoryFlash,
     GeneratorType.colorReflex,
-    GeneratorType.mathChallenge,
     GeneratorType.ticTacToe,
     GeneratorType.connectFour,
+    GeneratorType.hangman,
+    GeneratorType.mathChallenge,
   ];
 
   @override
