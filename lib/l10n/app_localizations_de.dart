@@ -981,6 +981,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get generatorTicTacToe => 'Tic Tac Toe';
 
   @override
+  String get ticTacToeDescription => 'Klassisches 3×3-Spiel mit X und O';
+
+  @override
   String get generatorConnectFour => 'Vier gewinnt';
 
   @override

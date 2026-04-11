@@ -407,6 +407,7 @@
   "mathFreeProHint": "Free : addition & soustraction, 30 secondes.\nPro : toutes les opérations, durée personnalisée.",
   "mathAvgAccuracy": "Précision moyenne",
   "generatorTicTacToe": "Morpion",
+  "ticTacToeDescription": "Classique jeu 3×3 de X et O",
   "generatorConnectFour": "Puissance 4",
   "gameSetupTitle": "Configuration",
   "gameModeLabel": "Mode de Jeu",

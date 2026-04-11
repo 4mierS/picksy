@@ -1928,6 +1928,12 @@ abstract class AppLocalizations {
   /// **'Tic Tac Toe'**
   String get generatorTicTacToe;
 
+  /// No description provided for @ticTacToeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic 3×3 game of X\'s and O\'s'**
+  String get ticTacToeDescription;
+
   /// No description provided for @generatorConnectFour.
   ///
   /// In en, this message translates to:

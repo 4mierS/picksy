@@ -979,6 +979,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get generatorTicTacToe => 'Tris';
 
   @override
+  String get ticTacToeDescription => 'Il classico gioco 3×3 di X e O';
+
+  @override
   String get generatorConnectFour => 'Forza 4';
 
   @override

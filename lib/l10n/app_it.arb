@@ -407,6 +407,7 @@
   "mathFreeProHint": "Gratis: addizione e sottrazione, 30 secondi.\nPro: tutte le operazioni, durata personalizzata.",
   "mathAvgAccuracy": "Accuratezza media",
   "generatorTicTacToe": "Tris",
+  "ticTacToeDescription": "Il classico gioco 3×3 di X e O",
   "generatorConnectFour": "Forza 4",
   "gameSetupTitle": "Impostazioni Gioco",
   "gameModeLabel": "Modalità di Gioco",

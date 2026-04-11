@@ -35,29 +35,32 @@ class GameModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return Row(
-      children: [
-        Expanded(
-          child: GameModeButton(
-            label: l10n.gameModeBot,
-            icon: Icons.smart_toy_outlined,
-            selected: selected == GameMode.bot,
-            accentColor: accentColor,
-            onTap: () => onChanged(GameMode.bot),
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: GameModeButton(
+              label: l10n.gameModeBot,
+              icon: Icons.smart_toy_outlined,
+              selected: selected == GameMode.bot,
+              accentColor: accentColor,
+              onTap: () => onChanged(GameMode.bot),
+            ),
           ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: GameModeButton(
-            label: l10n.gameModeLocal,
-            icon: Icons.people_outlined,
-            selected: selected == GameMode.local,
-            accentColor: accentColor,
-            onTap: () => onChanged(GameMode.local),
-            badge: l10n.gameModePro,
+          const SizedBox(width: 8),
+          Expanded(
+            child: GameModeButton(
+              label: l10n.gameModeLocal,
+              icon: Icons.people_outlined,
+              selected: selected == GameMode.local,
+              accentColor: accentColor,
+              onTap: () => onChanged(GameMode.local),
+              badge: l10n.gameModePro,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

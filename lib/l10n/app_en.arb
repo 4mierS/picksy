@@ -407,6 +407,7 @@
   "mathFreeProHint": "Free: addition & subtraction, 30 seconds.\nPro: all operations, custom duration.",
   "mathAvgAccuracy": "Avg Accuracy",
   "generatorTicTacToe": "Tic Tac Toe",
+  "ticTacToeDescription": "Classic 3×3 game of X's and O's",
   "generatorConnectFour": "Connect Four",
   "gameSetupTitle": "Game Setup",
   "gameModeLabel": "Game Mode",
