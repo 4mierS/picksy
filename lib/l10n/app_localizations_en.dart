@@ -355,7 +355,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get proMonthlyFallbackPrice => '€0.49 / month';
 
   @override
-  String get proLifetimeFallbackPrice => '€7.49 one-time';
+  String get proLifetimeFallbackPrice => '€5.49 one-time';
 
   @override
   String get coinTitle => 'Coin';

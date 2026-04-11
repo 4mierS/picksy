@@ -779,7 +779,7 @@ abstract class AppLocalizations {
   /// No description provided for @proLifetimeFallbackPrice.
   ///
   /// In en, this message translates to:
-  /// **'€7.49 one-time'**
+  /// **'€5.49 one-time'**
   String get proLifetimeFallbackPrice;
 
   /// No description provided for @coinTitle.
