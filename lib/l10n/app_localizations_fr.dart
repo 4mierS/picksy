@@ -108,7 +108,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsPrivacyPolicy => 'Politique de confidentialité';
 
   @override
-  String get settingsImprint => 'Imprint';
+  String get settingsImprint => 'Mentions légales';
 
   @override
   String get settingsTermsOfService => 'Conditions d\'utilisation';
@@ -269,11 +269,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Appuyez sur l\'étoile d\'une carte pour l\'épingler ici';
 
   @override
-  String get homeFavoritesLimitReachedTitle => 'Favorites limit reached';
+  String get homeFavoritesLimitReachedTitle => 'Limite de favoris atteinte';
 
   @override
   String get homeFavoritesLimitReachedMessage =>
-      'Free users can pin up to 2 generators. Go Pro for unlimited favorites.';
+      'Les utilisateurs gratuits peuvent épingler jusqu\'à 2 générateurs. Passez Pro pour des favoris illimités.';
 
   @override
   String get historyTitle => 'Historique';
@@ -295,184 +295,188 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get gateNotNow => 'Not now';
+  String get gateNotNow => 'Pas maintenant';
 
   @override
-  String get gateGoPro => 'Go Pro';
+  String get gateGoPro => 'Passer Pro';
 
   @override
-  String get gateOpenProTab => 'Open Pro tab to upgrade';
+  String get gateOpenProTab => 'Ouvrir l\'onglet Pro pour mettre à niveau';
 
   @override
-  String get proGoPro => 'Go Pro';
+  String get proGoPro => 'Passer Pro';
 
   @override
-  String get proActiveBadge => 'PRO ACTIVE';
+  String get proActiveBadge => 'PRO ACTIF';
 
   @override
   String get proBadge => 'PRO';
 
   @override
-  String get proThanksActive => 'Thanks! Pro is active on this device.';
+  String get proThanksActive => 'Merci ! Pro est actif sur cet appareil.';
 
   @override
   String get proUnlockDescription =>
-      'Unlock Pro features: more history, unlimited favorites, and advanced generators.';
+      'Déverrouillez les fonctions Pro : plus d\'historique, favoris illimités et générateurs avancés.';
 
   @override
   String get proIapUnavailable =>
-      'In-app purchases are not available on this device/platform.\nTip: IAP works on Android/iOS when installed via the store test track.';
+      'Les achats intégrés ne sont pas disponibles sur cet appareil/cette plateforme.\nAstuce : IAP fonctionne sur Android/iOS lorsqu\'installé via la piste de test du store.';
 
   @override
-  String get proWhatYouGet => 'What you get with Pro';
+  String get proWhatYouGet => 'Ce que vous obtenez avec Pro';
 
   @override
-  String get proFeatureHistory => 'History: 1000 results (Free: 3)';
+  String get proFeatureHistory => 'Historique : 1000 résultats (Gratuit : 3)';
 
   @override
-  String get proFeatureFavorites => 'Unlimited favorites (Free: 2)';
+  String get proFeatureFavorites => 'Favoris illimités (Gratuit : 2)';
 
   @override
-  String get proFeatureNumber => 'Number: custom min/max + float + even/odd';
+  String get proFeatureNumber =>
+      'Nombre : min/max personnalisé + décimal + pair/impair';
 
   @override
   String get proFeatureGames =>
-      'Unlimited games: play as much as you want (Free: 10/day)';
+      'Jeux illimités : jouez autant que vous voulez (Gratuit : 10/session)';
 
   @override
   String get proFeatureLetter =>
-      'Letter: lowercase + umlauts + vowels + exclude';
+      'Lettre : minuscules + trémas + voyelles + exclusion';
 
   @override
-  String get proFeatureCustomList => 'Custom List: undo + weighted (V1)';
+  String get proFeatureCustomList =>
+      'Liste personnalisée : annuler + pondéré (V1)';
 
   @override
-  String get proFeatureBottleSpin => 'Bottle Spin: strength + haptics';
+  String get proFeatureBottleSpin => 'Bouteille : force + haptique';
 
   @override
-  String get proChoosePlan => 'Choose your plan';
+  String get proChoosePlan => 'Choisissez votre plan';
 
   @override
-  String get proMonthlyTitle => 'Pro Monthly';
+  String get proMonthlyTitle => 'Pro Mensuel';
 
   @override
-  String get proMonthlySubtitle => 'Best if you want to try it out';
+  String get proMonthlySubtitle => 'Idéal pour essayer';
 
   @override
-  String get proLifetimeTitle => 'Lifetime Unlock';
+  String get proLifetimeTitle => 'Accès à vie';
 
   @override
-  String get proLifetimeSubtitle => 'Pay once, keep Pro forever';
+  String get proLifetimeSubtitle => 'Payez une fois, gardez Pro pour toujours';
 
   @override
-  String get proPopular => 'POPULAR';
+  String get proPopular => 'POPULAIRE';
 
   @override
-  String get proUnlockButton => 'Unlock';
+  String get proUnlockButton => 'Déverrouiller';
 
   @override
-  String get proActiveButton => 'Active';
+  String get proActiveButton => 'Actif';
 
   @override
-  String get proRestorePurchases => 'Restore purchases';
+  String get proRestorePurchases => 'Restaurer les achats';
 
   @override
   String get proPrivacyNote =>
-      'Privacy: No account required. All data stays on your device.';
+      'Confidentialité : Aucun compte requis. Toutes les données restent sur votre appareil.';
 
   @override
   String get proPaymentsNote =>
-      'Payments and restore are handled via your Apple/Google store account.';
+      'Les paiements et restaurations sont gérés via votre compte Apple/Google Store.';
 
   @override
-  String get proMonthlyFallbackPrice => '€0.49 / month';
+  String get proMonthlyFallbackPrice => '€0,49 / mois';
 
   @override
-  String get proLifetimeFallbackPrice => '€5.49 one-time';
+  String get proLifetimeFallbackPrice => '€5,49 unique';
 
   @override
-  String get coinTitle => 'Coin';
+  String get coinTitle => 'Pièce';
 
   @override
-  String get coinFlip => 'Flip';
+  String get coinFlip => 'Lancer';
 
   @override
-  String get coinDefaultHeads => 'Heads';
+  String get coinDefaultHeads => 'Pile';
 
   @override
-  String get coinDefaultTails => 'Tails';
+  String get coinDefaultTails => 'Face';
 
   @override
-  String get colorTitle => 'Color';
+  String get colorTitle => 'Couleur';
 
   @override
-  String get letterTitle => 'Letter';
+  String get letterTitle => 'Lettre';
 
   @override
-  String get letterExcludeLetters => 'Exclude letters';
+  String get letterExcludeLetters => 'Exclure des lettres';
 
   @override
-  String get letterExcludeNone => 'None';
+  String get letterExcludeNone => 'Aucune';
 
   @override
-  String get letterFiltersProTitle => 'Letter filters are Pro';
+  String get letterFiltersProTitle => 'Les filtres de lettres sont Pro';
 
   @override
   String get letterFiltersProMessage =>
-      'Go Pro to unlock lowercase, umlauts, vowels-only, and exclusions.';
+      'Passez Pro pour débloquer les minuscules, trémas, voyelles seulement et exclusions.';
 
   @override
-  String get numberTitle => 'Number';
+  String get numberTitle => 'Nombre';
 
   @override
-  String get numberTapGenerate => 'Tap \"Generate\" to get a number';
+  String get numberTapGenerate =>
+      'Appuyez sur \"Générer\" pour obtenir un nombre';
 
   @override
-  String get numberSectionRange => 'Range';
+  String get numberSectionRange => 'Plage';
 
   @override
   String get numberSectionType => 'Type';
 
   @override
-  String get numberSectionFilter => 'Filter';
+  String get numberSectionFilter => 'Filtre';
 
   @override
-  String get numberInvalidRange => 'Max must be >= Min';
+  String get numberInvalidRange => 'Le max doit être >= au min';
 
   @override
-  String get numberFloat => 'Float (decimals)';
+  String get numberFloat => 'Décimal';
 
   @override
-  String get numberFloatSubtitle => 'Generate decimal numbers';
+  String get numberFloatSubtitle => 'Générer des nombres décimaux';
 
   @override
-  String get numberCustomRangeProTitle => 'Custom range is Pro';
+  String get numberCustomRangeProTitle => 'La plage personnalisée est Pro';
 
   @override
   String get numberCustomRangeProMessage =>
-      'Free users can generate numbers from 0 to 100. Go Pro to set your own min/max.';
+      'Les utilisateurs gratuits peuvent générer des nombres de 0 à 100. Passez Pro pour définir votre propre min/max.';
 
   @override
-  String get numberFloatProTitle => 'Float mode is Pro';
+  String get numberFloatProTitle => 'Le mode décimal est Pro';
 
   @override
-  String get numberFloatProMessage => 'Go Pro to generate decimal numbers.';
+  String get numberFloatProMessage =>
+      'Passez Pro pour générer des nombres décimaux.';
 
   @override
-  String get numberParityProTitle => 'Even/Odd filter is Pro';
+  String get numberParityProTitle => 'Le filtre pair/impair est Pro';
 
   @override
   String get numberParityProMessage =>
-      'Go Pro to filter for even or odd numbers.';
+      'Passez Pro pour filtrer les nombres pairs ou impairs.';
 
   @override
-  String get numberParityAny => 'Any';
+  String get numberParityAny => 'Tous';
 
   @override
-  String get numberParityEven => 'Even';
+  String get numberParityEven => 'Pair';
 
   @override
-  String get numberParityOdd => 'Odd';
+  String get numberParityOdd => 'Impair';
 
   @override
   String get numberMin => 'Min';
@@ -482,101 +486,103 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get numberFreeProHint =>
-      'Free limits: range 0-100, integer only.\nGo Pro for custom range, floats, and even/odd filters.';
+      'Limites gratuites : plage 0–100, entiers seulement.\nPro : plage personnalisée, décimaux et filtres pair/impair.';
 
   @override
-  String get customListTitle => 'Custom List';
+  String get customListTitle => 'Liste personnalisée';
 
   @override
-  String get customListNewList => 'New list';
+  String get customListNewList => 'Nouvelle liste';
 
   @override
-  String get customListSelectList => 'Select list';
+  String get customListSelectList => 'Sélectionner une liste';
 
   @override
-  String get customListDeleteList => 'Delete list';
+  String get customListDeleteList => 'Supprimer la liste';
 
   @override
-  String get customListWithReplacement => 'With replacement';
+  String get customListWithReplacement => 'Avec remise';
 
   @override
-  String get customListWithReplacementOn => 'Picked item stays in the list';
+  String get customListWithReplacementOn =>
+      'L\'élément choisi reste dans la liste';
 
   @override
   String get customListWithReplacementOff =>
-      'Picked item is removed (auto resets when empty)';
+      'L\'élément choisi est retiré (réinitialisation auto quand vide)';
 
   @override
-  String get customListTeamMode => 'Team mode';
+  String get customListTeamMode => 'Mode équipe';
 
   @override
-  String get customListTeamModeOn => 'Generate teams from all list items';
+  String get customListTeamModeOn =>
+      'Générer des équipes avec tous les éléments de la liste';
 
   @override
-  String get customListTeamModeOff => 'Pick one random item';
+  String get customListTeamModeOff => 'Choisir un élément aléatoire';
 
   @override
-  String get customListTeamsLabel => 'Teams:';
+  String get customListTeamsLabel => 'Équipes :';
 
   @override
   String customListPeopleCount(int count) {
-    return '$count people';
+    return '$count personnes';
   }
 
   @override
-  String get customListTeamsCardTitle => 'Teams';
+  String get customListTeamsCardTitle => 'Équipes';
 
   @override
   String customListTeamTitle(int index) {
-    return 'Team $index';
+    return 'Équipe $index';
   }
 
   @override
   String customListTeamHistoryLine(int index, Object members) {
-    return 'Team $index: $members';
+    return 'Équipe $index : $members';
   }
 
   @override
-  String get customListEmptyTeam => '(empty)';
+  String get customListEmptyTeam => '(vide)';
 
   @override
-  String get customListNoItems => '(no items)';
+  String get customListNoItems => '(aucun élément)';
 
   @override
   String customListPicked(Object value) {
-    return 'Picked: $value';
+    return 'Choisi : $value';
   }
 
   @override
-  String get customListGenerateTeams => 'Generate Teams';
+  String get customListGenerateTeams => 'Générer des équipes';
 
   @override
-  String get customListPickRandom => 'Pick Random';
+  String get customListPickRandom => 'Choisir au hasard';
 
   @override
-  String get customListRestoreRemoved => 'Restore removed';
+  String get customListRestoreRemoved => 'Restaurer les supprimés';
 
   @override
-  String get customListAddItem => 'Add item';
+  String get customListAddItem => 'Ajouter un élément';
 
   @override
-  String get customListAddItemHint => 'e.g. Pizza';
+  String get customListAddItemHint => 'ex. Pizza';
 
   @override
-  String get customListNoListSelected => 'No list selected';
+  String get customListNoListSelected => 'Aucune liste sélectionnée';
 
   @override
-  String get bottleSpinTitle => 'Bottle Spin';
+  String get bottleSpinTitle => 'Bouteille';
 
   @override
-  String get bottleSpinSpinning => 'Spinning...';
+  String get bottleSpinSpinning => 'Tourne...';
 
   @override
-  String get bottleSpinSpin => 'Spin';
+  String get bottleSpinSpin => 'Tourner';
 
   @override
   String bottleSpinAngleValue(Object degree) {
-    return 'Angle: $degree°';
+    return 'Angle : $degree°';
   }
 
   @override
@@ -646,17 +652,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get analyticsTitle => 'Analytique';
 
   @override
-  String get analyticsProOnly => 'Analytics is a Pro feature';
+  String get analyticsProOnly => 'L\'analytique est une fonction Pro';
 
   @override
   String get analyticsProMessage =>
-      'Unlock advanced analytics, trends and auto-run with Picksy Pro.';
+      'Débloquez l\'analytique avancée, les tendances et l\'exécution auto avec Picksy Pro.';
 
   @override
-  String get analyticsEmpty => 'No data yet. Generate some results first.';
+  String get analyticsEmpty =>
+      'Pas encore de données. Générez d\'abord des résultats.';
 
   @override
-  String get analyticsViewAll => 'View All';
+  String get analyticsViewAll => 'Voir tout';
 
   @override
   String analyticsGeneratorTitle(Object generator) {
@@ -664,46 +671,46 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get analyticsAutoRun => 'Auto-Run';
+  String get analyticsAutoRun => 'Exécution auto';
 
   @override
-  String get analyticsAutoRunCount => 'Count';
+  String get analyticsAutoRunCount => 'Nombre';
 
   @override
-  String get analyticsAutoRunStart => 'Start';
+  String get analyticsAutoRunStart => 'Démarrer';
 
   @override
-  String get analyticsAutoRunRunning => 'Running…';
+  String get analyticsAutoRunRunning => 'En cours…';
 
   @override
-  String get analyticsAutoRunResults => 'Results';
+  String get analyticsAutoRunResults => 'Résultats';
 
   @override
   String get analyticsAutoRunDistribution => 'Distribution';
 
   @override
-  String get analyticsBestTime => 'Best time';
+  String get analyticsBestTime => 'Meilleur temps';
 
   @override
-  String get analyticsAvgTime => 'Avg time';
+  String get analyticsAvgTime => 'Temps moy.';
 
   @override
   String get analyticsTotal => 'Total';
 
   @override
-  String get analyticsWins => 'Wins';
+  String get analyticsWins => 'Victoires';
 
   @override
-  String get analyticsLosses => 'Losses';
+  String get analyticsLosses => 'Défaites';
 
   @override
-  String get analyticsWinRate => 'Win rate';
+  String get analyticsWinRate => 'Taux de victoire';
 
   @override
-  String get analyticsHighScore => 'High score';
+  String get analyticsHighScore => 'Meilleur score';
 
   @override
-  String get analyticsFrequency => 'Frequency';
+  String get analyticsFrequency => 'Fréquence';
 
   @override
   String get analyticsAvgLevel => 'Niveau moyen';
@@ -1003,7 +1010,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get mathFreeProHint =>
-      'Free : addition & soustraction, 30 secondes.\nPro : toutes les opérations, durée personnalisée.';
+      'Gratuit : addition & soustraction, 30 secondes.\nPro : toutes les opérations, durée personnalisée.';
 
   @override
   String get mathAvgAccuracy => 'Précision moyenne';
@@ -1141,7 +1148,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get gameFreeProHint =>
-      'Free : jouer contre Bot.\nPro : multijoueur local, noms personnalisés, sélection de difficulté et statistiques.';
+      'Gratuit : jouer contre Bot.\nPro : multijoueur local, noms personnalisés, sélection de difficulté et statistiques.';
 
   @override
   String get gameStatsBot => 'BOT';
