@@ -5,12 +5,12 @@ import 'package:vibration/vibration.dart';
 import 'package:picksy/core/ui/app_colors.dart';
 import 'package:picksy/core/ui/app_styles.dart';
 
-import 'package:picksy/l10n/app_localizations.dart';
 import 'package:picksy/models/generator_type.dart';
 import 'package:picksy/storage/history_store.dart';
 import 'package:picksy/core/gating/feature_gate.dart';
 import 'package:picksy/l10n/l10n.dart';
 import 'package:picksy/features/analytics/screens/generator_analytics_page.dart';
+import 'package:picksy/features/generators/shared/generator_widgets.dart';
 
 enum _Phase { idle, countdown, running, result }
 
@@ -24,11 +24,9 @@ class TapChallengePage extends StatefulWidget {
 class _TapChallengePageState extends State<TapChallengePage> {
   _Phase _phase = _Phase.idle;
 
-  // Countdown
   int _countdownValue = 3;
   Timer? _countdownTimer;
 
-  // Running
   int _tapsCount = 0;
   int _durationSeconds = 5;
   int _remainingMs = 0;
@@ -36,10 +34,9 @@ class _TapChallengePageState extends State<TapChallengePage> {
   Timer? _tickTimer;
   DateTime? _runStart;
 
-  // Result
   int? _lastTaps;
   double? _lastTPS;
-  int? _personalBest; // in taps
+  int? _personalBest;
 
   static const List<int> _proDurations = [5, 10, 15, 30, 60];
 
@@ -74,14 +71,10 @@ class _TapChallengePageState extends State<TapChallengePage> {
     });
 
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (t) {
-      if (!mounted) {
-        t.cancel();
-        return;
-      }
+      if (!mounted) { t.cancel(); return; }
       if (_countdownValue > 1) {
         setState(() => _countdownValue--);
       } else if (_countdownValue == 1) {
-        // Show "GO!" (value = 0) for a brief moment, then start run
         setState(() => _countdownValue = 0);
         t.cancel();
         Future.delayed(const Duration(milliseconds: 600), () {
@@ -101,19 +94,13 @@ class _TapChallengePageState extends State<TapChallengePage> {
     });
 
     final hasV = await Vibration.hasVibrator();
-    if (hasV) Vibration.vibrate(duration: 100);
+    if (hasV ?? false) Vibration.vibrate(duration: 100);
 
-    // Tick every 100ms for smooth countdown display
     _tickTimer = Timer.periodic(const Duration(milliseconds: 100), (t) {
-      if (!mounted) {
-        t.cancel();
-        return;
-      }
+      if (!mounted) { t.cancel(); return; }
       final elapsed = DateTime.now().difference(_runStart!).inMilliseconds;
       final remaining = (_durationSeconds * 1000) - elapsed;
-      setState(
-        () => _remainingMs = remaining.clamp(0, _durationSeconds * 1000),
-      );
+      setState(() => _remainingMs = remaining.clamp(0, _durationSeconds * 1000));
     });
 
     _runTimer = Timer(Duration(seconds: _durationSeconds), () {
@@ -129,7 +116,6 @@ class _TapChallengePageState extends State<TapChallengePage> {
     final taps = _tapsCount;
     final tps = taps / _durationSeconds;
 
-    // Update personal best
     if (_personalBest == null || taps > _personalBest!) {
       _personalBest = taps;
     }
@@ -142,24 +128,19 @@ class _TapChallengePageState extends State<TapChallengePage> {
       _remainingMs = 0;
     });
 
-    // Save to history
-    if (mounted) {
-      final history = context.read<HistoryStore>();
-      final gate = context.gateRead;
-      await history.add(
-        type: GeneratorType.tapChallenge,
-        value: '$taps taps',
-        maxEntries: gate.historyMax,
-        metadata: {
-          'tapsCount': taps,
-          'durationSeconds': _durationSeconds,
-          'tapsPerSecond': double.parse(tps.toStringAsFixed(2)),
-        },
-      );
-    }
+    context.read<HistoryStore>().add(
+      type: GeneratorType.tapChallenge,
+      value: '$taps taps',
+      maxEntries: context.gateRead.historyMax,
+      metadata: {
+        'tapsCount': taps,
+        'durationSeconds': _durationSeconds,
+        'tapsPerSecond': double.parse(tps.toStringAsFixed(2)),
+      },
+    );
 
     final hasV = await Vibration.hasVibrator();
-    if (hasV) Vibration.vibrate(duration: 300);
+    if (hasV ?? false) Vibration.vibrate(duration: 300);
   }
 
   void _onTap() {
@@ -180,10 +161,12 @@ class _TapChallengePageState extends State<TapChallengePage> {
     final l10n = context.l10n;
     final gate = context.gate;
     final accent = GeneratorType.tapChallenge.accentColor;
+    final isSettingsEnabled = _phase == _Phase.idle || _phase == _Phase.result;
 
     return Scaffold(
       backgroundColor: _bgColor(context),
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         title: Text(l10n.tapChallengeTitle),
         actions: [
           IconButton(
@@ -215,23 +198,80 @@ class _TapChallengePageState extends State<TapChallengePage> {
         behavior: HitTestBehavior.opaque,
         onTap: _onTap,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 12),
-              _buildMainCard(l10n, accent),
-              const SizedBox(height: 16),
-              _buildControls(l10n, gate, accent),
-              const Spacer(),
-              _buildButtons(l10n, accent),
-              const SizedBox(height: 8),
-              if (_phase == _Phase.running)
-                Text(
-                  l10n.tapChallengeInstructions,
-                  style: Theme.of(context).textTheme.bodySmall,
-                  textAlign: TextAlign.center,
+              // ── Main card (Expanded, centered) ────────────────────────────
+              Expanded(
+                child: Center(
+                  child: Container(
+                    width: double.infinity,
+                    constraints: const BoxConstraints(minHeight: 200),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 28,
+                    ),
+                    decoration: AppStyles.generatorResultCard(accent),
+                    child: _buildCardContent(l10n, accent),
+                  ),
                 ),
-              const SizedBox(height: 8),
+              ),
+
+              const SizedBox(height: 16),
+
+              // ── Duration selector (idle + result only) ────────────────────
+              if (isSettingsEnabled) ...[
+                _DurationSelector(
+                  accent: accent,
+                  durationSeconds: _durationSeconds,
+                  gate: gate,
+                  onChanged: (v) => setState(() => _durationSeconds = v),
+                  onLockedTap: () => showProDialog(
+                    context,
+                    title: l10n.tapChallengeDurationProTitle,
+                    message: l10n.tapChallengeDurationProMessage,
+                    generatorType: GeneratorType.tapChallenge,
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
+
+              // ── Buttons ───────────────────────────────────────────────────
+              if (_phase == _Phase.idle)
+                FilledButton.icon(
+                  style: AppStyles.generatorButton(accent),
+                  onPressed: _startCountdown,
+                  icon: const Icon(Icons.play_arrow),
+                  label: Text(l10n.tapChallengeStart),
+                )
+              else if (_phase == _Phase.result)
+                FilledButton.icon(
+                  style: AppStyles.generatorButton(accent),
+                  onPressed: _startCountdown,
+                  icon: const Icon(Icons.replay),
+                  label: Text(l10n.tapChallengeAgain),
+                )
+              else
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                  ),
+                  onPressed: _reset,
+                  child: Text(l10n.timeReset),
+                ),
+
+              // ── Tip ───────────────────────────────────────────────────────
+              const SizedBox(height: 10),
+              Text(
+                l10n.tapChallengeInstructions,
+                style: Theme.of(context).textTheme.bodySmall,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -239,33 +279,21 @@ class _TapChallengePageState extends State<TapChallengePage> {
     );
   }
 
-  Widget _buildMainCard(AppLocalizations l10n, Color accent) {
-    return Container(
-      width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 160),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-      decoration: AppStyles.generatorResultCard(accent),
-      child: _buildCardContent(l10n, accent),
-    );
-  }
-
-  Widget _buildCardContent(AppLocalizations l10n, Color accent) {
+  Widget _buildCardContent(dynamic l10n, Color accent) {
     switch (_phase) {
       case _Phase.idle:
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.touch_app_outlined, size: 48, color: accent),
-            const SizedBox(height: 12),
             Text(
               l10n.tapChallengeTitle,
-              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
+              style: const TextStyle(fontSize: 36, fontWeight: FontWeight.w900),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
-              l10n.tapChallengeInstructions,
-              style: const TextStyle(fontSize: 15),
+              l10n.tapChallengeGetReady,
+              style: const TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
           ],
@@ -276,15 +304,9 @@ class _TapChallengePageState extends State<TapChallengePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              l10n.tapChallengeGetReady,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            Text(
               _countdownValue > 0 ? '$_countdownValue' : l10n.tapChallengeGo,
               style: TextStyle(
-                fontSize: 72,
+                fontSize: 80,
                 fontWeight: FontWeight.w900,
                 color: accent,
               ),
@@ -308,7 +330,7 @@ class _TapChallengePageState extends State<TapChallengePage> {
               style: const TextStyle(fontSize: 18),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             LinearProgressIndicator(
               value: _remainingMs / (_durationSeconds * 1000),
               color: accent,
@@ -336,7 +358,7 @@ class _TapChallengePageState extends State<TapChallengePage> {
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -363,138 +385,95 @@ class _TapChallengePageState extends State<TapChallengePage> {
         );
     }
   }
+}
 
-  Widget _buildControls(AppLocalizations l10n, FeatureGate gate, Color accent) {
-    if (_phase != _Phase.idle && _phase != _Phase.result) {
-      return const SizedBox.shrink();
-    }
+// ─── Duration Selector ────────────────────────────────────────────────────────
 
-    final canChangeDuration = gate.canUse(ProFeature.tapChallengeDuration);
+class _DurationSelector extends StatelessWidget {
+  final Color accent;
+  final int durationSeconds;
+  final FeatureGate gate;
+  final void Function(int) onChanged;
+  final VoidCallback onLockedTap;
+
+  const _DurationSelector({
+    required this.accent,
+    required this.durationSeconds,
+    required this.gate,
+    required this.onChanged,
+    required this.onLockedTap,
+  });
+
+  static const _durations = [5, 10, 15, 30, 60];
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final canChange = gate.canUse(ProFeature.tapChallengeDuration);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Duration selector
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        l10n.tapChallengeDurationLabel,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      if (!canChangeDuration)
-                        Text(
-                          l10n.commonProFeature,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                    ],
+        Row(
+          children: [
+            GeneratorSectionTitle(l10n.tapChallengeDurationLabel),
+            if (!canChange) ...[
+              const SizedBox(width: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.proPurple.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: const Text(
+                  'PRO',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: AppColors.proPurple,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-                if (canChangeDuration)
-                  DropdownButton<int>(
-                    value: _durationSeconds,
-                    underline: const SizedBox.shrink(),
-                    items: _proDurations
-                        .map(
-                          (s) => DropdownMenuItem(
-                            value: s,
-                            child: Text(l10n.tapChallengeDurationSeconds(s)),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (v) {
-                      if (v != null) setState(() => _durationSeconds = v);
-                    },
-                  )
-                else
-                  GestureDetector(
-                    onTap: () => showProDialog(
-                      context,
-                      title: l10n.tapChallengeDurationProTitle,
-                      message: l10n.tapChallengeDurationProMessage,
-                      generatorType: GeneratorType.tapChallenge,
+              ),
+            ],
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: List.generate(_durations.length, (i) {
+            final s = _durations[i];
+            final selected = durationSeconds == s;
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(right: i < _durations.length - 1 ? 6 : 0),
+                child: GestureDetector(
+                  onTap: canChange ? null : onLockedTap,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: selected ? accent : null,
+                      side: BorderSide(
+                        color: selected ? accent : Colors.grey.withOpacity(0.4),
+                        width: selected ? 2 : 1,
+                      ),
+                      backgroundColor: selected ? accent.withOpacity(0.1) : null,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: Row(
-                      children: [
-                        Text(
-                          l10n.tapChallengeDurationSeconds(_durationSeconds),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.lock_outline, size: 16),
-                      ],
+                    onPressed: canChange ? () => onChanged(s) : null,
+                    child: Text(
+                      l10n.tapChallengeDurationSeconds(s),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
-              ],
-            ),
-          ),
+                ),
+              ),
+            );
+          }),
         ),
-
-        const SizedBox(height: 8),
-
-        if (!gate.isPro) ...[
-          const SizedBox(height: 8),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(16),
-            decoration: AppStyles.proCard(),
-            child: Text(
-              l10n.tapChallengeFreeProHint,
-              style: AppStyles.resultStyle,
-            ),
-          ),
-        ],
       ],
     );
   }
-
-  Widget _buildButtons(AppLocalizations l10n, Color accent) {
-    if (_phase == _Phase.idle) {
-      return SizedBox(
-        width: double.infinity,
-        child: FilledButton.icon(
-          style: AppStyles.generatorButton(accent),
-          onPressed: _startCountdown,
-          icon: const Icon(Icons.play_arrow),
-          label: Text(l10n.tapChallengeStart),
-        ),
-      );
-    }
-
-    if (_phase == _Phase.result) {
-      return SizedBox(
-        width: double.infinity,
-        child: FilledButton.icon(
-          style: AppStyles.generatorButton(accent),
-          onPressed: _startCountdown,
-          icon: const Icon(Icons.replay),
-          label: Text(l10n.tapChallengeAgain),
-        ),
-      );
-    }
-
-    if (_phase == _Phase.countdown || _phase == _Phase.running) {
-      return SizedBox(
-        width: double.infinity,
-        child: OutlinedButton(onPressed: _reset, child: Text(l10n.timeReset)),
-      );
-    }
-
-    return const SizedBox.shrink();
-  }
 }
+
+// ─── Result Stat ──────────────────────────────────────────────────────────────
 
 class _ResultStat extends StatelessWidget {
   final String label;

@@ -875,16 +875,6 @@ class AppLocalizationsIt extends AppLocalizations {
       'Passa a Pro per impostare la durata a 5s, 10s, 15s, 30s o 60s.';
 
   @override
-  String get tapChallengeVibrateOnGo => 'Vibra al VIA';
-
-  @override
-  String get tapChallengeVibrateOnEnd => 'Vibra alla fine';
-
-  @override
-  String get tapChallengeFreeProHint =>
-      'Gratis: prova da 5 secondi.\nPro: scegli la durata (5s, 10s, 15s, 30s, 60s) + analisi avanzate.';
-
-  @override
   String get tapChallengeGo => 'VIA!';
 
   @override

@@ -1730,24 +1730,6 @@ abstract class AppLocalizations {
   /// **'Go Pro to set the challenge duration to 5s, 10s, 15s, 30s, or 60s.'**
   String get tapChallengeDurationProMessage;
 
-  /// No description provided for @tapChallengeVibrateOnGo.
-  ///
-  /// In en, this message translates to:
-  /// **'Vibrate on GO'**
-  String get tapChallengeVibrateOnGo;
-
-  /// No description provided for @tapChallengeVibrateOnEnd.
-  ///
-  /// In en, this message translates to:
-  /// **'Vibrate on end'**
-  String get tapChallengeVibrateOnEnd;
-
-  /// No description provided for @tapChallengeFreeProHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Free: 5-second run.\nPro: choose duration (5s, 10s, 15s, 30s, 60s) + advanced analytics.'**
-  String get tapChallengeFreeProHint;
-
   /// No description provided for @tapChallengeGo.
   ///
   /// In en, this message translates to:
